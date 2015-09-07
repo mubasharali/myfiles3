@@ -25,6 +25,7 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.Reporteds = new HashSet<Reported>();
             this.MobileAds = new HashSet<MobileAd>();
             this.LaptopAds = new HashSet<LaptopAd>();
+            this.CarAds = new HashSet<CarAd>();
         }
     
         public int Id { get; set; }
@@ -46,5 +47,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<Reported> Reporteds { get; set; }
         public virtual ICollection<MobileAd> MobileAds { get; set; }
         public virtual ICollection<LaptopAd> LaptopAds { get; set; }
+        public virtual ICollection<CarAd> CarAds { get; set; }
     }
 }

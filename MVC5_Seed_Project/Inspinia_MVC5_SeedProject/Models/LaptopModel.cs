@@ -14,10 +14,16 @@ namespace Inspinia_MVC5_SeedProject.Models
     
     public partial class LaptopModel
     {
+        public LaptopModel()
+        {
+            this.LaptopAds = new HashSet<LaptopAd>();
+        }
+    
         public int Id { get; set; }
         public string brand { get; set; }
         public string model { get; set; }
     
         public virtual LaptopBrand LaptopBrand { get; set; }
+        public virtual ICollection<LaptopAd> LaptopAds { get; set; }
     }
 }

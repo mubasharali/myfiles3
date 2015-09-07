@@ -3,15 +3,6 @@
 @{
     ViewBag.Title = "Create";
 }
-
-@*@if (TempData["error"] != null)
-{
-   <input type="hidden" id="tempdataError" value="@TempData["error"]" />
-}
-else
-{
-    <input type="hidden" id="tempdataError" value="" />
-}*@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
         <h2>Create</h2>
@@ -26,12 +17,12 @@ else
     </div>
     <div class="col-sm-8">
         <div class="title-action">
-			@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary"})
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
         </div>
     </div>
 </div>
 
-
+<div>@Model.title</div>
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-md-6">
@@ -40,87 +31,68 @@ else
                     <h5>Create Ad</h5>
                 </div>
                 <div class="ibox-content">
+                    @using (Html.BeginForm("CreateLaptopAd", "Electronics", FormMethod.Post, new { id = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
 
-				@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form"}))
-                {
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true)
-        <div class="form-group">
-            <label class="control-label col-md-2">Select Brand</label>
-            <div class="col-md-10">
-                <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true)
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Select Brand</label>
+                                <div class="col-md-10">
+                                    <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
                        value: selectedBrand,
                        optionsCaption: 'Choose brand...'"></select>
-                @*<div data-bind="visible:isNewBrand()">
-                    You have entered new Brand. Now enter you model name also as we don't have list of models for '<span data-bind="text:selectedBrand"></span>' Brand.<br /><b>Note:</b>Your ad will first verified by admin. 
-                </div>*@
-            </div>
-        </div>
-        @*<span data-bind="text: selectedBrand() ? selectedBrand(): 'unknown'"></span>*@
-        <div data-bind="with:selectedBrand">
-            <div class="form-group">
-                <label class="control-label col-md-2">Select Model</label>
-                <div class="col-md-10">
-                    <select id="select-model" required class="demo-default" name="model" data-bind="options: $parent.availableModels,
+                                </div>
+                            </div>
+                            <div data-bind="with:selectedBrand">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Select Model</label>
+                                    <div class="col-md-10">
+                                        <select id="select-model" required class="demo-default" name="model" data-bind="options: $parent.availableModels,
                        value: $parent.selectedModel,
                        optionsCaption: 'Choose model...'"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Color</label>
+                                <div class="col-md-10">
+                                    <select id="select-color" name="color" required placeholder="choose color">
+                                        <option value="">Choose color</option>
+                                        <option value="white">White</option>
+                                        <option value="Black">Black</option>
+                                        <option value="Yellow">Yellow</option>
+                                        <option value="Red">Red</option>
+                                        <option value="Blue">Blue</option>
+                                        <option value="Orange">Orange</option>
+                                        <option value="Purple">Purple</option>
+                                        <option value="Violet">Violet</option>
+                                        <option value="Green">Green</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @Html.Partial("~/Views/Shared/_CreateAd.cshtml")
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
+                                </div>
+                            </div>
+                            @*<input type="text" id="input-tags" value="" data-selectize-value="[awesome]" />*@
+
+                        </div>
+                    }
+
                 </div>
-                @*<div data-bind="text:$parent.selectedModel"></div>*@
             </div>
-        </div>  
-        
-
-        
-        <div class="form-group">
-            <label class="control-label col-md-2">Color</label>
-            <div class="col-md-10">
-                <select id="select-color" name="color" required placeholder="choose color">
-                    <option value="">Choose color</option>
-                    <option value="white">White</option>
-                    <option value="Black">Black</option>
-                    <option value="Yellow">Yellow</option>
-                    <option value="Red">Red</option>
-                    <option value="Blue">Blue</option>
-                    <option value="Orange">Orange</option>
-                    <option value="Purple">Purple</option>
-                    <option value="Violet">Violet</option>
-                    <option value="Green">Green</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2">Number of sims</label>
-            <div class="col-md-10">
-                <select id="select-sims" name="sims" required placeholder="choose sims">
-                    <option value="">Choose sims</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-        </div>
-        @Html.Partial("~/Views/Shared/_CreateAd.cshtml")
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-primary" />
-            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
         </div>
     </div>
-    @*<input type="text" id="input-tags" value="" data-selectize-value="[awesome]" />*@
-
 </div>
-                }
-
-        </div>
-    </div>
-        </div>
-    </div>
- </div>
 
 
 
@@ -129,7 +101,7 @@ else
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
-@Styles.Render("~/scripts/selectizeStyles")
+    @Styles.Render("~/scripts/selectizeStyles")
 }
 
 @section Scripts {
@@ -138,11 +110,11 @@ else
     @Scripts.Render("~/plugins/validate")
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/iCheck")
-@Scripts.Render("~/scripts/selectize")
+    @Scripts.Render("~/scripts/selectize")
     @Scripts.Render("~/plugins/toastr")
-@Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/autosize")
     <script type="text/javascript">
-        
+
         function ViewModel() {
             var self = this;
             self.conditionChecked = ko.observable(false);
@@ -168,10 +140,10 @@ else
             })
             self.isAllowBidingChecked = ko.observable(false);
             self.isFixPriceChecked = ko.observable(false);
-            
+
             self.loadBrands = function () {
                 $.ajax({
-                    url: '/api/Electronic/GetBrands',
+                    url: '/api/Electronic/GetLaptopBrands',
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
@@ -182,12 +154,12 @@ else
                             create: true,
                             plugins: ['inputMaxlength'],
                             inputMaxlength: 29,
-                            option_add:newBrandAdded,
+                            option_add: newBrandAdded,
                             sortField: {
                                 field: 'text',
                                 direction: 'asc'
                             },
-                            onOptionAdd: function (value, data) { self.isNewBrand(true);}
+                            onOptionAdd: function (value, data) { self.isNewBrand(true); }
                         });
                     },
                     error: function (jqXHR, status, thrownError) {
@@ -203,7 +175,7 @@ else
             self.loadModels = function () {
                 self.availableModels.removeAll();
                 $.ajax({
-                    url: '/api/Electronic/GetModels?brand=' + self.selectedBrand(),
+                    url: '/api/Electronic/GetLaptopModels?brand=' + self.selectedBrand(),
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
@@ -289,15 +261,15 @@ else
                     title: {
                         required: true,
                         maxlength: 50,
-                        minlength:15
+                        minlength: 15
                     },
                     company: {
                         required: true,
-                        maxlength:15
+                        maxlength: 15
                     },
                     model: {
                         required: true,
-                        maxlength:20
+                        maxlength: 20
                     },
                     description: {
                         required: true,
@@ -322,6 +294,6 @@ else
             });
 
         });
-</script>
-    }
+    </script>
+}
 

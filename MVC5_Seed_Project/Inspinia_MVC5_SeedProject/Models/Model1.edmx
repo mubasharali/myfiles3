@@ -160,7 +160,20 @@
           <Property Name="time" Type="datetime" Nullable="false" />
           <Property Name="price" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="Car">
+        <EntityType Name="CarAd">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="year" Type="smallint" />
+          <Property Name="kmDriven" Type="int" />
+          <Property Name="color" Type="nchar" MaxLength="20" />
+          <Property Name="fuelType" Type="nchar" MaxLength="20" />
+          <Property Name="adId" Type="int" Nullable="false" />
+          <Property Name="carModel" Type="int" Nullable="false" />
+          <Property Name="condition" Type="char" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="CarBrand">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -171,7 +184,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="company" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="brand" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="model" Type="nvarchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="City">
@@ -225,7 +238,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="laptopId" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="laptopId" Type="int" Nullable="false" />
           <Property Name="adId" Type="int" Nullable="false" />
           <Property Name="color" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="condition" Type="char" MaxLength="1" Nullable="false" />
@@ -255,7 +268,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="mobileId" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="mobileId" Type="int" Nullable="false" />
           <Property Name="adId" Type="int" Nullable="false" />
           <Property Name="color" Type="nvarchar" MaxLength="20" />
           <Property Name="condition" Type="char" MaxLength="1" />
@@ -565,17 +578,45 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CarAd_ToTable">
+          <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CarAd" Type="Self.CarAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CarAd">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarAd_ToTable_1">
+          <End Role="CarModel" Type="Self.CarModel" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CarAd" Type="Self.CarAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CarModel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CarAd">
+              <PropertyRef Name="carModel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CarModels_ToTable">
-          <End Role="Car" Type="Self.Car" Multiplicity="1">
+          <End Role="CarBrand" Type="Self.CarBrand" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="CarModel" Type="Self.CarModel" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Car">
+            <Principal Role="CarBrand">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="CarModel">
-              <PropertyRef Name="company" />
+              <PropertyRef Name="brand" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -754,12 +795,12 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_LaptopAds_ToTable_1">
-          <End Role="LaptopBrand" Type="Self.LaptopBrand" Multiplicity="1">
+          <End Role="LaptopModel" Type="Self.LaptopModel" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="LaptopAds" Type="Self.LaptopAds" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="LaptopBrand">
+            <Principal Role="LaptopModel">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="LaptopAds">
@@ -796,12 +837,12 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_MobileAds_ToTable_1">
-          <End Role="Mobile" Type="Self.Mobile" Multiplicity="1">
+          <End Role="MobileModel" Type="Self.MobileModel" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="MobileAds" Type="Self.MobileAds" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Mobile">
+            <Principal Role="MobileModel">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="MobileAds">
@@ -1008,7 +1049,8 @@
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bid" EntityType="Self.Bid" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarAd" EntityType="Self.CarAd" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarBrand" EntityType="Self.CarBrand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CarModel" EntityType="Self.CarModel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
@@ -1097,8 +1139,16 @@
             <End Role="Ad" EntitySet="Ad" />
             <End Role="Bid" EntitySet="Bid" />
           </AssociationSet>
+          <AssociationSet Name="FK_CarAd_ToTable" Association="Self.FK_CarAd_ToTable">
+            <End Role="Ad" EntitySet="Ad" />
+            <End Role="CarAd" EntitySet="CarAd" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarAd_ToTable_1" Association="Self.FK_CarAd_ToTable_1">
+            <End Role="CarModel" EntitySet="CarModel" />
+            <End Role="CarAd" EntitySet="CarAd" />
+          </AssociationSet>
           <AssociationSet Name="FK_CarModels_ToTable" Association="Self.FK_CarModels_ToTable">
-            <End Role="Car" EntitySet="Car" />
+            <End Role="CarBrand" EntitySet="CarBrand" />
             <End Role="CarModel" EntitySet="CarModel" />
           </AssociationSet>
           <AssociationSet Name="FK_Comment_ToTable" Association="Self.FK_Comment_ToTable">
@@ -1154,7 +1204,7 @@
             <End Role="LaptopAds" EntitySet="LaptopAds" />
           </AssociationSet>
           <AssociationSet Name="FK_LaptopAds_ToTable_1" Association="Self.FK_LaptopAds_ToTable_1">
-            <End Role="LaptopBrand" EntitySet="LaptopBrand" />
+            <End Role="LaptopModel" EntitySet="LaptopModel" />
             <End Role="LaptopAds" EntitySet="LaptopAds" />
           </AssociationSet>
           <AssociationSet Name="FK_LaptopModel_ToTable" Association="Self.FK_LaptopModel_ToTable">
@@ -1166,7 +1216,7 @@
             <End Role="MobileAds" EntitySet="MobileAds" />
           </AssociationSet>
           <AssociationSet Name="FK_MobileAds_ToTable_1" Association="Self.FK_MobileAds_ToTable_1">
-            <End Role="Mobile" EntitySet="Mobile" />
+            <End Role="MobileModel" EntitySet="MobileModel" />
             <End Role="MobileAds" EntitySet="MobileAds" />
           </AssociationSet>
           <AssociationSet Name="FK_MobileModel_ToTable" Association="Self.FK_MobileModel_ToTable">
@@ -1404,7 +1454,6 @@
           <EntitySet Name="AnswerReplies" EntityType="Model.AnswerReply" />
           <EntitySet Name="AnswerReplyVotes" EntityType="Model.AnswerReplyVote" />
           <EntitySet Name="AnswerVotes" EntityType="Model.AnswerVote" />
-          <EntitySet Name="CarModels" EntityType="Model.CarModel" />
           <EntitySet Name="Questions" EntityType="Model.Question" />
           <EntitySet Name="QuestionReplies" EntityType="Model.QuestionReply" />
           <EntitySet Name="QuestionReplyVotes" EntityType="Model.QuestionReplyVote" />
@@ -1478,11 +1527,6 @@
             <End Role="QuestionReply" EntitySet="QuestionReplies" />
             <End Role="QuestionReplyVote" EntitySet="QuestionReplyVotes" />
           </AssociationSet>
-          <EntitySet Name="Cars" EntityType="Model.Car" />
-          <AssociationSet Name="FK_CarModels_ToTable" Association="Model.FK_CarModels_ToTable">
-            <End Role="Car" EntitySet="Cars" />
-            <End Role="CarModel" EntitySet="CarModels" />
-          </AssociationSet>
           <EntitySet Name="ReportedQuestions" EntityType="Model.ReportedQuestion" />
           <AssociationSet Name="FK_Reported_ToTable_1" Association="Model.FK_Reported_ToTable_1">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
@@ -1544,29 +1588,44 @@
             <End Role="Ad" EntitySet="Ads" />
             <End Role="Reported" EntitySet="Reporteds" />
           </AssociationSet>
+          <EntitySet Name="LaptopBrands" EntityType="Model.LaptopBrand" />
+          <EntitySet Name="LaptopModels" EntityType="Model.LaptopModel" />
+          <AssociationSet Name="FK_LaptopModel_ToTable" Association="Model.FK_LaptopModel_ToTable">
+            <End Role="LaptopBrand" EntitySet="LaptopBrands" />
+            <End Role="LaptopModel" EntitySet="LaptopModels" />
+          </AssociationSet>
           <EntitySet Name="MobileAds" EntityType="Model.MobileAd" />
           <AssociationSet Name="FK_MobileAds_ToTable" Association="Model.FK_MobileAds_ToTable">
             <End Role="Ad" EntitySet="Ads" />
             <End Role="MobileAd" EntitySet="MobileAds" />
           </AssociationSet>
           <AssociationSet Name="FK_MobileAds_ToTable_1" Association="Model.FK_MobileAds_ToTable_1">
-            <End Role="Mobile" EntitySet="Mobiles" />
+            <End Role="MobileModel" EntitySet="MobileModels" />
             <End Role="MobileAd" EntitySet="MobileAds" />
           </AssociationSet>
           <EntitySet Name="LaptopAds" EntityType="Model.LaptopAd" />
-          <EntitySet Name="LaptopBrands" EntityType="Model.LaptopBrand" />
-          <EntitySet Name="LaptopModels" EntityType="Model.LaptopModel" />
           <AssociationSet Name="FK_LaptopAds_ToTable" Association="Model.FK_LaptopAds_ToTable">
             <End Role="Ad" EntitySet="Ads" />
             <End Role="LaptopAd" EntitySet="LaptopAds" />
           </AssociationSet>
           <AssociationSet Name="FK_LaptopAds_ToTable_1" Association="Model.FK_LaptopAds_ToTable_1">
-            <End Role="LaptopBrand" EntitySet="LaptopBrands" />
+            <End Role="LaptopModel" EntitySet="LaptopModels" />
             <End Role="LaptopAd" EntitySet="LaptopAds" />
           </AssociationSet>
-          <AssociationSet Name="FK_LaptopModel_ToTable" Association="Model.FK_LaptopModel_ToTable">
-            <End Role="LaptopBrand" EntitySet="LaptopBrands" />
-            <End Role="LaptopModel" EntitySet="LaptopModels" />
+          <EntitySet Name="CarAds" EntityType="Model.CarAd" />
+          <EntitySet Name="CarBrands" EntityType="Model.CarBrand" />
+          <EntitySet Name="CarModels" EntityType="Model.CarModel" />
+          <AssociationSet Name="FK_CarAd_ToTable" Association="Model.FK_CarAd_ToTable">
+            <End Role="Ad" EntitySet="Ads" />
+            <End Role="CarAd" EntitySet="CarAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarModels_ToTable" Association="Model.FK_CarModels_ToTable">
+            <End Role="CarBrand" EntitySet="CarBrands" />
+            <End Role="CarModel" EntitySet="CarModels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarAd_ToTable_1" Association="Model.FK_CarAd_ToTable_1">
+            <End Role="CarModel" EntitySet="CarModels" />
+            <End Role="CarAd" EntitySet="CarAds" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdsLike">
@@ -1779,7 +1838,6 @@
           </Key>
           <Property Name="Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MobileModels" Relationship="Model.FK_MobileModel_ToTable" FromRole="Mobile" ToRole="MobileModel" />
-          <NavigationProperty Name="MobileAds" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="Mobile" ToRole="MobileAd" />
         </EntityType>
         <EntityType Name="Answer">
           <Key>
@@ -1829,15 +1887,6 @@
           <Property Name="votedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Answer" Relationship="Model.FK_AnswerVote_ToTable" FromRole="AnswerVote" ToRole="Answer" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_AnswerVote_ToTable_1" FromRole="AnswerVote" ToRole="AspNetUser" />
-        </EntityType>
-        <EntityType Name="CarModel">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="company" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Car" Relationship="Model.FK_CarModels_ToTable" FromRole="CarModel" ToRole="Car" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -2124,27 +2173,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Car">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CarModels" Relationship="Model.FK_CarModels_ToTable" FromRole="Car" ToRole="CarModel" />
-        </EntityType>
-        <Association Name="FK_CarModels_ToTable">
-          <End Type="Model.Car" Role="Car" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.CarModel" Role="CarModel" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Car">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CarModel">
-              <PropertyRef Name="company" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="ReportedQuestion">
           <Key>
             <PropertyRef Name="Id" />
@@ -2234,6 +2262,7 @@
           <Property Name="Mobile" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="model" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Mobile1" Relationship="Model.FK_MobileModel_ToTable" FromRole="MobileModel" ToRole="Mobile" />
+          <NavigationProperty Name="MobileAds" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="MobileModel" ToRole="MobileAd" />
         </EntityType>
         <Association Name="FK_AdView_ToTable_1">
           <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
@@ -2281,6 +2310,7 @@
           <NavigationProperty Name="Reporteds" Relationship="Model.FK_Reported_ToTable" FromRole="Ad" ToRole="Reported" />
           <NavigationProperty Name="MobileAds" Relationship="Model.FK_MobileAds_ToTable" FromRole="Ad" ToRole="MobileAd" />
           <NavigationProperty Name="LaptopAds" Relationship="Model.FK_LaptopAds_ToTable" FromRole="Ad" ToRole="LaptopAd" />
+          <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable" FromRole="Ad" ToRole="CarAd" />
         </EntityType>
         <Association Name="FK_Ad_ToTable">
           <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -2392,18 +2422,49 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="LaptopBrand">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LaptopModels" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopBrand" ToRole="LaptopModel" />
+        </EntityType>
+        <EntityType Name="LaptopModel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="LaptopBrand" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopModel" ToRole="LaptopBrand" />
+          <NavigationProperty Name="LaptopAds" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopModel" ToRole="LaptopAd" />
+        </EntityType>
+        <Association Name="FK_LaptopModel_ToTable">
+          <End Type="Model.LaptopBrand" Role="LaptopBrand" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.LaptopModel" Role="LaptopModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LaptopBrand">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LaptopModel">
+              <PropertyRef Name="brand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="MobileAd">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="mobileId" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="mobileId" Type="Int32" Nullable="false" />
           <Property Name="adId" Type="Int32" Nullable="false" />
           <Property Name="color" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="condition" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="sims" Type="Int32" />
           <NavigationProperty Name="Ad" Relationship="Model.FK_MobileAds_ToTable" FromRole="MobileAd" ToRole="Ad" />
-          <NavigationProperty Name="Mobile" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="MobileAd" ToRole="Mobile" />
+          <NavigationProperty Name="MobileModel" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="MobileAd" ToRole="MobileModel" />
         </EntityType>
         <Association Name="FK_MobileAds_ToTable">
           <End Type="Model.Ad" Role="Ad" Multiplicity="1">
@@ -2420,12 +2481,12 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_MobileAds_ToTable_1">
-          <End Type="Model.Mobile" Role="Mobile" Multiplicity="1">
+          <End Type="Model.MobileModel" Role="MobileModel" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="Model.MobileAd" Role="MobileAd" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Mobile">
+            <Principal Role="MobileModel">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="MobileAd">
@@ -2438,29 +2499,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="laptopId" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="laptopId" Type="Int32" Nullable="false" />
           <Property Name="adId" Type="Int32" Nullable="false" />
           <Property Name="color" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="condition" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="Ad" Relationship="Model.FK_LaptopAds_ToTable" FromRole="LaptopAd" ToRole="Ad" />
-          <NavigationProperty Name="LaptopBrand" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopAd" ToRole="LaptopBrand" />
-        </EntityType>
-        <EntityType Name="LaptopBrand">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="LaptopAds" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopBrand" ToRole="LaptopAd" />
-          <NavigationProperty Name="LaptopModels" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopBrand" ToRole="LaptopModel" />
-        </EntityType>
-        <EntityType Name="LaptopModel">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="LaptopBrand" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopModel" ToRole="LaptopBrand" />
+          <NavigationProperty Name="LaptopModel" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopAd" ToRole="LaptopModel" />
         </EntityType>
         <Association Name="FK_LaptopAds_ToTable">
           <End Type="Model.Ad" Role="Ad" Multiplicity="1">
@@ -2477,12 +2521,12 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_LaptopAds_ToTable_1">
-          <End Type="Model.LaptopBrand" Role="LaptopBrand" Multiplicity="1">
+          <End Type="Model.LaptopModel" Role="LaptopModel" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="Model.LaptopAd" Role="LaptopAd" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="LaptopBrand">
+            <Principal Role="LaptopModel">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="LaptopAd">
@@ -2490,17 +2534,77 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_LaptopModel_ToTable">
-          <End Type="Model.LaptopBrand" Role="LaptopBrand" Multiplicity="1">
+        <EntityType Name="CarAd">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="year" Type="Int16" />
+          <Property Name="kmDriven" Type="Int32" />
+          <Property Name="color" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="fuelType" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="adId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Ad" Relationship="Model.FK_CarAd_ToTable" FromRole="CarAd" ToRole="Ad" />
+          <Property Name="carModel" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CarModel1" Relationship="Model.FK_CarAd_ToTable_1" FromRole="CarAd" ToRole="CarModel" />
+          <Property Name="condition" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CarBrand">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CarModels" Relationship="Model.FK_CarModels_ToTable" FromRole="CarBrand" ToRole="CarModel" />
+        </EntityType>
+        <EntityType Name="CarModel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CarBrand" Relationship="Model.FK_CarModels_ToTable" FromRole="CarModel" ToRole="CarBrand" />
+          <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable_1" FromRole="CarModel" ToRole="CarAd" />
+        </EntityType>
+        <Association Name="FK_CarAd_ToTable">
+          <End Type="Model.Ad" Role="Ad" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="Model.LaptopModel" Role="LaptopModel" Multiplicity="*" />
+          <End Type="Model.CarAd" Role="CarAd" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="LaptopBrand">
+            <Principal Role="Ad">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="LaptopModel">
+            <Dependent Role="CarAd">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarModels_ToTable">
+          <End Type="Model.CarBrand" Role="CarBrand" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.CarModel" Role="CarModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CarBrand">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CarModel">
               <PropertyRef Name="brand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarAd_ToTable_1">
+          <End Type="Model.CarModel" Role="CarModel" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.CarAd" Role="CarAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CarModel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CarAd">
+              <PropertyRef Name="carModel" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2721,15 +2825,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CarModels">
-            <EntityTypeMapping TypeName="Model.CarModel">
-              <MappingFragment StoreEntitySet="CarModel">
-                <ScalarProperty Name="model" ColumnName="model" />
-                <ScalarProperty Name="company" ColumnName="company" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Questions">
             <EntityTypeMapping TypeName="Model.Question">
               <MappingFragment StoreEntitySet="Question">
@@ -2779,13 +2874,6 @@
                 <ScalarProperty Name="votedBy" ColumnName="votedBy" />
                 <ScalarProperty Name="isUp" ColumnName="isUp" />
                 <ScalarProperty Name="questionId" ColumnName="questionId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Cars">
-            <EntityTypeMapping TypeName="Model.Car">
-              <MappingFragment StoreEntitySet="Car">
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2842,6 +2930,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="LaptopBrands">
+            <EntityTypeMapping TypeName="Model.LaptopBrand">
+              <MappingFragment StoreEntitySet="LaptopBrand">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LaptopModels">
+            <EntityTypeMapping TypeName="Model.LaptopModel">
+              <MappingFragment StoreEntitySet="LaptopModel">
+                <ScalarProperty Name="model" ColumnName="model" />
+                <ScalarProperty Name="brand" ColumnName="brand" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="MobileAds">
             <EntityTypeMapping TypeName="Model.MobileAd">
               <MappingFragment StoreEntitySet="MobileAds">
@@ -2865,16 +2969,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LaptopBrands">
-            <EntityTypeMapping TypeName="Model.LaptopBrand">
-              <MappingFragment StoreEntitySet="LaptopBrand">
+          <EntitySetMapping Name="CarAds">
+            <EntityTypeMapping TypeName="Model.CarAd">
+              <MappingFragment StoreEntitySet="CarAd">
+                <ScalarProperty Name="condition" ColumnName="condition" />
+                <ScalarProperty Name="carModel" ColumnName="carModel" />
+                <ScalarProperty Name="adId" ColumnName="adId" />
+                <ScalarProperty Name="fuelType" ColumnName="fuelType" />
+                <ScalarProperty Name="color" ColumnName="color" />
+                <ScalarProperty Name="kmDriven" ColumnName="kmDriven" />
+                <ScalarProperty Name="year" ColumnName="year" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LaptopModels">
-            <EntityTypeMapping TypeName="Model.LaptopModel">
-              <MappingFragment StoreEntitySet="LaptopModel">
+          <EntitySetMapping Name="CarBrands">
+            <EntityTypeMapping TypeName="Model.CarBrand">
+              <MappingFragment StoreEntitySet="CarBrand">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CarModels">
+            <EntityTypeMapping TypeName="Model.CarModel">
+              <MappingFragment StoreEntitySet="CarModel">
                 <ScalarProperty Name="model" ColumnName="model" />
                 <ScalarProperty Name="brand" ColumnName="brand" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

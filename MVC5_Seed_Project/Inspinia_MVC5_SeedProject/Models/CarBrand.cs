@@ -12,9 +12,9 @@ namespace Inspinia_MVC5_SeedProject.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Car
+    public partial class CarBrand
     {
-        public Car()
+        public CarBrand()
         {
             this.CarModels = new HashSet<CarModel>();
         }

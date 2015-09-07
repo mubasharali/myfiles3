@@ -25,32 +25,32 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return db.Ads;
         }
         //[Route("api/Electronic/{category}/{subcategory}/{lowcategory}/{title}")]
-        public async Task<IHttpActionResult> search(string category, string subcategory, string lowcategory, string title)
-        {
-          //  IEnumerable<Ad> ads =await db.Ads.Where(x=>x.category == "Electronics").ToListAsync();
-            var ret = (from ad in db.Ads
-                      where ad.category == "Electronics" && ad.title.Contains(title)
-                      orderby ad.time
-                      select new
-                      {
-                          title = ad.title,
-                          postedById = ad.AspNetUser.Id,
-                          postedByName = ad.AspNetUser.UserName,
-                          id = ad.Id,
-                          price = ad.price,
-                          isNegotiable = ad.isnegotiable,
-                          mobilead = from mobile in ad.MobileAds.Where(x => x.Mobile.Id == subcategory && x.Mobile.MobileModels.Any(xu =>xu.model.Equals(lowcategory)) ).ToList()
-                                     select new
-                                     {
-                                         color = mobile.color,
-                                         condition = mobile.condition,
-                                         company = mobile.Mobile.Id,
-                                         sims = mobile.sims,
-                                         model = mobile.Mobile.MobileModels.FirstOrDefault(x=>x.model.Equals(lowcategory)).model
-                                     }
-                      }).AsEnumerable();
-            return Ok(ret);
-        }
+        //public async Task<IHttpActionResult> search(string category, string subcategory, string lowcategory, string title)
+        //{
+        //  //  IEnumerable<Ad> ads =await db.Ads.Where(x=>x.category == "Electronics").ToListAsync();
+        //    var ret = (from ad in db.Ads
+        //              where ad.category == "Electronics" && ad.title.Contains(title)
+        //              orderby ad.time
+        //              select new
+        //              {
+        //                  title = ad.title,
+        //                  postedById = ad.AspNetUser.Id,
+        //                  postedByName = ad.AspNetUser.UserName,
+        //                  id = ad.Id,
+        //                  price = ad.price,
+        //                  isNegotiable = ad.isnegotiable,
+        //                  mobilead = from mobile in ad.MobileAds.Where(x => x.Mobile.Id == subcategory && x.Mobile.MobileModels.Any(xu =>xu.model.Equals(lowcategory)) ).ToList()
+        //                             select new
+        //                             {
+        //                                 color = mobile.color,
+        //                                 condition = mobile.condition,
+        //                                 company = mobile.Mobile.Id,
+        //                                 sims = mobile.sims,
+        //                                 model = mobile.Mobile.MobileModels.FirstOrDefault(x=>x.model.Equals(lowcategory)).model
+        //                             }
+        //              }).AsEnumerable();
+        //    return Ok(ret);
+        //}
         [HttpPost]
         public async Task<IHttpActionResult> GetMobileTree()
         {
@@ -66,6 +66,34 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                        }
                           }).AsEnumerable();
             return Ok(mobiles);
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> GetLaptopTree()
+        {
+            var mobiles = (from mobile in db.LaptopBrands.ToList()
+                           orderby mobile.Id
+                           select new
+                           {
+                               companyName = mobile.Id,
+                               models = from model in mobile.LaptopModels.ToList()
+                                        select new
+                                        {
+                                            model = model.model
+                                        }
+                           }).AsEnumerable();
+            return Ok(mobiles);
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> GetLaptopBrands()
+        {
+            var brands =  (db.LaptopBrands.Select(x => x.Id)).AsEnumerable();
+            return Ok(brands);
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> GetLaptopModels(string brand)
+        {
+            var models = await db.LaptopModels.Where(x => x.brand == brand).Select(x => x.model).ToListAsync();
+            return Ok(models);
         }
         [HttpPost]
         public async Task<IHttpActionResult> GetBrands()
@@ -126,6 +154,16 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                           color = mobile.color,
                                           condition = mobile.condition,
                                           sims = mobile.sims,
+                                          brand = mobile.MobileModel.Mobile,
+                                          model = mobile.MobileModel.model,
+                                      },
+                           laptopad = from laptop in ad.LaptopAds.ToList()
+                                      select new
+                                      {
+                                          color = laptop.color,
+                                          condition = laptop.condition,
+                                          brand = laptop.LaptopModel.brand,
+                                          model = laptop.LaptopModel.model,
                                       },
                            comment = from comment in ad.Comments.ToList()
                                      orderby comment.time

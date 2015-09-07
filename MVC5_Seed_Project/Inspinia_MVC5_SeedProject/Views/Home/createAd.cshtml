@@ -24,7 +24,7 @@ create electronic ad:
                             <li data-bind="click:electronicsClicked" class="info-element">
                                 Electronics
                             </li>
-                            <li class="warning-element">
+                            <li data-bind="click:vehiclesClicked" class="warning-element">
                                 Vehicles
                             </li>
                             <li class="success-element">
@@ -38,19 +38,27 @@ create electronic ad:
                     <div data-bind="visible: categorySelected()">
                         <h3>Select subcategory </h3>
                         <ul class="sortable-list connectList agile-list">
-                            <li data-bind="click:mobilesClicked" class="info-element">
-                                Mobiles
-                            </li>
-                            <li class="warning-element">
-                                Laptops
-                            </li>
-                            <li class="success-element">
-                                watches
-                            </li>
-                            <li class="danger-element">
-                                others
-                            </li>
+                            <span data-bind="if:category() == 'Electronics'">
+                                <li data-bind="click:mobilesClicked" class="info-element">
+                                    Mobiles
+                                </li>
+                                <li data-bind="click:laptopsClicked" class="warning-element">
+                                    Laptops
+                                </li>
+                                <li class="success-element">
+                                    watches
+                                </li>
+                                <li class="danger-element">
+                                    others
+                                </li>
+                            </span>
+                            <span data-bind="if:category() == 'Vehicles'">
+                                <li data-bind="click:carsClicked" class="info-element">
+                                    Cars
+                                </li>
+                            </span>
                         </ul>
+                        <button class="btn" data-bind="click:backButton">Back</button>
                     </div>
                 </div>
             </div>
@@ -92,9 +100,24 @@ create electronic ad:
                         self.category ("Electronics");
                         self.categorySelected(true);
                     }
+                    self.vehiclesClicked = function () {
+                        self.category("Vehicles");
+                        self.categorySelected(true);
+                    }
+                    self.carsClicked = function () {
+                        self.subcategory("Cars");
+                        window.location.href = '/Vehicles/CreateCarAd';
+                    }
                     self.mobilesClicked = function () {
                         self.subcategory("Mobiles");
                         window.location.href = '/Electronics/Create';
+                    }
+                    self.laptopsClicked = function () {
+                        self.subcategory("Laptops");
+                        window.location.href = '/Electronics/CreateLaptopAd';
+                    }
+                    self.backButton = function () {
+                        self.categorySelected(false);
                     }
                 }
 

@@ -212,15 +212,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CarModels">
-      <EntityTypeMapping TypeName="Model.CarModel">
-        <MappingFragment StoreEntitySet="CarModel">
-          <ScalarProperty Name="model" ColumnName="model" />
-          <ScalarProperty Name="company" ColumnName="company" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Questions">
       <EntityTypeMapping TypeName="Model.Question">
         <MappingFragment StoreEntitySet="Question">
@@ -270,13 +261,6 @@
           <ScalarProperty Name="votedBy" ColumnName="votedBy" />
           <ScalarProperty Name="isUp" ColumnName="isUp" />
           <ScalarProperty Name="questionId" ColumnName="questionId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Cars">
-      <EntityTypeMapping TypeName="Model.Car">
-        <MappingFragment StoreEntitySet="Car">
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -333,6 +317,22 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="LaptopBrands">
+      <EntityTypeMapping TypeName="Model.LaptopBrand">
+        <MappingFragment StoreEntitySet="LaptopBrand">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LaptopModels">
+      <EntityTypeMapping TypeName="Model.LaptopModel">
+        <MappingFragment StoreEntitySet="LaptopModel">
+          <ScalarProperty Name="model" ColumnName="model" />
+          <ScalarProperty Name="brand" ColumnName="brand" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="MobileAds">
       <EntityTypeMapping TypeName="Model.MobileAd">
         <MappingFragment StoreEntitySet="MobileAds">
@@ -356,16 +356,30 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="LaptopBrands">
-      <EntityTypeMapping TypeName="Model.LaptopBrand">
-        <MappingFragment StoreEntitySet="LaptopBrand">
+    <EntitySetMapping Name="CarAds">
+      <EntityTypeMapping TypeName="Model.CarAd">
+        <MappingFragment StoreEntitySet="CarAd">
+          <ScalarProperty Name="condition" ColumnName="condition" />
+          <ScalarProperty Name="carModel" ColumnName="carModel" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="fuelType" ColumnName="fuelType" />
+          <ScalarProperty Name="color" ColumnName="color" />
+          <ScalarProperty Name="kmDriven" ColumnName="kmDriven" />
+          <ScalarProperty Name="year" ColumnName="year" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="LaptopModels">
-      <EntityTypeMapping TypeName="Model.LaptopModel">
-        <MappingFragment StoreEntitySet="LaptopModel">
+    <EntitySetMapping Name="CarBrands">
+      <EntityTypeMapping TypeName="Model.CarBrand">
+        <MappingFragment StoreEntitySet="CarBrand">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CarModels">
+      <EntityTypeMapping TypeName="Model.CarModel">
+        <MappingFragment StoreEntitySet="CarModel">
           <ScalarProperty Name="model" ColumnName="model" />
           <ScalarProperty Name="brand" ColumnName="brand" />
           <ScalarProperty Name="Id" ColumnName="Id" />

@@ -209,6 +209,7 @@
     <Compile Include="CodeTemplates\ElectronicsController.cs" />
     <Compile Include="CodeTemplates\ForumController.cs" />
     <Compile Include="CodeTemplates\UserController.cs" />
+    <Compile Include="CodeTemplates\VehiclesController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\ElectronicController.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TempController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\VehicleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -264,7 +266,10 @@
     <Compile Include="Models\Bid.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Car.cs">
+    <Compile Include="Models\CarAd.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CarBrand.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CarModel.cs">
@@ -644,6 +649,13 @@
     <Content Include="Views\Forum\Details.cshtml" />
     <Content Include="Views\Forum\Edit.cshtml" />
     <Content Include="Views\Forum\Index.cshtml" />
+    <Content Include="Views\Shared\_CreateAd.cshtml" />
+    <Content Include="Views\Electronics\CreateLaptopAd.cshtml" />
+    <Content Include="Views\Vehicles\CreateCarAd.cshtml" />
+    <Content Include="Views\Vehicles\Delete.cshtml" />
+    <Content Include="Views\Vehicles\Details.cshtml" />
+    <Content Include="Views\Vehicles\Edit.cshtml" />
+    <Content Include="Views\Vehicles\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

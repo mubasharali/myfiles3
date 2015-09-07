@@ -30,9 +30,35 @@
                                             </li>
                                         </ul>
                                     </li>
+                                    <li>
+                                        <a href="#">Laptops</a>
+                                        <ul data-bind="foreach:showLaptopBrands">
+                                            <li>
+                                                <a data-bind="text:companyName"></a>
+                                                <ul data-bind="foreach:showModels">
+                                                    <li data-bind="text:modelName"></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </li>
-
+                            <li>
+                                <a href="#">Vehicles</a>
+                                <ul>
+                                    <li>
+                                        <a href="#">Cars</a>
+                                        <ul data-bind="foreach:showCarBrands">
+                                            <li>
+                                                <a data-bind="text:companyName"></a>
+                                                <ul data-bind="foreach:showModels">
+                                                    <li data-bind="text:modelName"></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </div>

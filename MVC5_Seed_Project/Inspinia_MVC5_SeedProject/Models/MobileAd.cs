@@ -15,13 +15,13 @@ namespace Inspinia_MVC5_SeedProject.Models
     public partial class MobileAd
     {
         public int Id { get; set; }
-        public string mobileId { get; set; }
+        public int mobileId { get; set; }
         public int adId { get; set; }
         public string color { get; set; }
         public string condition { get; set; }
         public Nullable<int> sims { get; set; }
     
         public virtual Ad Ad { get; set; }
-        public virtual Mobile Mobile { get; set; }
+        public virtual MobileModel MobileModel { get; set; }
     }
 }

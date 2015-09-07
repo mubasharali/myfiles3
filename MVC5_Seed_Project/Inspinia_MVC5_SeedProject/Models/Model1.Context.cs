@@ -45,21 +45,22 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<AnswerReply> AnswerReplies { get; set; }
         public virtual DbSet<AnswerReplyVote> AnswerReplyVotes { get; set; }
         public virtual DbSet<AnswerVote> AnswerVotes { get; set; }
-        public virtual DbSet<CarModel> CarModels { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<QuestionReply> QuestionReplies { get; set; }
         public virtual DbSet<QuestionReplyVote> QuestionReplyVotes { get; set; }
         public virtual DbSet<QuestionView> QuestionViews { get; set; }
         public virtual DbSet<QuestionVote> QuestionVotes { get; set; }
-        public virtual DbSet<Car> Cars { get; set; }
         public virtual DbSet<ReportedQuestion> ReportedQuestions { get; set; }
         public virtual DbSet<AdImage> AdImages { get; set; }
         public virtual DbSet<Bid> Bids { get; set; }
         public virtual DbSet<MobileModel> MobileModels { get; set; }
         public virtual DbSet<Ad> Ads { get; set; }
-        public virtual DbSet<MobileAd> MobileAds { get; set; }
-        public virtual DbSet<LaptopAd> LaptopAds { get; set; }
         public virtual DbSet<LaptopBrand> LaptopBrands { get; set; }
         public virtual DbSet<LaptopModel> LaptopModels { get; set; }
+        public virtual DbSet<MobileAd> MobileAds { get; set; }
+        public virtual DbSet<LaptopAd> LaptopAds { get; set; }
+        public virtual DbSet<CarAd> CarAds { get; set; }
+        public virtual DbSet<CarBrand> CarBrands { get; set; }
+        public virtual DbSet<CarModel> CarModels { get; set; }
     }
 }

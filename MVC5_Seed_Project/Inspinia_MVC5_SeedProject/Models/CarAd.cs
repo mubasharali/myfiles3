@@ -12,15 +12,18 @@ namespace Inspinia_MVC5_SeedProject.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class LaptopBrand
+    public partial class CarAd
     {
-        public LaptopBrand()
-        {
-            this.LaptopModels = new HashSet<LaptopModel>();
-        }
+        public int Id { get; set; }
+        public Nullable<short> year { get; set; }
+        public Nullable<int> kmDriven { get; set; }
+        public string color { get; set; }
+        public string fuelType { get; set; }
+        public int adId { get; set; }
+        public int carModel { get; set; }
+        public string condition { get; set; }
     
-        public string Id { get; set; }
-    
-        public virtual ICollection<LaptopModel> LaptopModels { get; set; }
+        public virtual Ad Ad { get; set; }
+        public virtual CarModel CarModel1 { get; set; }
     }
 }

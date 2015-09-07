@@ -118,6 +118,147 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             Ad ad = new Ad();
             return View(ad);
         }
+        public ActionResult CreateLaptopAd()
+        {
+            Ad ad = new Ad();
+            return View(ad);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateLaptopAd([Bind(Include = "Id,category,postedBy,title,description,time")] Ad ad)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Request.IsAuthenticated)
+                {
+                    LaptopAd mobileAd = new LaptopAd();
+
+                    var isbiding = Request["bidingAllowed"];
+                    if (isbiding == "fixedPrice")
+                    {
+                        var nn = Request["isNegotiable"];
+                        if (nn == "on")
+                        {
+                            ad.isnegotiable = "y";
+                        }
+                        else
+                        {
+                            ad.isnegotiable = "n";
+                        }
+                    }
+                    else if (isbiding == "allowBiding")
+                    {
+                        ad.isnegotiable = "b";
+                    }
+                    var condition = Request["condition"];
+                    if (condition == "new")
+                    {
+                        mobileAd.condition = "n";
+                    }
+                    else if (condition == "unboxed")
+                    {
+                        mobileAd.condition = "b";
+                    }
+                    else
+                    {
+                        mobileAd.condition = "u";
+                    }
+                    mobileAd.color = Request["color"];
+                    var pp = Request["price"];
+                    pp = pp.Replace(",", string.Empty);
+                    if (pp != null && pp != "")
+                    {
+                        //if (pp.Substring(pp.Length - 1) == ",")
+                        //{
+                        //    pp = pp.Remove(pp.Length - 1);
+                        //}
+                        ad.price = int.Parse(pp);
+                    }
+                    var company = Request["brand"];
+                    var model = Request["model"];
+                    ad.time = DateTime.UtcNow;
+                    ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
+                    ad.postedBy = User.Identity.GetUserId();
+                    AspNetUser asp = db.AspNetUsers.FirstOrDefault(x => x.Id == ad.postedBy);
+
+                    ad.category = "Electronics";
+                    //var companyName = model.Split(' ')[0];
+                    var allBrands = (db.LaptopBrands.Select(x => x.Id)).AsEnumerable(); //getBrands
+                    bool isNewBrand = true;
+                    foreach (var brand in allBrands)
+                    {
+                        if (brand == company)
+                        {
+                            isNewBrand = false;
+                        }
+                    }
+                    if (isNewBrand)
+                    {
+                        LaptopBrand mob = new  LaptopBrand();
+                        mob.Id = company;
+                        db.LaptopBrands.Add(mob);
+                        db.SaveChanges();
+
+                        LaptopModel mod = new  LaptopModel();
+                        mod.model = model;
+                        mod.brand = company;
+                        db.LaptopModels.Add(mod);
+                        db.SaveChanges();
+                        //send admin notification
+                    }
+                    else
+                    {
+                        var allModels = db.LaptopModels.Where(x => x.brand == company).Select(x => x.model);
+                        bool isNewModel = true;
+                        foreach (var myModel in allModels)
+                        {
+                            if (myModel == model)
+                            {
+                                isNewModel = false;
+                            }
+                        }
+                        if (isNewModel)
+                        {
+                            LaptopModel mod = new LaptopModel();
+                            mod.brand = company;
+                            mod.model = model;
+                            db.LaptopModels.Add(mod);
+                            db.SaveChanges();
+                            //send admin notification with user info
+                        }
+                    }
+
+                    //if (companyName == "HTC" || companyName == "Nokia" || companyName == "Samsung" || companyName == "Iphone")
+                    //{
+                    //    string[] newModel = model.Split(' ').Skip(1).ToArray();
+                    //    model = string.Join("", newModel);
+                    //}
+
+                    //var mobiledata = db.LaptopBrands.FirstOrDefault(x => x.Id == company && x.LaptopModels.Any(xu => xu.model.Equals(model)));
+                    var laptopdata = db.LaptopModels.FirstOrDefault(x => x.brand == company && x.model == model);
+                    mobileAd.laptopId = laptopdata.Id;
+                    asp.Ads.Add(ad);
+                    db.Ads.Add(ad);
+                    mobileAd.adId = ad.Id;
+                    ad.LaptopAds.Add(mobileAd);
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        string s = e.ToString();
+                    }
+                    return RedirectToAction("Index", new { category = "mobiles", subcategory = laptopdata.brand, lowcategory = laptopdata.model, id = ad.Id, title = ad.title });
+                }
+                TempData["error"] = "You must be logged in to post ad";
+                return View("Create", ad);
+            }
+            TempData["error"] = "Only enter those information about which you are asked";
+            return View("Create", ad);
+            //ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", ad.postedBy);
+            //return View(ad);
+        }
 
         // POST: /Electronics/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -233,7 +374,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     //    model = string.Join("", newModel);
                     //}
 
-                    var mobiledata = db.Mobiles.FirstOrDefault(x => x.Id == company && x.MobileModels.Any(xu=>xu.model.Equals(model)));
+                    //var mobiledata = db.Mobiles.FirstOrDefault(x => x.Id == company && x.MobileModels.Any(xu=>xu.model.Equals(model)));
+                    var mobileModel = db.MobileModels.FirstOrDefault(x => x.Mobile == company && x.model == model);
                     //if (mobiledata == null)
                     //{
                     //    Mobile mob = new Mobile();
@@ -244,7 +386,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     //    mm.model = model;
                     //    //send admin notification
                     //}
-                    mobileAd.mobileId = mobiledata.Id;
+                    mobileAd.mobileId = mobileModel.Id;
                     asp.Ads.Add(ad);
                     db.Ads.Add(ad);
                     mobileAd.adId = ad.Id;
@@ -257,7 +399,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     {
                         string s = e.ToString();
                     }
-                    return RedirectToAction("Index", new {category = "mobiles",subcategory = mobiledata.Id,lowcategory = mobiledata.MobileModels.FirstOrDefault(x=>x.model.Equals(model)).model,id = ad.Id , title = ad.title });
+                    return RedirectToAction("Index", new {category = "mobiles",subcategory = mobileModel.Mobile,lowcategory = mobileModel.model,id = ad.Id , title = ad.title });
                 }
                 TempData["error"] = "You must be logged in to post ad";
                 return View("Create", ad);

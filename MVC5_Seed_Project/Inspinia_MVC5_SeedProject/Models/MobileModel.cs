@@ -14,10 +14,16 @@ namespace Inspinia_MVC5_SeedProject.Models
     
     public partial class MobileModel
     {
+        public MobileModel()
+        {
+            this.MobileAds = new HashSet<MobileAd>();
+        }
+    
         public int Id { get; set; }
         public string Mobile { get; set; }
         public string model { get; set; }
     
         public virtual Mobile Mobile1 { get; set; }
+        public virtual ICollection<MobileAd> MobileAds { get; set; }
     }
 }

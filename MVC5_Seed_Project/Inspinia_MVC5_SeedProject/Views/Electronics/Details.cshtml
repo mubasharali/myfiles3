@@ -100,12 +100,18 @@
                                     <div data-bind="foreach: showMobileAd">
                                         <hr>
                                         <dl class="dl-horizontal m-t-md small">
+                                            <dt>Brand:</dt>
+                                            <dd data-bind="text:brand"></dd>
+                                            <dt>Model:</dt>
+                                            <dd data-bind="text:model"></dd>
                                             <dt>color:</dt>
                                             <dd data-bind="text:color"></dd>
                                             <dt>condition:</dt>
                                             <dd data-bind="text:condition"></dd>
-                                            <dt>Number of sims:</dt>
-                                            <dd data-bind="text:sims"></dd>
+                                            <span data-bind="if:sims">
+                                                <dt>Number of sims:</dt>
+                                                <dd data-bind="text:sims"></dd>
+                                            </span>
                                         </dl>
                                     </div>
                                     <h4>Product description</h4>
@@ -141,7 +147,7 @@
                                             <label class="control-label col-sm-2">Bid amount</label>
                                             <div class="col-sm-8">
                                                 <div class="input-group m-b">
-                                                    <span class="input-group-addon">Rs</span><input type="number" data-bind="value:newBidPrice" class="form-control" pattern="[0-9]*" name="price" required />
+                                                    <span class="input-group-addon">Rs</span><input type="number" placeholder="place bid.." data-bind="value:newBidPrice" class="form-control" pattern="[0-9]*" name="price" required />
                                                 </div>
                                             </div>
                                             <div class="col-sm-2"><button class="btn btn-success" data-bind="click:postBid">Submit</button></div>
@@ -336,9 +342,10 @@
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/slick")
     @Scripts.Render("~/plugins/jsTree")
-    @Scripts.Render("~/bundles/categoryTree")
+    @*@Scripts.Render("~/bundles/categoryTree")*@
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/plugins/sweetAlert")
+<script src="~/Scripts/categoryTree.js"></script>
     <script>
         function Biding(data) {
             var self = this;
@@ -385,15 +392,9 @@
             } else if (data.condition == "b") {
                 self.condition = "unBoxed";
             }
-
             self.sims = data.sims;
-            //if (data.isNew) {
-            //    self.isNew = 'New';
-            //} else {
-            //    self.isNew = 'Used'
-            //}
-            
-            
+            self.brand = data.brand;
+            self.model = data.model;
         }
         function commentReply(data) {
             var self = this;
@@ -714,7 +715,11 @@
                 self.showBidings(biding);
                 
             }
-            if (data.mobilead) {
+            if (data.laptopad) {
+                var mobad = $.map(data.laptopad, function (item) { return new mobilead(item); });
+                self.showMobileAd(mobad);
+            }
+            else if (data.mobilead) {
                 var mobad = $.map(data.mobilead, function (item) { return new mobilead(item); });
                 self.showMobileAd(mobad);
             }
