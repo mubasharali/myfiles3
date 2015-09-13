@@ -12,18 +12,15 @@ namespace Inspinia_MVC5_SeedProject.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CarModel
+    public partial class Chat
     {
-        public CarModel()
-        {
-            this.CarAds = new HashSet<CarAd>();
-        }
-    
         public int Id { get; set; }
-        public string brand { get; set; }
-        public string model { get; set; }
+        public string sentFrom { get; set; }
+        public string sentTo { get; set; }
+        public string message { get; set; }
+        public System.DateTime time { get; set; }
     
-        public virtual ICollection<CarAd> CarAds { get; set; }
-        public virtual CarBrand CarBrand { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
+        public virtual AspNetUser AspNetUser1 { get; set; }
     }
 }

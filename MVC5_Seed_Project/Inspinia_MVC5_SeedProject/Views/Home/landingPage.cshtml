@@ -2,6 +2,142 @@
 @{
     ViewBag.Title = "landingPage";
 }
-
+abcdef
 <h2>landingPage</h2>
 @Html.RouteLink("Create Ad", "Default", new { controller="Electronics",action="Details" })
+
+
+<div class="small-chat-box fadeInRight animated">
+
+    <div class="heading" draggable="true">
+        <small class="chat-date pull-right">
+            02.19.2015
+        </small>
+        Small chat
+    </div>
+
+    <div class="content">
+
+        <div class="left">
+            <div class="author-name">
+                Monica Jackson <small class="chat-date">
+                    10:02 am
+                </small>
+            </div>
+            <div class="chat-message active">
+                Lorem Ipsum is simply dummy text input.
+            </div>
+
+        </div>
+        <div class="right">
+            <div class="author-name">
+                Mick Smith
+                <small class="chat-date">
+                    11:24 am
+                </small>
+            </div>
+            <div class="chat-message">
+                Lorem Ipsum is simpl.
+            </div>
+        </div>
+        <div class="left">
+            <div class="author-name">
+                Alice Novak
+                <small class="chat-date">
+                    08:45 pm
+                </small>
+            </div>
+            <div class="chat-message active">
+                Check this stock char.
+            </div>
+        </div>
+        <div class="right">
+            <div class="author-name">
+                Anna Lamson
+                <small class="chat-date">
+                    11:24 am
+                </small>
+            </div>
+            <div class="chat-message">
+                The standard chunk of Lorem Ipsum
+            </div>
+        </div>
+        <div class="left">
+            <div class="author-name">
+                Mick Lane
+                <small class="chat-date">
+                    08:45 pm
+                </small>
+            </div>
+            <div class="chat-message active">
+                I belive that. Lorem Ipsum is simply dummy text.
+            </div>
+        </div>
+
+
+    </div>
+    <div class="form-chat">
+        <div class="input-group input-group-sm">
+            <input type="text" data-bind="value:newMessage" class="form-control"> <span class="input-group-btn">
+                <button class="btn btn-primary" data-bind="click:sendMessage" type="button">
+                    Send
+                </button>
+            </span>
+        </div>
+    </div>
+
+</div>
+<div id="small-chat">
+
+    <span class="badge badge-warning pull-right">5</span>
+    <a class="open-small-chat">
+        <i class="fa fa-comments"></i>
+
+    </a>
+</div>
+@section Styles{
+    @Styles.Render("~/plugins/toastrStyles")
+}
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+
+    <script>
+        function Message(data){
+            var self = this;
+            data = data || {};
+            self.sentFrom = data.from;
+            self.sentTo = data.to;
+            self.message = data.message;
+        }
+        function ChatViewModel() {
+            var self = this;
+            self.showChat = ko.observableArray();
+            self.newMessage = ko.observable();
+            self.sendMessage = function () {
+                var msg = new Message();
+                msg.sentTo = "";
+                msg.message = self.newMessage();
+                $.ajax({
+                    url: '/api/Chat/PostChat',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(message),
+                    success: function (data) {
+                        self.newMessage("");
+                    },
+                    error: function () {
+                        toastr.error("failed to send message", "Error!");
+                    }
+                });
+            }
+        }
+        $(function () {
+            ko.applyBindings(new ChatViewModel);
+        });
+    </script>
+}

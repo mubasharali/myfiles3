@@ -37,6 +37,8 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.Bids = new HashSet<Bid>();
             this.AdViews = new HashSet<AdView>();
             this.Ads = new HashSet<Ad>();
+            this.Chats = new HashSet<Chat>();
+            this.Chats1 = new HashSet<Chat>();
         }
     
         public string Id { get; set; }
@@ -51,6 +53,17 @@ namespace Inspinia_MVC5_SeedProject.Models
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
+        public Nullable<System.DateTime> since { get; set; }
+        public Nullable<int> reputation { get; set; }
+        public Nullable<bool> hideEmail { get; set; }
+        public Nullable<bool> hidePhoneNumber { get; set; }
+        public string dpExtension { get; set; }
+        public Nullable<System.DateTime> dateOfBirth { get; set; }
+        public string shortAbout { get; set; }
+        public string longAbout { get; set; }
+        public string city { get; set; }
+        public string gender { get; set; }
+        public Nullable<bool> hideDateOfBirth { get; set; }
     
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
@@ -73,5 +86,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<Bid> Bids { get; set; }
         public virtual ICollection<AdView> AdViews { get; set; }
         public virtual ICollection<Ad> Ads { get; set; }
+        public virtual ICollection<Chat> Chats { get; set; }
+        public virtual ICollection<Chat> Chats1 { get; set; }
     }
 }

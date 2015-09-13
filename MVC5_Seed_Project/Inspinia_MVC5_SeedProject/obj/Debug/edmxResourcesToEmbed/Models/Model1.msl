@@ -41,6 +41,17 @@
     <EntitySetMapping Name="AspNetUsers">
       <EntityTypeMapping TypeName="Model.AspNetUser">
         <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="hideDateOfBirth" ColumnName="hideDateOfBirth" />
+          <ScalarProperty Name="gender" ColumnName="gender" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="longAbout" ColumnName="longAbout" />
+          <ScalarProperty Name="shortAbout" ColumnName="shortAbout" />
+          <ScalarProperty Name="dateOfBirth" ColumnName="dateOfBirth" />
+          <ScalarProperty Name="dpExtension" ColumnName="dpExtension" />
+          <ScalarProperty Name="hidePhoneNumber" ColumnName="hidePhoneNumber" />
+          <ScalarProperty Name="hideEmail" ColumnName="hideEmail" />
+          <ScalarProperty Name="reputation" ColumnName="reputation" />
+          <ScalarProperty Name="since" ColumnName="since" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
@@ -129,36 +140,6 @@
         <MappingFragment StoreEntitySet="AdView">
           <ScalarProperty Name="adId" ColumnName="adId" />
           <ScalarProperty Name="viewedBy" ColumnName="viewedBy" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="popularPlaces">
-      <EntityTypeMapping TypeName="Model.popularPlace">
-        <MappingFragment StoreEntitySet="popularPlace">
-          <ScalarProperty Name="latitude" ColumnName="latitude" />
-          <ScalarProperty Name="longitude" ColumnName="longitude" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="cityId" ColumnName="cityId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AdsLocations">
-      <EntityTypeMapping TypeName="Model.AdsLocation">
-        <MappingFragment StoreEntitySet="AdsLocation">
-          <ScalarProperty Name="adId" ColumnName="adId" />
-          <ScalarProperty Name="exectLocation" ColumnName="exectLocation" />
-          <ScalarProperty Name="cityId" ColumnName="cityId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Cities">
-      <EntityTypeMapping TypeName="Model.City">
-        <MappingFragment StoreEntitySet="City">
-          <ScalarProperty Name="popularPlace" ColumnName="popularPlace" />
-          <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -356,11 +337,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="CarBrands">
+      <EntityTypeMapping TypeName="Model.CarBrand">
+        <MappingFragment StoreEntitySet="CarBrand">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="CarAds">
       <EntityTypeMapping TypeName="Model.CarAd">
         <MappingFragment StoreEntitySet="CarAd">
           <ScalarProperty Name="condition" ColumnName="condition" />
-          <ScalarProperty Name="carModel" ColumnName="carModel" />
+          <ScalarProperty Name="carId" ColumnName="carId" />
           <ScalarProperty Name="adId" ColumnName="adId" />
           <ScalarProperty Name="fuelType" ColumnName="fuelType" />
           <ScalarProperty Name="color" ColumnName="color" />
@@ -370,18 +358,50 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CarBrands">
-      <EntityTypeMapping TypeName="Model.CarBrand">
-        <MappingFragment StoreEntitySet="CarBrand">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CarModels">
       <EntityTypeMapping TypeName="Model.CarModel">
         <MappingFragment StoreEntitySet="CarModel">
           <ScalarProperty Name="model" ColumnName="model" />
           <ScalarProperty Name="brand" ColumnName="brand" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cities">
+      <EntityTypeMapping TypeName="Model.City">
+        <MappingFragment StoreEntitySet="City">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="popularPlaces">
+      <EntityTypeMapping TypeName="Model.popularPlace">
+        <MappingFragment StoreEntitySet="popularPlace">
+          <ScalarProperty Name="latitude" ColumnName="latitude" />
+          <ScalarProperty Name="longitude" ColumnName="longitude" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="cityId" ColumnName="cityId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdsLocations">
+      <EntityTypeMapping TypeName="Model.AdsLocation">
+        <MappingFragment StoreEntitySet="AdsLocation">
+          <ScalarProperty Name="popularPlaceId" ColumnName="popularPlaceId" />
+          <ScalarProperty Name="exectLocation" ColumnName="exectLocation" />
+          <ScalarProperty Name="cityId" ColumnName="cityId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Chats">
+      <EntityTypeMapping TypeName="Model.Chat">
+        <MappingFragment StoreEntitySet="Chat">
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="message" ColumnName="message" />
+          <ScalarProperty Name="sentTo" ColumnName="sentTo" />
+          <ScalarProperty Name="sentFrom" ColumnName="sentFrom" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

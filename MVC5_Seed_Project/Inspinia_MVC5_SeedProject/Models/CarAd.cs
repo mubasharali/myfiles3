@@ -20,10 +20,10 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string color { get; set; }
         public string fuelType { get; set; }
         public int adId { get; set; }
-        public int carModel { get; set; }
+        public int carId { get; set; }
         public string condition { get; set; }
     
         public virtual Ad Ad { get; set; }
-        public virtual CarModel CarModel1 { get; set; }
+        public virtual CarModel CarModel { get; set; }
     }
 }

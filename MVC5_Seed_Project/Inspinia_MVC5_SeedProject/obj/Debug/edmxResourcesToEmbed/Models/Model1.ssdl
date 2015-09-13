@@ -43,10 +43,10 @@
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="cityId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="cityId" Type="nvarchar" MaxLength="40" />
     <Property Name="exectLocation" Type="varchar" MaxLength="50" />
-    <Property Name="adId" Type="int" Nullable="false" />
+    <Property Name="popularPlaceId" Type="int" />
   </EntityType>
   <EntityType Name="AdView">
     <Key>
@@ -144,6 +144,17 @@
     <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
     <Property Name="AccessFailedCount" Type="int" Nullable="false" />
     <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="since" Type="smalldatetime" />
+    <Property Name="reputation" Type="int" />
+    <Property Name="hideEmail" Type="bit" />
+    <Property Name="hidePhoneNumber" Type="bit" />
+    <Property Name="dpExtension" Type="char" MaxLength="10" />
+    <Property Name="gender" Type="char" MaxLength="12" />
+    <Property Name="dateOfBirth" Type="date" />
+    <Property Name="shortAbout" Type="nvarchar" MaxLength="30" />
+    <Property Name="longAbout" Type="nvarchar" MaxLength="500" />
+    <Property Name="city" Type="nvarchar" MaxLength="40" />
+    <Property Name="hideDateOfBirth" Type="bit" />
   </EntityType>
   <EntityType Name="Bid">
     <Key>
@@ -165,7 +176,7 @@
     <Property Name="color" Type="nchar" MaxLength="20" />
     <Property Name="fuelType" Type="nchar" MaxLength="20" />
     <Property Name="adId" Type="int" Nullable="false" />
-    <Property Name="carModel" Type="int" Nullable="false" />
+    <Property Name="carId" Type="int" Nullable="false" />
     <Property Name="condition" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="CarBrand">
@@ -182,13 +193,21 @@
     <Property Name="brand" Type="nvarchar" MaxLength="30" Nullable="false" />
     <Property Name="model" Type="nvarchar" MaxLength="30" Nullable="false" />
   </EntityType>
-  <EntityType Name="City">
+  <EntityType Name="Chat">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="popularPlace" Type="varchar" MaxLength="50" />
+    <Property Name="sentFrom" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="sentTo" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="message" Type="nvarchar" MaxLength="1000" Nullable="false" />
+    <Property Name="time" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="City">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="40" Nullable="false" />
   </EntityType>
   <EntityType Name="Comment">
     <Key>
@@ -282,7 +301,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="cityId" Type="int" />
+    <Property Name="cityId" Type="nvarchar" MaxLength="40" Nullable="false" />
     <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="longitude" Type="decimal" Precision="18" Scale="0" />
     <Property Name="latitude" Type="decimal" Precision="18" Scale="0" />
@@ -394,19 +413,23 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_AdsLocation_ToTable">
-    <End Role="Ad" Type="Self.Ad" Multiplicity="1" />
-    <End Role="AdsLocation" Type="Self.AdsLocation" Multiplicity="*" />
+    <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AdsLocation" Type="Self.AdsLocation" Multiplicity="0..1" />
     <ReferentialConstraint>
       <Principal Role="Ad">
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="AdsLocation">
-        <PropertyRef Name="adId" />
+        <PropertyRef Name="Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_AdsLocation_ToTable_1">
-    <End Role="City" Type="Self.City" Multiplicity="1" />
+    <End Role="City" Type="Self.City" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="AdsLocation" Type="Self.AdsLocation" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="City">
@@ -414,6 +437,18 @@
       </Principal>
       <Dependent Role="AdsLocation">
         <PropertyRef Name="cityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AdsLocation_ToTable_2">
+    <End Role="popularPlace" Type="Self.popularPlace" Multiplicity="0..1" />
+    <End Role="AdsLocation" Type="Self.AdsLocation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="popularPlace">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AdsLocation">
+        <PropertyRef Name="popularPlaceId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -597,7 +632,7 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="CarAd">
-        <PropertyRef Name="carModel" />
+        <PropertyRef Name="carId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -612,6 +647,30 @@
       </Principal>
       <Dependent Role="CarModel">
         <PropertyRef Name="brand" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Chat_ToTable">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="Chat" Type="Self.Chat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Chat">
+        <PropertyRef Name="sentFrom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Chat_ToTable_1">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="Chat" Type="Self.Chat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Chat">
+        <PropertyRef Name="sentTo" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -857,6 +916,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_popularPlace_ToTable">
+    <End Role="City" Type="Self.City" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="popularPlace" Type="Self.popularPlace" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="popularPlace">
+        <PropertyRef Name="cityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Question_ToTable">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -1047,6 +1120,7 @@
     <EntitySet Name="CarAd" EntityType="Self.CarAd" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarBrand" EntityType="Self.CarBrand" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarModel" EntityType="Self.CarModel" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Chat" EntityType="Self.Chat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CommentReply" EntityType="Self.CommentReply" Schema="dbo" store:Type="Tables" />
@@ -1084,6 +1158,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_AdsLocation_ToTable_1" Association="Self.FK_AdsLocation_ToTable_1">
       <End Role="City" EntitySet="City" />
+      <End Role="AdsLocation" EntitySet="AdsLocation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AdsLocation_ToTable_2" Association="Self.FK_AdsLocation_ToTable_2">
+      <End Role="popularPlace" EntitySet="popularPlace" />
       <End Role="AdsLocation" EntitySet="AdsLocation" />
     </AssociationSet>
     <AssociationSet Name="FK_AdView_ToTable" Association="Self.FK_AdView_ToTable">
@@ -1145,6 +1223,14 @@
     <AssociationSet Name="FK_CarModels_ToTable" Association="Self.FK_CarModels_ToTable">
       <End Role="CarBrand" EntitySet="CarBrand" />
       <End Role="CarModel" EntitySet="CarModel" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Chat_ToTable" Association="Self.FK_Chat_ToTable">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Chat" EntitySet="Chat" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Chat_ToTable_1" Association="Self.FK_Chat_ToTable_1">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Chat" EntitySet="Chat" />
     </AssociationSet>
     <AssociationSet Name="FK_Comment_ToTable" Association="Self.FK_Comment_ToTable">
       <End Role="Ad" EntitySet="Ad" />
@@ -1217,6 +1303,10 @@
     <AssociationSet Name="FK_MobileModel_ToTable" Association="Self.FK_MobileModel_ToTable">
       <End Role="Mobile" EntitySet="Mobile" />
       <End Role="MobileModel" EntitySet="MobileModel" />
+    </AssociationSet>
+    <AssociationSet Name="FK_popularPlace_ToTable" Association="Self.FK_popularPlace_ToTable">
+      <End Role="City" EntitySet="City" />
+      <End Role="popularPlace" EntitySet="popularPlace" />
     </AssociationSet>
     <AssociationSet Name="FK_Question_ToTable" Association="Self.FK_Question_ToTable">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />

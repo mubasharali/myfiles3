@@ -18,7 +18,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         {
             this.AdImages = new HashSet<AdImage>();
             this.AdsLikes = new HashSet<AdsLike>();
-            this.AdsLocations = new HashSet<AdsLocation>();
             this.AdViews = new HashSet<AdView>();
             this.Bids = new HashSet<Bid>();
             this.Comments = new HashSet<Comment>();
@@ -40,7 +39,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual ICollection<AdImage> AdImages { get; set; }
         public virtual ICollection<AdsLike> AdsLikes { get; set; }
-        public virtual ICollection<AdsLocation> AdsLocations { get; set; }
         public virtual ICollection<AdView> AdViews { get; set; }
         public virtual ICollection<Bid> Bids { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
@@ -48,5 +46,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<MobileAd> MobileAds { get; set; }
         public virtual ICollection<LaptopAd> LaptopAds { get; set; }
         public virtual ICollection<CarAd> CarAds { get; set; }
+        public virtual AdsLocation AdsLocation { get; set; }
     }
 }

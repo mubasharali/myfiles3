@@ -165,6 +165,27 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                           brand = laptop.LaptopModel.brand,
                                           model = laptop.LaptopModel.model,
                                       },
+                                      carad = from car in ad.CarAds.ToList()
+                                              select new{
+                                                  color = car.color,
+                                                  condition = car.condition,
+                                                  brand = car.CarModel.brand,
+                                                  model = car.CarModel.model,
+                                                  fuelType = car.fuelType,
+                                                  year = car.year,
+                                                  kmDriven = car.kmDriven,
+                                              },
+                           //carad = from car in ad.CarAds.ToList()
+                           //        select new
+                           //        {
+                           //            color = car.color,
+                           //            condition = car.condition,
+                           //            brand = car.CarModel.brand,
+                           //            model = car.CarModel.model,
+                           //            fuelType = car.fuelType,
+                           //            year = car.year,
+                           //            kmDriven = car.kmDriven,
+                           //        },
                            comment = from comment in ad.Comments.ToList()
                                      orderby comment.time
                                      select new

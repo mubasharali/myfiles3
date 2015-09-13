@@ -23,6 +23,11 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             ViewBag.id = id;
             return View();
         }
+        public ActionResult Profile(string id)
+        {
+            ViewBag.userId = id;
+            return View();
+        }
         public ActionResult saveProfilePic()
         {
             if (Request.IsAuthenticated)

@@ -37,9 +37,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<CommentVote> CommentVotes { get; set; }
         public virtual DbSet<Reported> Reporteds { get; set; }
         public virtual DbSet<AdView> AdViews { get; set; }
-        public virtual DbSet<popularPlace> popularPlaces { get; set; }
-        public virtual DbSet<AdsLocation> AdsLocations { get; set; }
-        public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Mobile> Mobiles { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<AnswerReply> AnswerReplies { get; set; }
@@ -59,8 +56,12 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<LaptopModel> LaptopModels { get; set; }
         public virtual DbSet<MobileAd> MobileAds { get; set; }
         public virtual DbSet<LaptopAd> LaptopAds { get; set; }
-        public virtual DbSet<CarAd> CarAds { get; set; }
         public virtual DbSet<CarBrand> CarBrands { get; set; }
+        public virtual DbSet<CarAd> CarAds { get; set; }
         public virtual DbSet<CarModel> CarModels { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
+        public virtual DbSet<popularPlace> popularPlaces { get; set; }
+        public virtual DbSet<AdsLocation> AdsLocations { get; set; }
+        public virtual DbSet<Chat> Chats { get; set; }
     }
 }

@@ -39,7 +39,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             
         //    return View();
         //}
-
+        public ActionResult Temp()
+        {
+            return View();
+        }
         public ActionResult Index(string category, string subcategory, string lowercategory,string lowercategory1,int id = 0, string ignore = "")
         {
             var currentNode = this.GetCurrentSiteMapNode();

@@ -122,6 +122,14 @@ namespace Inspinia_MVC5_SeedProject
             bundles.Add(new ScriptBundle("~/plugins/sweetAlert").Include(
                       "~/Scripts/plugins/sweetalert/sweetalert.min.js"));
 
+            // dataPicker styles
+            bundles.Add(new StyleBundle("~/plugins/dataPickerStyles").Include(
+                      "~/Content/plugins/datapicker/datepicker3.css"));
+
+            // dataPicker 
+            bundles.Add(new ScriptBundle("~/plugins/dataPicker").Include(
+                      "~/Scripts/plugins/datapicker/bootstrap-datepicker.js"));
+
             // Rickshaw chart
             bundles.Add(new ScriptBundle("~/plugins/rickshaw").Include(
                       "~/Scripts/plugins/rickshaw/vendor/d3.v3.js",

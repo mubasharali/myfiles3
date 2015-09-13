@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Security;
+using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.Controllers
@@ -33,21 +35,88 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         public async Task<IHttpActionResult> GetUser(string id)
         {
             AspNetUser aspnetuser = await db.AspNetUsers.FindAsync(id);
-            var user = from u in db.AspNetUsers
+           // AspNetUser aspnetuser = db.AspNetUsers.FirstOrDefault(id);
+            if (aspnetuser == null)
+            {
+                return NotFound();
+            }
+            string loginUserId = "";
+            if (User.Identity.IsAuthenticated)
+            {
+                loginUserId = User.Identity.GetUserId();
+            }
+            var user = (from u in db.AspNetUsers
                        where u.Id.Equals(id)
                        select new
                        {
                            UserName = u.UserName,
                            Email = u.Email,
-                           Id = u.Id
-                       };
+                           Id = u.Id,
+                           dateOfBirth = u.dateOfBirth,
+                           gender = u.gender,
+                           hideEmail = u.hideEmail,
+                           hidePhoneNumber = u.hidePhoneNumber,
+                           hideDateOfBirth = u.hideDateOfBirth,
+                           phoneNumber = u.PhoneNumber,
+                           shortAbout = u.shortAbout,
+                           longAbout = u.longAbout,
+                           dpExtension = u.dpExtension,
+                           lastSeen = Membership.UserIsOnlineTimeWindow,
+                           reputation = u.reputation,
+                           since = u.since,
+                           city = u.city,
+                           
+                           loginUserId = loginUserId,
+                       }).FirstOrDefault();
             if (user == null)
             {
                 return NotFound();
             }
             return Ok(user);
         }
+        public async Task<IHttpActionResult> IsUserOnline(string id)
+        {
+            var ret = "false";
+            if (Membership.GetUser(id).IsOnline)
+            {
+                ret = "true";
+                return Ok(ret);
+            }
+            return Ok(ret);
+        }
+         public async Task<IHttpActionResult> UpdateProfile(AspNetUser user)
+         {
+             if (User.Identity.IsAuthenticated)
+             {
+                 if (User.Identity.GetUserId() == user.Id)
+                 {
+                     if (!ModelState.IsValid)
+                     {
+                         return BadRequest();
+                     }
+                     db.Entry(user).State = EntityState.Modified;
 
+                     try
+                     {
+                         await db.SaveChangesAsync();
+                     }
+                     catch (DbUpdateConcurrencyException)
+                     {
+                         if (!AspNetUserExists(user.Id))
+                         {
+                             return NotFound();
+                         }
+                         else
+                         {
+                             throw;
+                         }
+                     }
+
+                     return StatusCode(HttpStatusCode.NoContent);
+                 }
+             }
+             return BadRequest();
+        }
         // PUT api/User/5
         public async Task<IHttpActionResult> PutAspNetUser(string id, AspNetUser aspnetuser)
         {
@@ -129,7 +198,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         }
 
         protected override void Dispose(bool disposing)
-        {
+       {
             if (disposing)
             {
                 db.Dispose();

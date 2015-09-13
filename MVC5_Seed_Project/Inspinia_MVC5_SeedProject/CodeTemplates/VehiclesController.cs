@@ -69,7 +69,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 {
                     ViewBag.adId = id;
                 }
-                return View("/Views/Electronics/Details", new { id = id});
+                return View("../Electronics/Details", new { id = id});
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
@@ -142,6 +142,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         mobileAd.condition = "u";
                     }
                     mobileAd.color = Request["color"];
+                    mobileAd.year = short.Parse( Request["year"]);
+                    mobileAd.kmDriven = int.Parse(Request["kmDriven"]);
+                    mobileAd.fuelType = Request["fuelType"];
                     var pp = Request["price"];
                     pp = pp.Replace(",", string.Empty);
                     if (pp != null && pp != "")
@@ -154,6 +157,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     }
                     var company = Request["brand"];
                     var model = Request["model"];
+
                     ad.time = DateTime.UtcNow;
                     ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
                     ad.postedBy = User.Identity.GetUserId();
@@ -214,7 +218,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
 
                     //var mobiledata = db.LaptopBrands.FirstOrDefault(x => x.Id == company && x.LaptopModels.Any(xu => xu.model.Equals(model)));
                     var laptopdata = db.CarModels.FirstOrDefault(x => x.brand == company && x.model == model);
-                    mobileAd.carModel = laptopdata.Id;
+                    mobileAd.carId = laptopdata.Id;
                     asp.Ads.Add(ad);
                     db.Ads.Add(ad);
                     mobileAd.adId = ad.Id;

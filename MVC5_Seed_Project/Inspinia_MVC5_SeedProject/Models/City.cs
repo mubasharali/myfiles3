@@ -16,13 +16,13 @@ namespace Inspinia_MVC5_SeedProject.Models
     {
         public City()
         {
+            this.popularPlaces = new HashSet<popularPlace>();
             this.AdsLocations = new HashSet<AdsLocation>();
         }
     
-        public int Id { get; set; }
-        public string name { get; set; }
-        public string popularPlace { get; set; }
+        public string Id { get; set; }
     
+        public virtual ICollection<popularPlace> popularPlaces { get; set; }
         public virtual ICollection<AdsLocation> AdsLocations { get; set; }
     }
 }
