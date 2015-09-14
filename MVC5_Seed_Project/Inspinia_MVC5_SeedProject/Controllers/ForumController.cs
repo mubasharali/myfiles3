@@ -53,6 +53,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           views = q.QuestionViews.Count,
                           reportedCount = q.ReportedQuestions.Count,
                           isReported = q.ReportedQuestions.Any(x=>x.reportedBy == islogin),
+                          voteUpCount = q.QuestionVotes.Where(x=>x.isUp == true).Count(),
+                          voteDownCount = q.QuestionVotes.Where(x => x.isUp == false).Count(),
+                          isUp = q.QuestionVotes.Any(x=>x.votedBy == islogin && x.isUp),
+                          isDown = q.QuestionVotes.Any(x=>x.votedBy == islogin && x.isUp == false),
                           questionReplies = from reply in q.QuestionReplies.ToList()
                                             select new
                                             {
@@ -60,7 +64,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                 description = reply.description,
                                                 postedById = reply.AspNetUser.Id,
                                                 postedByName = reply.AspNetUser.UserName,
-                                                time = reply.time
+                                                time = reply.time,
+                                                voteUpCount = reply.QuestionReplyVotes.Where(x=>x.isUp).Count(),
+                                                voteDownCount = reply.QuestionReplyVotes.Where(x=>x.isUp == false).Count(),
+                                                isUp = reply.QuestionReplyVotes.Any(x =>x.votedBy == islogin && x.isUp),
+                                                isDown = reply.QuestionReplyVotes.Any(x=>x.votedBy == islogin && x.isUp == false),
                                             },
                           answers = from ans in q.Answers.ToList()
                                     select new
@@ -70,6 +78,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                         postedByName = ans.AspNetUser.UserName,
                                         postedById = ans.AspNetUser.Id,
                                         time = ans.time,
+                                        voteUpCount = ans.AnswerVotes.Where(x => x.isUp == true).Count(),
+                                        voteDownCount = ans.AnswerVotes.Where(x => x.isUp == false).Count(),
+                                        isUp = ans.AnswerVotes.Any(x => x.votedBy == islogin && x.isUp),
+                                        isDown = ans.AnswerVotes.Any(x => x.votedBy == islogin && x.isUp == false),
+                          
                                         answerReplies = from rep in ans.AnswerReplies.ToList()
                                                         select new
                                                         {
@@ -77,7 +90,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                             description = rep.description,
                                                             postedByName = rep.AspNetUser.UserName,
                                                             postedById = rep.AspNetUser.Id,
-                                                            time = rep.time
+                                                            time = rep.time,
+                                                            voteUpCount = rep.AnswerReplyVotes.Where(x => x.isUp).Count(),
+                                                            voteDownCount = rep.AnswerReplyVotes.Where(x => x.isUp == false).Count(),
+                                                            isUp = rep.AnswerReplyVotes.Any(x => x.votedBy == islogin && x.isUp),
+                                                            isDown = rep.AnswerReplyVotes.Any(x => x.votedBy == islogin && x.isUp == false),
+                                            
                                                         }
                                     }
                       };
@@ -393,6 +411,219 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 return BadRequest("Not login");
             }
         }
+        public async Task<IHttpActionResult> VoteQuestion(int id, bool isup)
+        {
+            var userId = User.Identity.GetUserId();
+            if (userId != null)
+            {
+                Question comment = await db.Questions.FindAsync(id);
+                var commentVoteByUser = await db.QuestionVotes.FirstOrDefaultAsync(x => x.questionId == id && x.votedBy == userId);
+                if (comment == null)
+                {
+                    return NotFound();
+                }
+                var vote = commentVoteByUser;
+                if (vote != null)
+                {
+                    if (vote.isUp && isup)
+                    {
+                        return BadRequest("You have already voteup");
+                    }
+                    else if (vote.isUp && !isup)
+                    {
+                        vote.isUp = false;
+                    }
+                    else if (!vote.isUp && !isup)
+                    {
+                        return BadRequest("You have already votedown");
+                    }
+                    else if (!vote.isUp && isup)
+                    {
+                        vote.isUp = true;
+                    }
+                }
+                else
+                {
+                    QuestionVote repvote = new QuestionVote();
+                    repvote.isUp = isup;
+                    repvote.votedBy = userId;
+                    repvote.questionId = id;
+                    db.QuestionVotes.Add(repvote);
+                }
+                await db.SaveChangesAsync();
+
+                var q = (from x in comment.QuestionVotes.Where(x => x.questionId == comment.Id)
+                         let voteUp = comment.QuestionVotes.Count(m => m.isUp)
+                         let voteDown = comment.QuestionVotes.Count(m => m.isUp == false)
+                         select new { voteCount = voteUp - voteDown }).FirstOrDefault();
+
+                return Ok(q);
+            }
+            else
+            {
+                return BadRequest("You are not login");
+            }
+        }
+        public async Task<IHttpActionResult> VoteAnswer(int id, bool isup)
+        {
+            var userId = User.Identity.GetUserId();
+            if (userId != null)
+            {
+                Answer comment = await db.Answers.FindAsync(id);
+                var commentVoteByUser = await db.AnswerVotes.FirstOrDefaultAsync(x => x.answerId == id && x.votedBy == userId);
+                if (comment == null)
+                {
+                    return NotFound();
+                }
+                var vote = commentVoteByUser;
+                if (vote != null)
+                {
+                    if (vote.isUp && isup)
+                    {
+                        return BadRequest("You have already voteup");
+                    }
+                    else if (vote.isUp && !isup)
+                    {
+                        vote.isUp = false;
+                    }
+                    else if (!vote.isUp && !isup)
+                    {
+                        return BadRequest("You have already votedown");
+                    }
+                    else if (!vote.isUp && isup)
+                    {
+                        vote.isUp = true;
+                    }
+                }
+                else
+                {
+                    AnswerVote repvote = new  AnswerVote();
+                    repvote.isUp = isup;
+                    repvote.votedBy = userId;
+                    repvote.answerId = id;
+                    db.AnswerVotes.Add(repvote);
+                }
+                await db.SaveChangesAsync();
+
+                var q = (from x in comment.AnswerVotes.Where(x => x.answerId == comment.Id)
+                         let voteUp = comment.AnswerVotes.Count(m => m.isUp)
+                         let voteDown = comment.AnswerVotes.Count(m => m.isUp == false)
+                         select new { voteUpCount = voteUp, voteDownCount = voteDown }).FirstOrDefault();
+
+                return Ok(q);
+            }
+            else
+            {
+                return BadRequest("You are not login");
+            }
+        }
+        public async Task<IHttpActionResult> VoteQuestionReply(int id, bool isup)
+        {
+            var userId = User.Identity.GetUserId();
+            if (userId != null)
+            {
+                QuestionReply comment = await db.QuestionReplies.FindAsync(id);
+                var commentVoteByUser = await db.QuestionReplyVotes.FirstOrDefaultAsync(x => x.questionReplyId == id && x.votedBy == userId);
+                if (comment == null)
+                {
+                    return NotFound();
+                }
+                var vote = commentVoteByUser;
+                if (vote != null)
+                {
+                    if (vote.isUp && isup)
+                    {
+                        return BadRequest("You have already voteup");
+                    }
+                    else if (vote.isUp && !isup)
+                    {
+                        vote.isUp = false;
+                    }
+                    else if (!vote.isUp && !isup)
+                    {
+                        return BadRequest("You have already votedown");
+                    }
+                    else if (!vote.isUp && isup)
+                    {
+                        vote.isUp = true;
+                    }
+                }
+                else
+                {
+                    QuestionReplyVote repvote = new  QuestionReplyVote();
+                    repvote.isUp = isup;
+                    repvote.votedBy = userId;
+                    repvote.questionReplyId = id;
+                    db.QuestionReplyVotes.Add(repvote);
+                }
+                await db.SaveChangesAsync();
+
+                var q = (from x in comment.QuestionReplyVotes.Where(x => x.questionReplyId == comment.Id)
+                         let voteUp = comment.QuestionReplyVotes.Count(m => m.isUp)
+                         let voteDown = comment.QuestionReplyVotes.Count(m => m.isUp == false)
+                         select new { voteUpCount = voteUp, voteDownCount = voteDown }).FirstOrDefault();
+
+                return Ok(q);
+            }
+            else
+            {
+                return BadRequest("You are not login");
+            }
+        }
+        public async Task<IHttpActionResult> VoteAnswerReply(int id, bool isup)
+        {
+            var userId = User.Identity.GetUserId();
+            if (userId != null)
+            {
+                AnswerReply comment = await db.AnswerReplies.FindAsync(id);
+                var commentVoteByUser = await db.AnswerReplyVotes.FirstOrDefaultAsync(x => x.answerReplyId == id && x.votedBy == userId);
+                if (comment == null)
+                {
+                    return NotFound();
+                }
+                var vote = commentVoteByUser;
+                if (vote != null)
+                {
+                    if (vote.isUp && isup)
+                    {
+                        return BadRequest("You have already voteup");
+                    }
+                    else if (vote.isUp && !isup)
+                    {
+                        vote.isUp = false;
+                    }
+                    else if (!vote.isUp && !isup)
+                    {
+                        return BadRequest("You have already votedown");
+                    }
+                    else if (!vote.isUp && isup)
+                    {
+                        vote.isUp = true;
+                    }
+                }
+                else
+                {
+                    AnswerReplyVote repvote = new  AnswerReplyVote();
+                    repvote.isUp = isup;
+                    repvote.votedBy = userId;
+                    repvote.answerReplyId = id;
+                    db.AnswerReplyVotes.Add(repvote);
+                }
+                await db.SaveChangesAsync();
+
+                var q = (from x in comment.AnswerReplyVotes.Where(x => x.answerReplyId == comment.Id)
+                         let voteUp = comment.AnswerReplyVotes.Count(m => m.isUp)
+                         let voteDown = comment.AnswerReplyVotes.Count(m => m.isUp == false)
+                         select new { voteUpCount = voteUp, voteDownCount = voteDown }).FirstOrDefault();
+
+                return Ok(q);
+            }
+            else
+            {
+                return BadRequest("You are not login");
+            }
+        }
+        
         protected string GetIPAddress()
         {
             System.Web.HttpContext context = System.Web.HttpContext.Current;

@@ -20,41 +20,69 @@
 
 
 
-<div class="wrapper wrapper-content animated fadeInRight">
-
+<div class="wrapper wrapper-content animated fadeInUp">
     <div class="row">
-        <div class="col-sm-3"></div>
+        <div class="col-md-3"></div>
         <div class="col-md-6">
-            <div data-bind="foreach: showQuestions">
-                
-                    <div class="wrapper wrapper-content animated fadeInUp">
-                        <div class="ibox">
-                            <div data-bind="attr:{'id':id}">
-                                <div class="ibox-content">
+            <div class="ibox">
+                <div data-bind="foreach: showQuestions">
+                    <div class="ibox-content" data-bind="attr:{'id':id}">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                    <a href="#" class="btn btn-white btn-xs pull-right">Delete</a><a href="#" class="btn btn-white btn-xs pull-right">Edit</a>
+                                <div class="vote-item">
                                     <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="m-b-md">
-                                                <a href="#" class="btn btn-white btn-xs pull-right">Edit</a>
-                                                <h2><span data-bind="text: title"></span></h2>
+                                        <div class="col-md-10">
+                                            <div class="vote-actions">
+                                                <a data-bind="click:function(){ return questionVoteUp(id,loginUserId,true) }">
+                                                    <i class="fa fa-chevron-up" data-bind="style:{color: isliked()? 'red' : 'gray'}"> </i>
+                                                </a>
+                                                <div data-bind="text:voteCount"></div>
+                                                <a data-bind="click:function(){ return questionVoteUp(id,loginUserId,false) }">
+                                                    <i class="fa fa-chevron-down" data-bind="style:{color: isunliked()? 'red' : 'gray'}"> </i>
+                                                </a>
+                                            </div>
+                                            <a data-bind="text:title" class="vote-title"></a>
+                                            <p data-bind="text:description"></p>
+                                            <div class="vote-info">
+                                                <a data-bind="click:toggleQuestionReply" class="btn btn-xs btn-white"><i class="fa fa-reply"></i> Reply </a>
+                                                <i class="fa fa-eye"></i> <a><span data-bind="text:views"></span>  Views</a>
+                                                <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
+                                                <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"><i class="fa fa-flag"></i></span> <a><span data-bind="text:reportedCount()"></span> Report</a></span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 ">
+                                            <div class="vote-icon">
+                                                <i class="fa fa-css3"> </i>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <h3>Details:</h3>
-                                            <span data-bind="text:description"></span><hr />
-                                            Views (<span data-bind="text:views"></span>) -
-                                            <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"><i class="fa fa-flag"></i></span> Report </span>(<span data-bind="text:reportedCount()"></span>)
-                                        </div>
-                                    </div>
-                                    
                                     <div data-bind="foreach:showQuestionReplies">
-                                        <span data-bind="visible:!isEditQuestionReply()">
-                                            <span data-bind="text:postedByName"></span>
-                                            <span data-bind="text:description()"></span>
-                                            <br />
-                                            <span data-bind="if: postedById === $parent.loginUserId"><a data-bind="click:editQuestionReply">edit</a>- <a data-bind="click:$parent.deleteQuestionReply">delete</a></span>
-                                        </span>
+                                        <div class="vote-item" style="padding:0px;padding-left:15px" data-bind="visible:!isEditQuestionReply()">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="vote-actions">
+                                                        <a data-bind="click:function(){return voteQuestionReply(id,$parent.loginUserId,true)}">
+                                                            <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-chevron-up"> </i>
+                                                        </a>
+                                                        <div data-bind="text:voteCount"></div>
+                                                        <a data-bind="click:function(){return voteQuestionReply(id,$parent.loginUserId,false)}">
+                                                            <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-chevron-down"> </i>
+                                                        </a>
+                                                    </div>
+                                                    <p data-bind="text:description()"></p>
+                                                    <div class="vote-info">
+
+                                                        <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                        <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
+                                                        <span data-bind="if: postedById === $parent.loginUserId"><a data-bind="click:editQuestionReply">edit</a> <a data-bind="click:$parent.deleteQuestionReply">delete</a></span>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <span data-bind="visible:isEditQuestionReply">
                                             <textarea class="msgTextArea form-control" placeholder="update comment.." data-bind="hasFocus:isEditQuestionReplyFocus,value:description,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:function(d,e){return checkEnter3($parent.id,description().length,d,e)}}"></textarea>
                                             <span data-bind="visible:description().length > 400 && description().length < 500">
@@ -69,157 +97,117 @@
                                             You can Enter only <span data-bind="text:499 - newQuestionReply().length"></span> more characters.
                                         </span>
                                     </span>
-                                    <h2>Answers</h2>
-                                    <div data-bind="foreach:showAnswers">
-                                        <span data-bind="visible:!isAnswerEditing()">
-                                            <h5>Answer</h5>
-                                            <span data-bind="text:description"></span>
-                                            <span data-bind="text:postedByName"></span><br />
-                                            <span data-bind="if: postedById === $parent.loginUserId"><a data-bind="click:function(){return editAnswer($parent.id)}">edit</a>- <a data-bind="click:$parent.deleteAnswer">delete</a></span>
-                                        </span>
-                                        <span data-bind="visible:isAnswerEditing()">
-                                            <textarea class="msgTextArea form-control" data-bind="value:description, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return editAnswerKeyUp(data,event)}}"></textarea>
-                                            <span data-bind="visible:description().length > 900 && description().length <= 1000">
-                                                You can Enter only <span data-bind="text:1000 - description().length"></span> more characters.
-                                            </span>
-                                            <button class="btn btn-info" data-bind="click:function(){return updateAnswer($parent.id)}">Submit</button>
-                                        </span>
-                                        <div data-bind="foreach:showAnswerReplies">
-                                            <h6>Replies</h6>
-                                            <span data-bind="visible:!isAnswerReplyEditing()">
-                                                <span data-bind="text:description"></span> -
-                                                <span data-bind="text:postedByName"></span>
-                                                <span data-bind="if: postedById === $parents[1].loginUserId"><a data-bind="click:function(d,e){return editAnswerReply(id,d,e)}">edit</a>-<a data-bind="click:$parent.deleteAnswerReply">delete</a></span>
-                                            </span>  
-                                            <span data-bind="visible:isAnswerReplyEditing()">
-                                                <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="value:description,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter($parent.id,data,event)}}"></textarea>
-                                                <span data-bind="visible:description().length > 400 && description().length < 500">
-                                                    You can Enter only <span data-bind="text:499 - description().length"></span> more characters.
-                                                </span>
-                                             </span>
-                                        </div>
-                                        <a data-bind="click:toggleAnswerReply">Reply</a>
-
-                                        <span data-bind="visible:isAnswerReplyVisible()">
-                                            <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="hasFocus:isAnswerReplyFocused,value:newAnswerReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter2($parent.loginUserId,id,data,event)}}"></textarea>
-                                            <span data-bind="visible:newAnswerReply().length > 400 && newAnswerReply().length < 500">
-                                                You can Enter only <span data-bind="text:499 - newAnswerReply().length"></span> more characters.
-                                            </span>
-                                        </span>
-                                    </div>
-                                    <h5>Post answer</h5>
-                                    <textarea class="msgTextArea form-control" placeholder="Write Answer.." name="answer" data-bind="value:newAnswer, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return answerKeyUp(newAnswer().length,data,event)}}"></textarea>
-                                    <span data-bind="visible:newAnswer().length > 900 && newAnswer().length <= 1000">
-                                        You can Enter only <span data-bind="text:1000 - newAnswer().length"></span> more characters.
-                                    </span>
-                                    <button data-bind="click:function(){return addAnswer()}" class="btn btn-default">submit</button>
-                                    <div class="row m-t-sm">
-                                        @*<div class="social-footer">
-
-                    <div data-bind="foreach:showComment">
-                        <div data-bind="attr:{'id':id}">
-
-                            <div class="social-comment">
-                                <a href="" class="pull-left">
-                                    <img alt="image" class="img-circle" src="/Images/profile.jpg">
-                                </a>
-                                <div class="media-body">
-
-                                    <span data-bind="visible:!isEditing()">
-                                        <a href="#">
-                                            <span data-bind="text: postedByName"></span>
-                                        </a>
-                                        <span data-bind="text: description"></span>
-                                        <br>
-                                        <span class="small">
-                                            <a data-bind="click:function(){ return likeComment(id,loginUserId,true) }"><span data-bind="style:{color: isliked()? 'red' : 'gray'}"><i class="fa fa-thumbs-up"></i></span> </a>(<span data-bind="text:voteUpCount()"></span>)
-                                            - <a data-bind="click:function(){ return likeComment(id,loginUserId,false) }"><span data-bind="style:{color: isunliked()? 'red' : 'gray'}"><i class="fa fa-thumbs-down"></i></span> </a>(<span data-bind="text:voteDownCount()"></span>)
-                                        </span>
-
-                                        <small class="text-muted"><span data-bind="text: time"></span></small> - <span data-bind="click:toggleComment"><a>Reply</a></span>
-
-                                        <span data-bind="if: postedById === loginUserId"> - <a><span data-bind="click:function(){return editComment($data.description)}">edit</span></a> - <a><span data-bind="click:function(){ $parent.deleteComment($data.id)}">delete</span></a></span>
-                                    </span>
-                                    <span data-bind="visible:isEditing()">
-                                        <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="value:description,valueUpdate:'afterkeydown', hasFocus:isFocus, jqAutoresize: {},event:{keyup:checkEnterEditing}"></textarea>
-                                    </span>
                                 </div>
-                                <div data-bind="foreach: showCommentReply">
-                                    <div data-bind="attr:{'id':id}">
-                                        <div class="social-comment">
-                                            <a href="" class="pull-left">
-                                                <img alt="image" class="img-circle" src="/Images/profile.jpg">
-                                            </a>
-                                            <div class="media-body">
-                                                <span data-bind="visible:!isEditing()">
-                                                    <a href="#">
-                                                        <span data-bind="text: postedByName"></span>
-                                                    </a>
-                                                    <span data-bind="text: description"></span>
-                                                    <br>
-                                                    <span class="small">
-                                                        <a data-bind="click:function(){ return likeCommentReply(id,$parent.loginUserId,true) }"><span data-bind="style:{color: isliked()? 'red' : 'gray'}"><i class="fa fa-thumbs-up"></i></span> </a>(<span data-bind="text:voteUpCount()"></span>)
-                                                        - <a data-bind="click:function(){ return likeCommentReply(id,$parent.loginUserId,false) }"><span data-bind="style:{color: isunliked()? 'red' : 'gray'}"><i class="fa fa-thumbs-down"></i></span> </a>(<span data-bind="text:voteDownCount()"></span>)
-                                                    </span>
-                                                    <small class="text-muted"><span data-bind="text: time"></span></small>
-                                                    <span data-bind="if: postedById === $parent.loginUserId"> - <a><span data-bind="click:function(){return editCommentReply()}">edit</span></a> - <span data-bind="click:$parent.deleteCommentReply"><a>delete</a></span></span>
-                                                </span>
-                                                <span data-bind="visible:isEditing()">
-                                                    <textarea class="msgTextArea form-control" data-bind="value:description,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter1Editing($parent.id,data,event)}}" placeholder="reply.."></textarea>
-                                                </span>
+                                
+                                    </div>
+
+                            </div>
+
+                            
+                        <h2>Answers</h2>
+                        <div class="row m-t-sm">
+                            <div data-bind="foreach:showAnswers">
+                                <div class="vote-item" data-bind="visible:!isAnswerEditing()">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <small data-bind="if: postedById === $parent.loginUserId" class="pull-right"><a data-bind="click:$parent.deleteAnswer" class="btn btn-white btn-xs pull-right">Delete</a><a data-bind="click:function(){return editAnswer($parent.id)}" class="btn btn-white btn-xs pull-right">Edit</a></small>
+                                            <div class="vote-actions">
+                                                <a data-bind="click:function(){return voteAnswer(id,$parent.loginUserId,true)}">
+                                                    <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-chevron-up"> </i>
+                                                </a>
+                                                <div data-bind="text:voteCount"></div>
+                                                <a data-bind="click:function(){return voteAnswer(id,$parent.loginUserId,false)}">
+                                                    <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-chevron-down"> </i>
+                                                </a>
+                                            </div>
+                                            <p data-bind="text:description"></p>
+                                            <div class="vote-info">
+                                                <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
+                                                <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                <a data-bind="click:toggleAnswerReply" class="btn btn-xs btn-white"><i class="fa fa-reply"></i> Reply </a>
+
                                             </div>
                                         </div>
+
                                     </div>
-                                </div>
+                                    <div data-bind="foreach:showAnswerReplies">
+                                        <div class="vote-item" style="margin:0px;padding:0px;padding-left:15px" data-bind="visible:!isAnswerReplyEditing()">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="vote-actions">
+                                                        <a data-bind="click:function(){return voteAnswerReply(id,$parents[1].loginUserId,true)}">
+                                                            <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-chevron-up"> </i>
+                                                        </a>
+                                                        <div data-bind="text:voteCount"></div>
+                                                        <a data-bind="click:function(){return voteAnswerReply(id,$parents[1].loginUserId,false)}">
+                                                            <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-chevron-down"> </i>
+                                                        </a>
+                                                    </div>
+                                                    <p data-bind="text:description"></p>
+                                                    <div class="vote-info">
+                                                        <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
+                                                        <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                        <span data-bind="if: postedById === $parents[1].loginUserId"><a data-bind="click:function(d,e){return editAnswerReply(id,d,e)}">edit</a>-<a data-bind="click:$parent.deleteAnswerReply">delete</a></span>
 
-                                <span data-bind="visible:isVisible">
-                                    <div class="social-comment">
-                                        <a href="" class="pull-left">
-                                            <img alt="image" src="/Images/profile.jpg">
-                                        </a>
-                                        <div class="media-body">
-                                            <textarea class="msgTextArea form-control" data-bind="value:newCommentReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}" placeholder="reply.."></textarea>
+                                                    </div>
+                                                </div>
 
+                                            </div>
+                                        </div>
+                                        <div data-bind="visible:isAnswerReplyEditing()">
+                                            <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="value:description,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter($parent.id,data,event)}}"></textarea>
+                                            <span data-bind="visible:description().length > 400 && description().length < 500">
+                                                You can Enter only <span data-bind="text:499 - description().length"></span> more characters.
+                                            </span>
                                         </div>
                                     </div>
-                                </span>
+                                    <div data-bind="visible:isAnswerReplyVisible()">
+                                        <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="hasFocus:isAnswerReplyFocused,value:newAnswerReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter2($parent.loginUserId,id,data,event)}}"></textarea>
+                                        <span data-bind="visible:newAnswerReply().length > 400 && newAnswerReply().length < 500">
+                                            You can Enter only <span data-bind="text:499 - newAnswerReply().length"></span> more characters.
+                                        </span>
+                                    </div>
+                                </div>
+                                <div data-bind="visible:isAnswerEditing()">
+                                    <textarea class="msgTextArea form-control" data-bind="value:description, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return editAnswerKeyUp(data,event)}}"></textarea>
+                                    <span data-bind="visible:description().length > 900 && description().length <= 1000">
+                                        You can Enter only <span data-bind="text:1000 - description().length"></span> more characters.
+                                    </span>
+                                    <button class="btn btn-info" data-bind="click:function(){return updateAnswer($parent.id)}">Submit</button>
+                                </div>
+                            </div>
+                            <h5>Post answer</h5>
+                            <textarea class="msgTextArea form-control" placeholder="Write Answer.." name="answer" data-bind="value:newAnswer, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return answerKeyUp(newAnswer().length,data,event)}}"></textarea>
+                            <span data-bind="visible:newAnswer().length > 900 && newAnswer().length <= 1000">
+                                You can Enter only <span data-bind="text:1000 - newAnswer().length"></span> more characters.
+                            </span>
+                            <div style="margin:6px">
+                                <button data-bind="click:function(){return addAnswer()}" class="btn btn-success pull-right">submit</button>
                             </div>
 
 
 
+                            
 
 
-                            @*<div class="social-comment">
-                                    <a href="" class="pull-left">
-                                        <img alt="image" src="/Images/a3.jpg">
-                                    </a>
-                                    <div class="media-body">
-                                        <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="value:newComment, jqAutoresize: {}"></textarea>
-                                        <input type="button" data-url="/api/comment" data-bind="click: addcomment" value="submit" />
-                                    </div>
-                                </div>*@
-                                    </div>
-                                </div>
-                            </div>
-                                      
-                                    </div>
-                                </div>
+
+                        </div>
+                        <div class="col-md-3">
                             
                         </div>
                     </div>
-        <div class="col-md-3">
-            
+                </div>
+            </div>
         </div>
-
+        <div class="col-md-3">this is 3</div>
     </div>
-
-
 </div>
 
 
 
 @section Styles {
     @Styles.Render("~/plugins/toastrStyles")
+<link href="~/Content/bootstrap-callout.css" rel="stylesheet" />
 }
 
 
@@ -239,6 +227,41 @@
             self.time = getTimeAgo(data.time);
             self.description = ko.observable(data.description);
             self.isAnswerReplyEditing = ko.observable(false);
+
+            self.isUp = ko.observable(data.isUp);
+            self.isDown = ko.observable(data.isDown);
+            self.voteUpCount = ko.observable(data.voteUpCount);
+            self.voteDownCount = ko.observable(data.voteDownCount),
+            self.voteCount = ko.observable(self.voteUpCount() - self.voteDownCount()),
+            self.voteAnswerReply = function (id, loginUserId, isup) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/VoteAnswerReply?id=' + id + '&isup=' + isup,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.voteCount(data.voteUpCount - data.voteDownCount);
+                            if (isup) {
+                                self.isUp(true);
+                                self.isDown(false);
+                            } else {
+                                self.isUp(false);
+                                self.isDown(true);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    });
+                }
+                else {
+                    toastr.info("You are not login", "Oops!");
+                }
+            }
+
             self.editAnswerReply = function () {
                 self.isAnswerReplyEditing(true);
             }
@@ -292,6 +315,42 @@
             self.showAnswerReplies = ko.observableArray();
             self.isAnswerReplyVisible = ko.observable(false);
             self.isAnswerReplyFocused = ko.observable(false);
+
+
+            self.isUp = ko.observable(data.isUp);
+            self.isDown = ko.observable(data.isDown);
+            self.voteUpCount = ko.observable(data.voteUpCount);
+            self.voteDownCount = ko.observable(data.voteDownCount),
+            self.voteCount = ko.observable(self.voteUpCount() - self.voteDownCount()),
+            self.voteAnswer = function (id, loginUserId, isup) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/VoteAnswer?id=' + id + '&isup=' + isup,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.voteCount(data.voteUpCount - data.voteDownCount);
+                            if (isup) {
+                                self.isUp(true);
+                                self.isDown(false);
+                            } else {
+                                self.isUp(false);
+                                self.isDown(true);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    });
+                }
+                else {
+                    toastr.info("You are not login", "Oops!");
+                }
+            }
+
             if (data.answerReplies) {
                 var reply = $.map(data.answerReplies, function (item) { return new AnswerReply(item) });
                 self.showAnswerReplies(reply);
@@ -416,6 +475,39 @@
             self.time = getTimeAgo(data.time);
             self.description = ko.observable(data.description);
             
+            self.isUp = ko.observable(data.isUp);
+            self.isDown = ko.observable(data.isDown);
+            self.voteUpCount = ko.observable(data.voteUpCount);
+            self.voteDownCount = ko.observable(data.voteDownCount),
+            self.voteCount = ko.observable(self.voteUpCount() - self.voteDownCount()),
+            self.voteQuestionReply = function (id, loginUserId, isup) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/VoteQuestionReply?id=' + id + '&isup=' + isup,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.voteCount(data.voteUpCount - data.voteDownCount);
+                            if (isup) {
+                                self.isUp(true);
+                                self.isDown(false);
+                            } else {
+                                self.isUp(false);
+                                self.isDown(true);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    });
+                }
+                else {
+                    toastr.info("You are not login", "Oops!");
+                }
+            }
             //edit question reply
             self.isEditQuestionReply = ko.observable(false);
             self.isEditQuestionReplyFocus = ko.observable(false);
@@ -478,6 +570,41 @@
             self.isQuestionReplyVisible = ko.observable(false);
             self.isQuestionReplyFocused = ko.observable(false);
             self.views = ko.observable(data.views);
+            self.isliked = ko.observable(data.isUp);
+            self.isunliked = ko.observable(data.isDown);
+            self.voteUpCount = ko.observable(data.voteUpCount);
+            self.voteDownCount = ko.observable(data.voteDownCount),
+            self.voteCount = ko.observable(self.voteUpCount() - self.voteDownCount()),
+            self.questionVoteUp = function (id, loginUserId, isup) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/VoteQuestion?id=' + id + '&isup=' + isup,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.voteCount(data.voteCount);
+                            if (isup) {
+                                self.isliked(true);
+                                self.isunliked(false);
+                            } else {
+                                self.isliked(false);
+                                self.isunliked(true);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    });
+                }
+                else {
+                    toastr.info("You are not login", "Oops!");
+                }
+            }
+
+
             if (data.questionReplies) {
                 var reply = $.map(data.questionReplies, function (item) { return new QuestionReply(item) });
                 self.showQuestionReplies(reply);
