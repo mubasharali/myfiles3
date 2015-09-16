@@ -20,6 +20,7 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.QuestionReplies = new HashSet<QuestionReply>();
             this.QuestionViews = new HashSet<QuestionView>();
             this.QuestionVotes = new HashSet<QuestionVote>();
+            this.FollowQuestions = new HashSet<FollowQuestion>();
             this.ReportedQuestions = new HashSet<ReportedQuestion>();
         }
     
@@ -36,6 +37,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<QuestionReply> QuestionReplies { get; set; }
         public virtual ICollection<QuestionView> QuestionViews { get; set; }
         public virtual ICollection<QuestionVote> QuestionVotes { get; set; }
+        public virtual ICollection<FollowQuestion> FollowQuestions { get; set; }
         public virtual ICollection<ReportedQuestion> ReportedQuestions { get; set; }
     }
 }

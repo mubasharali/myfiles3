@@ -57,6 +57,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           voteDownCount = q.QuestionVotes.Where(x => x.isUp == false).Count(),
                           isUp = q.QuestionVotes.Any(x=>x.votedBy == islogin && x.isUp),
                           isDown = q.QuestionVotes.Any(x=>x.votedBy == islogin && x.isUp == false),
+                          isFollowed = q.FollowQuestions.Any(x=>x.followedBy == islogin),
                           questionReplies = from reply in q.QuestionReplies.ToList()
                                             select new
                                             {
@@ -564,6 +565,34 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                          select new { voteUpCount = voteUp, voteDownCount = voteDown }).FirstOrDefault();
 
                 return Ok(q);
+            }
+            else
+            {
+                return BadRequest("You are not login");
+            }
+        }
+        public async Task<IHttpActionResult> Follow(int questionId)
+        {
+            var userId = User.Identity.GetUserId();
+            if (userId != null)
+            {
+                string s;
+                Question q = await db.Questions.FindAsync(questionId);
+                var followed = q.FollowQuestions.FirstOrDefault(x => x.followedBy == userId);
+                if (followed != null)
+                {
+                    db.FollowQuestions.Remove(followed);
+                    db.SaveChanges();
+                    s = "Follow";
+                    return Ok(s);
+                }
+                FollowQuestion f = new FollowQuestion();
+                f.followedBy = userId;
+                f.questionId = questionId;
+                db.FollowQuestions.Add(f);
+                db.SaveChanges();
+                s = "UnFollow";
+                return Ok(s);
             }
             else
             {

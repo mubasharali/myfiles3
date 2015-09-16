@@ -49,6 +49,7 @@
                                                 <i class="fa fa-eye"></i> <a><span data-bind="text:views"></span>  Views</a>
                                                 <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
                                                 <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
+                                                <i data-bind="style:{color: isFollowed()? 'red' : 'gray'}" class="fa fa-rss"></i> <a data-bind="click: function(){ return follow(id,loginUserId)},text:followText"></a>
                                                 <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"><i class="fa fa-flag"></i></span> <a><span data-bind="text:reportedCount()"></span> Report</a></span>
 
                                             </div>
@@ -570,6 +571,36 @@
             self.isQuestionReplyVisible = ko.observable(false);
             self.isQuestionReplyFocused = ko.observable(false);
             self.views = ko.observable(data.views);
+            self.isFollowed = ko.observable(false);
+            self.followText = ko.observable("Follow");
+            if (data.isFollowed) {
+                self.followText("UnFollow");
+                self.isFollowed(true);
+            }
+            self.follow = function (questionId, loginUserId) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/Follow?questionId=' + questionId,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.followText(data);
+                            if (data == "Follow") {
+                                self.isFollowed(false);
+                            } else { self.isFollowed(true);}
+                        },
+                        error: function (xhr, status, error) {
+                            toastr.error("Please refresh page and try again", "Error!");
+                        }
+                    });
+                }
+                else {
+                    toastr.info("You are not login", "Oops!");
+                }
+            }
+
             self.isliked = ko.observable(data.isUp);
             self.isunliked = ko.observable(data.isDown);
             self.voteUpCount = ko.observable(data.voteUpCount);

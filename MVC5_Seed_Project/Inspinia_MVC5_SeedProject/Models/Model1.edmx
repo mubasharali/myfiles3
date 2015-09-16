@@ -252,6 +252,14 @@
           <Property Name="isup" Type="bit" Nullable="false" />
           <Property Name="votedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
+        <EntityType Name="FollowQuestion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="followedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="questionId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="LaptopAds">
           <Key>
             <PropertyRef Name="Id" />
@@ -839,6 +847,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_FollowQuestion_ToTable">
+          <End Role="Question" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FollowQuestion" Type="Self.FollowQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FollowQuestion">
+              <PropertyRef Name="questionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FollowQuestion_ToTable_1">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="FollowQuestion" Type="Self.FollowQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FollowQuestion">
+              <PropertyRef Name="followedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_LaptopAds_ToTable">
           <End Role="Ad" Type="Self.Ad" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1131,6 +1165,7 @@
           <EntitySet Name="CommentReply" EntityType="Self.CommentReply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommentReplyVote" EntityType="Self.CommentReplyVote" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommentVote" EntityType="Self.CommentVote" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FollowQuestion" EntityType="Self.FollowQuestion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LaptopAds" EntityType="Self.LaptopAds" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LaptopBrand" EntityType="Self.LaptopBrand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LaptopModel" EntityType="Self.LaptopModel" Schema="dbo" store:Type="Tables" />
@@ -1284,6 +1319,14 @@
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FollowQuestion_ToTable" Association="Self.FK_FollowQuestion_ToTable">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="FollowQuestion" EntitySet="FollowQuestion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FollowQuestion_ToTable_1" Association="Self.FK_FollowQuestion_ToTable_1">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="FollowQuestion" EntitySet="FollowQuestion" />
           </AssociationSet>
           <AssociationSet Name="FK_LaptopAds_ToTable" Association="Self.FK_LaptopAds_ToTable">
             <End Role="Ad" EntitySet="Ad" />
@@ -1442,7 +1485,6 @@
           <NavigationProperty Name="QuestionViews" Relationship="Model.FK_QuestionView_ToTable_1" FromRole="AspNetUser" ToRole="QuestionView" />
           <NavigationProperty Name="QuestionVotes" Relationship="Model.FK_QuestionVote_ToTable_1" FromRole="AspNetUser" ToRole="QuestionVote" />
           <NavigationProperty Name="Reporteds" Relationship="Model.FK_Reported_ToTable_1" FromRole="AspNetUser" ToRole="Reported" />
-          <NavigationProperty Name="ReportedQuestions" Relationship="Model.FK_ReportedQuestion_ToTable_1" FromRole="AspNetUser" ToRole="ReportedQuestion" />
           <NavigationProperty Name="Bids" Relationship="Model.FK_Bid_ToTable" FromRole="AspNetUser" ToRole="Bid" />
           <NavigationProperty Name="AdViews" Relationship="Model.FK_AdView_ToTable_1" FromRole="AspNetUser" ToRole="AdView" />
           <NavigationProperty Name="Ads" Relationship="Model.FK_Ad_ToTable" FromRole="AspNetUser" ToRole="Ad" />
@@ -1459,6 +1501,8 @@
           <Property Name="hideDateOfBirth" Type="Boolean" />
           <NavigationProperty Name="Chats" Relationship="Model.FK_Chat_ToTable" FromRole="AspNetUser" ToRole="Chat" />
           <NavigationProperty Name="Chats1" Relationship="Model.FK_Chat_ToTable_1" FromRole="AspNetUser" ToRole="Chat" />
+          <NavigationProperty Name="FollowQuestions" Relationship="Model.FK_FollowQuestion_ToTable_1" FromRole="AspNetUser" ToRole="FollowQuestion" />
+          <NavigationProperty Name="ReportedQuestions" Relationship="Model.FK_ReportedQuestion_ToTable_1" FromRole="AspNetUser" ToRole="ReportedQuestion" />
           </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Type="Self.AspNetUser" Multiplicity="1" Role="AspNetUsers">
@@ -1623,18 +1667,9 @@
             <End Role="QuestionReply" EntitySet="QuestionReplies" />
             <End Role="QuestionReplyVote" EntitySet="QuestionReplyVotes" />
           </AssociationSet>
-          <EntitySet Name="ReportedQuestions" EntityType="Model.ReportedQuestion" />
           <AssociationSet Name="FK_Reported_ToTable_1" Association="Model.FK_Reported_ToTable_1">
             <End EntitySet="AspNetUsers" Role="AspNetUser" />
             <End EntitySet="Reporteds" Role="Reported" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReportedQuestion_ToTable_1" Association="Model.FK_ReportedQuestion_ToTable_1">
-            <End EntitySet="AspNetUsers" Role="AspNetUser" />
-            <End EntitySet="ReportedQuestions" Role="ReportedQuestion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReportedQuestion_ToTable" Association="Model.FK_ReportedQuestion_ToTable">
-            <End Role="Question" EntitySet="Questions" />
-            <End Role="ReportedQuestion" EntitySet="ReportedQuestions" />
           </AssociationSet>
           <EntitySet Name="AdImages" EntityType="Model.AdImage" />
           <EntitySet Name="Bids" EntityType="Model.Bid" />
@@ -1746,6 +1781,24 @@
           <AssociationSet Name="FK_Chat_ToTable_1" Association="Model.FK_Chat_ToTable_1">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Chat" EntitySet="Chats" />
+          </AssociationSet>
+          <EntitySet Name="FollowQuestions" EntityType="Model.FollowQuestion" />
+          <EntitySet Name="ReportedQuestions" EntityType="Model.ReportedQuestion" />
+          <AssociationSet Name="FK_FollowQuestion_ToTable_1" Association="Model.FK_FollowQuestion_ToTable_1">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="FollowQuestion" EntitySet="FollowQuestions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReportedQuestion_ToTable_1" Association="Model.FK_ReportedQuestion_ToTable_1">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="ReportedQuestion" EntitySet="ReportedQuestions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FollowQuestion_ToTable" Association="Model.FK_FollowQuestion_ToTable">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="FollowQuestion" EntitySet="FollowQuestions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReportedQuestion_ToTable" Association="Model.FK_ReportedQuestion_ToTable">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="ReportedQuestion" EntitySet="ReportedQuestions" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdsLike">
@@ -1982,6 +2035,7 @@
           <NavigationProperty Name="QuestionReplies" Relationship="Model.FK_QuestionReply_ToTable" FromRole="Question" ToRole="QuestionReply" />
           <NavigationProperty Name="QuestionViews" Relationship="Model.FK_QuestionView_ToTable" FromRole="Question" ToRole="QuestionView" />
           <NavigationProperty Name="QuestionVotes" Relationship="Model.FK_QuestionVote_ToTable" FromRole="Question" ToRole="QuestionVote" />
+          <NavigationProperty Name="FollowQuestions" Relationship="Model.FK_FollowQuestion_ToTable" FromRole="Question" ToRole="FollowQuestion" />
           <NavigationProperty Name="ReportedQuestions" Relationship="Model.FK_ReportedQuestion_ToTable" FromRole="Question" ToRole="ReportedQuestion" />
         </EntityType>
         <EntityType Name="QuestionReply">
@@ -2251,16 +2305,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="ReportedQuestion">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="questionId" Type="Int32" Nullable="false" />
-          <Property Name="reportedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUser" Relationship="Model.FK_ReportedQuestion_ToTable_1" FromRole="ReportedQuestion" ToRole="AspNetUser" />
-          <NavigationProperty Name="Question" Relationship="Model.FK_ReportedQuestion_ToTable" FromRole="ReportedQuestion" ToRole="Question" />
-        </EntityType>
         <Association Name="FK_Reported_ToTable_1">
           <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser" />
           <End Type="Model.Reported" Multiplicity="*" Role="Reported" />
@@ -2270,32 +2314,6 @@
             </Principal>
             <Dependent Role="Reported">
               <PropertyRef Name="reportedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ReportedQuestion_ToTable_1">
-          <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser" />
-          <End Type="Model.ReportedQuestion" Multiplicity="*" Role="ReportedQuestion" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ReportedQuestion">
-              <PropertyRef Name="reportedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ReportedQuestion_ToTable">
-          <End Type="Model.Question" Role="Question" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.ReportedQuestion" Role="ReportedQuestion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Question">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ReportedQuestion">
-              <PropertyRef Name="questionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2796,6 +2814,78 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="FollowQuestion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="followedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="questionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Model.FK_FollowQuestion_ToTable_1" FromRole="FollowQuestion" ToRole="AspNetUser" />
+          <NavigationProperty Name="Question" Relationship="Model.FK_FollowQuestion_ToTable" FromRole="FollowQuestion" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="ReportedQuestion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="questionId" Type="Int32" Nullable="false" />
+          <Property Name="reportedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="Model.FK_ReportedQuestion_ToTable_1" FromRole="ReportedQuestion" ToRole="AspNetUser" />
+          <NavigationProperty Name="Question" Relationship="Model.FK_ReportedQuestion_ToTable" FromRole="ReportedQuestion" ToRole="Question" />
+        </EntityType>
+        <Association Name="FK_FollowQuestion_ToTable_1">
+          <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="Model.FollowQuestion" Role="FollowQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FollowQuestion">
+              <PropertyRef Name="followedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReportedQuestion_ToTable_1">
+          <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="Model.ReportedQuestion" Role="ReportedQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReportedQuestion">
+              <PropertyRef Name="reportedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FollowQuestion_ToTable">
+          <End Type="Model.Question" Role="Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.FollowQuestion" Role="FollowQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FollowQuestion">
+              <PropertyRef Name="questionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReportedQuestion_ToTable">
+          <End Type="Model.Question" Role="Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.ReportedQuestion" Role="ReportedQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReportedQuestion">
+              <PropertyRef Name="questionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3047,15 +3137,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ReportedQuestions">
-            <EntityTypeMapping TypeName="Model.ReportedQuestion">
-              <MappingFragment StoreEntitySet="ReportedQuestion">
-                <ScalarProperty Name="reportedBy" ColumnName="reportedBy" />
-                <ScalarProperty Name="questionId" ColumnName="questionId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AdImages">
             <EntityTypeMapping TypeName="Model.AdImage">
               <MappingFragment StoreEntitySet="AdImage">
@@ -3203,6 +3284,24 @@
                 <ScalarProperty Name="message" ColumnName="message" />
                 <ScalarProperty Name="sentTo" ColumnName="sentTo" />
                 <ScalarProperty Name="sentFrom" ColumnName="sentFrom" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FollowQuestions">
+            <EntityTypeMapping TypeName="Model.FollowQuestion">
+              <MappingFragment StoreEntitySet="FollowQuestion">
+                <ScalarProperty Name="questionId" ColumnName="questionId" />
+                <ScalarProperty Name="followedBy" ColumnName="followedBy" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportedQuestions">
+            <EntityTypeMapping TypeName="Model.ReportedQuestion">
+              <MappingFragment StoreEntitySet="ReportedQuestion">
+                <ScalarProperty Name="reportedBy" ColumnName="reportedBy" />
+                <ScalarProperty Name="questionId" ColumnName="questionId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

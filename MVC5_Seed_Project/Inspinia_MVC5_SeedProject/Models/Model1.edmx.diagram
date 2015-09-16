@@ -4,12 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="815ee3eabea747c5bd662a6f75d487f4" Name="Diagram1" ZoomLevel="90">
+      <Diagram DiagramId="815ee3eabea747c5bd662a6f75d487f4" Name="Diagram1" ZoomLevel="72">
         <EntityTypeShape EntityType="Model.C__MigrationHistory" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.AspNetRole" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.AspNetUserClaim" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.AspNetUserLogin" Width="1.5" PointX="0.5" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.AspNetUser" PointX="3.125" PointY="0.5" Width="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AspNetUser" PointX="13.625" PointY="10.625" Width="1.5" IsExpanded="true" />
         <AssociationConnector ManuallyRouted="false" Association="Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector ManuallyRouted="false" Association="Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector ManuallyRouted="false" Association="Model.AspNetUserRoles" />
@@ -54,10 +54,7 @@
         <AssociationConnector Association="Model.FK_QuestionView_ToTable" />
         <AssociationConnector Association="Model.FK_QuestionVote_ToTable" />
         <AssociationConnector Association="Model.FK_QuestionReplyVote_ToTable" />
-        <EntityTypeShape EntityType="Model.ReportedQuestion" Width="1.5" PointX="0.5" PointY="20.75" />
         <AssociationConnector Association="Model.FK_Reported_ToTable_1" />
-        <AssociationConnector Association="Model.FK_ReportedQuestion_ToTable_1" />
-        <AssociationConnector Association="Model.FK_ReportedQuestion_ToTable" />
         <EntityTypeShape EntityType="Model.AdImage" Width="1.5" PointX="17" PointY="3.375" />
         <EntityTypeShape EntityType="Model.Bid" Width="1.5" PointX="16.25" PointY="5.375" />
         <AssociationConnector ManuallyRouted="false" Association="Model.FK_Bid_ToTable">
@@ -98,6 +95,12 @@
         <EntityTypeShape EntityType="Model.Chat" Width="1.5" PointX="5.375" PointY="4.25" />
         <AssociationConnector Association="Model.FK_Chat_ToTable" />
         <AssociationConnector Association="Model.FK_Chat_ToTable_1" />
+        <EntityTypeShape EntityType="Model.FollowQuestion" Width="1.5" PointX="15.875" PointY="17.75" />
+        <EntityTypeShape EntityType="Model.ReportedQuestion" Width="1.5" PointX="15.875" PointY="20.75" />
+        <AssociationConnector Association="Model.FK_FollowQuestion_ToTable_1" />
+        <AssociationConnector Association="Model.FK_ReportedQuestion_ToTable_1" />
+        <AssociationConnector Association="Model.FK_FollowQuestion_ToTable" />
+        <AssociationConnector Association="Model.FK_ReportedQuestion_ToTable" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -33,12 +33,13 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.QuestionViews = new HashSet<QuestionView>();
             this.QuestionVotes = new HashSet<QuestionVote>();
             this.Reporteds = new HashSet<Reported>();
-            this.ReportedQuestions = new HashSet<ReportedQuestion>();
             this.Bids = new HashSet<Bid>();
             this.AdViews = new HashSet<AdView>();
             this.Ads = new HashSet<Ad>();
             this.Chats = new HashSet<Chat>();
             this.Chats1 = new HashSet<Chat>();
+            this.FollowQuestions = new HashSet<FollowQuestion>();
+            this.ReportedQuestions = new HashSet<ReportedQuestion>();
         }
     
         public string Id { get; set; }
@@ -82,11 +83,12 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<QuestionView> QuestionViews { get; set; }
         public virtual ICollection<QuestionVote> QuestionVotes { get; set; }
         public virtual ICollection<Reported> Reporteds { get; set; }
-        public virtual ICollection<ReportedQuestion> ReportedQuestions { get; set; }
         public virtual ICollection<Bid> Bids { get; set; }
         public virtual ICollection<AdView> AdViews { get; set; }
         public virtual ICollection<Ad> Ads { get; set; }
         public virtual ICollection<Chat> Chats { get; set; }
         public virtual ICollection<Chat> Chats1 { get; set; }
+        public virtual ICollection<FollowQuestion> FollowQuestions { get; set; }
+        public virtual ICollection<ReportedQuestion> ReportedQuestions { get; set; }
     }
 }

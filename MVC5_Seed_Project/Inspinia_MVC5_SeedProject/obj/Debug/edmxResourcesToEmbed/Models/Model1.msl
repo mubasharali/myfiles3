@@ -246,15 +246,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ReportedQuestions">
-      <EntityTypeMapping TypeName="Model.ReportedQuestion">
-        <MappingFragment StoreEntitySet="ReportedQuestion">
-          <ScalarProperty Name="reportedBy" ColumnName="reportedBy" />
-          <ScalarProperty Name="questionId" ColumnName="questionId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="AdImages">
       <EntityTypeMapping TypeName="Model.AdImage">
         <MappingFragment StoreEntitySet="AdImage">
@@ -402,6 +393,24 @@
           <ScalarProperty Name="message" ColumnName="message" />
           <ScalarProperty Name="sentTo" ColumnName="sentTo" />
           <ScalarProperty Name="sentFrom" ColumnName="sentFrom" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FollowQuestions">
+      <EntityTypeMapping TypeName="Model.FollowQuestion">
+        <MappingFragment StoreEntitySet="FollowQuestion">
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="followedBy" ColumnName="followedBy" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReportedQuestions">
+      <EntityTypeMapping TypeName="Model.ReportedQuestion">
+        <MappingFragment StoreEntitySet="ReportedQuestion">
+          <ScalarProperty Name="reportedBy" ColumnName="reportedBy" />
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

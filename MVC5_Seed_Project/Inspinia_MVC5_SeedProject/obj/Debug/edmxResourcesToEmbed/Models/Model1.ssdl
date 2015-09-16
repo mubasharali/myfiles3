@@ -247,6 +247,14 @@
     <Property Name="isup" Type="bit" Nullable="false" />
     <Property Name="votedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
   </EntityType>
+  <EntityType Name="FollowQuestion">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="followedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="questionId" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="LaptopAds">
     <Key>
       <PropertyRef Name="Id" />
@@ -834,6 +842,32 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_FollowQuestion_ToTable">
+    <End Role="Question" Type="Self.Question" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="FollowQuestion" Type="Self.FollowQuestion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FollowQuestion">
+        <PropertyRef Name="questionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FollowQuestion_ToTable_1">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="FollowQuestion" Type="Self.FollowQuestion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FollowQuestion">
+        <PropertyRef Name="followedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_LaptopAds_ToTable">
     <End Role="Ad" Type="Self.Ad" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -1126,6 +1160,7 @@
     <EntitySet Name="CommentReply" EntityType="Self.CommentReply" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CommentReplyVote" EntityType="Self.CommentReplyVote" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CommentVote" EntityType="Self.CommentVote" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FollowQuestion" EntityType="Self.FollowQuestion" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopAds" EntityType="Self.LaptopAds" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopBrand" EntityType="Self.LaptopBrand" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopModel" EntityType="Self.LaptopModel" Schema="dbo" store:Type="Tables" />
@@ -1279,6 +1314,14 @@
     <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FollowQuestion_ToTable" Association="Self.FK_FollowQuestion_ToTable">
+      <End Role="Question" EntitySet="Question" />
+      <End Role="FollowQuestion" EntitySet="FollowQuestion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FollowQuestion_ToTable_1" Association="Self.FK_FollowQuestion_ToTable_1">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="FollowQuestion" EntitySet="FollowQuestion" />
     </AssociationSet>
     <AssociationSet Name="FK_LaptopAds_ToTable" Association="Self.FK_LaptopAds_ToTable">
       <End Role="Ad" EntitySet="Ad" />
