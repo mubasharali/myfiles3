@@ -1,0 +1,165 @@
+﻿@model IEnumerable<Inspinia_MVC5_SeedProject.Models.Ad>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Index</h2>
+        <ol class="breadcrumb">
+            <li class="active">
+                <strong>Ad</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>Recent added tags:</h2>
+            <div data-bind="foreach:showTags">
+                <div data-bind="visible:!isTagEditing()">
+                    <h3 data-bind="text:name"></h3>
+                    <p data-bind="text:info"></p>
+                    <button class="btn btn-sm" data-bind="click:editTag">edit</button>
+                    <button class="btn btn-sm" data-bind="click:deleteTag">Delete</button>
+                </div>
+                <div data-bind="visible:isTagEditing()">
+                    <input type="text" class="form-control" data-bind="value:name" />
+                    <textarea class="msgTextArea form-control" data-bind="value:info"></textarea>
+                    <button data-bind="click: updateTag">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+@section Styles {
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/sweetAlert")
+    <script>
+        function Tag(data) {
+            var self = this;
+            data = data || {};
+            self.name = ko.observable( data.name);
+            self.id = data.id;
+            self.info = ko.observable( data.info);
+            self.time = data.time;
+            self.postedById = data.postedById;
+            self.postedByName = data.postedByName;
+            self.isTagEditing = ko.observable(false);
+            self.editTag = function () {
+                self.isTagEditing(true);
+            }
+            self.updateTag = function (tag) {
+               
+                tag.createdBy = self.postedById;
+                tag.abc = self.def;
+                //does not execute below ajax funciton while starts a loop
+                $.ajax({
+                    url: '/api/Forum/UpdateTag',
+                    dataType: "json",
+                    type: 'POST',
+                    data:{tag:tag},
+                    //data:ko.toJSON(tagg),
+                    success: function (data) {
+                        self.isTagEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("Unable to load tags. Please try again", "Error");
+                    },
+                });
+            }
+            
+        }
+        function loadRecentAddedTags() {
+            var self = this;
+            self.daysAgo = ko.observable(1);
+            self.showTags = ko.observableArray();
+            self.loadTags = function () {
+                url_address = '/api/Forum/RecentAddedTags?daysAgo='+ self.daysAgo();
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (data) {
+                        var mappedads = $.map(data, function (item) { return new Tag(item); });
+                        self.showTags(mappedads);
+                    },
+                    error: function () {
+                        toastr.error("Unable to load tags. Please try again", "Error");
+                    },
+                });
+            };
+            self.deleteTag = function (tag) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this Tag!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Forum/DeleteTag?id=' + tag.id,
+                        dataType: "json",
+                        type: 'POST',
+                        success: function (data) {
+                            self.showTags.remove(tag);
+                            swal("Deleted!", "Tag has been deleted.", "success");
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        },
+                    });
+                });
+            }
+            self.loadTags();
+        }
+        function ViewModel() {
+            loadRecentAddedTags();
+        }
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+
+        $(function () {
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new ViewModel());
+            //jquery validate
+        });
+    </script>
+}
+
+

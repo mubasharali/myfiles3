@@ -40,6 +40,8 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.Chats1 = new HashSet<Chat>();
             this.FollowQuestions = new HashSet<FollowQuestion>();
             this.ReportedQuestions = new HashSet<ReportedQuestion>();
+            this.FollowTags = new HashSet<FollowTag>();
+            this.Tags = new HashSet<Tag>();
         }
     
         public string Id { get; set; }
@@ -90,5 +92,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<Chat> Chats1 { get; set; }
         public virtual ICollection<FollowQuestion> FollowQuestions { get; set; }
         public virtual ICollection<ReportedQuestion> ReportedQuestions { get; set; }
+        public virtual ICollection<FollowTag> FollowTags { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

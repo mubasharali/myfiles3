@@ -22,6 +22,7 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.QuestionVotes = new HashSet<QuestionVote>();
             this.FollowQuestions = new HashSet<FollowQuestion>();
             this.ReportedQuestions = new HashSet<ReportedQuestion>();
+            this.QuestionTags = new HashSet<QuestionTag>();
         }
     
         public int Id { get; set; }
@@ -31,6 +32,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public System.DateTime time { get; set; }
         public string title { get; set; }
         public string description { get; set; }
+        public byte[] lowCategory { get; set; }
     
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
@@ -39,5 +41,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<QuestionVote> QuestionVotes { get; set; }
         public virtual ICollection<FollowQuestion> FollowQuestions { get; set; }
         public virtual ICollection<ReportedQuestion> ReportedQuestions { get; set; }
+        public virtual ICollection<QuestionTag> QuestionTags { get; set; }
     }
 }

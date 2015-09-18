@@ -196,6 +196,7 @@
     <EntitySetMapping Name="Questions">
       <EntityTypeMapping TypeName="Model.Question">
         <MappingFragment StoreEntitySet="Question">
+          <ScalarProperty Name="lowCategory" ColumnName="lowCategory" />
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="title" ColumnName="title" />
           <ScalarProperty Name="time" ColumnName="time" />
@@ -411,6 +412,35 @@
         <MappingFragment StoreEntitySet="ReportedQuestion">
           <ScalarProperty Name="reportedBy" ColumnName="reportedBy" />
           <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FollowTags">
+      <EntityTypeMapping TypeName="Model.FollowTag">
+        <MappingFragment StoreEntitySet="FollowTag">
+          <ScalarProperty Name="followedBy" ColumnName="followedBy" />
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuestionTags">
+      <EntityTypeMapping TypeName="Model.QuestionTag">
+        <MappingFragment StoreEntitySet="QuestionTag">
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tags">
+      <EntityTypeMapping TypeName="Model.Tag">
+        <MappingFragment StoreEntitySet="Tag">
+          <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="info" ColumnName="info" />
+          <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

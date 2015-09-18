@@ -64,5 +64,8 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<Chat> Chats { get; set; }
         public virtual DbSet<FollowQuestion> FollowQuestions { get; set; }
         public virtual DbSet<ReportedQuestion> ReportedQuestions { get; set; }
+        public virtual DbSet<FollowTag> FollowTags { get; set; }
+        public virtual DbSet<QuestionTag> QuestionTags { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
     }
 }

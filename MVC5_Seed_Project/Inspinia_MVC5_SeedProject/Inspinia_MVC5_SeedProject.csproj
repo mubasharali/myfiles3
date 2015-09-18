@@ -206,6 +206,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="App_Start\WebApiConfig2.cs" />
+    <Compile Include="CodeTemplates\AdminController.cs" />
     <Compile Include="CodeTemplates\ElectronicsController.cs" />
     <Compile Include="CodeTemplates\ForumController.cs" />
     <Compile Include="CodeTemplates\UserController.cs" />
@@ -300,6 +301,9 @@
     <Compile Include="Models\FollowQuestion.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FollowTag.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LaptopAd.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -346,6 +350,9 @@
     <Compile Include="Models\QuestionReplyVote.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuestionTag.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\QuestionView.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -356,6 +363,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ReportedQuestion.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tag.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -672,6 +682,13 @@
     <Content Include="Views\Vehicles\Index.cshtml" />
     <Content Include="Views\Shared\_Comments.cshtml" />
     <Content Include="Views\Home\Temp.cshtml" />
+    <Content Include="Views\Shared\_Layout_3.cshtml" />
+    <Content Include="Views\Shared\_RightSideBar.cshtml" />
+    <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\Admin\Delete.cshtml" />
+    <Content Include="Views\Admin\Details.cshtml" />
+    <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

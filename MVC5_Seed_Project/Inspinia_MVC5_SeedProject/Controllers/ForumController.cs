@@ -58,6 +58,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           isUp = q.QuestionVotes.Any(x=>x.votedBy == islogin && x.isUp),
                           isDown = q.QuestionVotes.Any(x=>x.votedBy == islogin && x.isUp == false),
                           isFollowed = q.FollowQuestions.Any(x=>x.followedBy == islogin),
+                          questionTags = from tag in q.QuestionTags.ToList()
+                                         select new{
+                                             id = tag.Id,
+                                             name = tag.Tag.name,
+                                             //info = tag.Tag.info,
+                                         },
                           questionReplies = from reply in q.QuestionReplies.ToList()
                                             select new
                                             {
@@ -102,7 +108,79 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                       };
             return Ok(ret);
         }
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateTag(Tag tag)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            db.Entry(tag).State = EntityState.Modified;
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> DeleteTag(int id)
+        {
+            Tag comment = await db.Tags.FindAsync(id);
+            if (comment == null)
+            {
+                return NotFound();
+            }
 
+            db.Tags.Remove(comment);
+            await db.SaveChangesAsync();
+
+            return Ok(comment);
+        }
+        public async Task<IHttpActionResult> RecentAddedTags(int daysago)
+        {
+            TimeSpan duration = DateTime.UtcNow - DateTime.Today.AddDays(-daysago);
+            DateTime days = DateTime.UtcNow - duration;
+            var ret = from tag in db.Tags
+                     where tag.time >= days
+                      select new
+                      {
+                          postedById = tag.AspNetUser.Id,
+                          postedByName = tag.AspNetUser.UserName,
+                          name = tag.name,
+                          info = tag.info,
+                          time = tag.time,
+                          id = tag.Id,
+                      };
+            return Ok(ret);
+        }
+        public async Task<IHttpActionResult> SearchTags(string s)
+        {
+            //var ret = db.Tags.Where(x => x.name.Contains(s));
+            var ret = from tag in db.Tags
+                     where tag.name.Contains(s)
+                     select new
+                     {
+                         id = tag.Id,
+                         info = tag.info,
+                         name = tag.name,
+                         followers =  tag.FollowTags.Count()
+                     };
+            return Ok(ret);
+        }
+        //public async Task<IHttpActionResult> GetMobileCategoriesCount()
+        //{
+        //    var data =await (from q in db.Questions
+        //               where q.subCategory.Equals("Mobiles")
+        //               select new{
+        //                   NokiaCount = q.lowCategory.Count(x=>x.Equals("Nokia")),
+        //                   SamsungCount = q.lowCategory.Count(x=>x.Equals("Samsung"))
+        //               }).FirstOrDefaultAsync();
+        //    return Ok(data);
+        //}
         public async Task<IHttpActionResult> QuestionViews(int id)
         {
             Question ad = await db.Questions.FindAsync(id);

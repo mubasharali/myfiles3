@@ -255,6 +255,14 @@
     <Property Name="followedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="questionId" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="FollowTag">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="tagId" Type="int" Nullable="false" />
+    <Property Name="followedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+  </EntityType>
   <EntityType Name="LaptopAds">
     <Key>
       <PropertyRef Name="Id" />
@@ -325,6 +333,7 @@
     <Property Name="time" Type="datetime" Nullable="false" />
     <Property Name="title" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="description" Type="varchar" MaxLength="1000" Nullable="false" />
+    <Property Name="lowCategory" Type="varbinary" MaxLength="50" />
   </EntityType>
   <EntityType Name="QuestionReply">
     <Key>
@@ -344,6 +353,14 @@
     <Property Name="questionReplyId" Type="int" Nullable="false" />
     <Property Name="isUp" Type="bit" Nullable="false" />
     <Property Name="votedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+  </EntityType>
+  <EntityType Name="QuestionTag">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="tagId" Type="int" Nullable="false" />
+    <Property Name="questionId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="QuestionView">
     <Key>
@@ -377,6 +394,16 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="questionId" Type="int" Nullable="false" />
     <Property Name="reportedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Tag">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="70" Nullable="false" />
+    <Property Name="info" Type="nchar" MaxLength="1000" />
+    <Property Name="time" Type="datetime" />
+    <Property Name="createdBy" Type="nvarchar" MaxLength="128" />
   </EntityType>
   <Association Name="FK_Ad_ToTable">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -868,6 +895,32 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_FollowTag_ToTable">
+    <End Role="Tag" Type="Self.Tag" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="FollowTag" Type="Self.FollowTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tag">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FollowTag">
+        <PropertyRef Name="tagId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FollowTag_ToTable_1">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="FollowTag" Type="Self.FollowTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FollowTag">
+        <PropertyRef Name="followedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_LaptopAds_ToTable">
     <End Role="Ad" Type="Self.Ad" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -1030,6 +1083,34 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_QuestionTag_ToTable">
+    <End Role="Tag" Type="Self.Tag" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="QuestionTag" Type="Self.QuestionTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tag">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionTag">
+        <PropertyRef Name="tagId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuestionTag_ToTable_1">
+    <End Role="Question" Type="Self.Question" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="QuestionTag" Type="Self.QuestionTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionTag">
+        <PropertyRef Name="questionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_QuestionView_ToTable">
     <End Role="Question" Type="Self.Question" Multiplicity="1" />
     <End Role="QuestionView" Type="Self.QuestionView" Multiplicity="*" />
@@ -1134,6 +1215,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Tag_ToTable">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+    <End Role="Tag" Type="Self.Tag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Tag">
+        <PropertyRef Name="createdBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="ModelStoreContainer">
     <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Ad" EntityType="Self.Ad" Schema="dbo" store:Type="Tables" />
@@ -1161,6 +1254,7 @@
     <EntitySet Name="CommentReplyVote" EntityType="Self.CommentReplyVote" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CommentVote" EntityType="Self.CommentVote" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FollowQuestion" EntityType="Self.FollowQuestion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FollowTag" EntityType="Self.FollowTag" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopAds" EntityType="Self.LaptopAds" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopBrand" EntityType="Self.LaptopBrand" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopModel" EntityType="Self.LaptopModel" Schema="dbo" store:Type="Tables" />
@@ -1171,10 +1265,12 @@
     <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="QuestionReply" EntityType="Self.QuestionReply" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="QuestionReplyVote" EntityType="Self.QuestionReplyVote" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="QuestionTag" EntityType="Self.QuestionTag" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="QuestionView" EntityType="Self.QuestionView" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="QuestionVote" EntityType="Self.QuestionVote" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Reported" EntityType="Self.Reported" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ReportedQuestion" EntityType="Self.ReportedQuestion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tag" EntityType="Self.Tag" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Ad_ToTable" Association="Self.FK_Ad_ToTable">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="Ad" EntitySet="Ad" />
@@ -1323,6 +1419,14 @@
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="FollowQuestion" EntitySet="FollowQuestion" />
     </AssociationSet>
+    <AssociationSet Name="FK_FollowTag_ToTable" Association="Self.FK_FollowTag_ToTable">
+      <End Role="Tag" EntitySet="Tag" />
+      <End Role="FollowTag" EntitySet="FollowTag" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FollowTag_ToTable_1" Association="Self.FK_FollowTag_ToTable_1">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="FollowTag" EntitySet="FollowTag" />
+    </AssociationSet>
     <AssociationSet Name="FK_LaptopAds_ToTable" Association="Self.FK_LaptopAds_ToTable">
       <End Role="Ad" EntitySet="Ad" />
       <End Role="LaptopAds" EntitySet="LaptopAds" />
@@ -1371,6 +1475,14 @@
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="QuestionReplyVote" EntitySet="QuestionReplyVote" />
     </AssociationSet>
+    <AssociationSet Name="FK_QuestionTag_ToTable" Association="Self.FK_QuestionTag_ToTable">
+      <End Role="Tag" EntitySet="Tag" />
+      <End Role="QuestionTag" EntitySet="QuestionTag" />
+    </AssociationSet>
+    <AssociationSet Name="FK_QuestionTag_ToTable_1" Association="Self.FK_QuestionTag_ToTable_1">
+      <End Role="Question" EntitySet="Question" />
+      <End Role="QuestionTag" EntitySet="QuestionTag" />
+    </AssociationSet>
     <AssociationSet Name="FK_QuestionView_ToTable" Association="Self.FK_QuestionView_ToTable">
       <End Role="Question" EntitySet="Question" />
       <End Role="QuestionView" EntitySet="QuestionView" />
@@ -1402,6 +1514,10 @@
     <AssociationSet Name="FK_ReportedQuestion_ToTable_1" Association="Self.FK_ReportedQuestion_ToTable_1">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="ReportedQuestion" EntitySet="ReportedQuestion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tag_ToTable" Association="Self.FK_Tag_ToTable">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Tag" EntitySet="Tag" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

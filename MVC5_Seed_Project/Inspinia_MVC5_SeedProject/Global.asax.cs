@@ -22,6 +22,7 @@ namespace Inspinia_MVC5_SeedProject
             
         }
         protected void Application_BeginRequest()
+        
         {
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
             Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));

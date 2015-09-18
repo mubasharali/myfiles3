@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Net.Mail;
 using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
 
@@ -42,16 +43,89 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         [HttpPost]
         public ActionResult Create([Bind(Include="Id,category,subCategory,postedBy,time,title,description")] Question question)
         {
+            if (User.Identity.IsAuthenticated) { 
             if (ModelState.IsValid)
             {
+
                 question.time = DateTime.UtcNow;
                 question.postedBy = User.Identity.GetUserId();
                 db.Questions.Add(question);
+
+                string s = Request["tags"];
+                string[] values = s.Split(',');
+                Tag []tags = new Tag[values.Length];
+                QuestionTag []qt = new QuestionTag[values.Length];
+                //int count = 0;
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = values[i].Trim();
+                    string ss = values[i];
+                    var data = db.Tags.FirstOrDefault(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
+
+                    tags[i] = new Tag();
+                    if (data != null)
+                    {
+                        tags[i].Id = data.Id;
+                    }
+                    else
+                    {
+                        tags[i].name = values[i];
+                        tags[i].time = DateTime.UtcNow;
+                        tags[i].createdBy = User.Identity.GetUserId();
+                        db.Tags.Add(tags[i]);
+                    }
+                     
+
+                    //MailMessage mail = new MailMessage();
+                    //mail.From = new System.Net.Mail.MailAddress("m.irfanwatoo@gmail.com");
+
+                    //// The important part -- configuring the SMTP client
+                    //SmtpClient smtp = new SmtpClient();
+                    //smtp.Port = 587;   // [1] You can try with 465 also, I always used 587 and got success
+                    //smtp.EnableSsl = true;
+                    //smtp.DeliveryMethod = SmtpDeliveryMethod.Network; // [2] Added this
+                    //smtp.UseDefaultCredentials = false; // [3] Changed this
+                    //smtp.Credentials = new NetworkCredential("m.irfanwatoo@gmail.com","birthdaywish");  // [4] Added this. Note, first parameter is NOT string.
+                    //smtp.Host = "smtp.gmail.com";
+
+                    ////recipient address
+                    //mail.To.Add(new MailAddress("irfanyusanif420@gmail.com"));
+
+                    ////Formatted mail body
+                    //mail.IsBodyHtml = true;
+                    //string st = "Test";
+
+                    //mail.Body = st;
+                    //smtp.Send(mail);
+
+                }
+
+
+                db.SaveChanges();
+                
+
+                try { 
+                db.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    string sb = e.ToString();
+                }
+                for (int i = 0; i < values.Length; i++)
+                {
+                    qt[i] = new QuestionTag();
+                    qt[i].questionId = question.Id;
+                    qt[i].tagId = tags[i].Id;
+                    db.QuestionTags.Add(qt[i]);
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Details", new { id=question.Id});
             }
 
             ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", question.postedBy);
+            return View(question);
+            }
             return View(question);
         }
 
