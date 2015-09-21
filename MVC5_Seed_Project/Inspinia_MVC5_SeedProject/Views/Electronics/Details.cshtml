@@ -435,17 +435,19 @@
                 self.highestBid ( Math.max.apply(Math, biding.map(function (o) { return o.price(); })));
                 self.showBidings(biding);
             }
-            if (data.carad) {
-                var mobad = $.map(data.carad, function (item) { return new CarAd(item); });
-                self.showCarAd(mobad);
+            
+            
+            if (data.mobilead != "") {
+                var mobad = $.map(data.mobilead, function (item) { return new mobilead(item); });
+                self.showMobileAd(mobad);
             }
-            else if (data.laptopad) {
+            if (data.laptopad != "") {
                 var mobad = $.map(data.laptopad, function (item) { return new mobilead(item); });
                 self.showMobileAd(mobad);
             }
-            else if (data.mobilead) {
-                var mobad = $.map(data.mobilead, function (item) { return new mobilead(item); });
-                self.showMobileAd(mobad);
+            if (data.carad != "") {
+                var mobad = $.map(data.carad, function (item) { return new CarAd(item); });
+                self.showCarAd(mobad);
             }
             if (data.comment) {
                 var cmt = $.map(data.comment, function (item) { return new comment(item); });

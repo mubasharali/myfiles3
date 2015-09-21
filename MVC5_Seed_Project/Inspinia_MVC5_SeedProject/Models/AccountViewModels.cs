@@ -31,7 +31,7 @@ namespace Inspinia_MVC5_SeedProject.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "Email")]
         public string UserName { get; set; }
 
         [Required]
@@ -46,7 +46,7 @@ namespace Inspinia_MVC5_SeedProject.Models
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "Email")]
         public string UserName { get; set; }
 
         [Required]

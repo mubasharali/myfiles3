@@ -25,6 +25,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             UserManager = userManager;
         }
 
+        
+
         public UserManager<ApplicationUser> UserManager { get; private set; }
 
         //
@@ -53,7 +55,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid username or password.");
+                    ModelState.AddModelError("", "Invalid Email or password.");
                 }
             }
 

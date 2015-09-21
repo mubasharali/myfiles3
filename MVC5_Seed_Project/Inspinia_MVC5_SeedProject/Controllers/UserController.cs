@@ -11,6 +11,11 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Security;
 using Microsoft.AspNet.Identity;
+using System.Web;
+using Microsoft.Owin.Security;
+using System.Security.Claims;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.Controllers
@@ -25,11 +30,43 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return db.AspNetUsers;
         }
         [HttpPost]
+        public async Task<IHttpActionResult> CheckEmail(string email){
+            var ret =await db.AspNetUsers.FirstOrDefaultAsync(x => x.UserName.Equals(email));
+            if (ret == null)
+            {
+                return Ok("NewUser");
+            }
+            return Ok(ret.Email);
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> CheckLoginUserPassword(string email,string password)
+        {
+            ApplicationDbContext ctx = new ApplicationDbContext();
+            UserStore<ApplicationUser> store = new UserStore<ApplicationUser>(ctx);
+            UserManager<ApplicationUser> UserManager = new UserManager<ApplicationUser>(store);
+            password = UserManager.PasswordHasher.HashPassword(password);  
+            //var ret = await db.AspNetUsers.FirstOrDefaultAsync(x => x.UserName.Equals(email) && x.PasswordHash.Equals(password));
+            var user = await UserManager.FindAsync(email,password);
+            if (user != null)
+            {
+                
+    //            await HttpContext.GetOwinContext()
+    //.Get<ApplicationSignInManager>().SignInAsync(user, true, false); 
+              //  await  SignInAsync(user, true,true); 
+                return Ok("Incorrect");
+            }
+            return Ok("Ok");
+        }
+        
+        [HttpPost]
         public async Task<IHttpActionResult> SaveProfilePic()
         {
             //save extension in database.
             return Ok();
         }
+        //public async Task<IHttpActionResult> SendMessageTo(string id)
+        //{}
+
         // GET api/User/5
         [ResponseType(typeof(AspNetUser))]
         public async Task<IHttpActionResult> GetUser(string id)

@@ -9,6 +9,7 @@ namespace Inspinia_MVC5_SeedProject
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+            app.MapSignalR();
         }
     }
 }

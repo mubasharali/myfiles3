@@ -175,7 +175,7 @@
         right: 34px;
         width: 16px;
         height: 16px;
-        background: url(images/spinner.gif);
+        background: url(/Images/spinner.gif);
         background-size: 16px 16px;
         opacity: 0;
     }
@@ -237,12 +237,12 @@
                         '</div>';
                     }
                 },
-                score: function (search) {
-                    var score = this.getScoreFunction(search);
-                    return function (item) {
-                        return score(item) * (1 + Math.min(item.watchers / 100, 1));
-                    };
-                },
+                //score: function (search) {
+                //    var score = this.getScoreFunction(search);
+                //    return function (item) {
+                //        return score(item) * (1 + Math.min(item.watchers / 100, 1));
+                //    };
+                //},
                 load: function (query, callback) {
                     if (!query.length) return callback();
                     $.ajax({
@@ -252,7 +252,6 @@
                             callback();
                         },
                         success: function (res) {
-                            console.log(res);
                             callback(res.slice(0, 10));
                         }
                     });

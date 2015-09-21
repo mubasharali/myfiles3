@@ -32,7 +32,8 @@
                 <hr />
                 @Html.ValidationSummary()
                 <div class="form-group">
-                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-5 control-label" })
+                    @*@Html.LabelFor(m => m.Email, new { @class = "col-md-5 control-label" })*@
+                    <label class="col-md-5 control-label">Email</label>
                     <div class="col-md-7">
                         @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
                     </div>

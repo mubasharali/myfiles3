@@ -156,6 +156,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                           sims = mobile.sims,
                                           brand = mobile.MobileModel.Mobile,
                                           model = mobile.MobileModel.model,
+                                          //whichType = "mobiles",
                                       },
                            laptopad = from laptop in ad.LaptopAds.ToList()
                                       select new

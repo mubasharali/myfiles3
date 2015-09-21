@@ -3,6 +3,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 
+using Inspinia_MVC5_SeedProject.Models;
 namespace Inspinia_MVC5_SeedProject
 {
     public partial class Startup
@@ -10,6 +11,13 @@ namespace Inspinia_MVC5_SeedProject
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
+            //told by Sam Farajpour Ghamari from stackoverflow
+            //app.CreatePerOwinContext(() => new ApplicationDbContext());
+            //app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
+            //app.CreatePerOwinContext<RoleManager<AppRole>>((options, context) =>
+            //    new RoleManager<AppRole>(
+            //        new RoleStore<AppRole>(context.Get<MyDbContext>())));
+
             // Enable the application to use a cookie to store information for the signed in user
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {

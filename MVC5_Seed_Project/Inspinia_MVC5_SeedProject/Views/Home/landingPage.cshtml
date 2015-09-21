@@ -2,142 +2,200 @@
 @{
     ViewBag.Title = "landingPage";
 }
-abcdef
-<h2>landingPage</h2>
-@Html.RouteLink("Create Ad", "Default", new { controller="Electronics",action="Details" })
+<h2>Landing page</h2>
+
+<a href="/Account/MyAccount">My Account</a>
 
 
-<div class="small-chat-box fadeInRight animated">
+        <div id="chatViewModel">
+            <div class="small-chat-box fadeInRight animated">
 
-    <div class="heading" draggable="true">
-        <small class="chat-date pull-right">
-            02.19.2015
-        </small>
-        Small chat
-    </div>
+                <div class="heading" draggable="true">
+                    <small class="chat-date pull-right">
+                        02.19.2015
+                    </small>
+                    Small chat
+                </div>
 
-    <div class="content">
+                <div class="content" data-bind="foreach:showChat">
 
-        <div class="left">
-            <div class="author-name">
-                Monica Jackson <small class="chat-date">
-                    10:02 am
-                </small>
+                    @*<div class="left">
+                <div class="author-name">
+                    Monica Jackson <small class="chat-date">
+                        10:02 am
+                    </small>
+                </div>
+                <div class="chat-message active">
+                    Lorem Ipsum is simply dummy text input.
+                </div>
+
             </div>
-            <div class="chat-message active">
-                Lorem Ipsum is simply dummy text input.
+            <div class="right">
+                <div class="author-name">
+                    Mick Smith
+                    <small class="chat-date">
+                        11:24 am
+                    </small>
+                </div>
+                <div class="chat-message">
+                    Lorem Ipsum is simpl.
+                </div>
             </div>
+            <div class="left">
+                <div class="author-name">
+                    Alice Novak
+                    <small class="chat-date">
+                        08:45 pm
+                    </small>
+                </div>
+                <div class="chat-message active">
+                    Check this stock char.
+                </div>
+            </div>
+            <div class="right">
+                <div class="author-name">
+                    Anna Lamson
+                    <small class="chat-date">
+                        11:24 am
+                    </small>
+                </div>
+                <div class="chat-message">
+                    The standard chunk of Lorem Ipsum
+                </div>
+            </div>*@
 
+                    <div class="left">
+                        <div class="author-name">
+                            Mick Lane
+                            <small class="chat-date">
+                                08:45 pm
+                            </small>
+                        </div>
+                        <div class="chat-message active" data-bind="text:message">
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="form-chat">
+                    <div class="input-group input-group-sm">
+                        <input type="text" data-bind="value:newMessage" class="form-control"> <span class="input-group-btn">
+                            <button class="btn btn-primary" data-bind="click:sendMessage" type="button">
+                                Send
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            <div id="small-chat">
+
+                <span class="badge badge-warning pull-right">5</span>
+                <a class="open-small-chat">
+                    <i class="fa fa-comments"></i>
+
+                </a>
+            </div>
         </div>
-        <div class="right">
-            <div class="author-name">
-                Mick Smith
-                <small class="chat-date">
-                    11:24 am
-                </small>
-            </div>
-            <div class="chat-message">
-                Lorem Ipsum is simpl.
-            </div>
-        </div>
-        <div class="left">
-            <div class="author-name">
-                Alice Novak
-                <small class="chat-date">
-                    08:45 pm
-                </small>
-            </div>
-            <div class="chat-message active">
-                Check this stock char.
-            </div>
-        </div>
-        <div class="right">
-            <div class="author-name">
-                Anna Lamson
-                <small class="chat-date">
-                    11:24 am
-                </small>
-            </div>
-            <div class="chat-message">
-                The standard chunk of Lorem Ipsum
-            </div>
-        </div>
-        <div class="left">
-            <div class="author-name">
-                Mick Lane
-                <small class="chat-date">
-                    08:45 pm
-                </small>
-            </div>
-            <div class="chat-message active">
-                I belive that. Lorem Ipsum is simply dummy text.
-            </div>
-        </div>
-
-
-    </div>
-    <div class="form-chat">
-        <div class="input-group input-group-sm">
-            <input type="text" data-bind="value:newMessage" class="form-control"> <span class="input-group-btn">
-                <button class="btn btn-primary" data-bind="click:sendMessage" type="button">
-                    Send
-                </button>
-            </span>
-        </div>
-    </div>
-
-</div>
-<div id="small-chat">
-
-    <span class="badge badge-warning pull-right">5</span>
-    <a class="open-small-chat">
-        <i class="fa fa-comments"></i>
-
-    </a>
-</div>
-@section Styles{
-    @Styles.Render("~/plugins/toastrStyles")
-}
-@section Scripts{
-    @Scripts.Render("~/plugins/toastr")
-    @Scripts.Render("~/plugins/timeago")
-    @Scripts.Render("~/plugins/autosize")
-    @Scripts.Render("~/plugins/knockout")
-
-    <script>
-        function Message(data){
-            var self = this;
-            data = data || {};
-            self.sentFrom = data.from;
-            self.sentTo = data.to;
-            self.message = data.message;
+        @section Styles{
+            @Styles.Render("~/plugins/toastrStyles")
         }
-        function ChatViewModel() {
-            var self = this;
-            self.showChat = ko.observableArray();
-            self.newMessage = ko.observable();
-            self.sendMessage = function () {
-                var msg = new Message();
-                msg.sentTo = "";
-                msg.message = self.newMessage();
-                $.ajax({
-                    url: '/api/Chat/PostChat',
-                    dataType: "json",
-                    contentType: "application/json",
-                    cache: false,
-                    type: 'POST',
-                    data: ko.toJSON(message),
-                    success: function (data) {
-                        self.newMessage("");
-                    },
-                    error: function () {
-                        toastr.error("failed to send message", "Error!");
+        @section Scripts{
+            @Scripts.Render("~/plugins/toastr")
+            @Scripts.Render("~/plugins/timeago")
+            @Scripts.Render("~/plugins/autosize")
+            @Scripts.Render("~/plugins/knockout")
+
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+            <script>
+                
+                function Message(data) {
+                    var self = this;
+                    data = data || {};
+                    self.id = data.Id;
+                    self.sentFrom = data.from;
+                    self.sentTo = data.to;
+                    self.message = data.message;
+                }
+                function sendMessageTo(id) {
+                    $.ajax({
+                        url: '/api/Chat/SendMessageTo?id=' +id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            alert("ok");
+                        },
+                        error: function () {
+                            toastr.error("failed to accept message sending to this user", "Error!");
+                        }
+                    });
+                }
+                function ChatViewModel() {
+                    var self = this;
+                    self.hub = $.connection.chatHub;
+                    self.showChat = ko.observableArray();
+                    self.newMessage = ko.observable();
+                    //self.init = function () {
+                    //    self.hub.server.getAlert().fail(function (err) { alert(err) });
+                    //}
+                    //self.hub.client.showAlert = function () {
+                    //    alert("hahhha");
+                    //};
+                    self.hub.client.loadNewMessage = function (data) {
+                        self.newMessage('');
+                        self.showChat.push(new Message(data));
+
                     }
+                    self.getReceiverId = function (email) {
+                        $.ajax({
+                            url: '/api/Chat/GetIdByEmail?email='+email,
+                            dataType: "json",
+                            contentType: "application/json",
+                            cache: false,
+                            type: 'POST',
+                            success: function (data) {
+                                return data;
+                            },
+                            error: function () {
+                                toastr.error("failed to send message", "Error!");
+                                return null;
+                            }
+                        });
+                    }
+                    self.sendMessage = function () {
+                        var msg = new Message();
+                        msg.sentTo = "47edf8a5-2c9e-42b4-8be7-6351659ae82e";
+                        msg.message = self.newMessage();
+                        self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+                        //$.ajax({
+                        //    url: '/api/Chat/PostChat',
+                        //    dataType: "json",
+                        //    contentType: "application/json",
+                        //    cache: false,
+                        //    type: 'POST',
+                        //    data: ko.toJSON(msg),
+                        //    success: function (data) {
+                        //        self.newMessage("");
+                        //    },
+                        //    error: function () {
+                        //        toastr.error("failed to send message", "Error!");
+                        //    }
+                        //});
+                    }
+                }
+                $(function () {
+                    var model = new ChatViewModel();
+                   // ko.applyBindings(new AccountViewModel(), document.getElementById("AccountViewModel"));
+                    ko.applyBindings(model, document.getElementById("chatViewModel"));
+
+                    //var conn = $.connection.chatHub;
+                    $.connection.hub.start().done();
+                        //.done(function () {
+                        //model.init();
+                    //})
                 });
-            }
+            </script>
         }
-        $(function () {
-            ko.applyBindings(new ChatViewModel);
-        });
-    </script>
-}
