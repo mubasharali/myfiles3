@@ -1,154 +1,266 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-  <EntityType Name="C__MigrationHistory">
-    <Key>
-      <PropertyRef Name="MigrationId" />
-      <PropertyRef Name="ContextKey" />
-    </Key>
-    <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
-    <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-  </EntityType>
-  <EntityType Name="AspNetRole">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
-  </EntityType>
-  <EntityType Name="AspNetUserClaim">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
-  </EntityType>
-  <EntityType Name="AspNetUserLogin">
-    <Key>
-      <PropertyRef Name="LoginProvider" />
-      <PropertyRef Name="ProviderKey" />
-      <PropertyRef Name="UserId" />
-    </Key>
-    <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
-  </EntityType>
-  <EntityType Name="AspNetUser">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" Type="String" />
-    <Property Name="Email" MaxLength="256" FixedLength="false" Unicode="true" Type="String" />
-    <Property Name="EmailConfirmed" Nullable="false" Type="Boolean" />
-    <Property Name="PasswordHash" MaxLength="Max" FixedLength="false" Unicode="true" Type="String" />
-    <Property Name="SecurityStamp" MaxLength="Max" FixedLength="false" Unicode="true" Type="String" />
-    <Property Name="PhoneNumber" MaxLength="Max" FixedLength="false" Unicode="true" Type="String" />
-    <Property Name="PhoneNumberConfirmed" Nullable="false" Type="Boolean" />
-    <Property Name="TwoFactorEnabled" Nullable="false" Type="Boolean" />
-    <Property Name="LockoutEndDateUtc" Precision="3" Type="DateTime" />
-    <Property Name="LockoutEnabled" Nullable="false" Type="Boolean" />
-    <Property Name="AccessFailedCount" Nullable="false" Type="Int32" />
-    <Property Name="UserName" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" Type="String" />
-    <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
-    <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
-    <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
-    <NavigationProperty Name="Comments" Relationship="Model.FK_Comment_ToTable_1" FromRole="AspNetUser" ToRole="Comment" />
-    <NavigationProperty Name="CommentReplies" Relationship="Model.FK_CommentReply_ToTable_1" FromRole="AspNetUser" ToRole="CommentReply" />
-    <NavigationProperty Name="CommentReplyVotes" Relationship="Model.FK_CommentReplyVote_ToTable_1" FromRole="AspNetUser" ToRole="CommentReplyVote" />
-    <NavigationProperty Name="CommentVotes" Relationship="Model.FK_CommentVote_ToTable_1" FromRole="AspNetUser" ToRole="CommentVote" />
-    <NavigationProperty Name="Answers" Relationship="Model.FK_Answer_ToTable_1" FromRole="AspNetUser" ToRole="Answer" />
-    <NavigationProperty Name="AnswerReplies" Relationship="Model.FK_AnswerReply_ToTable_1" FromRole="AspNetUser" ToRole="AnswerReply" />
-    <NavigationProperty Name="AnswerReplyVotes" Relationship="Model.FK_AnswerReplyVote_ToTable_1" FromRole="AspNetUser" ToRole="AnswerReplyVote" />
-    <NavigationProperty Name="AnswerVotes" Relationship="Model.FK_AnswerVote_ToTable_1" FromRole="AspNetUser" ToRole="AnswerVote" />
-    <NavigationProperty Name="Questions" Relationship="Model.FK_Question_ToTable" FromRole="AspNetUser" ToRole="Question" />
-    <NavigationProperty Name="QuestionReplies" Relationship="Model.FK_QuestionReply_ToTable_1" FromRole="AspNetUser" ToRole="QuestionReply" />
-    <NavigationProperty Name="QuestionReplyVotes" Relationship="Model.FK_QuestionReplyVote_ToTable_1" FromRole="AspNetUser" ToRole="QuestionReplyVote" />
-    <NavigationProperty Name="QuestionViews" Relationship="Model.FK_QuestionView_ToTable_1" FromRole="AspNetUser" ToRole="QuestionView" />
-    <NavigationProperty Name="QuestionVotes" Relationship="Model.FK_QuestionVote_ToTable_1" FromRole="AspNetUser" ToRole="QuestionVote" />
-    <NavigationProperty Name="Reporteds" Relationship="Model.FK_Reported_ToTable_1" FromRole="AspNetUser" ToRole="Reported" />
-    <NavigationProperty Name="Bids" Relationship="Model.FK_Bid_ToTable" FromRole="AspNetUser" ToRole="Bid" />
-    <NavigationProperty Name="AdViews" Relationship="Model.FK_AdView_ToTable_1" FromRole="AspNetUser" ToRole="AdView" />
-    <NavigationProperty Name="Ads" Relationship="Model.FK_Ad_ToTable" FromRole="AspNetUser" ToRole="Ad" />
-    <Property Name="since" Type="DateTime" Precision="0" />
-    <Property Name="reputation" Type="Int32" />
-    <Property Name="hideEmail" Type="Boolean" />
-    <Property Name="hidePhoneNumber" Type="Boolean" />
-    <Property Name="dpExtension" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-    <Property Name="dateOfBirth" Type="DateTime" Precision="0" />
-    <Property Name="shortAbout" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-    <Property Name="longAbout" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-    <Property Name="city" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-    <Property Name="gender" Type="String" MaxLength="12" FixedLength="true" Unicode="false" />
-    <Property Name="hideDateOfBirth" Type="Boolean" />
-    <NavigationProperty Name="Chats" Relationship="Model.FK_Chat_ToTable" FromRole="AspNetUser" ToRole="Chat" />
-    <NavigationProperty Name="Chats1" Relationship="Model.FK_Chat_ToTable_1" FromRole="AspNetUser" ToRole="Chat" />
-    <NavigationProperty Name="FollowQuestions" Relationship="Model.FK_FollowQuestion_ToTable_1" FromRole="AspNetUser" ToRole="FollowQuestion" />
-    <NavigationProperty Name="ReportedQuestions" Relationship="Model.FK_ReportedQuestion_ToTable_1" FromRole="AspNetUser" ToRole="ReportedQuestion" />
-    <NavigationProperty Name="FollowTags" Relationship="Model.FK_FollowTag_ToTable_1" FromRole="AspNetUser" ToRole="FollowTag" />
-    <NavigationProperty Name="Tags" Relationship="Model.FK_Tag_ToTable" FromRole="AspNetUser" ToRole="Tag" />
-  </EntityType>
-  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-    <End Type="Self.AspNetUser" Multiplicity="1" Role="AspNetUsers">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Self.AspNetUserClaim" Multiplicity="*" Role="AspNetUserClaims" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AspNetUserClaims">
-        <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-    <End Type="Self.AspNetUser" Multiplicity="1" Role="AspNetUsers">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Self.AspNetUserLogin" Multiplicity="*" Role="AspNetUserLogins" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AspNetUserLogins">
-        <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="AspNetUserRoles">
-    <End Type="Self.AspNetRole" Multiplicity="*" Role="AspNetRoles" />
-    <End Type="Self.AspNetUser" Multiplicity="*" Role="AspNetUsers" />
-  </Association>
   <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
-    <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
-    <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
-    <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
-    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
-    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-      <End EntitySet="AspNetUsers" Role="AspNetUsers" />
-      <End EntitySet="AspNetUserClaims" Role="AspNetUserClaims" />
-    </AssociationSet>
-    <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-      <End EntitySet="AspNetUsers" Role="AspNetUsers" />
-      <End EntitySet="AspNetUserLogins" Role="AspNetUserLogins" />
-    </AssociationSet>
-    <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
-      <End EntitySet="AspNetRoles" Role="AspNetRoles" />
-      <End EntitySet="AspNetUsers" Role="AspNetUsers" />
-    </AssociationSet>
+    <EntitySet Name="C__MigrationHistory" EntityType="Model.C__MigrationHistory" />
+    <EntitySet Name="Ads" EntityType="Model.Ad" />
+    <EntitySet Name="AdImages" EntityType="Model.AdImage" />
     <EntitySet Name="AdsLikes" EntityType="Model.AdsLike" />
+    <EntitySet Name="AdsLocations" EntityType="Model.AdsLocation" />
+    <EntitySet Name="AdTags" EntityType="Model.AdTag" />
+    <EntitySet Name="AdViews" EntityType="Model.AdView" />
+    <EntitySet Name="Answers" EntityType="Model.Answer" />
+    <EntitySet Name="AnswerReplies" EntityType="Model.AnswerReply" />
+    <EntitySet Name="AnswerReplyVotes" EntityType="Model.AnswerReplyVote" />
+    <EntitySet Name="AnswerVotes" EntityType="Model.AnswerVote" />
+    <EntitySet Name="AspNetRoles" EntityType="Model.AspNetRole" />
+    <EntitySet Name="AspNetUserClaims" EntityType="Model.AspNetUserClaim" />
+    <EntitySet Name="AspNetUserLogins" EntityType="Model.AspNetUserLogin" />
+    <EntitySet Name="AspNetUsers" EntityType="Model.AspNetUser" />
+    <EntitySet Name="Bids" EntityType="Model.Bid" />
+    <EntitySet Name="CarAds" EntityType="Model.CarAd" />
+    <EntitySet Name="CarBrands" EntityType="Model.CarBrand" />
+    <EntitySet Name="CarModels" EntityType="Model.CarModel" />
+    <EntitySet Name="Chats" EntityType="Model.Chat" />
     <EntitySet Name="Comments" EntityType="Model.Comment" />
     <EntitySet Name="CommentReplies" EntityType="Model.CommentReply" />
     <EntitySet Name="CommentReplyVotes" EntityType="Model.CommentReplyVote" />
     <EntitySet Name="CommentVotes" EntityType="Model.CommentVote" />
+    <EntitySet Name="FollowQuestions" EntityType="Model.FollowQuestion" />
+    <EntitySet Name="FollowTags" EntityType="Model.FollowTag" />
+    <EntitySet Name="Friends" EntityType="Model.Friend" />
+    <EntitySet Name="LaptopAds" EntityType="Model.LaptopAd" />
+    <EntitySet Name="LaptopBrands" EntityType="Model.LaptopBrand" />
+    <EntitySet Name="LaptopModels" EntityType="Model.LaptopModel" />
+    <EntitySet Name="Mobiles" EntityType="Model.Mobile" />
+    <EntitySet Name="MobileAds" EntityType="Model.MobileAd" />
+    <EntitySet Name="MobileModels" EntityType="Model.MobileModel" />
+    <EntitySet Name="popularPlaces" EntityType="Model.popularPlace" />
+    <EntitySet Name="Questions" EntityType="Model.Question" />
+    <EntitySet Name="QuestionReplies" EntityType="Model.QuestionReply" />
+    <EntitySet Name="QuestionReplyVotes" EntityType="Model.QuestionReplyVote" />
+    <EntitySet Name="QuestionTags" EntityType="Model.QuestionTag" />
+    <EntitySet Name="QuestionViews" EntityType="Model.QuestionView" />
+    <EntitySet Name="QuestionVotes" EntityType="Model.QuestionVote" />
     <EntitySet Name="Reporteds" EntityType="Model.Reported" />
+    <EntitySet Name="ReportedQuestions" EntityType="Model.ReportedQuestion" />
+    <EntitySet Name="ReportedTags" EntityType="Model.ReportedTag" />
+    <EntitySet Name="Tags" EntityType="Model.Tag" />
+    <AssociationSet Name="FK_Ad_ToTable" Association="Model.FK_Ad_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Ad" EntitySet="Ads" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AdImage_ToTable" Association="Model.FK_AdImage_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="AdImage" EntitySet="AdImages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AdsLike_ToTable" Association="Model.FK_AdsLike_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="AdsLike" EntitySet="AdsLikes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AdsLocation_ToTable" Association="Model.FK_AdsLocation_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="AdsLocation" EntitySet="AdsLocations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AdTag_ToTable" Association="Model.FK_AdTag_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="AdTag" EntitySet="AdTags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AdView_ToTable" Association="Model.FK_AdView_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="AdView" EntitySet="AdViews" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Bid_ToTable_1" Association="Model.FK_Bid_ToTable_1">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="Bid" EntitySet="Bids" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarAd_ToTable" Association="Model.FK_CarAd_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="CarAd" EntitySet="CarAds" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Comment_ToTable" Association="Model.FK_Comment_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="Comment" EntitySet="Comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LaptopAds_ToTable" Association="Model.FK_LaptopAds_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="LaptopAd" EntitySet="LaptopAds" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MobileAds_ToTable" Association="Model.FK_MobileAds_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="MobileAd" EntitySet="MobileAds" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reported_ToTable" Association="Model.FK_Reported_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="Reported" EntitySet="Reporteds" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AdsLocation_ToTable_2" Association="Model.FK_AdsLocation_ToTable_2">
+      <End Role="popularPlace" EntitySet="popularPlaces" />
+      <End Role="AdsLocation" EntitySet="AdsLocations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AdTag_ToTable_1" Association="Model.FK_AdTag_ToTable_1">
+      <End Role="Tag" EntitySet="Tags" />
+      <End Role="AdTag" EntitySet="AdTags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AdView_ToTable_1" Association="Model.FK_AdView_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AdView" EntitySet="AdViews" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Answer_ToTable" Association="Model.FK_Answer_ToTable">
+      <End Role="Question" EntitySet="Questions" />
+      <End Role="Answer" EntitySet="Answers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Answer_ToTable_1" Association="Model.FK_Answer_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Answer" EntitySet="Answers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AnswerReply_ToTable" Association="Model.FK_AnswerReply_ToTable">
+      <End Role="Answer" EntitySet="Answers" />
+      <End Role="AnswerReply" EntitySet="AnswerReplies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AnswerVote_ToTable" Association="Model.FK_AnswerVote_ToTable">
+      <End Role="Answer" EntitySet="Answers" />
+      <End Role="AnswerVote" EntitySet="AnswerVotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AnswerReply_ToTable_1" Association="Model.FK_AnswerReply_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AnswerReply" EntitySet="AnswerReplies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AnswerReplyVote_ToTable" Association="Model.FK_AnswerReplyVote_ToTable">
+      <End Role="AnswerReply" EntitySet="AnswerReplies" />
+      <End Role="AnswerReplyVote" EntitySet="AnswerReplyVotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AnswerReplyVote_ToTable_1" Association="Model.FK_AnswerReplyVote_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AnswerReplyVote" EntitySet="AnswerReplyVotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AnswerVote_ToTable_1" Association="Model.FK_AnswerVote_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AnswerVote" EntitySet="AnswerVotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Bid_ToTable" Association="Model.FK_Bid_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Bid" EntitySet="Bids" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Chat_ToTable" Association="Model.FK_Chat_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Chat" EntitySet="Chats" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Chat_ToTable_1" Association="Model.FK_Chat_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Chat" EntitySet="Chats" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Comment_ToTable_1" Association="Model.FK_Comment_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Comment" EntitySet="Comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CommentReply_ToTable_1" Association="Model.FK_CommentReply_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="CommentReply" EntitySet="CommentReplies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CommentReplyVote_ToTable_1" Association="Model.FK_CommentReplyVote_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="CommentReplyVote" EntitySet="CommentReplyVotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CommentVote_ToTable_1" Association="Model.FK_CommentVote_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="CommentVote" EntitySet="CommentVotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FollowQuestion_ToTable_1" Association="Model.FK_FollowQuestion_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="FollowQuestion" EntitySet="FollowQuestions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FollowTag_ToTable_1" Association="Model.FK_FollowTag_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="FollowTag" EntitySet="FollowTags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Friend_ToTable" Association="Model.FK_Friend_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Friend" EntitySet="Friends" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Friend_ToTable_1" Association="Model.FK_Friend_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Friend" EntitySet="Friends" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LaptopBrand_ToTable" Association="Model.FK_LaptopBrand_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="LaptopBrand" EntitySet="LaptopBrands" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LaptopModel_ToTable_1" Association="Model.FK_LaptopModel_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="LaptopModel" EntitySet="LaptopModels" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Mobile_ToTable" Association="Model.FK_Mobile_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Mobile" EntitySet="Mobiles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MobileModel_ToTable_1" Association="Model.FK_MobileModel_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="MobileModel" EntitySet="MobileModels" />
+    </AssociationSet>
+    <AssociationSet Name="FK_popularPlace_ToTable_1" Association="Model.FK_popularPlace_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="popularPlace" EntitySet="popularPlaces" />
+    </AssociationSet>
+    <AssociationSet Name="FK_popularPlace_ToTable_2" Association="Model.FK_popularPlace_ToTable_2">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="popularPlace" EntitySet="popularPlaces" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Question_ToTable" Association="Model.FK_Question_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Question" EntitySet="Questions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_QuestionReply_ToTable_1" Association="Model.FK_QuestionReply_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="QuestionReply" EntitySet="QuestionReplies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_QuestionReplyVote_ToTable_1" Association="Model.FK_QuestionReplyVote_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="QuestionReplyVote" EntitySet="QuestionReplyVotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_QuestionView_ToTable_1" Association="Model.FK_QuestionView_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="QuestionView" EntitySet="QuestionViews" />
+    </AssociationSet>
+    <AssociationSet Name="FK_QuestionVote_ToTable_1" Association="Model.FK_QuestionVote_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="QuestionVote" EntitySet="QuestionVotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reported_ToTable_1" Association="Model.FK_Reported_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Reported" EntitySet="Reporteds" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReportedQuestion_ToTable_1" Association="Model.FK_ReportedQuestion_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="ReportedQuestion" EntitySet="ReportedQuestions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReportedTag_ToTable_1" Association="Model.FK_ReportedTag_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="ReportedTag" EntitySet="ReportedTags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tag_ToTable" Association="Model.FK_Tag_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Tag" EntitySet="Tags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tag_ToTable_1" Association="Model.FK_Tag_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Tag" EntitySet="Tags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarAd_ToTable_1" Association="Model.FK_CarAd_ToTable_1">
+      <End Role="CarModel" EntitySet="CarModels" />
+      <End Role="CarAd" EntitySet="CarAds" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarModels_ToTable" Association="Model.FK_CarModels_ToTable">
+      <End Role="CarBrand" EntitySet="CarBrands" />
+      <End Role="CarModel" EntitySet="CarModels" />
+    </AssociationSet>
     <AssociationSet Name="FK_CommentReply_ToTable" Association="Model.FK_CommentReply_ToTable">
       <End Role="Comment" EntitySet="Comments" />
       <End Role="CommentReply" EntitySet="CommentReplies" />
@@ -161,88 +273,37 @@
       <End Role="CommentReply" EntitySet="CommentReplies" />
       <End Role="CommentReplyVote" EntitySet="CommentReplyVotes" />
     </AssociationSet>
-    <EntitySet Name="AdViews" EntityType="Model.AdView" />
-    <AssociationSet Name="FK_Comment_ToTable_1" Association="Model.FK_Comment_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="Comments" Role="Comment" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CommentReply_ToTable_1" Association="Model.FK_CommentReply_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="CommentReplies" Role="CommentReply" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CommentReplyVote_ToTable_1" Association="Model.FK_CommentReplyVote_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="CommentReplyVotes" Role="CommentReplyVote" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CommentVote_ToTable_1" Association="Model.FK_CommentVote_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="CommentVotes" Role="CommentVote" />
-    </AssociationSet>
-    <EntitySet Name="Mobiles" EntityType="Model.Mobile" />
-    <EntitySet Name="Answers" EntityType="Model.Answer" />
-    <EntitySet Name="AnswerReplies" EntityType="Model.AnswerReply" />
-    <EntitySet Name="AnswerReplyVotes" EntityType="Model.AnswerReplyVote" />
-    <EntitySet Name="AnswerVotes" EntityType="Model.AnswerVote" />
-    <EntitySet Name="Questions" EntityType="Model.Question" />
-    <EntitySet Name="QuestionReplies" EntityType="Model.QuestionReply" />
-    <EntitySet Name="QuestionReplyVotes" EntityType="Model.QuestionReplyVote" />
-    <EntitySet Name="QuestionViews" EntityType="Model.QuestionView" />
-    <EntitySet Name="QuestionVotes" EntityType="Model.QuestionVote" />
-    <AssociationSet Name="FK_Answer_ToTable" Association="Model.FK_Answer_ToTable">
+    <AssociationSet Name="FK_FollowQuestion_ToTable" Association="Model.FK_FollowQuestion_ToTable">
       <End Role="Question" EntitySet="Questions" />
-      <End Role="Answer" EntitySet="Answers" />
+      <End Role="FollowQuestion" EntitySet="FollowQuestions" />
     </AssociationSet>
-    <AssociationSet Name="FK_Answer_ToTable_1" Association="Model.FK_Answer_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="Answers" Role="Answer" />
+    <AssociationSet Name="FK_FollowTag_ToTable" Association="Model.FK_FollowTag_ToTable">
+      <End Role="Tag" EntitySet="Tags" />
+      <End Role="FollowTag" EntitySet="FollowTags" />
     </AssociationSet>
-    <AssociationSet Name="FK_AnswerReply_ToTable" Association="Model.FK_AnswerReply_ToTable">
-      <End Role="Answer" EntitySet="Answers" />
-      <End Role="AnswerReply" EntitySet="AnswerReplies" />
+    <AssociationSet Name="FK_LaptopAds_ToTable_1" Association="Model.FK_LaptopAds_ToTable_1">
+      <End Role="LaptopModel" EntitySet="LaptopModels" />
+      <End Role="LaptopAd" EntitySet="LaptopAds" />
     </AssociationSet>
-    <AssociationSet Name="FK_AnswerVote_ToTable" Association="Model.FK_AnswerVote_ToTable">
-      <End Role="Answer" EntitySet="Answers" />
-      <End Role="AnswerVote" EntitySet="AnswerVotes" />
+    <AssociationSet Name="FK_LaptopModel_ToTable" Association="Model.FK_LaptopModel_ToTable">
+      <End Role="LaptopBrand" EntitySet="LaptopBrands" />
+      <End Role="LaptopModel" EntitySet="LaptopModels" />
     </AssociationSet>
-    <AssociationSet Name="FK_AnswerReply_ToTable_1" Association="Model.FK_AnswerReply_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="AnswerReplies" Role="AnswerReply" />
+    <AssociationSet Name="FK_MobileModel_ToTable" Association="Model.FK_MobileModel_ToTable">
+      <End Role="Mobile" EntitySet="Mobiles" />
+      <End Role="MobileModel" EntitySet="MobileModels" />
     </AssociationSet>
-    <AssociationSet Name="FK_AnswerReplyVote_ToTable" Association="Model.FK_AnswerReplyVote_ToTable">
-      <End Role="AnswerReply" EntitySet="AnswerReplies" />
-      <End Role="AnswerReplyVote" EntitySet="AnswerReplyVotes" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AnswerReplyVote_ToTable_1" Association="Model.FK_AnswerReplyVote_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="AnswerReplyVotes" Role="AnswerReplyVote" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AnswerVote_ToTable_1" Association="Model.FK_AnswerVote_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="AnswerVotes" Role="AnswerVote" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Question_ToTable" Association="Model.FK_Question_ToTable">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="Questions" Role="Question" />
-    </AssociationSet>
-    <AssociationSet Name="FK_QuestionReply_ToTable_1" Association="Model.FK_QuestionReply_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="QuestionReplies" Role="QuestionReply" />
-    </AssociationSet>
-    <AssociationSet Name="FK_QuestionReplyVote_ToTable_1" Association="Model.FK_QuestionReplyVote_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="QuestionReplyVotes" Role="QuestionReplyVote" />
-    </AssociationSet>
-    <AssociationSet Name="FK_QuestionView_ToTable_1" Association="Model.FK_QuestionView_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="QuestionViews" Role="QuestionView" />
-    </AssociationSet>
-    <AssociationSet Name="FK_QuestionVote_ToTable_1" Association="Model.FK_QuestionVote_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="QuestionVotes" Role="QuestionVote" />
+    <AssociationSet Name="FK_MobileAds_ToTable_1" Association="Model.FK_MobileAds_ToTable_1">
+      <End Role="MobileModel" EntitySet="MobileModels" />
+      <End Role="MobileAd" EntitySet="MobileAds" />
     </AssociationSet>
     <AssociationSet Name="FK_QuestionReply_ToTable" Association="Model.FK_QuestionReply_ToTable">
       <End Role="Question" EntitySet="Questions" />
       <End Role="QuestionReply" EntitySet="QuestionReplies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_QuestionTag_ToTable_1" Association="Model.FK_QuestionTag_ToTable_1">
+      <End Role="Question" EntitySet="Questions" />
+      <End Role="QuestionTag" EntitySet="QuestionTags" />
     </AssociationSet>
     <AssociationSet Name="FK_QuestionView_ToTable" Association="Model.FK_QuestionView_ToTable">
       <End Role="Question" EntitySet="Questions" />
@@ -252,167 +313,101 @@
       <End Role="Question" EntitySet="Questions" />
       <End Role="QuestionVote" EntitySet="QuestionVotes" />
     </AssociationSet>
-    <AssociationSet Name="FK_QuestionReplyVote_ToTable" Association="Model.FK_QuestionReplyVote_ToTable">
-      <End Role="QuestionReply" EntitySet="QuestionReplies" />
-      <End Role="QuestionReplyVote" EntitySet="QuestionReplyVotes" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Reported_ToTable_1" Association="Model.FK_Reported_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="Reporteds" Role="Reported" />
-    </AssociationSet>
-    <EntitySet Name="AdImages" EntityType="Model.AdImage" />
-    <EntitySet Name="Bids" EntityType="Model.Bid" />
-    <AssociationSet Name="FK_Bid_ToTable" Association="Model.FK_Bid_ToTable">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="Bids" Role="Bid" />
-    </AssociationSet>
-    <EntitySet Name="MobileModels" EntityType="Model.MobileModel" />
-    <AssociationSet Name="FK_AdView_ToTable_1" Association="Model.FK_AdView_ToTable_1">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="AdViews" Role="AdView" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MobileModel_ToTable" Association="Model.FK_MobileModel_ToTable">
-      <End Role="Mobile" EntitySet="Mobiles" />
-      <End Role="MobileModel" EntitySet="MobileModels" />
-    </AssociationSet>
-    <EntitySet Name="Ads" EntityType="Model.Ad" />
-    <AssociationSet Name="FK_Ad_ToTable" Association="Model.FK_Ad_ToTable">
-      <End EntitySet="AspNetUsers" Role="AspNetUser" />
-      <End EntitySet="Ads" Role="Ad" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AdImage_ToTable" Association="Model.FK_AdImage_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="AdImage" EntitySet="AdImages" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AdsLike_ToTable" Association="Model.FK_AdsLike_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="AdsLike" EntitySet="AdsLikes" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AdView_ToTable" Association="Model.FK_AdView_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="AdView" EntitySet="AdViews" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Bid_ToTable_1" Association="Model.FK_Bid_ToTable_1">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="Bid" EntitySet="Bids" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Comment_ToTable" Association="Model.FK_Comment_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="Comment" EntitySet="Comments" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Reported_ToTable" Association="Model.FK_Reported_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="Reported" EntitySet="Reporteds" />
-    </AssociationSet>
-    <EntitySet Name="LaptopBrands" EntityType="Model.LaptopBrand" />
-    <EntitySet Name="LaptopModels" EntityType="Model.LaptopModel" />
-    <AssociationSet Name="FK_LaptopModel_ToTable" Association="Model.FK_LaptopModel_ToTable">
-      <End Role="LaptopBrand" EntitySet="LaptopBrands" />
-      <End Role="LaptopModel" EntitySet="LaptopModels" />
-    </AssociationSet>
-    <EntitySet Name="MobileAds" EntityType="Model.MobileAd" />
-    <AssociationSet Name="FK_MobileAds_ToTable" Association="Model.FK_MobileAds_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="MobileAd" EntitySet="MobileAds" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MobileAds_ToTable_1" Association="Model.FK_MobileAds_ToTable_1">
-      <End Role="MobileModel" EntitySet="MobileModels" />
-      <End Role="MobileAd" EntitySet="MobileAds" />
-    </AssociationSet>
-    <EntitySet Name="LaptopAds" EntityType="Model.LaptopAd" />
-    <AssociationSet Name="FK_LaptopAds_ToTable" Association="Model.FK_LaptopAds_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="LaptopAd" EntitySet="LaptopAds" />
-    </AssociationSet>
-    <AssociationSet Name="FK_LaptopAds_ToTable_1" Association="Model.FK_LaptopAds_ToTable_1">
-      <End Role="LaptopModel" EntitySet="LaptopModels" />
-      <End Role="LaptopAd" EntitySet="LaptopAds" />
-    </AssociationSet>
-    <EntitySet Name="CarBrands" EntityType="Model.CarBrand" />
-    <EntitySet Name="CarAds" EntityType="Model.CarAd" />
-    <EntitySet Name="CarModels" EntityType="Model.CarModel" />
-    <AssociationSet Name="FK_CarAd_ToTable" Association="Model.FK_CarAd_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="CarAd" EntitySet="CarAds" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CarAd_ToTable_1" Association="Model.FK_CarAd_ToTable_1">
-      <End Role="CarModel" EntitySet="CarModels" />
-      <End Role="CarAd" EntitySet="CarAds" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CarModels_ToTable" Association="Model.FK_CarModels_ToTable">
-      <End Role="CarBrand" EntitySet="CarBrands" />
-      <End Role="CarModel" EntitySet="CarModels" />
-    </AssociationSet>
-    <EntitySet Name="Cities" EntityType="Model.City" />
-    <EntitySet Name="popularPlaces" EntityType="Model.popularPlace" />
-    <AssociationSet Name="FK_popularPlace_ToTable" Association="Model.FK_popularPlace_ToTable">
-      <End Role="City" EntitySet="Cities" />
-      <End Role="popularPlace" EntitySet="popularPlaces" />
-    </AssociationSet>
-    <EntitySet Name="AdsLocations" EntityType="Model.AdsLocation" />
-    <AssociationSet Name="FK_AdsLocation_ToTable" Association="Model.FK_AdsLocation_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="AdsLocation" EntitySet="AdsLocations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AdsLocation_ToTable_1" Association="Model.FK_AdsLocation_ToTable_1">
-      <End Role="City" EntitySet="Cities" />
-      <End Role="AdsLocation" EntitySet="AdsLocations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AdsLocation_ToTable_2" Association="Model.FK_AdsLocation_ToTable_2">
-      <End Role="popularPlace" EntitySet="popularPlaces" />
-      <End Role="AdsLocation" EntitySet="AdsLocations" />
-    </AssociationSet>
-    <EntitySet Name="Chats" EntityType="Model.Chat" />
-    <AssociationSet Name="FK_Chat_ToTable" Association="Model.FK_Chat_ToTable">
-      <End Role="AspNetUser" EntitySet="AspNetUsers" />
-      <End Role="Chat" EntitySet="Chats" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Chat_ToTable_1" Association="Model.FK_Chat_ToTable_1">
-      <End Role="AspNetUser" EntitySet="AspNetUsers" />
-      <End Role="Chat" EntitySet="Chats" />
-    </AssociationSet>
-    <EntitySet Name="FollowQuestions" EntityType="Model.FollowQuestion" />
-    <EntitySet Name="ReportedQuestions" EntityType="Model.ReportedQuestion" />
-    <AssociationSet Name="FK_FollowQuestion_ToTable_1" Association="Model.FK_FollowQuestion_ToTable_1">
-      <End Role="AspNetUser" EntitySet="AspNetUsers" />
-      <End Role="FollowQuestion" EntitySet="FollowQuestions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ReportedQuestion_ToTable_1" Association="Model.FK_ReportedQuestion_ToTable_1">
-      <End Role="AspNetUser" EntitySet="AspNetUsers" />
-      <End Role="ReportedQuestion" EntitySet="ReportedQuestions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_FollowQuestion_ToTable" Association="Model.FK_FollowQuestion_ToTable">
-      <End Role="Question" EntitySet="Questions" />
-      <End Role="FollowQuestion" EntitySet="FollowQuestions" />
-    </AssociationSet>
     <AssociationSet Name="FK_ReportedQuestion_ToTable" Association="Model.FK_ReportedQuestion_ToTable">
       <End Role="Question" EntitySet="Questions" />
       <End Role="ReportedQuestion" EntitySet="ReportedQuestions" />
     </AssociationSet>
-    <EntitySet Name="FollowTags" EntityType="Model.FollowTag" />
-    <AssociationSet Name="FK_FollowTag_ToTable_1" Association="Model.FK_FollowTag_ToTable_1">
-      <End Role="AspNetUser" EntitySet="AspNetUsers" />
-      <End Role="FollowTag" EntitySet="FollowTags" />
-    </AssociationSet>
-    <EntitySet Name="QuestionTags" EntityType="Model.QuestionTag" />
-    <AssociationSet Name="FK_QuestionTag_ToTable_1" Association="Model.FK_QuestionTag_ToTable_1">
-      <End Role="Question" EntitySet="Questions" />
-      <End Role="QuestionTag" EntitySet="QuestionTags" />
-    </AssociationSet>
-    <EntitySet Name="Tags" EntityType="Model.Tag" />
-    <AssociationSet Name="FK_Tag_ToTable" Association="Model.FK_Tag_ToTable">
-      <End Role="AspNetUser" EntitySet="AspNetUsers" />
-      <End Role="Tag" EntitySet="Tags" />
-    </AssociationSet>
-    <AssociationSet Name="FK_FollowTag_ToTable" Association="Model.FK_FollowTag_ToTable">
-      <End Role="Tag" EntitySet="Tags" />
-      <End Role="FollowTag" EntitySet="FollowTags" />
+    <AssociationSet Name="FK_QuestionReplyVote_ToTable" Association="Model.FK_QuestionReplyVote_ToTable">
+      <End Role="QuestionReply" EntitySet="QuestionReplies" />
+      <End Role="QuestionReplyVote" EntitySet="QuestionReplyVotes" />
     </AssociationSet>
     <AssociationSet Name="FK_QuestionTag_ToTable" Association="Model.FK_QuestionTag_ToTable">
       <End Role="Tag" EntitySet="Tags" />
       <End Role="QuestionTag" EntitySet="QuestionTags" />
     </AssociationSet>
+    <AssociationSet Name="FK_ReportedTag_ToTable" Association="Model.FK_ReportedTag_ToTable">
+      <End Role="Tag" EntitySet="Tags" />
+      <End Role="ReportedTag" EntitySet="ReportedTags" />
+    </AssociationSet>
+    <AssociationSet Name="AspNetUserRoles" Association="Model.AspNetUserRoles">
+      <End Role="AspNetRole" EntitySet="AspNetRoles" />
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+    </AssociationSet>
+    <EntitySet Name="Cities" EntityType="Model.City" />
+    <AssociationSet Name="FK_AdsLocation_ToTable_1" Association="Model.FK_AdsLocation_ToTable_1">
+      <End Role="City" EntitySet="Cities" />
+      <End Role="AdsLocation" EntitySet="AdsLocations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_City_ToTable" Association="Model.FK_City_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="City" EntitySet="Cities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_City_ToTable_1" Association="Model.FK_City_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="City" EntitySet="Cities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_popularPlace_ToTable" Association="Model.FK_popularPlace_ToTable">
+      <End Role="City" EntitySet="Cities" />
+      <End Role="popularPlace" EntitySet="popularPlaces" />
+    </AssociationSet>
+    <EntitySet Name="SaveAds" EntityType="Model.SaveAd" />
+    <AssociationSet Name="FK_SaveAd_ToTable" Association="Model.FK_SaveAd_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="SaveAd" EntitySet="SaveAds" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SaveAd_ToTable_1" Association="Model.FK_SaveAd_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="SaveAd" EntitySet="SaveAds" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="C__MigrationHistory">
+    <Key>
+      <PropertyRef Name="MigrationId" />
+      <PropertyRef Name="ContextKey" />
+    </Key>
+    <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+    <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Ad">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="category" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="postedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="price" Type="Int32" />
+    <Property Name="isnegotiable" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="subcategory" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="type" Type="Boolean" />
+    <Property Name="condition" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Ad_ToTable" FromRole="Ad" ToRole="AspNetUser" />
+    <NavigationProperty Name="AdImages" Relationship="Model.FK_AdImage_ToTable" FromRole="Ad" ToRole="AdImage" />
+    <NavigationProperty Name="AdsLikes" Relationship="Model.FK_AdsLike_ToTable" FromRole="Ad" ToRole="AdsLike" />
+    <NavigationProperty Name="AdsLocation" Relationship="Model.FK_AdsLocation_ToTable" FromRole="Ad" ToRole="AdsLocation" />
+    <NavigationProperty Name="AdTags" Relationship="Model.FK_AdTag_ToTable" FromRole="Ad" ToRole="AdTag" />
+    <NavigationProperty Name="AdViews" Relationship="Model.FK_AdView_ToTable" FromRole="Ad" ToRole="AdView" />
+    <NavigationProperty Name="Bids" Relationship="Model.FK_Bid_ToTable_1" FromRole="Ad" ToRole="Bid" />
+    <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable" FromRole="Ad" ToRole="CarAd" />
+    <NavigationProperty Name="Comments" Relationship="Model.FK_Comment_ToTable" FromRole="Ad" ToRole="Comment" />
+    <NavigationProperty Name="LaptopAd" Relationship="Model.FK_LaptopAds_ToTable" FromRole="Ad" ToRole="LaptopAd" />
+    <NavigationProperty Name="MobileAd" Relationship="Model.FK_MobileAds_ToTable" FromRole="Ad" ToRole="MobileAd" />
+    <NavigationProperty Name="Reporteds" Relationship="Model.FK_Reported_ToTable" FromRole="Ad" ToRole="Reported" />
+    <NavigationProperty Name="SaveAds" Relationship="Model.FK_SaveAd_ToTable" FromRole="Ad" ToRole="SaveAd" />
+  </EntityType>
+  <EntityType Name="AdImage">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <Property Name="imageExtension" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_AdImage_ToTable" FromRole="AdImage" ToRole="Ad" />
+  </EntityType>
   <EntityType Name="AdsLike">
     <Key>
       <PropertyRef Name="Id" />
@@ -422,101 +417,28 @@
     <Property Name="likedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Ad" Relationship="Model.FK_AdsLike_ToTable" FromRole="AdsLike" ToRole="Ad" />
   </EntityType>
-  <EntityType Name="Comment">
+  <EntityType Name="AdsLocation">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
-    <Property Name="postedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="adId" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="CommentReplies" Relationship="Model.FK_CommentReply_ToTable" FromRole="Comment" ToRole="CommentReply" />
-    <NavigationProperty Name="CommentVotes" Relationship="Model.FK_CommentVote_ToTable" FromRole="Comment" ToRole="CommentVote" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Comment_ToTable_1" FromRole="Comment" ToRole="AspNetUser" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_Comment_ToTable" FromRole="Comment" ToRole="Ad" />
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="cityId" Type="Int32" />
+    <Property Name="exectLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="popularPlaceId" Type="Int32" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_AdsLocation_ToTable" FromRole="AdsLocation" ToRole="Ad" />
+    <NavigationProperty Name="popularPlace" Relationship="Model.FK_AdsLocation_ToTable_2" FromRole="AdsLocation" ToRole="popularPlace" />
+    <NavigationProperty Name="City" Relationship="Model.FK_AdsLocation_ToTable_1" FromRole="AdsLocation" ToRole="City" />
   </EntityType>
-  <EntityType Name="CommentReply">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="commentId" Type="Int32" Nullable="false" />
-    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="description" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="postedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Comment" Relationship="Model.FK_CommentReply_ToTable" FromRole="CommentReply" ToRole="Comment" />
-    <NavigationProperty Name="CommentReplyVotes" Relationship="Model.FK_CommentReplyVote_ToTable" FromRole="CommentReply" ToRole="CommentReplyVote" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CommentReply_ToTable_1" FromRole="CommentReply" ToRole="AspNetUser" />
-  </EntityType>
-  <EntityType Name="CommentReplyVote">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="commentReplyId" Type="Int32" Nullable="false" />
-    <Property Name="isup" Type="Boolean" Nullable="false" />
-    <Property Name="votedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="CommentReply" Relationship="Model.FK_CommentReplyVote_ToTable" FromRole="CommentReplyVote" ToRole="CommentReply" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CommentReplyVote_ToTable_1" FromRole="CommentReplyVote" ToRole="AspNetUser" />
-  </EntityType>
-  <EntityType Name="CommentVote">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="commentId" Type="Int32" Nullable="false" />
-    <Property Name="isup" Type="Boolean" Nullable="false" />
-    <Property Name="votedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Comment" Relationship="Model.FK_CommentVote_ToTable" FromRole="CommentVote" ToRole="Comment" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CommentVote_ToTable_1" FromRole="CommentVote" ToRole="AspNetUser" />
-  </EntityType>
-  <EntityType Name="Reported">
+  <EntityType Name="AdTag">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="adId" Type="Int32" Nullable="false" />
-    <Property Name="reportedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Reported_ToTable_1" FromRole="Reported" ToRole="AspNetUser" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_Reported_ToTable" FromRole="Reported" ToRole="Ad" />
+    <Property Name="tagId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_AdTag_ToTable" FromRole="AdTag" ToRole="Ad" />
+    <NavigationProperty Name="Tag" Relationship="Model.FK_AdTag_ToTable_1" FromRole="AdTag" ToRole="Tag" />
   </EntityType>
-  <Association Name="FK_CommentReply_ToTable">
-    <End Type="Model.Comment" Role="Comment" Multiplicity="1" />
-    <End Type="Model.CommentReply" Role="CommentReply" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Comment">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CommentReply">
-        <PropertyRef Name="commentId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CommentVote_ToTable">
-    <End Type="Model.Comment" Role="Comment" Multiplicity="1" />
-    <End Type="Model.CommentVote" Role="CommentVote" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Comment">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CommentVote">
-        <PropertyRef Name="commentId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CommentReplyVote_ToTable">
-    <End Type="Model.CommentReply" Role="CommentReply" Multiplicity="1" />
-    <End Type="Model.CommentReplyVote" Role="CommentReplyVote" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CommentReply">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CommentReplyVote">
-        <PropertyRef Name="commentReplyId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="AdView">
     <Key>
       <PropertyRef Name="Id" />
@@ -524,63 +446,8 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="viewedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="adId" Type="Int32" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_AdView_ToTable_1" FromRole="AdView" ToRole="AspNetUser" />
     <NavigationProperty Name="Ad" Relationship="Model.FK_AdView_ToTable" FromRole="AdView" ToRole="Ad" />
-  </EntityType>
-  <Association Name="FK_Comment_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser" />
-    <End Type="Model.Comment" Multiplicity="*" Role="Comment" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Comment">
-        <PropertyRef Name="postedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CommentReply_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser" />
-    <End Type="Model.CommentReply" Multiplicity="*" Role="CommentReply" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CommentReply">
-        <PropertyRef Name="postedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CommentReplyVote_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser" />
-    <End Type="Model.CommentReplyVote" Multiplicity="*" Role="CommentReplyVote" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CommentReplyVote">
-        <PropertyRef Name="votedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CommentVote_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser" />
-    <End Type="Model.CommentVote" Multiplicity="*" Role="CommentVote" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CommentVote">
-        <PropertyRef Name="votedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Mobile">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="MobileModels" Relationship="Model.FK_MobileModel_ToTable" FromRole="Mobile" ToRole="MobileModel" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_AdView_ToTable_1" FromRole="AdView" ToRole="AspNetUser" />
   </EntityType>
   <EntityType Name="Answer">
     <Key>
@@ -631,6 +498,326 @@
     <NavigationProperty Name="Answer" Relationship="Model.FK_AnswerVote_ToTable" FromRole="AnswerVote" ToRole="Answer" />
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_AnswerVote_ToTable_1" FromRole="AnswerVote" ToRole="AspNetUser" />
   </EntityType>
+  <EntityType Name="AspNetRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUsers" Relationship="Model.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="AspNetUserClaim">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="AspNetUserLogin">
+    <Key>
+      <PropertyRef Name="LoginProvider" />
+      <PropertyRef Name="ProviderKey" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="since" Type="DateTime" Precision="0" />
+    <Property Name="reputation" Type="Int32" />
+    <Property Name="hideEmail" Type="Boolean" />
+    <Property Name="hidePhoneNumber" Type="Boolean" />
+    <Property Name="dpExtension" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="gender" Type="String" MaxLength="12" FixedLength="true" Unicode="false" />
+    <Property Name="dateOfBirth" Type="DateTime" Precision="0" />
+    <Property Name="shortAbout" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="longAbout" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="city" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="hideDateOfBirth" Type="Boolean" />
+    <Property Name="hideFriends" Type="Boolean" />
+    <NavigationProperty Name="Ads" Relationship="Model.FK_Ad_ToTable" FromRole="AspNetUser" ToRole="Ad" />
+    <NavigationProperty Name="AdViews" Relationship="Model.FK_AdView_ToTable_1" FromRole="AspNetUser" ToRole="AdView" />
+    <NavigationProperty Name="Answers" Relationship="Model.FK_Answer_ToTable_1" FromRole="AspNetUser" ToRole="Answer" />
+    <NavigationProperty Name="AnswerReplies" Relationship="Model.FK_AnswerReply_ToTable_1" FromRole="AspNetUser" ToRole="AnswerReply" />
+    <NavigationProperty Name="AnswerReplyVotes" Relationship="Model.FK_AnswerReplyVote_ToTable_1" FromRole="AspNetUser" ToRole="AnswerReplyVote" />
+    <NavigationProperty Name="AnswerVotes" Relationship="Model.FK_AnswerVote_ToTable_1" FromRole="AspNetUser" ToRole="AnswerVote" />
+    <NavigationProperty Name="AspNetUserClaims" Relationship="Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+    <NavigationProperty Name="AspNetUserLogins" Relationship="Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+    <NavigationProperty Name="Bids" Relationship="Model.FK_Bid_ToTable" FromRole="AspNetUser" ToRole="Bid" />
+    <NavigationProperty Name="Chats" Relationship="Model.FK_Chat_ToTable" FromRole="AspNetUser" ToRole="Chat" />
+    <NavigationProperty Name="Chats1" Relationship="Model.FK_Chat_ToTable_1" FromRole="AspNetUser" ToRole="Chat" />
+    <NavigationProperty Name="Comments" Relationship="Model.FK_Comment_ToTable_1" FromRole="AspNetUser" ToRole="Comment" />
+    <NavigationProperty Name="CommentReplies" Relationship="Model.FK_CommentReply_ToTable_1" FromRole="AspNetUser" ToRole="CommentReply" />
+    <NavigationProperty Name="CommentReplyVotes" Relationship="Model.FK_CommentReplyVote_ToTable_1" FromRole="AspNetUser" ToRole="CommentReplyVote" />
+    <NavigationProperty Name="CommentVotes" Relationship="Model.FK_CommentVote_ToTable_1" FromRole="AspNetUser" ToRole="CommentVote" />
+    <NavigationProperty Name="FollowQuestions" Relationship="Model.FK_FollowQuestion_ToTable_1" FromRole="AspNetUser" ToRole="FollowQuestion" />
+    <NavigationProperty Name="FollowTags" Relationship="Model.FK_FollowTag_ToTable_1" FromRole="AspNetUser" ToRole="FollowTag" />
+    <NavigationProperty Name="Friends" Relationship="Model.FK_Friend_ToTable" FromRole="AspNetUser" ToRole="Friend" />
+    <NavigationProperty Name="Friends1" Relationship="Model.FK_Friend_ToTable_1" FromRole="AspNetUser" ToRole="Friend" />
+    <NavigationProperty Name="LaptopBrands" Relationship="Model.FK_LaptopBrand_ToTable" FromRole="AspNetUser" ToRole="LaptopBrand" />
+    <NavigationProperty Name="LaptopModels" Relationship="Model.FK_LaptopModel_ToTable_1" FromRole="AspNetUser" ToRole="LaptopModel" />
+    <NavigationProperty Name="Mobiles" Relationship="Model.FK_Mobile_ToTable" FromRole="AspNetUser" ToRole="Mobile" />
+    <NavigationProperty Name="MobileModels" Relationship="Model.FK_MobileModel_ToTable_1" FromRole="AspNetUser" ToRole="MobileModel" />
+    <NavigationProperty Name="popularPlaces" Relationship="Model.FK_popularPlace_ToTable_1" FromRole="AspNetUser" ToRole="popularPlace" />
+    <NavigationProperty Name="popularPlaces1" Relationship="Model.FK_popularPlace_ToTable_2" FromRole="AspNetUser" ToRole="popularPlace" />
+    <NavigationProperty Name="Questions" Relationship="Model.FK_Question_ToTable" FromRole="AspNetUser" ToRole="Question" />
+    <NavigationProperty Name="QuestionReplies" Relationship="Model.FK_QuestionReply_ToTable_1" FromRole="AspNetUser" ToRole="QuestionReply" />
+    <NavigationProperty Name="QuestionReplyVotes" Relationship="Model.FK_QuestionReplyVote_ToTable_1" FromRole="AspNetUser" ToRole="QuestionReplyVote" />
+    <NavigationProperty Name="QuestionViews" Relationship="Model.FK_QuestionView_ToTable_1" FromRole="AspNetUser" ToRole="QuestionView" />
+    <NavigationProperty Name="QuestionVotes" Relationship="Model.FK_QuestionVote_ToTable_1" FromRole="AspNetUser" ToRole="QuestionVote" />
+    <NavigationProperty Name="Reporteds" Relationship="Model.FK_Reported_ToTable_1" FromRole="AspNetUser" ToRole="Reported" />
+    <NavigationProperty Name="ReportedQuestions" Relationship="Model.FK_ReportedQuestion_ToTable_1" FromRole="AspNetUser" ToRole="ReportedQuestion" />
+    <NavigationProperty Name="ReportedTags" Relationship="Model.FK_ReportedTag_ToTable_1" FromRole="AspNetUser" ToRole="ReportedTag" />
+    <NavigationProperty Name="Tags" Relationship="Model.FK_Tag_ToTable" FromRole="AspNetUser" ToRole="Tag" />
+    <NavigationProperty Name="Tags1" Relationship="Model.FK_Tag_ToTable_1" FromRole="AspNetUser" ToRole="Tag" />
+    <NavigationProperty Name="AspNetRoles" Relationship="Model.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+    <NavigationProperty Name="Cities" Relationship="Model.FK_City_ToTable" FromRole="AspNetUser" ToRole="City" />
+    <NavigationProperty Name="Cities1" Relationship="Model.FK_City_ToTable_1" FromRole="AspNetUser" ToRole="City" />
+    <NavigationProperty Name="SaveAds" Relationship="Model.FK_SaveAd_ToTable_1" FromRole="AspNetUser" ToRole="SaveAd" />
+  </EntityType>
+  <EntityType Name="Bid">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <Property Name="postedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="price" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_Bid_ToTable_1" FromRole="Bid" ToRole="Ad" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Bid_ToTable" FromRole="Bid" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="CarAd">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="year" Type="Int16" />
+    <Property Name="kmDriven" Type="Int32" />
+    <Property Name="color" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+    <Property Name="fuelType" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <Property Name="carId" Type="Int32" Nullable="false" />
+    <Property Name="condition" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_CarAd_ToTable" FromRole="CarAd" ToRole="Ad" />
+    <NavigationProperty Name="CarModel" Relationship="Model.FK_CarAd_ToTable_1" FromRole="CarAd" ToRole="CarModel" />
+  </EntityType>
+  <EntityType Name="CarBrand">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="CarModels" Relationship="Model.FK_CarModels_ToTable" FromRole="CarBrand" ToRole="CarModel" />
+  </EntityType>
+  <EntityType Name="CarModel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable_1" FromRole="CarModel" ToRole="CarAd" />
+    <NavigationProperty Name="CarBrand" Relationship="Model.FK_CarModels_ToTable" FromRole="CarModel" ToRole="CarBrand" />
+  </EntityType>
+  <EntityType Name="Chat">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="sentFrom" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="sentTo" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="message" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Chat_ToTable" FromRole="Chat" ToRole="AspNetUser" />
+    <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_Chat_ToTable_1" FromRole="Chat" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="Comment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="postedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_Comment_ToTable" FromRole="Comment" ToRole="Ad" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Comment_ToTable_1" FromRole="Comment" ToRole="AspNetUser" />
+    <NavigationProperty Name="CommentReplies" Relationship="Model.FK_CommentReply_ToTable" FromRole="Comment" ToRole="CommentReply" />
+    <NavigationProperty Name="CommentVotes" Relationship="Model.FK_CommentVote_ToTable" FromRole="Comment" ToRole="CommentVote" />
+  </EntityType>
+  <EntityType Name="CommentReply">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="commentId" Type="Int32" Nullable="false" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="description" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="postedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CommentReply_ToTable_1" FromRole="CommentReply" ToRole="AspNetUser" />
+    <NavigationProperty Name="Comment" Relationship="Model.FK_CommentReply_ToTable" FromRole="CommentReply" ToRole="Comment" />
+    <NavigationProperty Name="CommentReplyVotes" Relationship="Model.FK_CommentReplyVote_ToTable" FromRole="CommentReply" ToRole="CommentReplyVote" />
+  </EntityType>
+  <EntityType Name="CommentReplyVote">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="commentReplyId" Type="Int32" Nullable="false" />
+    <Property Name="isup" Type="Boolean" Nullable="false" />
+    <Property Name="votedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CommentReplyVote_ToTable_1" FromRole="CommentReplyVote" ToRole="AspNetUser" />
+    <NavigationProperty Name="CommentReply" Relationship="Model.FK_CommentReplyVote_ToTable" FromRole="CommentReplyVote" ToRole="CommentReply" />
+  </EntityType>
+  <EntityType Name="CommentVote">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="commentId" Type="Int32" Nullable="false" />
+    <Property Name="isup" Type="Boolean" Nullable="false" />
+    <Property Name="votedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CommentVote_ToTable_1" FromRole="CommentVote" ToRole="AspNetUser" />
+    <NavigationProperty Name="Comment" Relationship="Model.FK_CommentVote_ToTable" FromRole="CommentVote" ToRole="Comment" />
+  </EntityType>
+  <EntityType Name="FollowQuestion">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="followedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="questionId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_FollowQuestion_ToTable_1" FromRole="FollowQuestion" ToRole="AspNetUser" />
+    <NavigationProperty Name="Question" Relationship="Model.FK_FollowQuestion_ToTable" FromRole="FollowQuestion" ToRole="Question" />
+  </EntityType>
+  <EntityType Name="FollowTag">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tagId" Type="Int32" Nullable="false" />
+    <Property Name="followedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_FollowTag_ToTable_1" FromRole="FollowTag" ToRole="AspNetUser" />
+    <NavigationProperty Name="Tag" Relationship="Model.FK_FollowTag_ToTable" FromRole="FollowTag" ToRole="Tag" />
+  </EntityType>
+  <EntityType Name="Friend">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="friendId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Friend_ToTable" FromRole="Friend" ToRole="AspNetUser" />
+    <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_Friend_ToTable_1" FromRole="Friend" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="LaptopAd">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="laptopId" Type="Int32" Nullable="false" />
+    <Property Name="color" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_LaptopAds_ToTable" FromRole="LaptopAd" ToRole="Ad" />
+    <NavigationProperty Name="LaptopModel" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopAd" ToRole="LaptopModel" />
+  </EntityType>
+  <EntityType Name="LaptopBrand">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_LaptopBrand_ToTable" FromRole="LaptopBrand" ToRole="AspNetUser" />
+    <NavigationProperty Name="LaptopModels" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopBrand" ToRole="LaptopModel" />
+  </EntityType>
+  <EntityType Name="LaptopModel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="brandId" Type="Int32" Nullable="false" />
+    <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_LaptopModel_ToTable_1" FromRole="LaptopModel" ToRole="AspNetUser" />
+    <NavigationProperty Name="LaptopAds" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopModel" ToRole="LaptopAd" />
+    <NavigationProperty Name="LaptopBrand" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopModel" ToRole="LaptopBrand" />
+  </EntityType>
+  <EntityType Name="Mobile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Mobile_ToTable" FromRole="Mobile" ToRole="AspNetUser" />
+    <NavigationProperty Name="MobileModels" Relationship="Model.FK_MobileModel_ToTable" FromRole="Mobile" ToRole="MobileModel" />
+  </EntityType>
+  <EntityType Name="MobileAd">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="mobileId" Type="Int32" Nullable="false" />
+    <Property Name="color" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="sims" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_MobileAds_ToTable" FromRole="MobileAd" ToRole="Ad" />
+    <NavigationProperty Name="MobileModel" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="MobileAd" ToRole="MobileModel" />
+  </EntityType>
+  <EntityType Name="MobileModel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="brandId" Type="Int32" Nullable="false" />
+    <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_MobileModel_ToTable_1" FromRole="MobileModel" ToRole="AspNetUser" />
+    <NavigationProperty Name="Mobile" Relationship="Model.FK_MobileModel_ToTable" FromRole="MobileModel" ToRole="Mobile" />
+    <NavigationProperty Name="MobileAds" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="MobileModel" ToRole="MobileAd" />
+  </EntityType>
+  <EntityType Name="popularPlace">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="cityId" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="longitude" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="latitude" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="addedOn" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="updatedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="updatedOn" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="AdsLocations" Relationship="Model.FK_AdsLocation_ToTable_2" FromRole="popularPlace" ToRole="AdsLocation" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_popularPlace_ToTable_1" FromRole="popularPlace" ToRole="AspNetUser" />
+    <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_popularPlace_ToTable_2" FromRole="popularPlace" ToRole="AspNetUser" />
+    <NavigationProperty Name="City" Relationship="Model.FK_popularPlace_ToTable" FromRole="popularPlace" ToRole="City" />
+  </EntityType>
   <EntityType Name="Question">
     <Key>
       <PropertyRef Name="Id" />
@@ -642,15 +829,15 @@
     <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="lowCategory" Type="Binary" MaxLength="50" FixedLength="false" />
     <NavigationProperty Name="Answers" Relationship="Model.FK_Answer_ToTable" FromRole="Question" ToRole="Answer" />
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Question_ToTable" FromRole="Question" ToRole="AspNetUser" />
+    <NavigationProperty Name="FollowQuestions" Relationship="Model.FK_FollowQuestion_ToTable" FromRole="Question" ToRole="FollowQuestion" />
     <NavigationProperty Name="QuestionReplies" Relationship="Model.FK_QuestionReply_ToTable" FromRole="Question" ToRole="QuestionReply" />
+    <NavigationProperty Name="QuestionTags" Relationship="Model.FK_QuestionTag_ToTable_1" FromRole="Question" ToRole="QuestionTag" />
     <NavigationProperty Name="QuestionViews" Relationship="Model.FK_QuestionView_ToTable" FromRole="Question" ToRole="QuestionView" />
     <NavigationProperty Name="QuestionVotes" Relationship="Model.FK_QuestionVote_ToTable" FromRole="Question" ToRole="QuestionVote" />
-    <NavigationProperty Name="FollowQuestions" Relationship="Model.FK_FollowQuestion_ToTable" FromRole="Question" ToRole="FollowQuestion" />
     <NavigationProperty Name="ReportedQuestions" Relationship="Model.FK_ReportedQuestion_ToTable" FromRole="Question" ToRole="ReportedQuestion" />
-    <Property Name="lowCategory" Type="Binary" MaxLength="50" FixedLength="false" />
-    <NavigationProperty Name="QuestionTags" Relationship="Model.FK_QuestionTag_ToTable_1" FromRole="Question" ToRole="QuestionTag" />
   </EntityType>
   <EntityType Name="QuestionReply">
     <Key>
@@ -676,6 +863,16 @@
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_QuestionReplyVote_ToTable_1" FromRole="QuestionReplyVote" ToRole="AspNetUser" />
     <NavigationProperty Name="QuestionReply" Relationship="Model.FK_QuestionReplyVote_ToTable" FromRole="QuestionReplyVote" ToRole="QuestionReply" />
   </EntityType>
+  <EntityType Name="QuestionTag">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tagId" Type="Int32" Nullable="false" />
+    <Property Name="questionId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Question" Relationship="Model.FK_QuestionTag_ToTable_1" FromRole="QuestionTag" ToRole="Question" />
+    <NavigationProperty Name="Tag" Relationship="Model.FK_QuestionTag_ToTable" FromRole="QuestionTag" ToRole="Tag" />
+  </EntityType>
   <EntityType Name="QuestionView">
     <Key>
       <PropertyRef Name="Id" />
@@ -697,336 +894,61 @@
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_QuestionVote_ToTable_1" FromRole="QuestionVote" ToRole="AspNetUser" />
     <NavigationProperty Name="Question" Relationship="Model.FK_QuestionVote_ToTable" FromRole="QuestionVote" ToRole="Question" />
   </EntityType>
-  <Association Name="FK_Answer_ToTable">
-    <End Type="Model.Question" Role="Question" Multiplicity="1" />
-    <End Type="Model.Answer" Role="Answer" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Question">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Answer">
-        <PropertyRef Name="questionId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Answer_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.Answer" Multiplicity="*" Role="Answer" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Answer">
-        <PropertyRef Name="postedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AnswerReply_ToTable">
-    <End Type="Model.Answer" Role="Answer" Multiplicity="1" />
-    <End Type="Model.AnswerReply" Role="AnswerReply" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Answer">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AnswerReply">
-        <PropertyRef Name="answerId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AnswerVote_ToTable">
-    <End Type="Model.Answer" Role="Answer" Multiplicity="1" />
-    <End Type="Model.AnswerVote" Role="AnswerVote" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Answer">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AnswerVote">
-        <PropertyRef Name="answerId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AnswerReply_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.AnswerReply" Multiplicity="*" Role="AnswerReply" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AnswerReply">
-        <PropertyRef Name="postedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AnswerReplyVote_ToTable">
-    <End Type="Model.AnswerReply" Role="AnswerReply" Multiplicity="1" />
-    <End Type="Model.AnswerReplyVote" Role="AnswerReplyVote" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AnswerReply">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AnswerReplyVote">
-        <PropertyRef Name="answerReplyId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AnswerReplyVote_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.AnswerReplyVote" Multiplicity="*" Role="AnswerReplyVote" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AnswerReplyVote">
-        <PropertyRef Name="votedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AnswerVote_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.AnswerVote" Multiplicity="*" Role="AnswerVote" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AnswerVote">
-        <PropertyRef Name="votedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Question_ToTable">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.Question" Multiplicity="*" Role="Question" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Question">
-        <PropertyRef Name="postedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuestionReply_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.QuestionReply" Multiplicity="*" Role="QuestionReply" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="QuestionReply">
-        <PropertyRef Name="postedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuestionReplyVote_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.QuestionReplyVote" Multiplicity="*" Role="QuestionReplyVote" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="QuestionReplyVote">
-        <PropertyRef Name="votedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuestionView_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.QuestionView" Multiplicity="*" Role="QuestionView" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="QuestionView">
-        <PropertyRef Name="viewedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuestionVote_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.QuestionVote" Multiplicity="*" Role="QuestionVote" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="QuestionVote">
-        <PropertyRef Name="votedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuestionReply_ToTable">
-    <End Type="Model.Question" Role="Question" Multiplicity="1" />
-    <End Type="Model.QuestionReply" Role="QuestionReply" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Question">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="QuestionReply">
-        <PropertyRef Name="questionId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuestionView_ToTable">
-    <End Type="Model.Question" Role="Question" Multiplicity="1" />
-    <End Type="Model.QuestionView" Role="QuestionView" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Question">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="QuestionView">
-        <PropertyRef Name="questionId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuestionVote_ToTable">
-    <End Type="Model.Question" Role="Question" Multiplicity="1" />
-    <End Type="Model.QuestionVote" Role="QuestionVote" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Question">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="QuestionVote">
-        <PropertyRef Name="questionId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_QuestionReplyVote_ToTable">
-    <End Type="Model.QuestionReply" Role="QuestionReply" Multiplicity="1" />
-    <End Type="Model.QuestionReplyVote" Role="QuestionReplyVote" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="QuestionReply">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="QuestionReplyVote">
-        <PropertyRef Name="questionReplyId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Reported_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser" />
-    <End Type="Model.Reported" Multiplicity="*" Role="Reported" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Reported">
-        <PropertyRef Name="reportedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="AdImage">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" />
-    <Property Name="adId" Type="Int32" Nullable="false" />
-    <Property Name="imageExtension" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="true" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_AdImage_ToTable" FromRole="AdImage" ToRole="Ad" />
-  </EntityType>
-  <EntityType Name="Bid">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" />
-    <Property Name="adId" Type="Int32" Nullable="false" />
-    <Property Name="postedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="price" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Bid_ToTable" FromRole="Bid" ToRole="AspNetUser" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_Bid_ToTable_1" FromRole="Bid" ToRole="Ad" />
-  </EntityType>
-  <Association Name="FK_Bid_ToTable">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser" />
-    <End Type="Model.Bid" Multiplicity="*" Role="Bid" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Bid">
-        <PropertyRef Name="postedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="MobileModel">
+  <EntityType Name="Reported">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Mobile" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-    <Property Name="model" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Mobile1" Relationship="Model.FK_MobileModel_ToTable" FromRole="MobileModel" ToRole="Mobile" />
-    <NavigationProperty Name="MobileAds" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="MobileModel" ToRole="MobileAd" />
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <Property Name="reportedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="details" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_Reported_ToTable" FromRole="Reported" ToRole="Ad" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Reported_ToTable_1" FromRole="Reported" ToRole="AspNetUser" />
   </EntityType>
-  <Association Name="FK_AdView_ToTable_1">
-    <End Type="Model.AspNetUser" Multiplicity="0..1" Role="AspNetUser" />
-    <End Type="Model.AdView" Multiplicity="*" Role="AdView" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AdView">
-        <PropertyRef Name="viewedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MobileModel_ToTable">
-    <End Type="Model.Mobile" Role="Mobile" Multiplicity="0..1" />
-    <End Type="Model.MobileModel" Role="MobileModel" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Mobile">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="MobileModel">
-        <PropertyRef Name="Mobile" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Ad">
+  <EntityType Name="ReportedQuestion">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="category" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="postedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
-    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="price" Type="Int32" />
-    <Property Name="isnegotiable" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Ad_ToTable" FromRole="Ad" ToRole="AspNetUser" />
-    <NavigationProperty Name="AdImages" Relationship="Model.FK_AdImage_ToTable" FromRole="Ad" ToRole="AdImage" />
-    <NavigationProperty Name="AdsLikes" Relationship="Model.FK_AdsLike_ToTable" FromRole="Ad" ToRole="AdsLike" />
-    <NavigationProperty Name="AdViews" Relationship="Model.FK_AdView_ToTable" FromRole="Ad" ToRole="AdView" />
-    <NavigationProperty Name="Bids" Relationship="Model.FK_Bid_ToTable_1" FromRole="Ad" ToRole="Bid" />
-    <NavigationProperty Name="Comments" Relationship="Model.FK_Comment_ToTable" FromRole="Ad" ToRole="Comment" />
-    <NavigationProperty Name="Reporteds" Relationship="Model.FK_Reported_ToTable" FromRole="Ad" ToRole="Reported" />
-    <NavigationProperty Name="MobileAds" Relationship="Model.FK_MobileAds_ToTable" FromRole="Ad" ToRole="MobileAd" />
-    <NavigationProperty Name="LaptopAds" Relationship="Model.FK_LaptopAds_ToTable" FromRole="Ad" ToRole="LaptopAd" />
-    <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable" FromRole="Ad" ToRole="CarAd" />
-    <NavigationProperty Name="AdsLocation" Relationship="Model.FK_AdsLocation_ToTable" FromRole="Ad" ToRole="AdsLocation" />
+    <Property Name="questionId" Type="Int32" Nullable="false" />
+    <Property Name="reportedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_ReportedQuestion_ToTable_1" FromRole="ReportedQuestion" ToRole="AspNetUser" />
+    <NavigationProperty Name="Question" Relationship="Model.FK_ReportedQuestion_ToTable" FromRole="ReportedQuestion" ToRole="Question" />
+  </EntityType>
+  <EntityType Name="ReportedTag">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tagId" Type="Int32" Nullable="false" />
+    <Property Name="reportedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_ReportedTag_ToTable_1" FromRole="ReportedTag" ToRole="AspNetUser" />
+    <NavigationProperty Name="Tag" Relationship="Model.FK_ReportedTag_ToTable" FromRole="ReportedTag" ToRole="Tag" />
+  </EntityType>
+  <EntityType Name="Tag">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="true" />
+    <Property Name="info" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+    <Property Name="time" Type="DateTime" Precision="3" />
+    <Property Name="createdBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="updatedTime" Type="DateTime" Precision="3" />
+    <Property Name="updatedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AdTags" Relationship="Model.FK_AdTag_ToTable_1" FromRole="Tag" ToRole="AdTag" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Tag_ToTable" FromRole="Tag" ToRole="AspNetUser" />
+    <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_Tag_ToTable_1" FromRole="Tag" ToRole="AspNetUser" />
+    <NavigationProperty Name="FollowTags" Relationship="Model.FK_FollowTag_ToTable" FromRole="Tag" ToRole="FollowTag" />
+    <NavigationProperty Name="QuestionTags" Relationship="Model.FK_QuestionTag_ToTable" FromRole="Tag" ToRole="QuestionTag" />
+    <NavigationProperty Name="ReportedTags" Relationship="Model.FK_ReportedTag_ToTable" FromRole="Tag" ToRole="ReportedTag" />
   </EntityType>
   <Association Name="FK_Ad_ToTable">
-    <End Type="Model.AspNetUser" Multiplicity="1" Role="AspNetUser">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Type="Model.Ad" Multiplicity="*" Role="Ad" />
+    <End Type="Model.Ad" Role="Ad" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUser">
         <PropertyRef Name="Id" />
@@ -1064,6 +986,34 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_AdsLocation_ToTable">
+    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AdsLocation" Role="AdsLocation" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AdsLocation">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AdTag_ToTable">
+    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AdTag" Role="AdTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AdTag">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_AdView_ToTable">
     <End Type="Model.Ad" Role="Ad" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
@@ -1092,6 +1042,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_CarAd_ToTable">
+    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.CarAd" Role="CarAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarAd">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Comment_ToTable">
     <End Type="Model.Ad" Role="Ad" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -1103,6 +1067,34 @@
       </Principal>
       <Dependent Role="Comment">
         <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LaptopAds_ToTable">
+    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.LaptopAd" Role="LaptopAd" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LaptopAd">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MobileAds_ToTable">
+    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.MobileAd" Role="MobileAd" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MobileAd">
+        <PropertyRef Name="Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1120,161 +1112,509 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="LaptopBrand">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="LaptopModels" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopBrand" ToRole="LaptopModel" />
-  </EntityType>
-  <EntityType Name="LaptopModel">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-    <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="LaptopBrand" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopModel" ToRole="LaptopBrand" />
-    <NavigationProperty Name="LaptopAds" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopModel" ToRole="LaptopAd" />
-  </EntityType>
-  <Association Name="FK_LaptopModel_ToTable">
-    <End Type="Model.LaptopBrand" Role="LaptopBrand" Multiplicity="1">
+  <Association Name="FK_AdsLocation_ToTable_2">
+    <End Type="Model.popularPlace" Role="popularPlace" Multiplicity="0..1" />
+    <End Type="Model.AdsLocation" Role="AdsLocation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="popularPlace">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AdsLocation">
+        <PropertyRef Name="popularPlaceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AdTag_ToTable_1">
+    <End Type="Model.Tag" Role="Tag" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
+    <End Type="Model.AdTag" Role="AdTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tag">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AdTag">
+        <PropertyRef Name="tagId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AdView_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+    <End Type="Model.AdView" Role="AdView" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AdView">
+        <PropertyRef Name="viewedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Answer_ToTable">
+    <End Type="Model.Question" Role="Question" Multiplicity="1" />
+    <End Type="Model.Answer" Role="Answer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Answer">
+        <PropertyRef Name="questionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Answer_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.Answer" Role="Answer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Answer">
+        <PropertyRef Name="postedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AnswerReply_ToTable">
+    <End Type="Model.Answer" Role="Answer" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AnswerReply" Role="AnswerReply" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Answer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AnswerReply">
+        <PropertyRef Name="answerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AnswerVote_ToTable">
+    <End Type="Model.Answer" Role="Answer" Multiplicity="1" />
+    <End Type="Model.AnswerVote" Role="AnswerVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Answer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AnswerVote">
+        <PropertyRef Name="answerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AnswerReply_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.AnswerReply" Role="AnswerReply" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AnswerReply">
+        <PropertyRef Name="postedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AnswerReplyVote_ToTable">
+    <End Type="Model.AnswerReply" Role="AnswerReply" Multiplicity="1" />
+    <End Type="Model.AnswerReplyVote" Role="AnswerReplyVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AnswerReply">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AnswerReplyVote">
+        <PropertyRef Name="answerReplyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AnswerReplyVote_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AnswerReplyVote" Role="AnswerReplyVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AnswerReplyVote">
+        <PropertyRef Name="votedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AnswerVote_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AnswerVote" Role="AnswerVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AnswerVote">
+        <PropertyRef Name="votedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserClaim">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserLogin">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Bid_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.Bid" Role="Bid" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Bid">
+        <PropertyRef Name="postedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Chat_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.Chat" Role="Chat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Chat">
+        <PropertyRef Name="sentFrom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Chat_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.Chat" Role="Chat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Chat">
+        <PropertyRef Name="sentTo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Comment_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.Comment" Role="Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="postedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CommentReply_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.CommentReply" Role="CommentReply" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CommentReply">
+        <PropertyRef Name="postedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CommentReplyVote_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.CommentReplyVote" Role="CommentReplyVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CommentReplyVote">
+        <PropertyRef Name="votedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CommentVote_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.CommentVote" Role="CommentVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CommentVote">
+        <PropertyRef Name="votedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FollowQuestion_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.FollowQuestion" Role="FollowQuestion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FollowQuestion">
+        <PropertyRef Name="followedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FollowTag_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.FollowTag" Role="FollowTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FollowTag">
+        <PropertyRef Name="followedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Friend_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.Friend" Role="Friend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Friend">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Friend_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.Friend" Role="Friend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Friend">
+        <PropertyRef Name="friendId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LaptopBrand_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.LaptopBrand" Role="LaptopBrand" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LaptopBrand">
+        <PropertyRef Name="addedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LaptopModel_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
     <End Type="Model.LaptopModel" Role="LaptopModel" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="LaptopBrand">
+      <Principal Role="AspNetUser">
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="LaptopModel">
-        <PropertyRef Name="brand" />
+        <PropertyRef Name="addedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="MobileAd">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="mobileId" Type="Int32" Nullable="false" />
-    <Property Name="adId" Type="Int32" Nullable="false" />
-    <Property Name="color" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="condition" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="sims" Type="Int32" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_MobileAds_ToTable" FromRole="MobileAd" ToRole="Ad" />
-    <NavigationProperty Name="MobileModel" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="MobileAd" ToRole="MobileModel" />
-  </EntityType>
-  <Association Name="FK_MobileAds_ToTable">
-    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.MobileAd" Role="MobileAd" Multiplicity="*" />
+  <Association Name="FK_Mobile_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.Mobile" Role="Mobile" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Ad">
+      <Principal Role="AspNetUser">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="MobileAd">
-        <PropertyRef Name="adId" />
+      <Dependent Role="Mobile">
+        <PropertyRef Name="addedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_MobileAds_ToTable_1">
-    <End Type="Model.MobileModel" Role="MobileModel" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.MobileAd" Role="MobileAd" Multiplicity="*" />
+  <Association Name="FK_MobileModel_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.MobileModel" Role="MobileModel" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="MobileModel">
+      <Principal Role="AspNetUser">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="MobileAd">
-        <PropertyRef Name="mobileId" />
+      <Dependent Role="MobileModel">
+        <PropertyRef Name="addedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="LaptopAd">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="laptopId" Type="Int32" Nullable="false" />
-    <Property Name="adId" Type="Int32" Nullable="false" />
-    <Property Name="color" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="condition" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_LaptopAds_ToTable" FromRole="LaptopAd" ToRole="Ad" />
-    <NavigationProperty Name="LaptopModel" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopAd" ToRole="LaptopModel" />
-  </EntityType>
-  <Association Name="FK_LaptopAds_ToTable">
-    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.LaptopAd" Role="LaptopAd" Multiplicity="*" />
+  <Association Name="FK_popularPlace_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.popularPlace" Role="popularPlace" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Ad">
+      <Principal Role="AspNetUser">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="LaptopAd">
-        <PropertyRef Name="adId" />
+      <Dependent Role="popularPlace">
+        <PropertyRef Name="addedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_LaptopAds_ToTable_1">
-    <End Type="Model.LaptopModel" Role="LaptopModel" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.LaptopAd" Role="LaptopAd" Multiplicity="*" />
+  <Association Name="FK_popularPlace_ToTable_2">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+    <End Type="Model.popularPlace" Role="popularPlace" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="LaptopModel">
+      <Principal Role="AspNetUser">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="LaptopAd">
-        <PropertyRef Name="laptopId" />
+      <Dependent Role="popularPlace">
+        <PropertyRef Name="updatedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="CarBrand">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="CarModels" Relationship="Model.FK_CarModels_ToTable" FromRole="CarBrand" ToRole="CarModel" />
-  </EntityType>
-  <EntityType Name="CarAd">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="year" Type="Int16" />
-    <Property Name="kmDriven" Type="Int32" />
-    <Property Name="color" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
-    <Property Name="fuelType" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
-    <Property Name="adId" Type="Int32" Nullable="false" />
-    <Property Name="carId" Type="Int32" Nullable="false" />
-    <Property Name="condition" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_CarAd_ToTable" FromRole="CarAd" ToRole="Ad" />
-    <NavigationProperty Name="CarModel" Relationship="Model.FK_CarAd_ToTable_1" FromRole="CarAd" ToRole="CarModel" />
-  </EntityType>
-  <EntityType Name="CarModel">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-    <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable_1" FromRole="CarModel" ToRole="CarAd" />
-    <NavigationProperty Name="CarBrand" Relationship="Model.FK_CarModels_ToTable" FromRole="CarModel" ToRole="CarBrand" />
-  </EntityType>
-  <Association Name="FK_CarAd_ToTable">
-    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+  <Association Name="FK_Question_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Type="Model.CarAd" Role="CarAd" Multiplicity="*" />
+    <End Type="Model.Question" Role="Question" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Ad">
+      <Principal Role="AspNetUser">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="CarAd">
-        <PropertyRef Name="adId" />
+      <Dependent Role="Question">
+        <PropertyRef Name="postedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuestionReply_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.QuestionReply" Role="QuestionReply" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionReply">
+        <PropertyRef Name="postedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuestionReplyVote_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.QuestionReplyVote" Role="QuestionReplyVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionReplyVote">
+        <PropertyRef Name="votedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuestionView_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.QuestionView" Role="QuestionView" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionView">
+        <PropertyRef Name="viewedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuestionVote_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.QuestionVote" Role="QuestionVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionVote">
+        <PropertyRef Name="votedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reported_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.Reported" Role="Reported" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Reported">
+        <PropertyRef Name="reportedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReportedQuestion_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.ReportedQuestion" Role="ReportedQuestion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ReportedQuestion">
+        <PropertyRef Name="reportedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReportedTag_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.ReportedTag" Role="ReportedTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ReportedTag">
+        <PropertyRef Name="reportedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tag_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+    <End Type="Model.Tag" Role="Tag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Tag">
+        <PropertyRef Name="createdBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tag_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+    <End Type="Model.Tag" Role="Tag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Tag">
+        <PropertyRef Name="updatedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1306,169 +1646,45 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="City">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="popularPlaces" Relationship="Model.FK_popularPlace_ToTable" FromRole="City" ToRole="popularPlace" />
-    <NavigationProperty Name="AdsLocations" Relationship="Model.FK_AdsLocation_ToTable_1" FromRole="City" ToRole="AdsLocation" />
-  </EntityType>
-  <EntityType Name="popularPlace">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="cityId" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-    <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="longitude" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="latitude" Type="Decimal" Precision="18" Scale="0" />
-    <NavigationProperty Name="City" Relationship="Model.FK_popularPlace_ToTable" FromRole="popularPlace" ToRole="City" />
-    <NavigationProperty Name="AdsLocations" Relationship="Model.FK_AdsLocation_ToTable_2" FromRole="popularPlace" ToRole="AdsLocation" />
-  </EntityType>
-  <Association Name="FK_popularPlace_ToTable">
-    <End Type="Model.City" Role="City" Multiplicity="1">
+  <Association Name="FK_CommentReply_ToTable">
+    <End Type="Model.Comment" Role="Comment" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Type="Model.popularPlace" Role="popularPlace" Multiplicity="*" />
+    <End Type="Model.CommentReply" Role="CommentReply" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="City">
+      <Principal Role="Comment">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="popularPlace">
-        <PropertyRef Name="cityId" />
+      <Dependent Role="CommentReply">
+        <PropertyRef Name="commentId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="AdsLocation">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" />
-    <Property Name="cityId" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-    <Property Name="exectLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="popularPlaceId" Type="Int32" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_AdsLocation_ToTable" FromRole="AdsLocation" ToRole="Ad" />
-    <NavigationProperty Name="City" Relationship="Model.FK_AdsLocation_ToTable_1" FromRole="AdsLocation" ToRole="City" />
-    <NavigationProperty Name="popularPlace" Relationship="Model.FK_AdsLocation_ToTable_2" FromRole="AdsLocation" ToRole="popularPlace" />
-  </EntityType>
-  <Association Name="FK_AdsLocation_ToTable">
-    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+  <Association Name="FK_CommentVote_ToTable">
+    <End Type="Model.Comment" Role="Comment" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Type="Model.AdsLocation" Role="AdsLocation" Multiplicity="0..1" />
+    <End Type="Model.CommentVote" Role="CommentVote" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Ad">
+      <Principal Role="Comment">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="AdsLocation">
-        <PropertyRef Name="Id" />
+      <Dependent Role="CommentVote">
+        <PropertyRef Name="commentId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_AdsLocation_ToTable_1">
-    <End Type="Model.City" Role="City" Multiplicity="0..1">
+  <Association Name="FK_CommentReplyVote_ToTable">
+    <End Type="Model.CommentReply" Role="CommentReply" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Type="Model.AdsLocation" Role="AdsLocation" Multiplicity="*" />
+    <End Type="Model.CommentReplyVote" Role="CommentReplyVote" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="City">
+      <Principal Role="CommentReply">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="AdsLocation">
-        <PropertyRef Name="cityId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AdsLocation_ToTable_2">
-    <End Type="Model.popularPlace" Role="popularPlace" Multiplicity="0..1" />
-    <End Type="Model.AdsLocation" Role="AdsLocation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="popularPlace">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AdsLocation">
-        <PropertyRef Name="popularPlaceId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Chat">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="sentFrom" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="sentTo" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="message" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Chat_ToTable" FromRole="Chat" ToRole="AspNetUser" />
-    <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_Chat_ToTable_1" FromRole="Chat" ToRole="AspNetUser" />
-  </EntityType>
-  <Association Name="FK_Chat_ToTable">
-    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
-    <End Type="Model.Chat" Role="Chat" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Chat">
-        <PropertyRef Name="sentFrom" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Chat_ToTable_1">
-    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
-    <End Type="Model.Chat" Role="Chat" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Chat">
-        <PropertyRef Name="sentTo" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="FollowQuestion">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="followedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="questionId" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_FollowQuestion_ToTable_1" FromRole="FollowQuestion" ToRole="AspNetUser" />
-    <NavigationProperty Name="Question" Relationship="Model.FK_FollowQuestion_ToTable" FromRole="FollowQuestion" ToRole="Question" />
-  </EntityType>
-  <EntityType Name="ReportedQuestion">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="questionId" Type="Int32" Nullable="false" />
-    <Property Name="reportedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_ReportedQuestion_ToTable_1" FromRole="ReportedQuestion" ToRole="AspNetUser" />
-    <NavigationProperty Name="Question" Relationship="Model.FK_ReportedQuestion_ToTable" FromRole="ReportedQuestion" ToRole="Question" />
-  </EntityType>
-  <Association Name="FK_FollowQuestion_ToTable_1">
-    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
-    <End Type="Model.FollowQuestion" Role="FollowQuestion" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="FollowQuestion">
-        <PropertyRef Name="followedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ReportedQuestion_ToTable_1">
-    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
-    <End Type="Model.ReportedQuestion" Role="ReportedQuestion" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="ReportedQuestion">
-        <PropertyRef Name="reportedBy" />
+      <Dependent Role="CommentReplyVote">
+        <PropertyRef Name="commentReplyId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1482,6 +1698,126 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="FollowQuestion">
+        <PropertyRef Name="questionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FollowTag_ToTable">
+    <End Type="Model.Tag" Role="Tag" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.FollowTag" Role="FollowTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tag">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FollowTag">
+        <PropertyRef Name="tagId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LaptopAds_ToTable_1">
+    <End Type="Model.LaptopModel" Role="LaptopModel" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.LaptopAd" Role="LaptopAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LaptopModel">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LaptopAd">
+        <PropertyRef Name="laptopId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LaptopModel_ToTable">
+    <End Type="Model.LaptopBrand" Role="LaptopBrand" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.LaptopModel" Role="LaptopModel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LaptopBrand">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LaptopModel">
+        <PropertyRef Name="brandId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MobileModel_ToTable">
+    <End Type="Model.Mobile" Role="Mobile" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.MobileModel" Role="MobileModel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Mobile">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MobileModel">
+        <PropertyRef Name="brandId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MobileAds_ToTable_1">
+    <End Type="Model.MobileModel" Role="MobileModel" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.MobileAd" Role="MobileAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MobileModel">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MobileAd">
+        <PropertyRef Name="mobileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuestionReply_ToTable">
+    <End Type="Model.Question" Role="Question" Multiplicity="1" />
+    <End Type="Model.QuestionReply" Role="QuestionReply" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionReply">
+        <PropertyRef Name="questionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuestionTag_ToTable_1">
+    <End Type="Model.Question" Role="Question" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.QuestionTag" Role="QuestionTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionTag">
+        <PropertyRef Name="questionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuestionView_ToTable">
+    <End Type="Model.Question" Role="Question" Multiplicity="1" />
+    <End Type="Model.QuestionView" Role="QuestionView" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionView">
+        <PropertyRef Name="questionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuestionVote_ToTable">
+    <End Type="Model.Question" Role="Question" Multiplicity="1" />
+    <End Type="Model.QuestionVote" Role="QuestionVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionVote">
         <PropertyRef Name="questionId" />
       </Dependent>
     </ReferentialConstraint>
@@ -1500,88 +1836,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="FollowTag">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="tagId" Type="Int32" Nullable="false" />
-    <Property Name="followedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_FollowTag_ToTable_1" FromRole="FollowTag" ToRole="AspNetUser" />
-    <NavigationProperty Name="Tag" Relationship="Model.FK_FollowTag_ToTable" FromRole="FollowTag" ToRole="Tag" />
-  </EntityType>
-  <Association Name="FK_FollowTag_ToTable_1">
-    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
-    <End Type="Model.FollowTag" Role="FollowTag" Multiplicity="*" />
+  <Association Name="FK_QuestionReplyVote_ToTable">
+    <End Type="Model.QuestionReply" Role="QuestionReply" Multiplicity="1" />
+    <End Type="Model.QuestionReplyVote" Role="QuestionReplyVote" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="AspNetUser">
+      <Principal Role="QuestionReply">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="FollowTag">
-        <PropertyRef Name="followedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="QuestionTag">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="tagId" Type="Int32" Nullable="false" />
-    <Property Name="questionId" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="Question" Relationship="Model.FK_QuestionTag_ToTable_1" FromRole="QuestionTag" ToRole="Question" />
-    <NavigationProperty Name="Tag" Relationship="Model.FK_QuestionTag_ToTable" FromRole="QuestionTag" ToRole="Tag" />
-  </EntityType>
-  <Association Name="FK_QuestionTag_ToTable_1">
-    <End Type="Model.Question" Role="Question" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.QuestionTag" Role="QuestionTag" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Question">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="QuestionTag">
-        <PropertyRef Name="questionId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Tag">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="true" />
-    <Property Name="info" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
-    <Property Name="time" Type="DateTime" Precision="3" />
-    <Property Name="createdBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Tag_ToTable" FromRole="Tag" ToRole="AspNetUser" />
-    <NavigationProperty Name="FollowTags" Relationship="Model.FK_FollowTag_ToTable" FromRole="Tag" ToRole="FollowTag" />
-    <NavigationProperty Name="QuestionTags" Relationship="Model.FK_QuestionTag_ToTable" FromRole="Tag" ToRole="QuestionTag" />
-  </EntityType>
-  <Association Name="FK_Tag_ToTable">
-    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
-    <End Type="Model.Tag" Role="Tag" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Tag">
-        <PropertyRef Name="createdBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_FollowTag_ToTable">
-    <End Type="Model.Tag" Role="Tag" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.FollowTag" Role="FollowTag" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Tag">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="FollowTag">
-        <PropertyRef Name="tagId" />
+      <Dependent Role="QuestionReplyVote">
+        <PropertyRef Name="questionReplyId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1596,6 +1859,128 @@
       </Principal>
       <Dependent Role="QuestionTag">
         <PropertyRef Name="tagId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReportedTag_ToTable">
+    <End Type="Model.Tag" Role="Tag" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.ReportedTag" Role="ReportedTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tag">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ReportedTag">
+        <PropertyRef Name="tagId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AspNetUserRoles">
+    <End Type="Model.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+  </Association>
+  <EntityType Name="City">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="addedOn" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="updatedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="updatedOn" Type="DateTime" Precision="3" />
+    <Property Name="cityName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AdsLocations" Relationship="Model.FK_AdsLocation_ToTable_1" FromRole="City" ToRole="AdsLocation" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_City_ToTable" FromRole="City" ToRole="AspNetUser" />
+    <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_City_ToTable_1" FromRole="City" ToRole="AspNetUser" />
+    <NavigationProperty Name="popularPlaces" Relationship="Model.FK_popularPlace_ToTable" FromRole="City" ToRole="popularPlace" />
+  </EntityType>
+  <Association Name="FK_AdsLocation_ToTable_1">
+    <End Type="Model.City" Role="City" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AdsLocation" Role="AdsLocation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AdsLocation">
+        <PropertyRef Name="cityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_City_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.City" Role="City" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="City">
+        <PropertyRef Name="addedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_City_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+    <End Type="Model.City" Role="City" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="City">
+        <PropertyRef Name="updatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_popularPlace_ToTable">
+    <End Type="Model.City" Role="City" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.popularPlace" Role="popularPlace" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="popularPlace">
+        <PropertyRef Name="cityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="SaveAd">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <Property Name="savedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_SaveAd_ToTable" FromRole="SaveAd" ToRole="Ad" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_SaveAd_ToTable_1" FromRole="SaveAd" ToRole="AspNetUser" />
+  </EntityType>
+  <Association Name="FK_SaveAd_ToTable">
+    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.SaveAd" Role="SaveAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SaveAd">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SaveAd_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.SaveAd" Role="SaveAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SaveAd">
+        <PropertyRef Name="savedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

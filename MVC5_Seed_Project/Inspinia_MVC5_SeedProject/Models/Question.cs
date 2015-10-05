@@ -17,12 +17,12 @@ namespace Inspinia_MVC5_SeedProject.Models
         public Question()
         {
             this.Answers = new HashSet<Answer>();
+            this.FollowQuestions = new HashSet<FollowQuestion>();
             this.QuestionReplies = new HashSet<QuestionReply>();
+            this.QuestionTags = new HashSet<QuestionTag>();
             this.QuestionViews = new HashSet<QuestionView>();
             this.QuestionVotes = new HashSet<QuestionVote>();
-            this.FollowQuestions = new HashSet<FollowQuestion>();
             this.ReportedQuestions = new HashSet<ReportedQuestion>();
-            this.QuestionTags = new HashSet<QuestionTag>();
         }
     
         public int Id { get; set; }
@@ -36,11 +36,11 @@ namespace Inspinia_MVC5_SeedProject.Models
     
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
+        public virtual ICollection<FollowQuestion> FollowQuestions { get; set; }
         public virtual ICollection<QuestionReply> QuestionReplies { get; set; }
+        public virtual ICollection<QuestionTag> QuestionTags { get; set; }
         public virtual ICollection<QuestionView> QuestionViews { get; set; }
         public virtual ICollection<QuestionVote> QuestionVotes { get; set; }
-        public virtual ICollection<FollowQuestion> FollowQuestions { get; set; }
         public virtual ICollection<ReportedQuestion> ReportedQuestions { get; set; }
-        public virtual ICollection<QuestionTag> QuestionTags { get; set; }
     }
 }

@@ -20,10 +20,13 @@ namespace Inspinia_MVC5_SeedProject.Models
         }
     
         public int Id { get; set; }
-        public string Mobile { get; set; }
+        public int brandId { get; set; }
         public string model { get; set; }
+        public System.DateTime time { get; set; }
+        public string addedBy { get; set; }
     
-        public virtual Mobile Mobile1 { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
+        public virtual Mobile Mobile { get; set; }
         public virtual ICollection<MobileAd> MobileAds { get; set; }
     }
 }

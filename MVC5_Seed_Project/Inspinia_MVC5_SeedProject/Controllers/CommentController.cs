@@ -99,7 +99,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 description = x.description,
                 postedById = x.postedBy,
-                postedByName = x.AspNetUser.UserName,
+                postedByName = x.AspNetUser.Email,
                 time = x.time,
                 id = x.Id,
                 adId = x.adId,
@@ -130,7 +130,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 description = x.description,
                 postedById = x.postedBy,
-                postedByName = x.AspNetUser.UserName,
+                postedByName = x.AspNetUser.Email,
                 time = x.time,
                 id = x.Id,
             }).FirstOrDefault();

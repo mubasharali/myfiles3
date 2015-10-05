@@ -60,7 +60,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 }
                 if (category == "mobiles") // remove this logic
                 {
-                    var mobileAds = ad.MobileAds.FirstOrDefault();
+                    var mobileAds = ad.MobileAd;
                     ViewBag.ad = mobileAds;
                     ViewBag.category = "mobiles";
                     ViewBag.adId = id;

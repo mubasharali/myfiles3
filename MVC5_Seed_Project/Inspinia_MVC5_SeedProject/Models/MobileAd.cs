@@ -16,10 +16,8 @@ namespace Inspinia_MVC5_SeedProject.Models
     {
         public int Id { get; set; }
         public int mobileId { get; set; }
-        public int adId { get; set; }
         public string color { get; set; }
-        public string condition { get; set; }
-        public Nullable<int> sims { get; set; }
+        public string sims { get; set; }
     
         public virtual Ad Ad { get; set; }
         public virtual MobileModel MobileModel { get; set; }

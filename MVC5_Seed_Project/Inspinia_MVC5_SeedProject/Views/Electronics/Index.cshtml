@@ -17,64 +17,164 @@
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-sm-3">
-                        @Html.Partial("~/Views/Shared/_Tree.cshtml")
-        </div>
-        <div class="col-sm-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>List of Ad</h5>
-					<div class="ibox-tools">
-                        <a href="/">click here</a>
-						@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs" })
-					</div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div id="animation_bo" data-animation="pulse">
+                    <div class="widget navy-bg p-lg text-center">
+                        <div class="m-b-md">
+                            <i class="fa fa-mobile fa-4x"></i>
+                            <h1 class="m-xs">Mobiles</h1>
+                            <h3 class="font-bold no-margins"></h3>
+                            <small>Includes all local and international mobiles brands + accessories</small>
+                        </div>
+                    </div>
                 </div>
-                <div class="ibox-content">
-
-<table class="table table-striped">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AspNetUser.Email)
-        </th>
-        <th></th>
-    </tr>
-
-
-}
-
-</table>
-
+            </div>
+            
+            <div class="col-lg-4">
+                <div id="animation_bo" data-animation="pulse">
+                    <div class="widget lazur-bg p-lg text-center">
+                        <div class="m-b-md">
+                            <i class="fa fa-laptop fa-4x"></i>
+                            <h1 class="m-xs">Laptops</h1>
+                            <h3 class="font-bold no-margins"></h3>
+                            <small>Contains all laptop brands and accessories including MacBook</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="widget yellow-bg p-lg text-center">
+                    <div class="m-b-md">
+                        <i class="fa fa-tablet fa-4x"></i>
+                        <h1 class="m-xs">Tablets</h1>
+                        <h3 class="font-bold no-margins"></h3>
+                        <small>Includes all local and international tablet brands and their accessories</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="widget yellow-bg red-bg p-lg text-center">
+                    <div class="m-b-md">
+                        <i class="fa fa-desktop fa-4x"></i>
+                        <h1 class="m-xs">Computers</h1>
+                        <h3 class="font-bold no-margins"></h3>
+                        <small>Includes all desktop computers + accessories</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="widget red-bg p-lg text-center">
+                    <div class="m-b-md">
+                        <i class="fa fa-camera fa-4x"></i>
+                        <h1 class="m-xs">Camera</h1>
+                        <h3 class="font-bold no-margins"></h3>
+                        <small>Includes all types of cameras + accessories</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="widget red-bg p-lg text-center">
+                    <div class="m-b-md">
+                        <i class="fa fa-camera fa-4x"></i>
+                        <h1 class="m-xs">Watches</h1>
+                        <h3 class="font-bold no-margins"></h3>
+                        <small>Includes all types of cameras + accessories</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="widget red-bg p-lg text-center">
+                    <div class="m-b-md">
+                        <i class="fa fa-gamepad fa-4x"></i>
+                        <h1 class="m-xs">Games</h1>
+                        <h3 class="font-bold no-margins"></h3>
+                        <small>Games + Consoles + accessories</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="widget red-bg p-lg text-center">
+                    <div class="m-b-md">
+                        <i class="fa fa-archive fa-4x"></i>
+                        <h1 class="m-xs">Home Appliances</h1>
+                        <h3 class="font-bold no-margins"></h3>
+                        <small>Tv, Air conditioner, washer, Refigerator etc</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="widget red-bg p-lg text-center">
+                    <div class="m-b-md">
+                        <i class="fa fa-play-circle fa-4x"></i>
+                        <h1 class="m-xs">audio, video</h1>
+                        <h3 class="font-bold no-margins"></h3>
+                        <small>Movies, songs, cartoons etc</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="widget red-bg p-lg text-center">
+                    <div class="m-b-md">
+                        <i class="fa fa-binoculars fa-4x"></i>
+                        <h1 class="m-xs">Others</h1>
+                        <h3 class="font-bold no-margins"></h3>
+                        <small>Servers, Cables, toys, Machinery, medical equipments etc</small>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">
-        
-        </div>
-    </div>
+
  </div>
 
 @section Styles {
+<link href="~/Content/animate.css" rel="stylesheet">
+    <style>
+        .categoryBox {
+            background-color: transparent;
+            border: none;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
     @Styles.Render("~/Content/plugins/jsTree")
+
 }
 
 @section Scripts {
     @Scripts.Render("~/plugins/jsTree")
     @Scripts.Render("~/plugins/knockout")
+@Scripts.Render("~/plugins/rickshaw")
+<script type="text/javascript">
+    $(document).ready(function () {
 
-    <script>
+        $('#animation_bo').click(function () {
+            $('#animation_bo').removeAttr('class').attr('class', '');
+            var animation = $(this).attr("data-animation");
+            $('#animation_bo').addClass('animated');
+            $('#animation_bo').addClass(animation);
+            return false;
+        });
+
+        var graph2 = new Rickshaw.Graph({
+            element: document.querySelector("#rickshaw_multi"),
+            renderer: 'area',
+            stroke: true,
+            series: [{
+                data: [{ x: 0, y: 2 }, { x: 1, y: 5 }, { x: 2, y: 8 }, { x: 3, y: 4 }, { x: 4, y: 8 }],
+                color: '#1ab394',
+                stroke: '#17997f'
+            }, {
+                data: [{ x: 0, y: 13 }, { x: 1, y: 15 }, { x: 2, y: 17 }, { x: 3, y: 12 }, { x: 4, y: 10 }],
+                color: '#eeeeee',
+                stroke: '#d7d7d7'
+            }]
+        });
+        graph2.renderer.unstack = true;
+        graph2.render();
+    });</script>
+
+    @*<script>
         function Model(data) {
             var self = this;
             data = data || {};
@@ -140,6 +240,6 @@
             //    }
             //});
         })
-    </script>
+    </script>*@
 
 }

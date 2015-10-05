@@ -214,8 +214,11 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="App_Start\WebApiConfig2.cs" />
     <Compile Include="CodeTemplates\AdminController.cs" />
+    <Compile Include="CodeTemplates\AnimalsController.cs" />
     <Compile Include="CodeTemplates\ElectronicsController.cs" />
     <Compile Include="CodeTemplates\ForumController.cs" />
+    <Compile Include="CodeTemplates\JobsController.cs" />
+    <Compile Include="CodeTemplates\RealEstateController.cs" />
     <Compile Include="CodeTemplates\UserController.cs" />
     <Compile Include="CodeTemplates\VehiclesController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -224,6 +227,8 @@
     <Compile Include="Controllers\ElectronicController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TempController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VehicleController.cs" />
@@ -245,6 +250,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AdsLocation.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AdTag.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AdView.cs">
@@ -313,6 +321,9 @@
     <Compile Include="Models\FollowTag.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Friend.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LaptopAd.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -374,6 +385,12 @@
     <Compile Include="Models\ReportedQuestion.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ReportedTag.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SaveAd.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Tag.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -422,6 +439,19 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Images\landing\avatar1.jpg" />
+    <Content Include="Images\landing\avatar2.jpg" />
+    <Content Include="Images\landing\avatar3.jpg" />
+    <Content Include="Images\landing\avatar4.jpg" />
+    <Content Include="Images\landing\avatar5.jpg" />
+    <Content Include="Images\landing\avatar6.jpg" />
+    <Content Include="Images\landing\avatar7.jpg" />
+    <Content Include="Images\landing\avatar8.jpg" />
+    <Content Include="Images\landing\avatar9.jpg" />
+    <Content Include="Images\landing\dashboard.png" />
+    <Content Include="Images\landing\iphone.jpg" />
+    <Content Include="Images\landing\laptop.png" />
+    <Content Include="Images\landing\perspective.png" />
     <Content Include="Images\spinner.gif" />
     <Content Include="Scripts\app\inspinia.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -702,6 +732,39 @@
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Shared\_MyAccount.cshtml" />
+    <Content Include="Views\Shared\_DeliveryMethod.cshtml" />
+    <Content Include="Views\Shared\_EditAd.cshtml" />
+    <Content Include="Views\Tag\Create.cshtml" />
+    <Content Include="Views\Tag\Delete.cshtml" />
+    <Content Include="Views\Tag\Details.cshtml" />
+    <Content Include="Views\Tag\Edit.cshtml" />
+    <Content Include="Views\Tag\Index.cshtml" />
+    <Content Include="Views\Home\temp2.cshtml" />
+    <Content Include="Views\Electronics\Mobiles.cshtml" />
+    <Content Include="Views\Electronics\_TreeMobile.cshtml" />
+    <Content Include="Views\Animals\Create.cshtml" />
+    <Content Include="Views\Animals\Delete.cshtml" />
+    <Content Include="Views\Animals\Details.cshtml" />
+    <Content Include="Views\Animals\Edit.cshtml" />
+    <Content Include="Views\Animals\Index.cshtml" />
+    <Content Include="Views\Jobs\Create.cshtml" />
+    <Content Include="Views\Jobs\Delete.cshtml" />
+    <Content Include="Views\Jobs\Details.cshtml" />
+    <Content Include="Views\Jobs\Edit.cshtml" />
+    <Content Include="Views\Jobs\Index.cshtml" />
+    <Content Include="Views\RealEstate\Create.cshtml" />
+    <Content Include="Views\RealEstate\Delete.cshtml" />
+    <Content Include="Views\RealEstate\Details.cshtml" />
+    <Content Include="Views\RealEstate\Edit.cshtml" />
+    <Content Include="Views\RealEstate\Index.cshtml" />
+    <Content Include="Views\Electronics\Laptops.cshtml" />
+    <Content Include="Views\Home\temp3.cshtml" />
+    <Content Include="Views\Electronics\EditLaptopAd.cshtml" />
+    <Content Include="Views\Admin\Models.cshtml" />
+    <Content Include="Views\Electronics\Home_Appliances.cshtml" />
+    <Content Include="Views\Electronics\CreateHomeAppliancesAd.cshtml" />
+    <Content Include="Views\Electronics\EditAd.cshtml" />
+    <Content Include="Views\Admin\Location.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -19,8 +19,12 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.MobileModels = new HashSet<MobileModel>();
         }
     
-        public string Id { get; set; }
+        public int Id { get; set; }
+        public string brand { get; set; }
+        public string addedBy { get; set; }
+        public System.DateTime time { get; set; }
     
+        public virtual AspNetUser AspNetUser { get; set; }
         public virtual ICollection<MobileModel> MobileModels { get; set; }
     }
 }

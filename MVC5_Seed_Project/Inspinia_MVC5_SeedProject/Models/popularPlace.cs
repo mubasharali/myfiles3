@@ -20,12 +20,18 @@ namespace Inspinia_MVC5_SeedProject.Models
         }
     
         public int Id { get; set; }
-        public string cityId { get; set; }
+        public int cityId { get; set; }
         public string name { get; set; }
         public Nullable<decimal> longitude { get; set; }
         public Nullable<decimal> latitude { get; set; }
+        public string addedBy { get; set; }
+        public System.DateTime addedOn { get; set; }
+        public string updatedBy { get; set; }
+        public Nullable<System.DateTime> updatedOn { get; set; }
     
-        public virtual City City { get; set; }
         public virtual ICollection<AdsLocation> AdsLocations { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
+        public virtual AspNetUser AspNetUser1 { get; set; }
+        public virtual City City { get; set; }
     }
 }

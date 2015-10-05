@@ -66,27 +66,26 @@
                                             </div>
                                         </div>*@
                                     </div>
-                                    <div data-bind="foreach:showQuestionReplies">
-                                        <div class="vote-item" style="padding:0px;padding-left:15px" data-bind="visible:!isEditQuestionReply()">
+                                    <div style="margin-left:30px;" data-bind="foreach:showQuestionReplies">
+                                        
+                                        <div class="vote-item" style="padding:0px;padding-left:0" data-bind="visible:!isEditQuestionReply()">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <div class="vote-actions">
+                                                    <p class="vote-title" style="font-size:small;font-weight:300; margin-left:0px" data-bind="text:description()"></p>
+                                                    <div class="vote-info" style="margin-left:0px">
                                                         <a data-bind="click:function(){return voteQuestionReply(id,$parent.loginUserId,true)}">
-                                                            <i  data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-chevron-up"> </i>
+                                                            <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-thumbs-up"> </i>
+                                                            <span data-bind="text:voteUpCount"></span>
                                                         </a>
-                                                        <div data-bind="text:voteCount"></div>
                                                         <a data-bind="click:function(){return voteQuestionReply(id,$parent.loginUserId,false)}">
-                                                            <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-chevron-down"> </i>
+                                                            <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-thumbs-down"> </i>
+                                                            <span data-bind="text:voteDownCount"></span>
                                                         </a>
-                                                    </div>
-                                                    <p data-bind="text:description()"></p>
-                                                    <div class="vote-info">
+                                                            <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                            <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
+                                                            <span data-bind="if: postedById === $parent.loginUserId"><a data-bind="click:editQuestionReply">edit</a> <a data-bind="click:$parent.deleteQuestionReply">delete</a></span>
 
-                                                        <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
-                                                        <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
-                                                        <span data-bind="if: postedById === $parent.loginUserId"><a data-bind="click:editQuestionReply">edit</a> <a data-bind="click:$parent.deleteQuestionReply">delete</a></span>
-
-                                                    </div>
+</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -97,13 +96,13 @@
                                             </span>
                                         </span>
                                     </div>
-                                    <a data-bind="click:toggleQuestionReply">Reply</a>
-                                    <span data-bind="visible:isQuestionReplyVisible">
+                                    @*<a data-bind="click:toggleQuestionReply">Reply</a>*@
+                                    <div style="margin-left:30px" data-bind="visible:isQuestionReplyVisible">
                                         <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="hasFocus:isQuestionReplyFocused,value:newQuestionReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}"></textarea>
                                         <span data-bind="visible:newQuestionReply().length > 400 && newQuestionReply().length < 500">
                                             You can Enter only <span data-bind="text:499 - newQuestionReply().length"></span> more characters.
                                         </span>
-                                    </span>
+                                    </div>
                                 </div>
                                 
                                     </div>
@@ -129,29 +128,28 @@
                                             </div>
                                             <p data-bind="text:description"></p>
                                             <div class="vote-info">
+                                                <a data-bind="click:toggleAnswerReply" class="btn btn-xs btn-white"><i class="fa fa-reply"></i> Reply </a>
                                                 <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
                                                 <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
-                                                <a data-bind="click:toggleAnswerReply" class="btn btn-xs btn-white"><i class="fa fa-reply"></i> Reply </a>
-
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div data-bind="foreach:showAnswerReplies">
-                                        <div class="vote-item" style="margin:0px;padding:0px;padding-left:15px" data-bind="visible:!isAnswerReplyEditing()">
+                                    <div style="margin-left:40px;" data-bind="foreach:showAnswerReplies">
+                                        <div class="vote-item" style="margin:0px;padding:0px" data-bind="visible:!isAnswerReplyEditing()">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <div class="vote-actions">
+                                                    
+                                                    <p class="vote-title" style="font-size:small;font-weight:300;margin-left:0" data-bind="text:description"></p>
+                                                    <div style="margin-left:0" class="vote-info">
                                                         <a data-bind="click:function(){return voteAnswerReply(id,$parents[1].loginUserId,true)}">
-                                                            <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-chevron-up"> </i>
+                                                            <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-thumbs-up"> </i>
+                                                            <span data-bind="text:voteUpCount"></span>
                                                         </a>
-                                                        <div data-bind="text:voteCount"></div>
                                                         <a data-bind="click:function(){return voteAnswerReply(id,$parents[1].loginUserId,false)}">
-                                                            <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-chevron-down"> </i>
+                                                            <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-thumbs-down"> </i>
+                                                            <span data-bind="text:voteDownCount"></span>
                                                         </a>
-                                                    </div>
-                                                    <p data-bind="text:description"></p>
-                                                    <div class="vote-info">
                                                         <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
                                                         <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
                                                         <span data-bind="if: postedById === $parents[1].loginUserId"><a data-bind="click:function(d,e){return editAnswerReply(id,d,e)}">edit</a>-<a data-bind="click:$parent.deleteAnswerReply">delete</a></span>
@@ -168,7 +166,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div data-bind="visible:isAnswerReplyVisible()">
+                                    <div style="margin-left:40px;" data-bind="visible:isAnswerReplyVisible()">
                                         <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="hasFocus:isAnswerReplyFocused,value:newAnswerReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter2($parent.loginUserId,id,data,event)}}"></textarea>
                                         <span data-bind="visible:newAnswerReply().length > 400 && newAnswerReply().length < 500">
                                             You can Enter only <span data-bind="text:499 - newAnswerReply().length"></span> more characters.
@@ -176,22 +174,26 @@
                                     </div>
                                 </div>
                                 <div data-bind="visible:isAnswerEditing()">
-                                    <textarea class="msgTextArea form-control" data-bind="value:description, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return editAnswerKeyUp(data,event)}}"></textarea>
-                                    <span data-bind="visible:description().length > 900 && description().length <= 1000">
-                                        You can Enter only <span data-bind="text:1000 - description().length"></span> more characters.
-                                    </span>
-                                    <button class="btn btn-info" data-bind="click:function(){return updateAnswer($parent.id)}">Submit</button>
+                                    <div style="margin:10px">
+                                        <textarea class="msgTextArea form-control" data-bind="value:description, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return editAnswerKeyUp(data,event)}}"></textarea>
+                                        <span data-bind="visible:description().length > 900 && description().length <= 1000">
+                                            You can Enter only <span data-bind="text:1000 - description().length"></span> more characters.
+                                        </span>
+                                        <button class="btn btn-info pull-right" data-bind="click:function(){return updateAnswer($parent.id)}">Update</button>
+                                    </div>
                                 </div>
                             </div>
-                            <h5>Post answer</h5>
-                            <textarea class="msgTextArea form-control" placeholder="Write Answer.." name="answer" data-bind="value:newAnswer, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return answerKeyUp(newAnswer().length,data,event)}}"></textarea>
-                            <span data-bind="visible:newAnswer().length > 900 && newAnswer().length <= 1000">
-                                You can Enter only <span data-bind="text:1000 - newAnswer().length"></span> more characters.
-                            </span>
-                            <div style="margin:6px">
-                                <button data-bind="click:function(){return addAnswer()}" class="btn btn-success pull-right">submit</button>
+                            
+                            <div style="margin:10px">
+                                <h5>Post answer</h5>
+                                <textarea class="msgTextArea form-control" placeholder="Write Answer.." name="answer" data-bind="value:newAnswer, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return answerKeyUp(newAnswer().length,data,event)}}"></textarea>
+                                <span data-bind="visible:newAnswer().length > 900 && newAnswer().length <= 1000">
+                                    You can Enter only <span data-bind="text:1000 - newAnswer().length"></span> more characters.
+                                </span>
+                                <div style="margin:6px">
+                                    <button data-bind="click:function(){return addAnswer()}" class="btn btn-success pull-right">submit</button>
+                                </div>
                             </div>
-
 
 
                             
@@ -248,6 +250,8 @@
                         cache: false,
                         type: 'POST',
                         success: function (data) {
+                            self.voteUpCount(data.voteUpCount);
+                            self.voteDownCount(data.voteDownCount);
                             self.voteCount(data.voteUpCount - data.voteDownCount);
                             if (isup) {
                                 self.isUp(true);
@@ -495,6 +499,8 @@
                         cache: false,
                         type: 'POST',
                         success: function (data) {
+                            self.voteUpCount(data.voteUpCount);
+                            self.voteDownCount(data.voteDownCount);
                             self.voteCount(data.voteUpCount - data.voteDownCount);
                             if (isup) {
                                 self.isUp(true);

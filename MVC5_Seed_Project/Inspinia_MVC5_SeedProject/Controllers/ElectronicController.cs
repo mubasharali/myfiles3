@@ -24,33 +24,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return db.Ads;
         }
-        //[Route("api/Electronic/{category}/{subcategory}/{lowcategory}/{title}")]
-        //public async Task<IHttpActionResult> search(string category, string subcategory, string lowcategory, string title)
-        //{
-        //  //  IEnumerable<Ad> ads =await db.Ads.Where(x=>x.category == "Electronics").ToListAsync();
-        //    var ret = (from ad in db.Ads
-        //              where ad.category == "Electronics" && ad.title.Contains(title)
-        //              orderby ad.time
-        //              select new
-        //              {
-        //                  title = ad.title,
-        //                  postedById = ad.AspNetUser.Id,
-        //                  postedByName = ad.AspNetUser.UserName,
-        //                  id = ad.Id,
-        //                  price = ad.price,
-        //                  isNegotiable = ad.isnegotiable,
-        //                  mobilead = from mobile in ad.MobileAds.Where(x => x.Mobile.Id == subcategory && x.Mobile.MobileModels.Any(xu =>xu.model.Equals(lowcategory)) ).ToList()
-        //                             select new
-        //                             {
-        //                                 color = mobile.color,
-        //                                 condition = mobile.condition,
-        //                                 company = mobile.Mobile.Id,
-        //                                 sims = mobile.sims,
-        //                                 model = mobile.Mobile.MobileModels.FirstOrDefault(x=>x.model.Equals(lowcategory)).model
-        //                             }
-        //              }).AsEnumerable();
-        //    return Ok(ret);
-        //}
+        
         [HttpPost]
         public async Task<IHttpActionResult> GetMobileTree()
         {
@@ -58,10 +32,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           orderby mobile.Id
                           select new
                           {
-                              companyName = mobile.Id,
+                              id = mobile.Id,
+                              companyName = mobile.brand,
                               models = from model in mobile.MobileModels.ToList()
                                        select new
                                        {
+                                           id = model.Id,
                                            model = model.model
                                        }
                           }).AsEnumerable();
@@ -74,38 +50,409 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            orderby mobile.Id
                            select new
                            {
-                               companyName = mobile.Id,
+                               id = mobile.Id,
+                               companyName = mobile.brand,
                                models = from model in mobile.LaptopModels.ToList()
                                         select new
                                         {
+                                            id = model.Id,
                                             model = model.model
                                         }
                            }).AsEnumerable();
             return Ok(mobiles);
         }
+        public async Task<IHttpActionResult> GetBrandsWithTime(int daysAgo,string MobileOrLaptop)
+        {
+            TimeSpan duration = DateTime.UtcNow - DateTime.Today.AddDays(-daysAgo);
+            DateTime days = DateTime.UtcNow - duration;
+            if (MobileOrLaptop == "Mobiles")
+            {
+                var ret = from mob in db.Mobiles
+                          where mob.time >= days
+                          select new
+                          {
+                              id = mob.Id,
+                              brand = mob.brand,
+                              time = mob.time,
+                              addedById = mob.addedBy,
+                              addedByName = mob.AspNetUser.Email
+                          };
+                return Ok(ret);
+            }
+            var retu = from b in db.LaptopBrands
+                      where b.time >= days
+                      select new
+                      {
+                          id = b.Id,
+                          brand = b.brand,
+                          time = b.time,
+                          addedById = b.AspNetUser.Id,
+                          addedByName = b.AspNetUser.Email
+                      };
+            return Ok(retu);
+        }
+        public async Task<IHttpActionResult> GetModelsWithTime(int daysAgo,string MobileOrLaptop)
+        {
+            TimeSpan duration = DateTime.UtcNow - DateTime.Today.AddDays(-daysAgo);
+            DateTime days = DateTime.UtcNow - duration;
+            if (MobileOrLaptop == "Mobiles")
+            {
+                var ret = from mob in db.MobileModels
+                          where mob.time >= days
+                          select new
+                          {
+                              id = mob.Id,
+                              brand = mob.Mobile.brand,
+                              brandId = mob.brandId,
+                              model = mob.model,
+                              time = mob.time,
+                              addedById = mob.AspNetUser.Id,
+                              addedByName = mob.AspNetUser.Email,
+                          };
+                return Ok(ret);
+            }
+            var retu = from mob in db.LaptopModels
+                      where mob.time >= days
+                      select new
+                      {
+                          id = mob.Id,
+                          brand = mob.LaptopBrand.brand,
+                          brandId = mob.brandId,
+                          model = mob.model,
+                          time = mob.time,
+                          addedById = mob.AspNetUser.Id,
+                          addedByName = mob.AspNetUser.Email,
+                      };
+            return Ok(retu);
+            
+        }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateMobileBrand(Mobile mob)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                mob.addedBy = User.Identity.GetUserId();
+                mob.time = DateTime.UtcNow;
+                db.Entry(mob).State = EntityState.Modified;
+
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return StatusCode(HttpStatusCode.NoContent);
+            }
+            return BadRequest("Not login");
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateLaptopBrand(LaptopBrand mob)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                mob.addedBy = User.Identity.GetUserId();
+                mob.time = DateTime.UtcNow;
+                db.Entry(mob).State = EntityState.Modified;
+
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return StatusCode(HttpStatusCode.NoContent);
+            }
+            return BadRequest("Not login");
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateMobileModel( MobileModel mob)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                mob.addedBy = User.Identity.GetUserId();
+                mob.time = DateTime.UtcNow;
+                try
+                {
+                    db.Entry(mob).State = EntityState.Modified;
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return StatusCode(HttpStatusCode.NoContent);
+            }
+            return BadRequest("Not login");
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateLaptopModel(LaptopModel mob)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                mob.addedBy = User.Identity.GetUserId();
+                mob.time = DateTime.UtcNow;
+                try
+                {
+                    db.Entry(mob).State = EntityState.Modified;
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+                return StatusCode(HttpStatusCode.NoContent);
+            }
+            return BadRequest("Not login");
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> DeleteMobileBrand(int id)
+        {
+            if (HttpContext.Current.Request.IsAuthenticated)
+            {
+                Mobile bid = await db.Mobiles.FindAsync(id);
+                if (bid == null)
+                {
+                    return NotFound();
+                }
+                db.Mobiles.Remove(bid);
+                await db.SaveChangesAsync();
+                return Ok(bid);
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> DeleteMobileModel(int id)
+        {
+            if (HttpContext.Current.Request.IsAuthenticated)
+            {
+                MobileModel bid = await db.MobileModels.FindAsync(id);
+                if (bid == null)
+                {
+                    return NotFound();
+                }
+                db.MobileModels.Remove(bid);
+                await db.SaveChangesAsync();
+                return Ok(bid);
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> DeleteLaptopBrand(int id)
+        {
+            if (HttpContext.Current.Request.IsAuthenticated)
+            {
+                LaptopBrand bid = await db.LaptopBrands.FindAsync(id);
+                if (bid == null)
+                {
+                    return NotFound();
+                }
+                db.LaptopBrands.Remove(bid);
+                await db.SaveChangesAsync();
+                return Ok(bid);
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> DeleteLaptopModel(int id)
+        {
+            if (HttpContext.Current.Request.IsAuthenticated)
+            {
+                LaptopModel bid = await db.LaptopModels.FindAsync(id);
+                if (bid == null)
+                {
+                    return NotFound();
+                }
+                db.LaptopModels.Remove(bid);
+                await db.SaveChangesAsync();
+                return Ok(bid);
+            }
+            return BadRequest();
+        }
         [HttpPost]
         public async Task<IHttpActionResult> GetLaptopBrands()
         {
-            var brands =  (db.LaptopBrands.Select(x => x.Id)).AsEnumerable();
+            //var brands =  (db.LaptopBrands.Select(x => x.Id)).AsEnumerable();
+            var brands =  db.LaptopBrands.Select(x => x.brand);
             return Ok(brands);
         }
         [HttpPost]
         public async Task<IHttpActionResult> GetLaptopModels(string brand)
         {
-            var models = await db.LaptopModels.Where(x => x.brand == brand).Select(x => x.model).ToListAsync();
+            var models =  db.LaptopModels.Where(x => x.LaptopBrand.brand == brand).Select(x => x.model);
             return Ok(models);
         }
         [HttpPost]
         public async Task<IHttpActionResult> GetBrands()
         {
-            var brands =  (db.Mobiles.Select(x=>x.Id)).AsEnumerable();
+            var brands =  db.Mobiles.Select(x => x.brand);
+            //var brands = await db.Mobiles.ToListAsync();
             return Ok(brands);
         }
         [HttpPost]
         public async Task<IHttpActionResult> GetModels(string brand)
         {
-            var models =await db.MobileModels.Where(x => x.Mobile == brand).Select(x => x.model).ToListAsync();
+            var models = db.MobileModels.Where(x=>x.Mobile.brand.Equals(brand)).Select(x=>x.model);
+            //var models =await db.MobileModels.Where(x => x.Mobile == brand).ToListAsync();
             return Ok(models);
+        }
+
+        public async Task<IHttpActionResult> SearchMobileAds(string brand, string model)
+        {
+            string islogin = "";
+            if (User.Identity.IsAuthenticated)
+            {
+                islogin = User.Identity.GetUserId();
+            }
+            if (brand == null)
+            {
+                var ret = from ad in db.MobileAds
+                          select new{
+                              title = ad.Ad.title,
+                              postedById = ad.Ad.AspNetUser.Id,
+                              postedByName = ad.Ad.AspNetUser.Email,
+                              description = ad.Ad.description,
+                              id = ad.Ad.Id,
+                              time = ad.Ad.time,
+                              islogin = islogin,
+                              isNegotiable = ad.Ad.isnegotiable,
+                              price = ad.Ad.price,
+                              reportedCount = ad.Ad.Reporteds.Count,
+                              isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                              views = ad.Ad.AdViews.Count,
+                              condition = ad.Ad.condition,
+
+                              color = ad.color,
+                              sims = ad.sims,
+                              brand = ad.MobileModel.Mobile.brand,
+                              model = ad.MobileModel.model,
+                              adTags = from tag in ad.Ad.AdTags.ToList()
+                                       select new
+                                       {
+                                           id = tag.Id,
+                                           name = tag.Tag.name,
+                                           //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                           //info = tag.Tag.info,
+                                       },
+                              bid = from biding in ad.Ad.Bids.ToList()
+                                    select new
+                                    {
+                                        price = biding.price,
+                                    },
+                          };
+                return Ok(ret);
+            }
+            if (model == null)
+            {
+                var re = from ad in db.Ads
+                         where ad.MobileAd.MobileModel.Mobile.brand.Equals(brand)
+                         select new
+                         {
+                             title = ad.title,
+                             postedById = ad.AspNetUser.Id,
+                             postedByName = ad.AspNetUser.Email,
+                             description = ad.description,
+                             id = ad.Id,
+                             time = ad.time,
+                             islogin = islogin,
+                             isNegotiable = ad.isnegotiable,
+                             price = ad.price,
+                             reportedCount = ad.Reporteds.Count,
+                             isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
+                             views = ad.AdViews.Count,
+                             condition = ad.condition,
+
+                             color = ad.MobileAd.color,
+                             sims = ad.MobileAd.sims,
+                             brand = ad.MobileAd.MobileModel.Mobile.brand,
+                             model = ad.MobileAd.MobileModel.model,
+                             adTags = from tag in ad.AdTags.ToList()
+                                      select new
+                                      {
+                                          id = tag.Id,
+                                          name = tag.Tag.name,
+                                          //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                          //info = tag.Tag.info,
+                                      },
+                             bid = from biding in ad.Bids.ToList()
+                                   select new
+                                   {
+                                       price = biding.price,
+                                   },
+                         };
+                return Ok(re);
+            }
+            var res = from ad in db.Ads
+                      where ad.MobileAd.MobileModel.Mobile.brand.Equals(brand) && ad.MobileAd.MobileModel.model.Equals(model)
+                      select new
+                      {
+                          title = ad.title,
+                          postedById = ad.AspNetUser.Id,
+                          postedByName = ad.AspNetUser.Email,
+                          description = ad.description,
+                          id = ad.Id,
+                          time = ad.time,
+                          islogin = islogin,
+                          isNegotiable = ad.isnegotiable,
+                          price = ad.price,
+                          reportedCount = ad.Reporteds.Count,
+                          isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
+                          views = ad.AdViews.Count,
+                          condition = ad.condition,
+
+                          color = ad.MobileAd.color,
+                          sims = ad.MobileAd.sims,
+                          brand = ad.MobileAd.MobileModel.Mobile.brand,
+                          model = ad.MobileAd.MobileModel.model,
+                          adTags = from tag in ad.AdTags.ToList()
+                                   select new
+                                   {
+                                       id = tag.Id,
+                                       name = tag.Tag.name,
+                                       //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                       //info = tag.Tag.info,
+                                   },
+                          bid = from biding in ad.Bids.ToList()
+                                select new
+                                {
+                                    price = biding.price,
+                                },
+                      };
+            return Ok(res);
         }
         // GET api/Electronic/5
         [ResponseType(typeof(Ad))]
@@ -129,7 +476,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                        {
                            title = ad.title,
                            postedById = ad.AspNetUser.Id,
-                           postedByName = ad.AspNetUser.UserName,
+                           postedByName = ad.AspNetUser.Email,
                            description = ad.description,
                            id = ad.Id,
                            time = ad.time,
@@ -139,43 +486,71 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            reportedCount = ad.Reporteds.Count,
                            isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
                            views = ad.AdViews.Count,
+                           condition = ad.condition,
+                           type = ad.type,
+                           isSaved = ad.SaveAds.Any(x=>x.savedBy == islogin),
+                           savedCount = ad.SaveAds.Count,
+                           mobilead = new
+                           {
+                               color = ad.MobileAd.color,
+                               sims = ad.MobileAd.sims,
+                               brand = ad.MobileAd.MobileModel.Mobile.brand,
+                               model = ad.MobileAd.MobileModel.model
+                           },
+                           laptopad = new
+                           {
+                               color = ad.LaptopAd.color,
+                               brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                               model = ad.LaptopAd.LaptopModel.model,
+                           },
+                           location = new
+                           {
+                               cityName = ad.AdsLocation.City.cityName,
+                               cityId = ad.AdsLocation.cityId,
+                               popularPlaceId = ad.AdsLocation.popularPlaceId,
+                               popularPlace = ad.AdsLocation.popularPlace.name,
+                               exectLocation = ad.AdsLocation.exectLocation,
+                           },
+                           adTags = from tag in ad.AdTags.ToList()
+                                    select new
+                                    {
+                                        id = tag.Id,
+                                        name = tag.Tag.name,
+                                        followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                        //info = tag.Tag.info,
+                                    },
                            bid = from biding in ad.Bids.ToList()
                                  select new
                                  {
-                                     postedByName = biding.AspNetUser.UserName,
+                                     postedByName = biding.AspNetUser.Email,
                                      postedById = biding.AspNetUser.Id,
                                      price = biding.price,
                                      time = biding.time,
                                      id = biding.Id,
                                  },
-                           mobilead = from mobile in ad.MobileAds.ToList()
-                                      select new
-                                      {
-                                          color = mobile.color,
-                                          condition = mobile.condition,
-                                          sims = mobile.sims,
-                                          brand = mobile.MobileModel.Mobile,
-                                          model = mobile.MobileModel.model,
-                                          //whichType = "mobiles",
-                                      },
-                           laptopad = from laptop in ad.LaptopAds.ToList()
-                                      select new
-                                      {
-                                          color = laptop.color,
-                                          condition = laptop.condition,
-                                          brand = laptop.LaptopModel.brand,
-                                          model = laptop.LaptopModel.model,
-                                      },
-                                      carad = from car in ad.CarAds.ToList()
-                                              select new{
-                                                  color = car.color,
-                                                  condition = car.condition,
-                                                  brand = car.CarModel.brand,
-                                                  model = car.CarModel.model,
-                                                  fuelType = car.fuelType,
-                                                  year = car.year,
-                                                  kmDriven = car.kmDriven,
-                                              },
+                           //mobilead = from mobile in ad.MobileAd
+                           //           select new
+                           //           {
+                           //               color = mobile.color,
+                           //               condition = mobile.condition,
+                           //               sims = mobile.sims,
+                           //               brand = mobile.MobileModel.Mobile,
+                           //               model = mobile.MobileModel.model,
+                           //               //whichType = "mobiles",
+                           //           },
+
+                           //carad = from car in ad.CarAds.ToList()
+                           //        select new
+                           //        {
+                           //            color = car.color,
+                           //            condition = car.condition,
+                           //            brand = car.CarModel.brand,
+                           //            model = car.CarModel.model,
+                           //            fuelType = car.fuelType,
+                           //            year = car.year,
+                           //            kmDriven = car.kmDriven,
+                           //        },
+
                            //carad = from car in ad.CarAds.ToList()
                            //        select new
                            //        {
@@ -193,7 +568,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                      {
                                          description = comment.description,
                                          postedById = comment.postedBy,
-                                         postedByName = comment.AspNetUser.UserName,
+                                         postedByName = comment.AspNetUser.Email,
                                          time = comment.time,
                                          id = comment.Id,
                                          adId = comment.adId,
@@ -209,7 +584,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                             id = commentreply.Id,
                                                             description = commentreply.description,
                                                             postedById = commentreply.postedBy,
-                                                            postedByName = commentreply.AspNetUser.UserName,
+                                                            postedByName = commentreply.AspNetUser.Email,
                                                             time = commentreply.time,
                                                             voteUpCount = commentreply.CommentReplyVotes.Where(x => x.isup == true).Count(),
                                                             voteDownCount = commentreply.CommentReplyVotes.Where(x => x.isup == false).Count(),
@@ -241,7 +616,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 price = x.price,
                 postedById = x.postedBy,
-                postedByName = x.AspNetUser.UserName,
+                postedByName = x.AspNetUser.Email,
                 time = x.time,
                 id = x.Id,
             }).FirstOrDefault();
@@ -403,12 +778,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
 
         }
-        public async Task<IHttpActionResult> ReportAd(int id)
+        public async Task<IHttpActionResult> ReportAd(Reported report)
         {
             var userId = User.Identity.GetUserId();
             if(userId != null)
             {
-                Ad ad = await db.Ads.FindAsync(id);
+                Ad ad = await db.Ads.FindAsync(report.adId);
                 if (ad == null)
                 {
                     return NotFound();
@@ -418,10 +793,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     return BadRequest("You can report an Ad only once.If something really wrong you can contact us");
                 }
-                Reported rep = new Reported();
-                rep.reportedBy = userId;
-                rep.adId = id;
-                db.Reporteds.Add(rep);
+                report.reportedBy = userId;
+                db.Reporteds.Add(report);
                 await db.SaveChangesAsync();
 
                 var count = ad.Reporteds.Count;

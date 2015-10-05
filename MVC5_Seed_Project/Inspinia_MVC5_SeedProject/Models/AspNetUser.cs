@@ -16,32 +16,45 @@ namespace Inspinia_MVC5_SeedProject.Models
     {
         public AspNetUser()
         {
-            this.AspNetUserClaims = new HashSet<AspNetUserClaim>();
-            this.AspNetUserLogins = new HashSet<AspNetUserLogin>();
-            this.AspNetRoles = new HashSet<AspNetRole>();
-            this.Comments = new HashSet<Comment>();
-            this.CommentReplies = new HashSet<CommentReply>();
-            this.CommentReplyVotes = new HashSet<CommentReplyVote>();
-            this.CommentVotes = new HashSet<CommentVote>();
+            this.Ads = new HashSet<Ad>();
+            this.AdViews = new HashSet<AdView>();
             this.Answers = new HashSet<Answer>();
             this.AnswerReplies = new HashSet<AnswerReply>();
             this.AnswerReplyVotes = new HashSet<AnswerReplyVote>();
             this.AnswerVotes = new HashSet<AnswerVote>();
+            this.AspNetUserClaims = new HashSet<AspNetUserClaim>();
+            this.AspNetUserLogins = new HashSet<AspNetUserLogin>();
+            this.Bids = new HashSet<Bid>();
+            this.Chats = new HashSet<Chat>();
+            this.Chats1 = new HashSet<Chat>();
+            this.Comments = new HashSet<Comment>();
+            this.CommentReplies = new HashSet<CommentReply>();
+            this.CommentReplyVotes = new HashSet<CommentReplyVote>();
+            this.CommentVotes = new HashSet<CommentVote>();
+            this.FollowQuestions = new HashSet<FollowQuestion>();
+            this.FollowTags = new HashSet<FollowTag>();
+            this.Friends = new HashSet<Friend>();
+            this.Friends1 = new HashSet<Friend>();
+            this.LaptopBrands = new HashSet<LaptopBrand>();
+            this.LaptopModels = new HashSet<LaptopModel>();
+            this.Mobiles = new HashSet<Mobile>();
+            this.MobileModels = new HashSet<MobileModel>();
+            this.popularPlaces = new HashSet<popularPlace>();
+            this.popularPlaces1 = new HashSet<popularPlace>();
             this.Questions = new HashSet<Question>();
             this.QuestionReplies = new HashSet<QuestionReply>();
             this.QuestionReplyVotes = new HashSet<QuestionReplyVote>();
             this.QuestionViews = new HashSet<QuestionView>();
             this.QuestionVotes = new HashSet<QuestionVote>();
             this.Reporteds = new HashSet<Reported>();
-            this.Bids = new HashSet<Bid>();
-            this.AdViews = new HashSet<AdView>();
-            this.Ads = new HashSet<Ad>();
-            this.Chats = new HashSet<Chat>();
-            this.Chats1 = new HashSet<Chat>();
-            this.FollowQuestions = new HashSet<FollowQuestion>();
             this.ReportedQuestions = new HashSet<ReportedQuestion>();
-            this.FollowTags = new HashSet<FollowTag>();
+            this.ReportedTags = new HashSet<ReportedTag>();
             this.Tags = new HashSet<Tag>();
+            this.Tags1 = new HashSet<Tag>();
+            this.AspNetRoles = new HashSet<AspNetRole>();
+            this.Cities = new HashSet<City>();
+            this.Cities1 = new HashSet<City>();
+            this.SaveAds = new HashSet<SaveAd>();
         }
     
         public string Id { get; set; }
@@ -61,38 +74,52 @@ namespace Inspinia_MVC5_SeedProject.Models
         public Nullable<bool> hideEmail { get; set; }
         public Nullable<bool> hidePhoneNumber { get; set; }
         public string dpExtension { get; set; }
+        public string gender { get; set; }
         public Nullable<System.DateTime> dateOfBirth { get; set; }
         public string shortAbout { get; set; }
         public string longAbout { get; set; }
         public string city { get; set; }
-        public string gender { get; set; }
         public Nullable<bool> hideDateOfBirth { get; set; }
+        public Nullable<bool> hideFriends { get; set; }
     
-        public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<CommentReply> CommentReplies { get; set; }
-        public virtual ICollection<CommentReplyVote> CommentReplyVotes { get; set; }
-        public virtual ICollection<CommentVote> CommentVotes { get; set; }
+        public virtual ICollection<Ad> Ads { get; set; }
+        public virtual ICollection<AdView> AdViews { get; set; }
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<AnswerReply> AnswerReplies { get; set; }
         public virtual ICollection<AnswerReplyVote> AnswerReplyVotes { get; set; }
         public virtual ICollection<AnswerVote> AnswerVotes { get; set; }
+        public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual ICollection<Bid> Bids { get; set; }
+        public virtual ICollection<Chat> Chats { get; set; }
+        public virtual ICollection<Chat> Chats1 { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<CommentReply> CommentReplies { get; set; }
+        public virtual ICollection<CommentReplyVote> CommentReplyVotes { get; set; }
+        public virtual ICollection<CommentVote> CommentVotes { get; set; }
+        public virtual ICollection<FollowQuestion> FollowQuestions { get; set; }
+        public virtual ICollection<FollowTag> FollowTags { get; set; }
+        public virtual ICollection<Friend> Friends { get; set; }
+        public virtual ICollection<Friend> Friends1 { get; set; }
+        public virtual ICollection<LaptopBrand> LaptopBrands { get; set; }
+        public virtual ICollection<LaptopModel> LaptopModels { get; set; }
+        public virtual ICollection<Mobile> Mobiles { get; set; }
+        public virtual ICollection<MobileModel> MobileModels { get; set; }
+        public virtual ICollection<popularPlace> popularPlaces { get; set; }
+        public virtual ICollection<popularPlace> popularPlaces1 { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<QuestionReply> QuestionReplies { get; set; }
         public virtual ICollection<QuestionReplyVote> QuestionReplyVotes { get; set; }
         public virtual ICollection<QuestionView> QuestionViews { get; set; }
         public virtual ICollection<QuestionVote> QuestionVotes { get; set; }
         public virtual ICollection<Reported> Reporteds { get; set; }
-        public virtual ICollection<Bid> Bids { get; set; }
-        public virtual ICollection<AdView> AdViews { get; set; }
-        public virtual ICollection<Ad> Ads { get; set; }
-        public virtual ICollection<Chat> Chats { get; set; }
-        public virtual ICollection<Chat> Chats1 { get; set; }
-        public virtual ICollection<FollowQuestion> FollowQuestions { get; set; }
         public virtual ICollection<ReportedQuestion> ReportedQuestions { get; set; }
-        public virtual ICollection<FollowTag> FollowTags { get; set; }
+        public virtual ICollection<ReportedTag> ReportedTags { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<Tag> Tags1 { get; set; }
+        public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
+        public virtual ICollection<City> Cities { get; set; }
+        public virtual ICollection<City> Cities1 { get; set; }
+        public virtual ICollection<SaveAd> SaveAds { get; set; }
     }
 }

@@ -29,6 +29,11 @@ namespace Inspinia_MVC5_SeedProject.Hubs
     public class ChatHub : Hub
     {
         Entities db = new Entities();
+
+        //start
+        
+        
+        //end
         public void AddMessage(Chat msg)
         {
             msg.time = DateTime.UtcNow;

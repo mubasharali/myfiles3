@@ -15,12 +15,12 @@ namespace Inspinia_MVC5_SeedProject.Models
     public partial class AdsLocation
     {
         public int Id { get; set; }
-        public string cityId { get; set; }
+        public Nullable<int> cityId { get; set; }
         public string exectLocation { get; set; }
         public Nullable<int> popularPlaceId { get; set; }
     
         public virtual Ad Ad { get; set; }
-        public virtual City City { get; set; }
         public virtual popularPlace popularPlace { get; set; }
+        public virtual City City { get; set; }
     }
 }

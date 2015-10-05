@@ -19,7 +19,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public bool isup { get; set; }
         public string votedBy { get; set; }
     
-        public virtual CommentReply CommentReply { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
+        public virtual CommentReply CommentReply { get; set; }
     }
 }

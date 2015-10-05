@@ -25,6 +25,7 @@
     <div class="row">
         <div class="col-sm-3">@Html.Partial("~/Views/Shared/_Tree.cshtml")</div>
         <div class="col-md-9" id="adsBinding">
+
             <div data-bind="foreach: showAds">
                 <div data-bind="attr:{'id':id}">
                     <div class="ibox product-detail">
@@ -59,8 +60,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-7">
-                                    <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a href="#" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                    <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a data-bind="click: function(){return editAd(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
                                     <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
+                                    <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
+                                        <li><a href=""><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                    </ul><br /><br />
                                     <hr>
                                     <span data-bind="if:isBidingAllowed">
                                         <button data-bind="click:placeBidButton" class="btn btn-primary pull-right">Place Bid</button>
@@ -68,52 +72,52 @@
                                     <span data-bind="if:!isBidingAllowed">
                                         <button data-bind="" class="btn btn-primary pull-right">Chat with seller</button>
                                     </span>
-                                        <h1 class="product-main-price">
-                                            <span data-bind="if:!isBidingAllowed">
-                                                <span data-bind="if:price">
-                                                     <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted"  >Rs. <span data-bind="html:isNegotiable"></span></small>
-                                                </span>
-                                                <span data-bind="if:!price">Price on contact</span>
+                                    <h1 class="product-main-price">
+                                        <span data-bind="if:!isBidingAllowed">
+                                            <span data-bind="if:price">
+                                                <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
                                             </span>
-                                            <span data-bind="if:isBidingAllowed">
-                                                <span data-bind="if:price">
-                                                    
-                                                    @*<span data-bind="text:highestBid()"></span>
-                                                    <span data-bind="text:price"></span> //*@
-                                                    <span data-bind="if:highestBid() == '-Infinity'">
-                                                        <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
-                                                    </span>
-                                                    <span data-bind="ifnot:highestBid() == '-Infinity'">
-                                                        <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
-                                                    </span>
+                                            <span data-bind="if:!price">Price on contact</span>
+                                        </span>
+                                        <span data-bind="if:isBidingAllowed">
+                                            <span data-bind="if:price">
+                                                <span data-bind="if:highestBid() == '-Infinity'">
+                                                    <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
                                                 </span>
-                                                <span data-bind="if:!price">
-                                                    <span data-bind="if:highestBid() == '-Infinity'">
-                                                        No Bit yet
-                                                    </span>
-                                                    <span data-bind="ifnot:highestBid() == '-Infinity'">
-                                                        <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
-                                                    </span>
+                                                <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                    <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) Initial Bid = <span data-bind="text:price"></span> </small>
                                                 </span>
                                             </span>
-                                        </h1>
-                                    <div data-bind="foreach: showMobileAd">
-                                        <hr>
-                                        <dl class="dl-horizontal m-t-md small">
+                                            <span data-bind="if:!price">
+                                                <span data-bind="if:highestBid() == '-Infinity'">
+                                                    No Bit yet
+                                                </span>
+                                                <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                    <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </h1>
+                                    <hr>
+                                    <dl class="dl-horizontal m-t-md small">
+                                        <dt>condition:</dt>
+                                        <dd data-bind="text:condition"></dd>
+                                        <dt>Tye:</dt>
+                                        <dd data-bind="text:type"></dd>
+                                        <span data-bind="with: showMobileAd">
                                             <dt>Brand:</dt>
                                             <dd data-bind="text:brand"></dd>
                                             <dt>Model:</dt>
                                             <dd data-bind="text:model"></dd>
                                             <dt>color:</dt>
                                             <dd data-bind="text:color"></dd>
-                                            <dt>condition:</dt>
-                                            <dd data-bind="text:condition"></dd>
                                             <span data-bind="if:sims">
                                                 <dt>Number of sims:</dt>
                                                 <dd data-bind="text:sims"></dd>
                                             </span>
-                                        </dl>
-                                    </div>
+
+                                        </span>
+                                    </dl>
                                     <div data-bind="foreach: showCarAd">
                                         <hr>
                                         <dl class="dl-horizontal m-t-md small">
@@ -133,14 +137,25 @@
                                             <dd data-bind="text:year"></dd>
                                         </dl>
                                     </div>
-                                    <h4>Product description</h4>
 
+                                    <h4>Details</h4>
                                     <div data-bind="text:description" class="small text-muted">
                                     </div>
 
+                                    <div data-bind="with:showLocation">
+                                        <h5 data-bind="with:cityName">Location</h5>
+                                        <span data-bind="if:exectLocation">
+                                            <span data-bind="text:exectLocation"></span>,
+                                        </span>
+                                        <span data-bind="if:popularPlace">
+                                            <span data-bind="text:popularPlace"></span>,
+                                        </span>
+                                        <span data-bind="text:cityName"></span>
+                                    </div>
+                                    <br />
                                     <div class="text-right">
                                         <div class="btn-group">
-                                            <button class="btn btn-white btn-sm"><i class="fa fa-star"></i> Add to wishlist </button>
+                                            <button data-bind="click:saveAd" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
                                             <a data-bind="click:sellerProfile" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile</a>
                                         </div>
                                     </div>
@@ -154,9 +169,11 @@
                             <span class="pull-right">
                                 <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
                             </span>
-                            Views (<span data-bind="text:views"></span>) -  wishlist (34) - <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
-                            
-                            
+                            Views (<span data-bind="text:views"></span>) -  wishlist (34) - <span data-toggle="modal" data-target="#report"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
+
+
+
+
                             <div data-bind="visible:isBidingAllowed">
                                 <hr />
                                 <h2>Bidings:</h2>
@@ -172,82 +189,92 @@
                                             <div class="col-sm-2"><button class="btn btn-success" data-bind="click:postBid">Submit</button></div>
                                         </div>
                                     </div>
-                                    @*Bid Amount:<input type="number" data-bind="value:newBidPrice" />*@
-                                    
+
                                 </div>
                                 <span data-bind="text:showBidings().length"></span> bidings
-                                    <ul class="sortable-list connectList agile-list" data-bind="foreach:showBidings">
-                                        <li class="success-element">
-                                            <span data-bind="visible:!isEditing()">
-                                                <a href="#"><span data-bind="text:postedByName"></span></a>
-                                                <span data-bind="text:price"></span>
-                                                <div class="agile-detail">
-                                                    <a data-bind="click:$parent.deleteBid" class="pull-right btn btn-xs btn-white">delete</a><a data-bind="click:editBidButton" class="pull-right btn btn-xs btn-white">edit</a>
-                                                    <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
-                                                </div>
-                                            </span>
-                                            <span data-bind="visible:isEditing()">
-                                                <div class="input-group m-b">
-                                                    <span class="input-group-addon">Rs</span><input type="number" data-bind="value:price" class="form-control" pattern="[0-9]*" name="price" required />
-                                                </div>
-                                                <button class="btn btn-success" data-bind="click:function(){return updateBid($parent.id)}">Update</button>
-                                            </span>
-                                        </li>
-                                    </ul>
-                                
+                                <ul class="sortable-list connectList agile-list" data-bind="foreach:showBidings">
+                                    <li class="success-element">
+                                        <span data-bind="visible:!isEditing()">
+                                            <a href="#"><span data-bind="text:postedByName"></span></a>
+                                            <span data-bind="text:price"></span>
+                                            <div class="agile-detail">
+                                                <a data-bind="click:$parent.deleteBid" class="pull-right btn btn-xs btn-white">delete</a><a data-bind="click:editBidButton" class="pull-right btn btn-xs btn-white">edit</a>
+                                                <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
+                                            </div>
+                                        </span>
+                                        <span data-bind="visible:isEditing()">
+                                            <div class="input-group m-b">
+                                                <span class="input-group-addon">Rs</span><input type="number" data-bind="value:price" class="form-control" pattern="[0-9]*" name="price" required />
+                                            </div>
+                                            <button class="btn btn-success" data-bind="click:function(){return updateBid($parent.id)}">Update</button>
+                                        </span>
+                                    </li>
+                                </ul>
+
                             </div>
                         </div>
-                            <div class="">
-                                @Html.Partial("~/Views/Shared/_Comments.cshtml")
-                            </div>
-</div>
+                        <div class="">
+                            @Html.Partial("~/Views/Shared/_Comments.cshtml")
+                        </div>
+                    </div>
                 </div>
             </div>
-                    </div>
-<div class="col-md-3">
-    @*<div class="wrapper wrapper-content project-manager">
-            <h4>Project description</h4>
-            <img src="~/Images/zender_logo.png" class="img-responsive">
-            <p class="small">
-                There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look
-                even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing
-            </p>
-            <p class="small font-bold">
-                <span><i class="fa fa-circle text-warning"></i> High priority</span>
-            </p>
-            <h5>Project tag</h5>
-            <ul class="tag-list" style="padding: 0">
-                <li><a href=""><i class="fa fa-tag"></i> Zender</a></li>
-                <li><a href=""><i class="fa fa-tag"></i> Lorem ipsum</a></li>
-                <li><a href=""><i class="fa fa-tag"></i> Passages</a></li>
-                <li><a href=""><i class="fa fa-tag"></i> Variations</a></li>
-            </ul>
-            <h5>Project files</h5>
-            <ul class="list-unstyled project-files">
-                <li><a href=""><i class="fa fa-file"></i> Project_document.docx</a></li>
-                <li><a href=""><i class="fa fa-file-picture-o"></i> Logo_zender_company.jpg</a></li>
-                <li><a href=""><i class="fa fa-stack-exchange"></i> Email_from_Alex.mln</a></li>
-                <li><a href=""><i class="fa fa-file"></i> Contract_20_11_2014.docx</a></li>
-            </ul>
-            <div class="text-center m-t-md">
-                <a href="#" class="btn btn-xs btn-primary">Add files</a>
-                <a href="#" class="btn btn-xs btn-primary">Report contact</a>
-
-            </div>
-        </div>*@
-</div>
-
-    </div>
-@*start*@
-<div class="row">
-    <div class="col-lg-12">
-
-
-
-    </div>
-</div>
         </div>
+        
 
+    </div>
+    <div class="modal inmodal fade" id="report" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <i class="fa fa-flag modal-icon"></i>
+                    <h4 class="modal-title">Report Ad</h4>
+                    <small class="font-bold">Make sure you have provided right information or you can loose reputation</small>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 ">
+                            <div class="radio">
+                                <label>
+                                    <input class="radio i-checks" type="radio" data-bind=" checked: selectedVal " name="report" value="duplicate" required /> Ad is duplicate
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="wrong_category" required /> Wrong category
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="Irrelevent_content" required /> Irrelevent content
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="spam" required /> Spam/Offensive content
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal" name="report" value="fraud" required /> Fraud reason
+                                </label>
+                            </div>
+                        </div>
+                        <label>Addational details:</label>
+                        <textarea class="msgTextArea form-control" placeholder="Addational info.." data-bind="jqAutoresize: {}"></textarea>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">I didn't mean to</button>
+                    <button type="button" data-bind="click: function(){ return report()}" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 @section Styles {
@@ -325,25 +352,34 @@
             var self = this;
             data = data || {};
             self.color = data.color;
-            self.condition = "";
-            if (data.condition == "n") {
-                self.condition = "New";
-            } else if (data.condition == "u") {
-                self.condition = "Used";
-            } else if (data.condition == "b") {
-                self.condition = "unBoxed";
-            }
+            
             self.sims = data.sims;
             self.brand = data.brand;
             self.model = data.model;
         }
-        
+        function Location(data) {
+            var self = this;
+            data = data || {};
+            self.cityId = data.cityId;
+            self.cityName = data.cityName;
+            self.popularPlaceId = data.popularPlaceId;
+            self.popularPlace = data.popularPlace;
+            self.exectLocation = data.exectLocation;
+        }
         function adImages(data) {
             var self = this;
             data = data || {};
             self.id = data.id;
             self.name = data.adId + '_' + data.imageExtension;// also loop after _
         }
+        function Tag(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.info = data.info || "";
+            self.followers = data.followers || 0;
+        };
         function ad(data) {
             var self = this;
             data = data || {};
@@ -354,21 +390,40 @@
             self.id = data.id;
             self.time = getTimeAgo(data.time);
             self.loginUserId = data.islogin || "";
-            self.showMobileAd = ko.observableArray();
+            self.showMobileAd = ko.observable();
+            self.showLocation = ko.observable();
             self.showComment = ko.observableArray();
             self.isReported = ko.observable(data.isReported);
+            self.isSaved = ko.observable(data.isSaved);
             self.reportedCount = ko.observable(data.reportedCount);
             self.showImages = ko.observable();
             self.views = data.views;
             self.price = data.price || "";
             self.newBidPrice = ko.observable();
             self.showCarAd = ko.observable();
+            self.type = "";
+            if (data.type == true) {
+                self.type = "For sell";
+            } else {
+                self.type = "Want to buy";
+            }
+            self.condition = "";
+            if (data.condition == "n") {
+                self.condition = "New";
+            } else if (data.condition == "u") {
+                self.condition = "Used";
+            } else if (data.condition == "b") {
+                self.condition = "unBoxed";
+            }
             //biding
             self.highestBid = ko.observable();
             self.showBidings = ko.observableArray();
             self.isBidingAllowed = false;
             self.placeBid = ko.observable(false);
             self.bidAmount = ko.observable();
+
+            self.showTags = ko.observableArray();
+
             self.sellerProfile = function () {
                 window.location.href = "/User/Index/" + self.postedById;
             }
@@ -430,25 +485,29 @@
             if(self.price == "") {
                 self.isNegotiable = "";
             }
-            if (data.bid) {
+            if (data.location != null) {
+                self.showLocation(new Location(data.location));
+            }
+            if (data.bid != null) {
                 var biding = $.map(data.bid, function (item) { return new Biding(item); });
                 self.highestBid ( Math.max.apply(Math, biding.map(function (o) { return o.price(); })));
                 self.showBidings(biding);
             }
+            if (data.adTags != null) {
+                var tags = $.map(data.adTags, function (item) { return new Tag(item); });
+                self.showTags(tags);
+            }
             
-            
-            if (data.mobilead != "") {
-                var mobad = $.map(data.mobilead, function (item) { return new mobilead(item); });
-                self.showMobileAd(mobad);
+            if (data.mobilead.brand != null) {
+                self.showMobileAd ( new mobilead(data.mobilead));
             }
-            if (data.laptopad != "") {
-                var mobad = $.map(data.laptopad, function (item) { return new mobilead(item); });
-                self.showMobileAd(mobad);
+            if (data.laptopad.brand != null) {
+                self.showMobileAd ( new mobilead(data.laptopad));
             }
-            if (data.carad != "") {
-                var mobad = $.map(data.carad, function (item) { return new CarAd(item); });
-                self.showCarAd(mobad);
-            }
+            //if (data.carad != "") {
+            //    var mobad = $.map(data.carad, function (item) { return new CarAd(item); });
+            //    self.showCarAd(mobad);
+            //}
             if (data.comment) {
                 var cmt = $.map(data.comment, function (item) { return new comment(item); });
                 self.showComment(cmt);
@@ -456,6 +515,36 @@
             if (data.image) {
                 var img = $.map(data.image, function (item) { return new adImages(item); });
                 self.showImages(img);
+            }
+            self.saveAd = function (ad) {
+                $.ajax({
+                    url: '/api/User/SaveAd/' + ad.id,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        if (data == "Deleted") {
+                            self.isSaved(false);
+                        } else {
+                            self.isSaved(true);
+                        }
+                    },
+                    error: function () {
+                        toastr.error("failed to Save Ad. Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+            self.editAd = function (id) {
+                if (data.laptopad.brand != null) {
+                    window.location.href = "/Electronics/EditLaptopAd/" + id;
+                }
+                 else if (data.mobilead.brand != null) {
+                    window.location.href = "/Electronics/Edit/" + id;
+                }
+                else  {
+                    window.location.href = "/Electronics/EditAd/" + id;
+                }
             }
             self.deleteAd = function (id) {
                     swal({
@@ -475,7 +564,6 @@
                             type: 'POST',
                             success: function (data) {
                                 swal("Deleted!", "Your Ad has been deleted.", "success");
-                                alert("ok");
                                 window.location.href = "/User/Index/"+self.loginUserId;
                             },
                             error: function () {
@@ -502,27 +590,33 @@
                     }
                 });
             }
-            self.report = function (id, loginUserId) {
-                if (loginUserId) {
-                    $.ajax({
-                        url: '/api/Electronic/reportAd?id=' + id,
-                        dataType: "json",
-                        contentType: "application/json",
-                        cache: false,
-                        type: 'POST',
-                        success: function (data) {
-                            self.isReported(true);
-                            self.reportedCount(data);
-                        },
-                        error: function (xhr, status, error) {
-                            var err = eval("(" + xhr.responseText + ")");
-                            toastr.info(err.Message);
-                        }
-                    })
-                } else {
-                    toastr.info("You must be login to report this ad", "Na na!");
-                }
-            }
+            //self.report = function (id, loginUserId) {
+            //    if (loginUserId) {
+            //        var data = {
+            //            adId: id,
+            //            details: self.reportText,
+            //            type: self.selectedVal,
+            //        };
+            //        $.ajax({
+            //            url: '/api/Electronic/reportAd',
+            //            dataType: "json",
+            //            contentType: "application/json",
+            //            cache: false,
+            //            type: 'POST',
+            //            data: ko.toJSON(data),
+            //            success: function (data) {
+            //                self.isReported(true);
+            //                self.reportedCount(data);
+            //            },
+            //            error: function (xhr, status, error) {
+            //                var err = eval("(" + xhr.responseText + ")");
+            //                toastr.info(err.Message);
+            //            }
+            //        })
+            //    } else {
+            //        toastr.info("You must be login to report this ad", "Na na!");
+            //    }
+            //}
             self.checkEnter = function (d, e) {
                 if (e.keyCode == 13) {
                     self.addcomment();
@@ -585,7 +679,11 @@
                 });
                 
             }
-
+            self.selectedVal =ko.observable( "spam");
+            self.reportText = "";
+            self.report = function () {
+                alert(self.selectedVal());
+            }
             self.loadad();
             return self;
         }
@@ -605,7 +703,18 @@
                 $(element).autosize();
             }
         };
-        
+        ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+            init: function (element, valueAccessor) {
+                //initialize icheck to the element
+                $(element).iCheck({
+                    radioClass: 'iradio_square-green'
+                });
+                $(element).on('ifChecked', function (event) {
+                    var observable = valueAccessor();
+                    observable.checked(event.target.defaultValue); //assigning selected value
+                });
+            }
+        };
         $(function () {
             
             toastr.options = {
@@ -621,7 +730,6 @@
             ko.applyBindings(new viewModel, (document.getElementById('adsBinding')));
 
             ko.applyBindings(new treeModel, document.getElementById('navigation'));
-           
             
         });
 

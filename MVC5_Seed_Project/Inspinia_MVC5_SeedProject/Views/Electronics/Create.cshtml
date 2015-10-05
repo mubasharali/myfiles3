@@ -3,15 +3,6 @@
 @{
     ViewBag.Title = "Create";
 }
-
-@*@if (TempData["error"] != null)
-{
-   <input type="hidden" id="tempdataError" value="@TempData["error"]" />
-}
-else
-{
-    <input type="hidden" id="tempdataError" value="" />
-}*@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
         <h2>Create</h2>
@@ -53,12 +44,9 @@ else
                 <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
                        value: selectedBrand,
                        optionsCaption: 'Choose brand...'"></select>
-                @*<div data-bind="visible:isNewBrand()">
-                    You have entered new Brand. Now enter you model name also as we don't have list of models for '<span data-bind="text:selectedBrand"></span>' Brand.<br /><b>Note:</b>Your ad will first verified by admin. 
-                </div>*@
+                
             </div>
         </div>
-        @*<span data-bind="text: selectedBrand() ? selectedBrand(): 'unknown'"></span>*@
         <div data-bind="with:selectedBrand">
             <div class="form-group">
                 <label class="control-label col-md-2">Select Model</label>
@@ -104,14 +92,14 @@ else
             </div>
         </div>
         @Html.Partial("~/Views/Shared/_CreateAd.cshtml")
-
+        
+        <br />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Create" class="btn btn-primary" />
             @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
         </div>
     </div>
-    @*<input type="text" id="input-tags" value="" data-selectize-value="[awesome]" />*@
 
 </div>
                 }
@@ -119,13 +107,104 @@ else
         </div>
     </div>
         </div>
+        <div class="col-sm-6">
+            If you are posting accessories than include tag 'accessories'
+        </div>
     </div>
  </div>
 
 
 
 @section Styles {
+<style type="text/css">
+    .selectize-control.repositories .selectize-dropdown > div {
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
 
+    .selectize-control.repositories .selectize-dropdown .by {
+        font-size: 11px;
+        opacity: 0.8;
+    }
+
+        .selectize-control.repositories .selectize-dropdown .by::before {
+            content: 'by ';
+        }
+
+    .selectize-control.repositories .selectize-dropdown .name {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+    .selectize-control.repositories .selectize-dropdown .title {
+        display: block;
+    }
+
+    .selectize-control.repositories .selectize-dropdown .description {
+        font-size: 12px;
+        display: block;
+        color: #a0a0a0;
+        white-space: nowrap;
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .selectize-control.repositories .selectize-dropdown .meta {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 10px;
+    }
+
+        .selectize-control.repositories .selectize-dropdown .meta li {
+            margin: 0;
+            padding: 0;
+            display: inline;
+            margin-right: 10px;
+        }
+
+            .selectize-control.repositories .selectize-dropdown .meta li span {
+                font-weight: bold;
+            }
+
+    .selectize-control.repositories::before {
+        -moz-transition: opacity 0.2s;
+        -webkit-transition: opacity 0.2s;
+        transition: opacity 0.2s;
+        content: ' ';
+        z-index: 2;
+        position: absolute;
+        display: block;
+        top: 12px;
+        right: 34px;
+        width: 16px;
+        height: 16px;
+        background: url(/Images/spinner.gif);
+        background-size: 16px 16px;
+        opacity: 0;
+    }
+
+    .selectize-control.repositories.loading::before {
+        opacity: 0.4;
+    }
+
+    .icon {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        background-size: 16px 16px;
+        margin: 0 3px 0 0;
+    }
+
+        .icon.fork {
+            background-image: url(images/repo-fork.png);
+        }
+
+        .icon.source {
+            background-image: url(images/repo-source.png);
+        }
+</style>
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
@@ -146,6 +225,7 @@ else
         function ViewModel() {
             var self = this;
             self.conditionChecked = ko.observable(false);
+            self.typeValue = ko.observable();
             self.selectedVal = ko.observable();
             self.selectedVal.subscribe(function (val) {
                 if (val == "fixedPrice") {
@@ -157,9 +237,6 @@ else
                     self.isFixPriceChecked(false);
                 }
             });
-
-
-            self.isNewBrand = ko.observable(false);
             self.availableBrands = ko.observableArray();
             self.selectedBrand = ko.observable();
             self.selectedModel = ko.observable();
@@ -182,21 +259,17 @@ else
                             create: true,
                             plugins: ['inputMaxlength'],
                             inputMaxlength: 29,
-                            option_add:newBrandAdded,
                             sortField: {
                                 field: 'text',
                                 direction: 'asc'
                             },
-                            onOptionAdd: function (value, data) { self.isNewBrand(true);}
+                            
                         });
                     },
                     error: function (jqXHR, status, thrownError) {
                         toastr.error("failed to load Brands.Please refresh page and try again", "Error");
                     }
                 });
-            }
-            function newBrandAdded() {
-                alert("new ");
             }
             self.availableModels = ko.observableArray();
             self.selectedModel = ko.observable();
@@ -226,6 +299,66 @@ else
                 });
             }
             self.loadBrands();
+
+            //location
+            self.availableCities = ko.observableArray();
+            self.selectedCity = ko.observable();
+            self.availablePopularPlaces = ko.observableArray();
+            self.selectedPopularPlace = ko.observable();
+            self.loadCities = function () {
+                $.ajax({
+                    url: '/api/Location/GetCities',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availableCities.push(item) });
+                        $('#select-city').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 39,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Cities.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadPopularPlaces = function () {
+                self.availablePopularPlaces.removeAll();
+                $.ajax({
+                    url: '/api/Location/GetPopularPlaces?city=' + self.selectedCity(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availablePopularPlaces.push(item) });
+                        $('#select-popularPlace').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 49,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadCities();
+            var sub = self.selectedCity.subscribe(function (value) {
+                self.loadPopularPlaces();
+            })
         }
         ko.bindingHandlers.jqAutoresize = {
             init: function (element, valueAccessor, aBA, vm) {
@@ -261,13 +394,41 @@ else
                     };
                 })();
             });
+            $('#select-tag').selectize({
+                valueField: 'name',
+                labelField: 'name',
+                searchField: 'name',
+                options: [],
+                create: true,
+                render: {
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="title">' +
+                                '<span class="name">' + escape(item.name) + '</span>' +
 
-            //$('#input-tags').selectize({
-            //    persist: false,
-            //    createOnBlur: true,
-            //    create: true,
-            //    maxItems: 4
-            //});
+                            '</span>' +
+                            '<span class="description">' + escape(item.info) + '</span>' +
+                            '<ul class="meta">' +
+                                '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                                '<li class="forks"><span>' + escape(item.questions) + '</span> questions asked</li>' +
+                            '</ul>' +
+                        '</div>';
+                    }
+                },
+                load: function (query, callback) {
+                    if (!query.length) return callback();
+                    $.ajax({
+                        url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                        type: 'POST',
+                        error: function () {
+                            callback();
+                        },
+                        success: function (res) {
+                            callback(res.slice(0, 10));
+                        }
+                    });
+                }
+            });
             $('#select-color').selectize({
                 create: true,
                 plugins: ['inputMaxlength'],

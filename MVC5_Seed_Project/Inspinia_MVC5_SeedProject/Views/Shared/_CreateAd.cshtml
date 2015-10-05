@@ -5,6 +5,21 @@
     </div>
 </div>
 <div class="form-group">
+    <label class="col-sm-2 control-label">Type </label>
+    <div class="col-sm-10">
+        <div class="radio">
+            <label>
+                <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: typeValue }" name="type" value="sell" required /> For sell
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: typeValue }" name="type" value="buy" required /> want to buy
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group">
     <label class="col-sm-2 control-label">Condition</label>
     <div class="col-sm-10">
         <div class="radio">
@@ -19,7 +34,7 @@
         </div>
         <div class="radio">
             <label>
-                <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: conditionChecked }" name="condition" value="unboxed" readonly /> unBoxed
+                <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: conditionChecked }" name="condition" value="unboxed" required /> unBoxed
             </label>
         </div>
     </div>
@@ -60,12 +75,48 @@
                 <span class="input-group-addon">Rs</span><input type="number" class="form-control" pattern="[0-9]*" name="price" />
             </div>
         </div>
-
     </div>
 </div>
+@*@Html.Partial("~/Views/Shared/_DeliveryMethod.cshtml")*@
 <div class="form-group">
     <label class="control-label col-md-2">Description</label>
     <div class="col-md-10">
         <textarea class="form-control msgTextArea" data-bind=" jqAutoresize: {}" name="description">@Model.description</textarea>
+    </div>
+</div>
+<div class="row">
+    <div class="control-group">
+        <label class="control-label col-md-2" for="select-repo">Tags <br /><small class="text-navy">optional</small></label>
+        <div class="col-md-10">
+            <input id="select-tag" name="tags" class="repositories" placeholder="Pick tags..." />
+        </div>
+    </div>
+</div><hr />
+<h2>Location details</h2>
+<div class="form-group">
+    <label class="control-label col-md-2">City</label>
+    <div class="col-md-10">
+        <select id="select-city" class="demo-default" name="city" data-bind="options: availableCities,
+                       value: selectedCity,
+                       optionsCaption: 'Choose City...'"></select>
+
+    </div>
+</div>
+<div data-bind="with:selectedCity">
+    <div class="form-group">
+        <label class="control-label col-md-2">Famous Place</label>
+        <div class="col-md-10">
+            <select id="select-popularPlace" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
+                       value: $parent.selectedPopularPlace,
+                       optionsCaption: 'Choose Famous place...'"></select>
+        </div>
+    </div>
+</div> 
+<div data-bind="with:selectedPopularPlace">
+    <div class="form-group">
+        <label class="control-label col-md-2">Exect location</label>
+        <div class="col-md-10">
+            <input type="text" class="form-control" name="exectLocation" />
+        </div>
     </div>
 </div>

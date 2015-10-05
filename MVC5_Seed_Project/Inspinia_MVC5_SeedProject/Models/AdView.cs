@@ -18,7 +18,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string viewedBy { get; set; }
         public Nullable<int> adId { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual Ad Ad { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

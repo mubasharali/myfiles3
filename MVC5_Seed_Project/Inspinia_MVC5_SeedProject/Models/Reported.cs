@@ -17,8 +17,10 @@ namespace Inspinia_MVC5_SeedProject.Models
         public int Id { get; set; }
         public int adId { get; set; }
         public string reportedBy { get; set; }
+        public string details { get; set; }
+        public string type { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual Ad Ad { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

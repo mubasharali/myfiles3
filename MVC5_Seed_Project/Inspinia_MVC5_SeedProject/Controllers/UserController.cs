@@ -64,6 +64,27 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             //save extension in database.
             return Ok();
         }
+        public async Task<IHttpActionResult> SaveAd(int id)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                SaveAd save =  db.SaveAds.FirstOrDefault(x=>x.savedBy.Equals(userId) && x.adId.Equals(id));
+                if(save != null){
+                    db.SaveAds.Remove(save);
+                    await db.SaveChangesAsync();
+                    return Ok("Deleted");
+                }
+                SaveAd ad = new SaveAd();
+                ad.time = DateTime.UtcNow;
+                ad.adId = id;
+                ad.savedBy = User.Identity.GetUserId();
+                db.SaveAds.Add(ad);
+                await db.SaveChangesAsync();
+                return Ok("Saved");
+            }
+            return BadRequest("Not login");
+        }
         //public async Task<IHttpActionResult> SendMessageTo(string id)
         //{}
 
@@ -111,16 +132,16 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return Ok(user);
         }
-        public async Task<IHttpActionResult> IsUserOnline(string id)
-        {
-            var ret = "false";
-            if (Membership.GetUser(id).IsOnline)
-            {
-                ret = "true";
-                return Ok(ret);
-            }
-            return Ok(ret);
-        }
+        //public async Task<IHttpActionResult> IsUserOnline(string id)
+        //{
+        //    var ret = "false";
+        //    if (Membership.GetUser(id).IsOnline)
+        //    {
+        //        ret = "true";
+        //        return Ok(ret);
+        //    }
+        //    return Ok(ret);
+        //}
          public async Task<IHttpActionResult> UpdateProfile(AspNetUser user)
          {
              if (User.Identity.IsAuthenticated)

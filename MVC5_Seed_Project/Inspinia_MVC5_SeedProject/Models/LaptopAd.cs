@@ -16,9 +16,7 @@ namespace Inspinia_MVC5_SeedProject.Models
     {
         public int Id { get; set; }
         public int laptopId { get; set; }
-        public int adId { get; set; }
         public string color { get; set; }
-        public string condition { get; set; }
     
         public virtual Ad Ad { get; set; }
         public virtual LaptopModel LaptopModel { get; set; }

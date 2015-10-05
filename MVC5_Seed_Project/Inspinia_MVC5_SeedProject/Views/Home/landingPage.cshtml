@@ -8,95 +8,100 @@
 
 
         <div id="chatViewModel">
-            <div class="small-chat-box fadeInRight animated">
 
-                <div class="heading" draggable="true">
-                    <small class="chat-date pull-right">
-                        02.19.2015
-                    </small>
-                    Small chat
-                </div>
+            <ul data-bind="foreach:onlineUsers">
+                <li data-bind="text:$data"></li>
+            </ul>
 
-                <div class="content" data-bind="foreach:showChat">
+                <div class="small-chat-box fadeInRight animated">
 
-                    @*<div class="left">
-                <div class="author-name">
-                    Monica Jackson <small class="chat-date">
-                        10:02 am
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Lorem Ipsum is simply dummy text input.
-                </div>
+                    <div class="heading" draggable="true">
+                        <small class="chat-date pull-right">
+                            02.19.2015
+                        </small>
+                        Small chat
+                    </div>
 
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Mick Smith
-                    <small class="chat-date">
-                        11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    Lorem Ipsum is simpl.
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Alice Novak
-                    <small class="chat-date">
-                        08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Check this stock char.
-                </div>
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Anna Lamson
-                    <small class="chat-date">
-                        11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    The standard chunk of Lorem Ipsum
-                </div>
-            </div>*@
+                    <div class="content" data-bind="foreach:showChat">
 
+                        @*<div class="left">
+                        <div class="author-name">
+                            Monica Jackson <small class="chat-date">
+                                10:02 am
+                            </small>
+                        </div>
+                        <div class="chat-message active">
+                            Lorem Ipsum is simply dummy text input.
+                        </div>
+
+                    </div>
+                    <div class="right">
+                        <div class="author-name">
+                            Mick Smith
+                            <small class="chat-date">
+                                11:24 am
+                            </small>
+                        </div>
+                        <div class="chat-message">
+                            Lorem Ipsum is simpl.
+                        </div>
+                    </div>
                     <div class="left">
                         <div class="author-name">
-                            Mick Lane
+                            Alice Novak
                             <small class="chat-date">
                                 08:45 pm
                             </small>
                         </div>
-                        <div class="chat-message active" data-bind="text:message">
+                        <div class="chat-message active">
+                            Check this stock char.
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="author-name">
+                            Anna Lamson
+                            <small class="chat-date">
+                                11:24 am
+                            </small>
+                        </div>
+                        <div class="chat-message">
+                            The standard chunk of Lorem Ipsum
+                        </div>
+                    </div>*@
+
+                        <div class="left">
+                            <div class="author-name">
+                                Mick Lane
+                                <small class="chat-date">
+                                    08:45 pm
+                                </small>
+                            </div>
+                            <div class="chat-message active" data-bind="text:message">
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="form-chat">
+                        <div class="input-group input-group-sm">
+                            <input type="text" data-bind="value:newMessage" class="form-control"> <span class="input-group-btn">
+                                <button class="btn btn-primary" data-bind="click:sendMessage" type="button">
+                                    Send
+                                </button>
+                            </span>
                         </div>
                     </div>
 
-
                 </div>
-                <div class="form-chat">
-                    <div class="input-group input-group-sm">
-                        <input type="text" data-bind="value:newMessage" class="form-control"> <span class="input-group-btn">
-                            <button class="btn btn-primary" data-bind="click:sendMessage" type="button">
-                                Send
-                            </button>
-                        </span>
-                    </div>
+                <div id="small-chat">
+
+                    <span class="badge badge-warning pull-right">5</span>
+                    <a class="open-small-chat">
+                        <i class="fa fa-comments"></i>
+
+                    </a>
                 </div>
-
-            </div>
-            <div id="small-chat">
-
-                <span class="badge badge-warning pull-right">5</span>
-                <a class="open-small-chat">
-                    <i class="fa fa-comments"></i>
-
-                </a>
-            </div>
-        </div>
+</div>
         @section Styles{
             @Styles.Render("~/plugins/toastrStyles")
         }
@@ -133,21 +138,21 @@
                         }
                     });
                 }
+                
                 function ChatViewModel() {
                     var self = this;
                     self.hub = $.connection.chatHub;
+                    self.onlineUsersHub = $.connection.onlineUsers;
                     self.showChat = ko.observableArray();
                     self.newMessage = ko.observable();
-                    //self.init = function () {
-                    //    self.hub.server.getAlert().fail(function (err) { alert(err) });
-                    //}
-                    //self.hub.client.showAlert = function () {
-                    //    alert("hahhha");
-                    //};
+                    self.onlineUsers = ko.observableArray();
                     self.hub.client.loadNewMessage = function (data) {
                         self.newMessage('');
                         self.showChat.push(new Message(data));
-
+                    }
+                    self.onlineUsersHub.client.showConnected = function (connectionId) {
+                        var mape = $.map(connectionId, function (item) { return item });
+                        self.onlineUsers(mape);
                     }
                     self.getReceiverId = function (email) {
                         $.ajax({
@@ -192,7 +197,9 @@
                     ko.applyBindings(model, document.getElementById("chatViewModel"));
 
                     //var conn = $.connection.chatHub;
-                    $.connection.hub.start().done();
+                    $.connection.hub.start().done(function () {
+                        //model.init();
+                    });
                         //.done(function () {
                         //model.init();
                     //})

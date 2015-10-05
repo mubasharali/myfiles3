@@ -1,6 +1,4 @@
-﻿@model IEnumerable<Inspinia_MVC5_SeedProject.Models.Ad>
-
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -19,23 +17,30 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-6">
-            <h2>Recent added tags:</h2>
+            <h2>Tags:</h2>
+            <select class="demo-default" data-bind="options: availableOptions,
+                       value: selectedOption,
+                       optionsCaption: 'Choose ...'"></select>
+            <input type="number" data-bind="value:daysAgo" />
+            <button class="btn btn-xs" data-bind="click:submitDate">Submit</button>
+            @*<p>Showing Tags <span data-bind="visible:showUpdatedTag()"> updated </span> <span data-bind="visible:!showUpdatedTag()"> added </span> <span data-bind="text:daysAgo"></span> days ago</p>*@
             <div data-bind="foreach:showTags">
                 <div data-bind="visible:!isTagEditing()">
                     <h3 data-bind="text:name"></h3>
                     <p data-bind="text:info"></p>
                     <button class="btn btn-sm" data-bind="click:editTag">edit</button>
-                    <button class="btn btn-sm" data-bind="click:deleteTag">Delete</button>
+                    <button class="btn btn-sm" data-bind="click:$parent.deleteTag">Delete</button>
                 </div>
                 <div data-bind="visible:isTagEditing()">
                     <input type="text" class="form-control" data-bind="value:name" />
-                    <textarea class="msgTextArea form-control" data-bind="value:info"></textarea>
-                    <button data-bind="click: updateTag">Update</button>
+                    <textarea class="msgTextArea form-control" data-bind="value:info, jqAutoresize: {}"></textarea>
+                    <button data-bind="click:updateTag">Update</button>
                 </div>
             </div>
         </div>
+
     </div>
- </div>
+</div>
 @section Styles {
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/plugins/sweetAlertStyles")
@@ -52,42 +57,58 @@
         function Tag(data) {
             var self = this;
             data = data || {};
-            self.name = ko.observable( data.name);
+            self.name = ko.observable(data.name);
             self.id = data.id;
-            self.info = ko.observable( data.info);
+            self.info = ko.observable(data.info);
             self.time = data.time;
-            self.postedById = data.postedById;
-            self.postedByName = data.postedByName;
+            self.createdBy = data.createdBy;
+            self.createdByName = data.createdByName;
+            self.updatedTime = data.updatedTime;
+            self.updatedBy = data.updatedBy;
             self.isTagEditing = ko.observable(false);
             self.editTag = function () {
                 self.isTagEditing(true);
             }
             self.updateTag = function (tag) {
-               
-                tag.createdBy = self.postedById;
-                tag.abc = self.def;
-                //does not execute below ajax funciton while starts a loop
                 $.ajax({
-                    url: '/api/Forum/UpdateTag',
+                    url: '/api/Tag/UpdateTag',
                     dataType: "json",
                     type: 'POST',
-                    data:{tag:tag},
-                    //data:ko.toJSON(tagg),
+                    data:ko.toJSON(tag),
                     success: function (data) {
                         self.isTagEditing(false);
                     },
                     error: function () {
-                        toastr.error("Unable to load tags. Please try again", "Error");
+                        toastr.error("Unable to update tag. Please try again", "Error");
                     },
+                    
                 });
+                return true;
             }
+
         }
         function loadRecentAddedTags() {
             var self = this;
-            self.daysAgo = ko.observable(1);
+            self.submitDate = function () {
+                self.loadTags();
+            }
+            self.selectedOption = ko.observable("reported");
+            self.availableOptions = ["added", "updated", "reported"];
+            self.daysAgo = ko.observable(10);
             self.showTags = ko.observableArray();
+            self.showUpdatedTagBtn = function () {
+                self.showUpdatedTag(!self.showUpdatedTag());
+            }
+
             self.loadTags = function () {
-                url_address = '/api/Forum/RecentAddedTags?daysAgo='+ self.daysAgo();
+                if (self.selectedOption() == "updated") {
+                    url_address = '/api/Tag/RecentUpdatedTags?daysAgo=' + self.daysAgo();
+                } else if (self.selectedOption() == "added") {
+                    url_address = '/api/Tag/RecentAddedTags?daysAgo=' + self.daysAgo();
+                }
+                else if (self.selectedOption() == "reported") {
+                    url_address = '/api/Tag/ReportedTags?daysAgo=' + self.daysAgo();
+                }
                 $.ajax({
                     url: url_address,
                     dataType: "json",
@@ -112,7 +133,7 @@
                     closeOnConfirm: false
                 }, function () {
                     $.ajax({
-                        url: '/api/Forum/DeleteTag?id=' + tag.id,
+                        url: '/api/Tag/DeleteTag?id=' + tag.id,
                         dataType: "json",
                         type: 'POST',
                         success: function (data) {
@@ -156,6 +177,7 @@
                 onclick: null
             };
             ko.applyBindings(new ViewModel());
+            //ko.applyBindings(new updateTagModel, document.getElementById("updateTags"));
             //jquery validate
         });
     </script>

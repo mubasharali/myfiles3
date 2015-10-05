@@ -77,25 +77,6 @@ function treeModel() {
                         toastr.error("failed to laod category tree. Please refresh page", "Error");
                     }
                 });
-                //$("#navigation").jstree({
-                //    "themes": {
-                //        "theme": "classic"
-                //    },
-                //    "core": {
-                //        "themes": {
-                //            "icons": false
-                //        }
-                //    },
-                //    "plugins": ["search"]
-                //});
-                //var to = false;
-                //$('#treeSearch').keyup(function () {
-                //    if (to) { clearTimeout(to); }
-                //    to = setTimeout(function () {
-                //        var v = $('#treeSearch').val();
-                //        $('#navigation').jstree(true).search(v);
-                //    }, 250);
-                //});
             },
             error: function (jqXHR, status, thrownError) {
                 toastr.error("failed to laod category tree. Please refresh page", "Error");

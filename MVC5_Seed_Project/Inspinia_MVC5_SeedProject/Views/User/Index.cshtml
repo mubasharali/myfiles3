@@ -11,6 +11,7 @@
             <li class="active">
                 <strong>AspNetUser</strong>
             </li>
+            
         </ol>
     </div>
 </div>
@@ -26,9 +27,9 @@
     </form>
 </div>*@
 
-<div class="wrapper wrapper-content animated fadeInRight" id="profile" data-bind="with:showProfile">
-
-    <div class="row m-b-lg m-t-lg">
+<div class="wrapper wrapper-content animated fadeInRight" id="profile" >
+    abcdef <div data-bind="text:showOnline"></div>
+    <div class="row m-b-lg m-t-lg" data-bind="with:showProfile">
         <div class="col-md-5">
 
             <div class="profile-image">
@@ -37,6 +38,7 @@
             <div class="profile-info">
                 <div class="">
                     <div>
+                        <div data-bind="text:showOnline"></div>
                         <h2 class="no-margins" data-bind="text:email"></h2>
                         <h4 data-bind="text:shortAbout"></h4>
                         <small>
@@ -56,14 +58,14 @@
                     </tr>
                     <tr>
                         <td>
-                            Email: <strong data-bind="text:UserName"></strong> 
+                            Email: <strong data-bind="text:UserName"></strong>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                           phone number: <strong data-bind="text:phoneNumber"></strong> 
+                            phone number: <strong data-bind="text:phoneNumber"></strong>
                         </td>
-                        
+
                     </tr>
                     <tr>
                         <td>
@@ -74,7 +76,7 @@
             </table>
         </div>
         <div class="col-md-offset-1 col-md-3">
-            <table class="table small m-b-xs" >
+            <table class="table small m-b-xs">
                 <tbody>
                     <tr>
                         <td>
@@ -105,10 +107,10 @@
             </table>
         </div>
         @*<div class="col-md-3">
-            <small>Sales in last 24h</small>
-            <h2 class="no-margins">206 480</h2>
-            <div id="sparkline1"></div>
-        </div>*@
+                <small>Sales in last 24h</small>
+                <h2 class="no-margins">206 480</h2>
+                <div id="sparkline1"></div>
+            </div>*@
 
 
     </div>
@@ -554,6 +556,9 @@
 <script src="~/Scripts/jquery.timeago.js"></script>
 <script src="~/Scripts/knockout-3.3.0.js"></script>
 
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+
     <script>
         function profile(data) {
             var self = this;
@@ -583,24 +588,10 @@
             self.loginUserId = data.loginUserId || "";
             self.age = getAge(self.dateOfBirth);
             self.isUserOnline = function(id){
-                $.ajax({
-                    url: '/api/User/IsUserOnline/' + id,
-                    dataType: "json",
-                    contentType: "application/json",
-                    cache: false,
-                    type: 'POST',
-                    success: function (data) {
-                        if(data == "true")
-                            return true;
-                        return false;
-                    },
-                    error: function () {
-                        toastr.error("failed to check user status", "Error");
-                    }
-                })
+                
             }
-            //self.isOnline = self.isUserOnline(self.UserName);
-            console.log(self.isUserOnline(self.id));
+            self.isOnline = self.isUserOnline(self.UserName);
+            //console.log(self.isUserOnline(self.id));
             function getAge(dateString) {
                 var today = new Date();
                 var birthDate = new Date(dateString);
@@ -625,10 +616,30 @@
         function viewModel() {
             var self = this;
             self.showProfile = ko.observable();
+            self.showOnline = ko.observable("Offline");
             self.openProfile = function () {
                 var userId = $("#userId").val();
                 window.location.href = "/User/Profile/" + userId;
             }
+
+            //online users
+            var userId = $("#userId").val();
+            self.onlineUsersHub = $.connection.onlineUsers;
+            self.onlineUsers = ko.observableArray();
+            self.onlineUsersHub.client.showConnected = function (connectionId) {
+                var mape = $.map(connectionId, function (item) { return item });
+                self.onlineUsers(mape);
+            }
+            
+           //execute script when page is completely loaded.
+            self.onlineUserChecker = function () {
+                for (var i = 0; i < self.onlineUsers.length ; i++) {
+                    if (self.onlineUsers[i] == userId) {
+                        self.showOnline("Online");
+                    }
+                }
+            }
+
             self.loadProfile = function () {
                 var userId = $("#userId").val();
                 $.ajax({
@@ -647,6 +658,7 @@
                 })
             }
             self.loadProfile();
+            self.onlineUserChecker();
             return self;
         }
         function getTimeAgo(varDate) {
@@ -723,6 +735,7 @@
             });
 
             ko.applyBindings(new viewModel(), document.getElementById("profile"));
+            $.connection.hub.start().done();
         });
     </script>
 }

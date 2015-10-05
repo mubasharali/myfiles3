@@ -20,7 +20,14 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         {
             return View();
         }
-
+        public async Task<ActionResult> Models()
+        {
+            return View();
+        }
+        public async Task<ActionResult> Location()
+        {
+            return View();
+        }
         // GET: /Admin/Details/5
         public async Task<ActionResult> Details(int? id)
         {

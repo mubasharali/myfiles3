@@ -13,7 +13,7 @@ namespace Inspinia_MVC5_SeedProject
         {
             //told by Sam Farajpour Ghamari from stackoverflow
             //app.CreatePerOwinContext(() => new ApplicationDbContext());
-            //app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
+            //app.CreatePerOwinContext<Appli>(AppUserManager.Create);
             //app.CreatePerOwinContext<RoleManager<AppRole>>((options, context) =>
             //    new RoleManager<AppRole>(
             //        new RoleStore<AppRole>(context.Get<MyDbContext>())));

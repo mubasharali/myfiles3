@@ -25,8 +25,8 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string description { get; set; }
         public string postedBy { get; set; }
     
+        public virtual AspNetUser AspNetUser { get; set; }
         public virtual Comment Comment { get; set; }
         public virtual ICollection<CommentReplyVote> CommentReplyVotes { get; set; }
-        public virtual AspNetUser AspNetUser { get; set; }
     }
 }
