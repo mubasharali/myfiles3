@@ -55,6 +55,15 @@
             <li class="@Html.IsSelected(action: "Index")">
                 <a href="@Url.Action("Index", "Home")"><i class="fa fa-cogs"></i> <span class="nav-label">Services</span> </a>
             </li>
+            <li class="@Html.IsSelected(controller: "Vehicles")">
+                <a href="@Url.Action("Index", "Vehicles")"><i class="fa fa-book"></i> <span class="nav-label">Study</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Cars")"><a href="@Url.Action("Mobiles","Electronics")"><i class="fa fa-laptop"></i> Courses and classes</a></li>
+                    <li class="@Html.IsSelected(action: "Bikes")"><a href="@Url.Action("Laptops", "Electronics")"><i class="fa fa-laptop"></i> Books & Magazines</a></li>
+                    @*<li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")">Lost Found</a></li> course type classroom evening distance online see course subjects from totaljobs http://learningzone.totaljobs.com/*@
+                    <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")">Others</a></li>
+                </ul>
+            </li>
             <li class="@Html.IsSelected(action: "Index")">
                 <a href="@Url.Action("Index", "Home")"><i class="fa fa-book"></i> <span class="nav-label">Study</span> </a>
             </li>

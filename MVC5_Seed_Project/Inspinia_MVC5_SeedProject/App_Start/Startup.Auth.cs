@@ -2,8 +2,18 @@
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
-
+using Inspinia_MVC5_SeedProject.Controllers;//remove this after
 using Inspinia_MVC5_SeedProject.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+
+//remove this
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.Cookies;
+using Owin;
+
 namespace Inspinia_MVC5_SeedProject
 {
     public partial class Startup
@@ -13,7 +23,7 @@ namespace Inspinia_MVC5_SeedProject
         {
             //told by Sam Farajpour Ghamari from stackoverflow
             //app.CreatePerOwinContext(() => new ApplicationDbContext());
-            //app.CreatePerOwinContext<Appli>(AppUserManager.Create);
+            //app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
             //app.CreatePerOwinContext<RoleManager<AppRole>>((options, context) =>
             //    new RoleManager<AppRole>(
             //        new RoleStore<AppRole>(context.Get<MyDbContext>())));
@@ -43,4 +53,21 @@ namespace Inspinia_MVC5_SeedProject
             //app.UseGoogleAuthentication();
         }
     }
+    //public class IdentityConfig
+    //{
+    //    public void Configuration(IAppBuilder app)
+    //    {
+    //        app.CreatePerOwinContext(() => new MyDbContext());
+    //        app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
+    //        app.CreatePerOwinContext<RoleManager<AppRole>>((options, context) =>
+    //            new RoleManager<AppRole>(
+    //                new RoleStore<AppRole>(context.Get<MyDbContext>())));
+
+    //        app.UseCookieAuthentication(new CookieAuthenticationOptions
+    //        {
+    //            AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+    //            LoginPath = new PathString("/Home/Login"),
+    //        });
+    //    }
+    //}
 }

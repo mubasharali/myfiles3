@@ -18,8 +18,49 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Inspinia_MVC5_SeedProject.Models;
 
+
+//below are from stackoverflow
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.Cookies;
+using Owin;
+
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
+    //public class MyDbContext : IdentityDbContext<ApplicationUser>
+    //{
+    //    // Other part of codes still same 
+    //    // You don't need to add AppUser and AppRole 
+    //    // since automatically added by inheriting form IdentityDbContext<AppUser>
+    //}
+    //public class AppUserManager : UserManager<ApplicationUser>
+    //{
+    //    public AppUserManager(IUserStore<ApplicationUser> store)
+    //        : base(store)
+    //    {
+    //    }
+
+    //    // this method is called by Owin therefore best place to configure your User Manager
+    //    public static AppUserManager Create(
+    //        IdentityFactoryOptions<AppUserManager> options, IOwinContext context)
+    //    {
+    //        var manager = new AppUserManager(
+    //            new UserStore<ApplicationUser>(context.Get<MyDbContext>()));
+
+    //        // optionally configure your manager
+    //        // ...
+
+    //        return manager;
+    //    }
+    //}
+    //public class AppRole : IdentityRole
+    //{
+    //    public AppRole() : base() { }
+    //    public AppRole(string name) : base(name) { }
+    //    // extra properties here 
+    //}
     public class UserController : ApiController
     {
         private Entities db = new Entities();
@@ -31,12 +72,16 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         }
         [HttpPost]
         public async Task<IHttpActionResult> CheckEmail(string email){
-            var ret =await db.AspNetUsers.FirstOrDefaultAsync(x => x.UserName.Equals(email));
-            if (ret == null)
+            if (!User.Identity.IsAuthenticated)
             {
-                return Ok("NewUser");
+                var ret = await db.AspNetUsers.FirstOrDefaultAsync(x => x.UserName.Equals(email));
+                if (ret == null)
+                {
+                    return Ok("NewUser");
+                }
+                return Ok(ret.Email);
             }
-            return Ok(ret.Email);
+            return BadRequest("Already Login");
         }
         [HttpPost]
         public async Task<IHttpActionResult> CheckLoginUserPassword(string email,string password)
@@ -49,10 +94,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             var user = await UserManager.FindAsync(email,password);
             if (user != null)
             {
-                
-    //            await HttpContext.GetOwinContext()
+                //await HttpContext
+               // await HttpContext.GetOwinContext()
     //.Get<ApplicationSignInManager>().SignInAsync(user, true, false); 
-              //  await  SignInAsync(user, true,true); 
+           //    await  SignInAsync(user, true,true); 
                 return Ok("Incorrect");
             }
             return Ok("Ok");

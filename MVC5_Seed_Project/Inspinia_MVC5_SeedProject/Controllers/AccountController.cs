@@ -12,9 +12,18 @@ using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
+    public class MyUserManager : UserManager<ApplicationUser>
+    {
+        public MyUserManager() :
+            base(new UserStore<ApplicationUser>(new ApplicationDbContext()))
+        {
+            PasswordValidator = new MinimumLengthValidator(0);
+        }
+    }
     [Authorize]
     public class AccountController : Controller
     {
+        private Entities db = new Entities();
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
@@ -37,7 +46,21 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<JsonResult> UserLogin(string email, string password)
+        {
+            var user = await UserManager.FindAsync(email, password);
+            if (user != null)
+            {
+                await SignInAsync(user, true);
+                return Json("Done",JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("Error", JsonRequestBehavior.AllowGet);
+            }
+        }
         //
         // POST: /Account/Login
         [HttpPost]
@@ -70,8 +93,21 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return View();
         }
-
-        //
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<JsonResult> RegisterUser(string email, string password = "")
+        {
+            var user = new ApplicationUser() { UserName = email };
+            var result = await UserManager.CreateAsync(user, password);
+            if (result.Succeeded)
+            {
+                await SignInAsync(user, isPersistent: true);
+                return Json("Done", JsonRequestBehavior.AllowGet);
+            }
+            return Json("Error", JsonRequestBehavior.AllowGet);
+            
+        }
+        
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
@@ -96,7 +132,37 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public async Task<JsonResult> RegisterOnEmail(string email)
+        //{
+        //    var user = new ApplicationUser() { UserName = email };
+        //    var result = await UserManager.CreateAsync(user, password);
+        //    if (result.Succeeded)
+        //    {
+        //        await SignInAsync(user, isPersistent: true);
+        //        return Json("Done", JsonRequestBehavior.AllowGet);
+        //    }
 
+        //    return Json("Error", JsonRequestBehavior.AllowGet);
+        //}
+        [HttpPost]
+        public async Task<JsonResult> SubmitName(string name)
+        {
+            if (Request.IsAuthenticated)
+            {
+                string userId = User.Identity.GetUserId();
+                var data =await db.AspNetUsers.FindAsync(userId);
+                if (data != null)
+                {
+                    name = name.Trim();
+                    data.Email = name;
+                    await db.SaveChangesAsync();
+                    return Json("Done", JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json("Error", JsonRequestBehavior.AllowGet);
+        }
         //
         // POST: /Account/Disassociate
         [HttpPost]
