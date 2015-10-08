@@ -9,9 +9,10 @@
 
         <div id="chatViewModel">
 
-            <ul data-bind="foreach:onlineUsers">
-                <li data-bind="text:$data"></li>
-            </ul>
+            @*<ul data-bind="foreach:onlineUsers">
+                <li data-bind="text:id"></li>
+                <li data-bind="click:$parent.sendTo,text:name"></li>
+            </ul>*@
 
                 <div class="small-chat-box fadeInRight animated">
 
@@ -71,9 +72,8 @@
 
                         <div class="left">
                             <div class="author-name">
-                                Mick Lane
-                                <small class="chat-date">
-                                    08:45 pm
+                                <div data-bind="text:sentToName"></div>                                <small data-bind="text:timeAgo" class="chat-date">
+
                                 </small>
                             </div>
                             <div class="chat-message active" data-bind="text:message">
@@ -84,7 +84,7 @@
                     </div>
                     <div class="form-chat">
                         <div class="input-group input-group-sm">
-                            <input type="text" data-bind="value:newMessage" class="form-control"> <span class="input-group-btn">
+                            <input type="text" data-bind="value:newMessage,valueUpdate:'afterkeydown',event:{keyup:checkMsgEnter}" class="form-control"> <span class="input-group-btn">
                                 <button class="btn btn-primary" data-bind="click:sendMessage" type="button">
                                     Send
                                 </button>
@@ -113,89 +113,21 @@
 
 <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
 <script src="~/signalr/hubs"></script>
+<script src="~/Scripts/app/chat.js"></script>
             <script>
-                
-                function Message(data) {
-                    var self = this;
-                    data = data || {};
-                    self.id = data.Id;
-                    self.sentFrom = data.from;
-                    self.sentTo = data.to;
-                    self.message = data.message;
-                }
-                function sendMessageTo(id) {
-                    $.ajax({
-                        url: '/api/Chat/SendMessageTo?id=' +id,
-                        dataType: "json",
-                        contentType: "application/json",
-                        cache: false,
-                        type: 'POST',
-                        success: function (data) {
-                            alert("ok");
-                        },
-                        error: function () {
-                            toastr.error("failed to accept message sending to this user", "Error!");
-                        }
-                    });
-                }
-                
-                function ChatViewModel() {
-                    var self = this;
-                    self.hub = $.connection.chatHub;
-                    self.onlineUsersHub = $.connection.onlineUsers;
-                    self.showChat = ko.observableArray();
-                    self.newMessage = ko.observable();
-                    self.onlineUsers = ko.observableArray();
-                    self.hub.client.loadNewMessage = function (data) {
-                        self.newMessage('');
-                        self.showChat.push(new Message(data));
+                function getTimeAgo(varDate) {
+                    if (varDate) {
+                        return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
                     }
-                    self.onlineUsersHub.client.showConnected = function (connectionId) {
-                        var mape = $.map(connectionId, function (item) { return item });
-                        self.onlineUsers(mape);
-                    }
-                    self.getReceiverId = function (email) {
-                        $.ajax({
-                            url: '/api/Chat/GetIdByEmail?email='+email,
-                            dataType: "json",
-                            contentType: "application/json",
-                            cache: false,
-                            type: 'POST',
-                            success: function (data) {
-                                return data;
-                            },
-                            error: function () {
-                                toastr.error("failed to send message", "Error!");
-                                return null;
-                            }
-                        });
-                    }
-                    self.sendMessage = function () {
-                        var msg = new Message();
-                        msg.sentTo = "47edf8a5-2c9e-42b4-8be7-6351659ae82e";
-                        msg.message = self.newMessage();
-                        self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
-                        //$.ajax({
-                        //    url: '/api/Chat/PostChat',
-                        //    dataType: "json",
-                        //    contentType: "application/json",
-                        //    cache: false,
-                        //    type: 'POST',
-                        //    data: ko.toJSON(msg),
-                        //    success: function (data) {
-                        //        self.newMessage("");
-                        //    },
-                        //    error: function () {
-                        //        toastr.error("failed to send message", "Error!");
-                        //    }
-                        //});
+                    else {
+                        return '';
                     }
                 }
                 $(function () {
                     var model = new ChatViewModel();
                    // ko.applyBindings(new AccountViewModel(), document.getElementById("AccountViewModel"));
-                    ko.applyBindings(model, document.getElementById("chatViewModel"));
-
+                   // ko.applyBindings(model, document.getElementById("chatViewModel"));
+                    ko.applyBindings(model);
                     //var conn = $.connection.chatHub;
                     $.connection.hub.start().done(function () {
                         //model.init();

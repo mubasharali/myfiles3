@@ -35,9 +35,9 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="adId" Type="int" Nullable="false" />
-          <Property Name="imageExtension" Type="nchar" MaxLength="7" Nullable="false" />
+          <Property Name="imageExtension" Type="char" MaxLength="7" Nullable="false" />
         </EntityType>
         <EntityType Name="AdsLike">
           <Key>
@@ -172,6 +172,7 @@
           <Property Name="city" Type="nvarchar" MaxLength="40" />
           <Property Name="hideDateOfBirth" Type="bit" />
           <Property Name="hideFriends" Type="bit" />
+          <Property Name="IsPasswordSaved" Type="bit" />
         </EntityType>
         <EntityType Name="Bid">
           <Key>
@@ -1323,20 +1324,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_QuestionView_ToTable_1">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="QuestionView" Type="Self.QuestionView" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="QuestionView">
-              <PropertyRef Name="viewedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_QuestionVote_ToTable">
           <End Role="Question" Type="Self.Question" Multiplicity="1" />
           <End Role="QuestionVote" Type="Self.QuestionVote" Multiplicity="*" />
@@ -1801,10 +1788,6 @@
             <End Role="Question" EntitySet="Question" />
             <End Role="QuestionView" EntitySet="QuestionView" />
           </AssociationSet>
-          <AssociationSet Name="FK_QuestionView_ToTable_1" Association="Self.FK_QuestionView_ToTable_1">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="QuestionView" EntitySet="QuestionView" />
-          </AssociationSet>
           <AssociationSet Name="FK_QuestionVote_ToTable" Association="Self.FK_QuestionVote_ToTable">
             <End Role="Question" EntitySet="Question" />
             <End Role="QuestionVote" EntitySet="QuestionVote" />
@@ -2263,7 +2246,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="adId" Type="Int32" Nullable="false" />
-          <Property Name="imageExtension" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="true" />
+          <Property Name="imageExtension" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="Ad" Relationship="Model.FK_AdImage_ToTable" FromRole="AdImage" ToRole="Ad" />
         </EntityType>
         <EntityType Name="AdsLike">
@@ -2452,6 +2435,7 @@
           <NavigationProperty Name="Cities" Relationship="Model.FK_City_ToTable" FromRole="AspNetUser" ToRole="City" />
           <NavigationProperty Name="Cities1" Relationship="Model.FK_City_ToTable_1" FromRole="AspNetUser" ToRole="City" />
           <NavigationProperty Name="SaveAds" Relationship="Model.FK_SaveAd_ToTable_1" FromRole="AspNetUser" ToRole="SaveAd" />
+          <Property Name="IsPasswordSaved" Type="Boolean" />
         </EntityType>
         <EntityType Name="Bid">
           <Key>
@@ -3993,6 +3977,7 @@
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="Model.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="IsPasswordSaved" ColumnName="IsPasswordSaved" />
                 <ScalarProperty Name="hideFriends" ColumnName="hideFriends" />
                 <ScalarProperty Name="hideDateOfBirth" ColumnName="hideDateOfBirth" />
                 <ScalarProperty Name="city" ColumnName="city" />

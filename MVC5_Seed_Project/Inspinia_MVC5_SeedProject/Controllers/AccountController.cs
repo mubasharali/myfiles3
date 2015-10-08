@@ -12,14 +12,21 @@ using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
-    public class MyUserManager : UserManager<ApplicationUser>
-    {
-        public MyUserManager() :
-            base(new UserStore<ApplicationUser>(new ApplicationDbContext()))
-        {
-            PasswordValidator = new MinimumLengthValidator(0);
-        }
-    }
+  //   public class ApplicationUserManager : UserManager<ApplicationUser>
+  //{
+  //        public ApplicationUserManager(): base(new UserStore<ApplicationUser>(new ApplicationDbContext()))
+  //        {
+  //              PasswordValidator = new MinimumLengthValidator (0);
+  //        }
+  //}
+    //public class MyUserManager : UserManager<ApplicationUser>
+    //{
+    //    public MyUserManager() :
+    //        base(new UserStore<ApplicationUser>(new ApplicationDbContext()))
+    //    {
+    //        PasswordValidator = new MinimumLengthValidator(0);
+    //    }
+    //}
     [Authorize]
     public class AccountController : Controller
     {
@@ -33,9 +40,6 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             UserManager = userManager;
         }
-
-        
-
         public UserManager<ApplicationUser> UserManager { get; private set; }
 
         //
@@ -46,11 +50,29 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+        
         [HttpPost]
         [AllowAnonymous]
         public async Task<JsonResult> UserLogin(string email, string password)
         {
+            var data = db.AspNetUsers.First(x => x.UserName.Equals(email));
+            bool isSaved =(bool) data.IsPasswordSaved;
+            if (!isSaved)
+            {
+                UserManager.PasswordValidator = new PasswordValidator
+                {
+                    RequiredLength = -1
+                };
+                IdentityResult result = await UserManager.ChangePasswordAsync(data.Id, "aa", password);
+                if (!result.Succeeded)
+                {
+                    return Json("Error", JsonRequestBehavior.AllowGet);
+                }
+                data.IsPasswordSaved = true;
+               await db.SaveChangesAsync();
+            }
             var user = await UserManager.FindAsync(email, password);
+            
             if (user != null)
             {
                 await SignInAsync(user, true);
@@ -95,17 +117,34 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         }
         [HttpPost]
         [AllowAnonymous]
-        public async Task<JsonResult> RegisterUser(string email, string password = "")
+        public async Task<JsonResult> RegisterUser(string email, string password = "aa")
         {
+            var ab = email.Split('@');
+
             var user = new ApplicationUser() { UserName = email };
+            user.Email = ab[0];
+            UserManager.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = -1
+            };
             var result = await UserManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
                 await SignInAsync(user, isPersistent: true);
+                var id = user.Id;
+                var data =await db.AspNetUsers.FindAsync(id);
+                if (password == "aa")
+                {
+                    data.IsPasswordSaved = false;
+                }
+                else
+                {
+                    data.IsPasswordSaved = true;
+                }
+                await db.SaveChangesAsync();
                 return Json("Done", JsonRequestBehavior.AllowGet);
             }
             return Json("Error", JsonRequestBehavior.AllowGet);
-            
         }
         
         // POST: /Account/Register

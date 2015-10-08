@@ -81,6 +81,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string city { get; set; }
         public Nullable<bool> hideDateOfBirth { get; set; }
         public Nullable<bool> hideFriends { get; set; }
+        public Nullable<bool> IsPasswordSaved { get; set; }
     
         public virtual ICollection<Ad> Ads { get; set; }
         public virtual ICollection<AdView> AdViews { get; set; }

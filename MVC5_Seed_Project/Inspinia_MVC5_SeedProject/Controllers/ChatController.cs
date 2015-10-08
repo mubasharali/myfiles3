@@ -36,7 +36,16 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
             return Ok(chat);
         }
+        public async Task<IHttpActionResult> SearchUser(int id)
+        {
+            Chat chat = await db.Chats.FindAsync(id);
+            if (chat == null)
+            {
+                return NotFound();
+            }
 
+            return Ok(chat);
+        }
         // PUT api/Chat/5
         public async Task<IHttpActionResult> PutChat(int id, Chat chat)
         {
@@ -82,6 +91,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 chat.sentFrom = User.Identity.GetUserId();
+                if (chat.sentFrom == chat.sentTo)
+                {
+                    return BadRequest("You cannot send message to Yourself!");
+                }
             }
             else
             {

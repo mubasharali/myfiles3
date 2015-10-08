@@ -75,11 +75,23 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             if (!User.Identity.IsAuthenticated)
             {
                 var ret = await db.AspNetUsers.FirstOrDefaultAsync(x => x.UserName.Equals(email));
+                //var dat = from u in db.AspNetUsers
+                //          where u.Email.Equals(email)
+                //          select new
+                //          {
+                //              isPasswordSaved = u.IsPasswordSaved,
+                //          };
                 if (ret == null)
                 {
                     return Ok("NewUser");
                 }
-                return Ok(ret.Email);
+                var data = new
+                {
+                    name = ret.Email,
+                    isPasswordSaved = ret.IsPasswordSaved,
+                };
+                
+                return Ok(data);
             }
             return BadRequest("Already Login");
         }

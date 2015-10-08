@@ -73,7 +73,7 @@
                     <h4 class="modal-title">Welcome Back <span data-bind="text:UserName"></span> !</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group"><label>Enter Password</label> <input type="password" data-bind="value:password,valueUpdate:'afterkeydown',event:{keyup:checkEnterPassword}" placeholder="Enter your Password" class="form-control"></div>
+                    <div class="form-group"><label><span data-bind="visible:!isPasswordSaved()">Create </span> <span data-bind="visible:isPasswordSaved()">Enter </span>  password</label> <input type="password" data-bind="value:password,valueUpdate:'afterkeydown',event:{keyup:checkEnterPassword}" placeholder="Enter your Password" class="form-control"></div>
                     <p data-bind="text:error"></p>
                 </div>
                 <div class="modal-footer">
@@ -101,10 +101,8 @@
         self.password = ko.observable();
         self.UserName = ko.observable();
         self.confirmPassword = ko.observable();
-       // self.isEmailTaken = ko.observable(false);
-       // self.isNewUser = ko.observable(false);
-       // self.isOldUser = ko.observable(false);
-        self.error = ko.observable();
+        self.error = ko.observable("");
+        self.isPasswordSaved = ko.observable(true);
         self.checkEnterEmail = function (d, e) {
             if (e.keyCode == 13) {
                 self.submitEmail();
@@ -141,10 +139,6 @@
                 type: 'POST',
                 success: function (data) {
                     if (data == "Done") {
-                        //self.isEmailTaken(false);
-                        //self.isNewUser(false);
-                        //self.isOldUser(false);
-                        
                         location.reload();
                     } else {
                         self.error("Some Error has occured.Please try again");
@@ -168,8 +162,9 @@
                         if (data == "NewUser") {
                             $("#newUser").modal('show');
                         } else {
+                            self.isPasswordSaved(data.isPasswordSaved);
                             $("#oldUser").modal('show');
-                            self.UserName(data);
+                            self.UserName(data.name);
                         }
                         self.error("");
                     },
@@ -182,6 +177,7 @@
             }
         }
         self.checkLoginUserPassword = function () {
+            self.error("");
             $.ajax({
                 url: '/Account/UserLogin?email='+self.email() + '&password=' + self.password(),
                 dataType: "json",
@@ -190,9 +186,6 @@
                 type: 'POST',
                 success: function (data) {
                     if (data == "Done") {
-                        //self.isEmailTaken(false);
-                        //self.isNewUser(false);
-                        //self.isOldUser(false);
                         self.error("");
                         
                         location.reload();
@@ -206,6 +199,7 @@
             });
         }
         self.registerNewUser = function () {
+            self.error("");
             if (self.password() === self.confirmPassword()) {
                 $.ajax({
                     url: '/Account/RegisterUser?email=' + self.email() + '&password=' + self.password(),
@@ -215,9 +209,6 @@
                     type: 'POST',
                     success: function (data) {
                         if (data == "Done") {
-                            //self.isEmailTaken(false);
-                            //self.isNewUser(false);
-                            //self.isOldUser(false);
                             self.error("");
                             $("#newUser").modal('hide');
                             $("#inputName").modal('show');
@@ -263,7 +254,6 @@
     }
     $(function () {
         ko.applyBindings(new AccountViewModel());
-
     })
 </script>
 }

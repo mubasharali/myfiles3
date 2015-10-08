@@ -17,9 +17,9 @@
         <div id="navigation">
             <ul data-bind="foreach:showCompanies">
                 <li>
-                    <a data-bind="click:companyClicked, text:companyName"></a>
+                    <a data-bind="text:companyName"></a>
                     <ul data-bind="foreach:showModels">
-                        <li data-bind="click:modelClicked,text:modelName"></li>
+                        <li data-bind="text:modelName"></li>
                     </ul>
                 </li>
             </ul>

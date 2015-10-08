@@ -146,6 +146,7 @@
     <EntitySetMapping Name="AspNetUsers">
       <EntityTypeMapping TypeName="Model.AspNetUser">
         <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="IsPasswordSaved" ColumnName="IsPasswordSaved" />
           <ScalarProperty Name="hideFriends" ColumnName="hideFriends" />
           <ScalarProperty Name="hideDateOfBirth" ColumnName="hideDateOfBirth" />
           <ScalarProperty Name="city" ColumnName="city" />

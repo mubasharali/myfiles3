@@ -47,7 +47,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           description = q.description,
                           id = q.Id,
                           postedById = q.AspNetUser.Id,
-                          postedByName = q.AspNetUser.UserName,
+                          postedByName = q.AspNetUser.Email,
                           time = q.time,
                           islogin = islogin,
                           views = q.QuestionViews.Count,
@@ -70,7 +70,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                 id = reply.Id,
                                                 description = reply.description,
                                                 postedById = reply.AspNetUser.Id,
-                                                postedByName = reply.AspNetUser.UserName,
+                                                postedByName = reply.AspNetUser.Email,
                                                 time = reply.time,
                                                 voteUpCount = reply.QuestionReplyVotes.Where(x=>x.isUp).Count(),
                                                 voteDownCount = reply.QuestionReplyVotes.Where(x=>x.isUp == false).Count(),
@@ -82,7 +82,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                     {
                                         id = ans.Id,
                                         description = ans.description,
-                                        postedByName = ans.AspNetUser.UserName,
+                                        postedByName = ans.AspNetUser.Email,
                                         postedById = ans.AspNetUser.Id,
                                         time = ans.time,
                                         voteUpCount = ans.AnswerVotes.Where(x => x.isUp == true).Count(),
@@ -95,7 +95,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                         {
                                                             id = rep.Id,
                                                             description = rep.description,
-                                                            postedByName = rep.AspNetUser.UserName,
+                                                            postedByName = rep.AspNetUser.Email,
                                                             postedById = rep.AspNetUser.Id,
                                                             time = rep.time,
                                                             voteUpCount = rep.AnswerReplyVotes.Where(x => x.isUp).Count(),
@@ -153,8 +153,18 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 QuestionView rep = new QuestionView();
                 rep.viewedBy = ip;
                 rep.questionId = id;
+                //if (rep.viewedBy == "::1")
+                //{
+                //    rep.viewedBy = "abcdef4264";
+                //}
                 db.QuestionViews.Add(rep);
+                try { 
                 await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
                 return Ok();
             }
 
@@ -281,7 +291,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     id = x.Id,
                     description = x.description,
                     postedById = x.AspNetUser.Id,
-                    postedByName = x.AspNetUser.UserName,
+                    postedByName = x.AspNetUser.Email,
                     time = x.time
                 }).FirstOrDefault();
                 return Ok(ret);
@@ -325,7 +335,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     id = x.Id,
                     description = x.description,
                     postedById = x.AspNetUser.Id,
-                    postedByName = x.AspNetUser.UserName,
+                    postedByName = x.AspNetUser.Email,
                     time = x.time
                 }).FirstOrDefaultAsync();
                 return Ok(ret);
@@ -368,7 +378,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     id = x.Id,
                     description = x.description,
                     postedById = x.AspNetUser.Id,
-                    postedByName = x.AspNetUser.UserName,
+                    postedByName = x.AspNetUser.Email,
                     time = x.time
                 }).FirstOrDefault();
                 return Ok(ret);

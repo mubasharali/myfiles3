@@ -31,19 +31,48 @@ namespace Inspinia_MVC5_SeedProject.Hubs
         Entities db = new Entities();
 
         //start
-        
+        public override Task OnConnected()
+        {
+            if (Context.User.Identity.IsAuthenticated)
+            {
+                string name = Context.User.Identity.GetUserId();
+                Groups.Add(Context.ConnectionId, name);
+            }
+            return base.OnConnected();
+        }
         
         //end
         public void AddMessage(Chat msg)
         {
-            msg.time = DateTime.UtcNow;
-            msg.sentFrom = Context.User.Identity.GetUserId();
-            db.Chats.Add(msg);
-            db.SaveChanges();
-            var ret = db.Chats.FirstOrDefault(x => x.Id == msg.Id);
-            //Clients.Group(msg.sentTo).loadNewMessage(ret);
+            if (Context.User.Identity.IsAuthenticated)
+            {
+                msg.time = DateTime.UtcNow;
+                msg.sentFrom = Context.User.Identity.GetUserId();
+                db.Chats.Add(msg);
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                var ret = (from chat in db.Chats
+                          where chat.Id.Equals(msg.Id)
+                          select new
+                          {
+                              id = chat.Id,
+                              sentFromName = chat.AspNetUser.Email,
+                              sentToName = chat.AspNetUser1.Email,
+                              message = chat.message,
+                              time = chat.time,
+                          }).FirstOrDefault();
+               // var ret = db.Chats.FirstOrDefault(x => x.Id == msg.Id);
+                Clients.Group(msg.sentFrom).loadNewMessage(ret);
+                Clients.Group(msg.sentTo).loadNewMessage(ret);
+            }
            // Clients.Caller.loadNewMessage(ret);
-            Clients.All.loadNewMessage(ret);
+          //  Clients.All.loadNewMessage(ret);
         }
         public void GetAlert()
         {

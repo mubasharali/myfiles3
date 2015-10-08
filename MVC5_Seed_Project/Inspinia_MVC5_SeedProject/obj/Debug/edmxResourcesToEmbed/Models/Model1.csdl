@@ -405,7 +405,7 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" />
     <Property Name="adId" Type="Int32" Nullable="false" />
-    <Property Name="imageExtension" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="true" />
+    <Property Name="imageExtension" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="false" />
     <NavigationProperty Name="Ad" Relationship="Model.FK_AdImage_ToTable" FromRole="AdImage" ToRole="Ad" />
   </EntityType>
   <EntityType Name="AdsLike">
@@ -594,6 +594,7 @@
     <NavigationProperty Name="Cities" Relationship="Model.FK_City_ToTable" FromRole="AspNetUser" ToRole="City" />
     <NavigationProperty Name="Cities1" Relationship="Model.FK_City_ToTable_1" FromRole="AspNetUser" ToRole="City" />
     <NavigationProperty Name="SaveAds" Relationship="Model.FK_SaveAd_ToTable_1" FromRole="AspNetUser" ToRole="SaveAd" />
+    <Property Name="IsPasswordSaved" Type="Boolean" />
   </EntityType>
   <EntityType Name="Bid">
     <Key>

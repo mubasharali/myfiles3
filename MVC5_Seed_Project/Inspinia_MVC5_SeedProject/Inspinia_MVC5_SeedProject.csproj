@@ -50,7 +50,7 @@
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -453,7 +453,9 @@
     <Content Include="Images\landing\laptop.png" />
     <Content Include="Images\landing\perspective.png" />
     <Content Include="Images\spinner.gif" />
+    <Content Include="Scripts\app\chat.js" />
     <Content Include="Scripts\app\inspinia.js" />
+    <Content Include="Scripts\app\MobileTree.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\bootstrap-theme.css.map" />
@@ -655,6 +657,7 @@
     <Content Include="Scripts\plugins\sweetalert\sweetalert.min.js" />
     <Content Include="Scripts\plugins\toastr\toastr.min.js" />
     <Content Include="Scripts\plugins\validate\jquery.validate.min.js" />
+    <Content Include="Scripts\UserLogin.js" />
     <Content Include="Scripts\_Comments.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -765,6 +768,7 @@
     <Content Include="Views\Electronics\CreateHomeAppliancesAd.cshtml" />
     <Content Include="Views\Electronics\EditAd.cshtml" />
     <Content Include="Views\Admin\Location.cshtml" />
+    <Content Include="Views\Shared\_UserLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

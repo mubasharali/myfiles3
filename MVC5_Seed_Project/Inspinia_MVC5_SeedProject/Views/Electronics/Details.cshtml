@@ -297,6 +297,7 @@
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/plugins/sweetAlert")
 <script src="~/Scripts/_Comments.js"></script>
+<script src="~/Scripts/UserLogin.js"></script>
     <script>
         function Biding(data) {
             var self = this;
@@ -687,6 +688,7 @@
             self.loadad();
             return self;
         }
+
         function getTimeAgo(varDate) {
             if (varDate) {
                 return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');

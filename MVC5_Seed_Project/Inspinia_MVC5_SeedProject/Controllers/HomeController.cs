@@ -47,6 +47,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return View();
         }
+        public ActionResult LandingPage()
+        {
+            return View();
+        }
         public ActionResult temp2()
         {
             return View();

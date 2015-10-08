@@ -17,9 +17,6 @@
     </div>
 </div>
 
-
-
-
 <div class="wrapper wrapper-content animated fadeInUp">
     <div class="row">
         <div class="col-md-3"></div>
@@ -211,8 +208,7 @@
         <div class="col-md-3">this is 3</div>
     </div>
 </div>
-
-
+@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 
 @section Styles {
     @Styles.Render("~/plugins/toastrStyles")
@@ -224,6 +220,10 @@
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
     @Scripts.Render("~/plugins/knockout")
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/UserLogin.js"></script>
+<script src="~/Scripts/app/chat.js"></script>
     <script>
         function AnswerReply(data) {
             var self = this;
@@ -268,7 +268,7 @@
                     });
                 }
                 else {
-                    toastr.info("You are not login", "Oops!");
+                    $("#inputEmail").modal('show');
                 }
             }
 
@@ -357,7 +357,7 @@
                     });
                 }
                 else {
-                    toastr.info("You are not login", "Oops!");
+                    $("#inputEmail").modal('show');
                 }
             }
 
@@ -386,7 +386,7 @@
                         toastr.info("You have reached the limit!");
                     }
                 } else {
-                    toastr.info("You must login to add comment", "Oops!");
+                    $("#inputEmail").modal('show');
                 }
             }
             //delete answer reply
@@ -438,7 +438,7 @@
                         }
                     })
                 } else {
-                    toastr.info("Your answer must not be empty", "Are you mad?");
+                    toastr.info("Your answer must not be empty", "Are you drunk?");
                 }
             }
             self.newAnswerReply = ko.observable('');
@@ -470,8 +470,7 @@
                         }
                     }
                     else {
-                        //link to login page
-                        toastr.info("You must login to add comment", "Oops!")
+                        $("#inputEmail").modal('show');
                     }
             }
         }
@@ -517,7 +516,7 @@
                     });
                 }
                 else {
-                    toastr.info("You are not login", "Oops!");
+                    $("#inputEmail").modal('show');
                 }
             }
             //edit question reply
@@ -619,7 +618,7 @@
                     });
                 }
                 else {
-                    toastr.info("You are not login", "Oops!");
+                    $("#inputEmail").modal('show');
                 }
             }
 
@@ -653,7 +652,7 @@
                     });
                 }
                 else {
-                    toastr.info("You are not login", "Oops!");
+                    $("#inputEmail").modal('show');
                 }
             }
 
@@ -686,7 +685,7 @@
                         toastr.info("You reached the limit");
                     }
                 } else {
-                    toastr.info("You must login to add answer", "Oops!");
+                    $("#inputEmail").modal('show');
                 }
             }
             
@@ -714,7 +713,7 @@
                         }
                     })
                 } else {
-                    toastr.info("You must be login to report this Question", "Sorry!");
+                    $("#inputEmail").modal('show');
                 }
             }
             //delete answer
@@ -776,8 +775,7 @@
                     }
                 }
                 else {
-                    //link to login page
-                    toastr.info("You must login to add comment", "Oops!")
+                    $("#inputEmail").modal('show');
                 }
             }
             
@@ -789,7 +787,7 @@
                         toastr.info("You reached the limit","Sorry!");
                     }
                 } else {
-                    toastr.info("But you must login to post answer","Thanks for participating!");
+                    $("#inputEmail").modal('show');
                 }
             }
             self.addAnswer = function () {
@@ -817,12 +815,13 @@
                     }
                 }
                 else {
-                    //link to login page
-                    toastr.info("You must login to add answer","Oops!")
+                    $("#inputEmail").modal('show');
                 }
             }
         }
         function ViewModel() {
+            AccountViewModel();
+            ChatViewModel();
             var self = this;
             self.showQuestions = ko.observableArray();
             self.loadQuestion = function () {
@@ -871,7 +870,9 @@
                 onclick: null
             };
             ko.applyBindings(new ViewModel());
-            //jquery validate
+            $.connection.hub.start().done(function () {
+                //model.init();
+            });
         });
 
     </script>
