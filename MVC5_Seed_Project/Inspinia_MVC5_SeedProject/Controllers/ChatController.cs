@@ -26,15 +26,31 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
         // GET api/Chat/5
         [ResponseType(typeof(Chat))]
-        public async Task<IHttpActionResult> GetChat(int id)
+        public async Task<IHttpActionResult> GetChat(string with)
         {
-            Chat chat = await db.Chats.FindAsync(id);
-            if (chat == null)
-            {
-                return NotFound();
+            if(User.Identity.IsAuthenticated){
+                var userId = User.Identity.GetUserId();
+                var ret = from chat in db.Chats
+                          where chat.sentTo.Equals(with) && chat.sentFrom.Equals(userId) || chat.sentTo.Equals(userId) && chat.sentFrom.Equals(with)
+                          select new
+                          {
+                              id = chat.Id,
+                              sentFrom = chat.sentFrom,
+                              sentTo = chat.sentTo,
+                              sentFromName = chat.AspNetUser1.Email,
+                              sentToName = chat.AspNetUser.Email,
+                              message = chat.message,
+                              time = chat.time,
+                              loginUserId = userId
+                          };
+            return Ok(ret);
             }
-
-            return Ok(chat);
+            return BadRequest("Not login");
+            
+        }
+        public async Task<IHttpActionResult> GetLoginUserId()
+        {
+            return Ok( User.Identity.GetUserId());
         }
         public async Task<IHttpActionResult> SearchUser(int id)
         {

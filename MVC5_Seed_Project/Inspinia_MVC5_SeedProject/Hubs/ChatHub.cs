@@ -46,6 +46,7 @@ namespace Inspinia_MVC5_SeedProject.Hubs
         {
             if (Context.User.Identity.IsAuthenticated)
             {
+                var userId = Context.User.Identity.GetUserId();
                 msg.time = DateTime.UtcNow;
                 msg.sentFrom = Context.User.Identity.GetUserId();
                 db.Chats.Add(msg);
@@ -62,8 +63,10 @@ namespace Inspinia_MVC5_SeedProject.Hubs
                           select new
                           {
                               id = chat.Id,
-                              sentFromName = chat.AspNetUser.Email,
-                              sentToName = chat.AspNetUser1.Email,
+                              sentFrom = chat.sentFrom,
+                              sentTo = chat.sentTo,
+                              sentFromName = chat.AspNetUser1.Email,
+                              sentToName = chat.AspNetUser.Email,
                               message = chat.message,
                               time = chat.time,
                           }).FirstOrDefault();

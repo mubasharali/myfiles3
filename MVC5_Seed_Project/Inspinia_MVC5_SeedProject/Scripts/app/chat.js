@@ -11,15 +11,29 @@
 function Message(data) {
     var self = this;
     data = data || {};
-    self.id = data.Id;
+    self.id = data.id;
     self.name = data.name;
-    self.sentFrom = data.from;
-    self.sentTo = data.to;
+    self.sentFrom = data.sentFrom;
+    self.sentTo = data.sentTo;
     self.sentFromName = data.sentFromName;
     self.sentToName = data.sentToName;
     self.message = data.message;
     self.time = (data.time);
     self.timeAgo = getTimeAgo(data.time);
+    self.loginUserId = data.loginUserId;
+    //self.scroll = function () {
+    //    // var id = $(".small-chat-box").attr("id");
+
+    //    //alert("id is = " + id);
+        
+    //    var objDiv = document.getElementById(self.id);
+    //    alert(objDiv);
+    //   // $("html, body").animate({ scrollTop: $("#myID").scrollTop() }, 1000);
+    //    objDiv.scrollTop = objDiv.scrollHeight;
+    //}
+    //if(self.id){
+    //    self.scroll();
+    //}
 }
 function sendMessageTo(id) {
     $.ajax({
@@ -43,12 +57,48 @@ function ChatViewModel() {
     self.onlineUsersHub = $.connection.onlineUsers;
     self.showChat = ko.observableArray();
     self.newMessage = ko.observable();
-    self.loginUserId = true;
+    self.loginUserId = "abc";
     self.onlineUsers = ko.observableArray();
     self.sendMessageTo = ko.observable();
     self.sendTo = function (data) {
         self.sendMessageTo(data.id);
-        console.log("Message will be sent to: " + data.name);
+    }
+    var sub = self.sendMessageTo.subscribe(function (value) {
+        self.loadMessages();
+    })
+    self.getLoginUserId = function () {
+        $.ajax({
+            url: '/api/Chat/GetLoginUserId',
+            dataType: "json",
+            contentType: "application/json",
+            cache: false,
+            type: 'GET',
+            success: function (data) {
+                self.loginUserId = data;
+            },
+            error: function () {
+                toastr.error("failed to check user login", "Error!");
+                return null;
+            }
+        });
+    };
+    self.getLoginUserId();
+    self.loadMessages = function () {
+        $.ajax({
+            url: '/api/Chat/GetChat?with=' + self.sendMessageTo(),
+            dataType: "json",
+            contentType: "application/json",
+            cache: false,
+            type: 'GET',
+            success: function (data) {
+                var msg = $.map(data, function (item) { return new Message(item) });
+                self.showChat(msg);
+            },
+            error: function () {
+                toastr.error("failed to send message", "Error!");
+                return null;
+            }
+        });
     }
     self.checkMsgEnter = function (d, e) {
         if (self.loginUserId) {
@@ -98,3 +148,11 @@ function ChatViewModel() {
         self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
     }
 }
+ko.bindingHandlers.scrollToEnd = {
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        ko.utils.unwrapObservable(valueAccessor());
+        var scroller = element.previousSibling.previousSibling;
+        scroller.scrollTop = scroller.scrollHeight;
+    }
+};
+ko.virtualElements.allowedBindings.scrollToEnd = true;

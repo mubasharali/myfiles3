@@ -32,10 +32,9 @@ namespace Inspinia_MVC5_SeedProject.Hubs
                 u.dpExtension = da.dpExtension;
             }
             User abc;
-            var data = users.TryGetValue(Context.ConnectionId, out abc); // its not working
+            var data = users.TryGetValue(Context.ConnectionId, out abc); 
             if (!data)
             {
-
                 users.TryAdd(Context.ConnectionId, u);
             }
             Clients.All.showConnected(users);
