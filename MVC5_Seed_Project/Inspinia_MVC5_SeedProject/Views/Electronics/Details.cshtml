@@ -105,11 +105,11 @@
                                         <dt>Tye:</dt>
                                         <dd data-bind="text:type"></dd>
                                         <span data-bind="with: showMobileAd">
-                                            <dt>Brand:</dt>
+                                            <dt data-bind="with:brand">Brand:</dt>
                                             <dd data-bind="text:brand"></dd>
-                                            <dt>Model:</dt>
+                                            <dt data-bind="with:model">Model:</dt>
                                             <dd data-bind="text:model"></dd>
-                                            <dt>color:</dt>
+                                            <dt data-bind="with:color">color:</dt>
                                             <dd data-bind="text:color"></dd>
                                             <span data-bind="if:sims">
                                                 <dt>Number of sims:</dt>
@@ -169,7 +169,7 @@
                             <span class="pull-right">
                                 <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
                             </span>
-                            Views (<span data-bind="text:views"></span>) -  wishlist (34) - <span data-toggle="modal" data-target="#report"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
+                            Views (<span data-bind="text:views"></span>) -  wishlist (<span data-bind="text:savedCount"></span> ) - <span data-toggle="modal" data-target="#report"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
 
 
 
@@ -399,6 +399,7 @@
             self.reportedCount = ko.observable(data.reportedCount);
             self.showImages = ko.observable();
             self.views = data.views;
+            self.savedCount = ko.observable( data.savedCount );
             self.price = data.price || "";
             self.newBidPrice = ko.observable();
             self.showCarAd = ko.observable();
@@ -525,8 +526,10 @@
                     cache: false,
                     type: 'POST',
                     success: function (data) {
-                        if (data == "Deleted") {
+                        self.savedCount(data.count);
+                        if (data.text == "Deleted") {
                             self.isSaved(false);
+                            
                         } else {
                             self.isSaved(true);
                         }

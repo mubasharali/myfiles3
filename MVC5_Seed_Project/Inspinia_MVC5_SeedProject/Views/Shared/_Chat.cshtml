@@ -1,7 +1,7 @@
 ﻿<style>
-    #stuff {
+    #showChat {
         height: 100px;
-        border: 1px solid black;
+       // border: 1px solid black;
         overflow: scroll;
     }
 </style>
@@ -17,7 +17,7 @@
             Small chat
         </div>
 
-        <div id="stuff" class="content" data-bind="foreach:showChat">
+        <div id="showChat" class="content" data-bind="foreach:showChat">
 
             <div data-bind="visible:sentFrom !=$parent.loginUserId">
                 <div class="left">

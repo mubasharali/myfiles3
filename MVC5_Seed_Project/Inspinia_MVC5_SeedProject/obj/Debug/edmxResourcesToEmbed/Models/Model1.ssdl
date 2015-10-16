@@ -341,7 +341,7 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="brandId" Type="int" Nullable="false" />
-    <Property Name="model" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="model" Type="nvarchar" MaxLength="30" />
     <Property Name="time" Type="datetime" Nullable="false" />
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
   </EntityType>

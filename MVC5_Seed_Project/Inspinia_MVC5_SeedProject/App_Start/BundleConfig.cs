@@ -18,7 +18,10 @@ namespace Inspinia_MVC5_SeedProject
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.min.js"));
-
+            bundles.Add(new StyleBundle("~/bundles/myStyles").Include(
+                "~/Content/myStyles.css"));
+            bundles.Add(new StyleBundle("~/bundles/tagStyles").Include(
+                "~/Content/tagStyles.css"));
             // Inspinia script
             bundles.Add(new ScriptBundle("~/bundles/inspinia").Include(
                       "~/Scripts/app/inspinia.js"));

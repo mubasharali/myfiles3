@@ -355,7 +355,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
                               views = ad.Ad.AdViews.Count,
                               condition = ad.Ad.condition,
-
+                              savedCount = ad.Ad.SaveAds.Count,
                               color = ad.color,
                               sims = ad.sims,
                               brand = ad.MobileModel.Mobile.brand,

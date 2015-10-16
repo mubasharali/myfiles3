@@ -28,6 +28,14 @@
                         return '';
                     }
                 }
+                ko.bindingHandlers.scrollToEnd = {
+                    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                        ko.utils.unwrapObservable(valueAccessor());
+                        var scroller = element.previousSibling.previousSibling;
+                        scroller.scrollTop = scroller.scrollHeight;
+                    }
+                };
+                ko.virtualElements.allowedBindings.scrollToEnd = true;
                 $(function () {
                     var model = new ChatViewModel();
                    // ko.applyBindings(new AccountViewModel(), document.getElementById("AccountViewModel"));

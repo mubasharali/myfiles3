@@ -49,6 +49,125 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             //db.Ads.Where(x => x.Id.Equals(x.MobileAds.Where(x.));
             return View();
         }
+
+        public ActionResult CreateMobileAccessoriesAd()
+        {
+            Ad ad = new Ad();
+            return View(ad);
+        }
+        public ActionResult EditMobileAccessoriesAd(int id)
+        {
+            Ad ad = db.Ads.Find(id);
+
+            return View(ad);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateMobileAccessoriesAd([Bind(Include = "Id,category,postedBy,title,description,time")] Ad ad)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Request.IsAuthenticated)
+                {
+                    MyAd(ad, "Save");
+                    MobileAd mobileAd = new MobileAd();
+                    mobileAd.color = Request["color"];
+
+                    var company = Request["brand"];
+                    var model = Request["model"];
+                    if (company != null && company != "")
+                    {
+                        company = company.Trim();
+                        model = model.Trim();
+                    }
+                    AspNetUser asp = db.AspNetUsers.FirstOrDefault(x => x.Id == ad.postedBy);
+                    if (company != null)
+                    {
+
+                        var allBrands = (db.Mobiles.Select(x => x.brand)).AsEnumerable(); //getBrands
+                        bool isNewBrand = true;
+                        foreach (var brand in allBrands)
+                        {
+                            if (brand == company)
+                            {
+                                isNewBrand = false;
+                            }
+                        }
+                        if (isNewBrand)
+                        {
+                            Mobile mob = new Mobile();
+                            mob.brand = company;
+                            mob.addedBy = User.Identity.GetUserId();
+                            mob.time = DateTime.UtcNow;
+                            db.Mobiles.Add(mob);
+                            db.SaveChanges();
+
+                            MobileModel mod = new MobileModel();
+                            mod.model = model;
+                            mod.brandId = mob.Id;
+                            mod.time = DateTime.UtcNow;
+                            mod.addedBy = User.Identity.GetUserId();
+                            db.MobileModels.Add(mod);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            var allModels = db.MobileModels.Where(x => x.Mobile.brand == company).Select(x => x.model);
+                            bool isNewModel = true;
+                            foreach (var myModel in allModels)
+                            {
+                                if (myModel == model)
+                                {
+                                    isNewModel = false;
+                                }
+                            }
+                            if (isNewModel)
+                            {
+                                var brandId = db.Mobiles.FirstOrDefault(x => x.brand.Equals(company));
+                                MobileModel mod = new MobileModel();
+                                mod.brandId = brandId.Id;
+                                mod.model = model;
+                                mod.addedBy = User.Identity.GetUserId();
+                                mod.time = DateTime.UtcNow;
+                                db.MobileModels.Add(mod);
+                                try { 
+                                db.SaveChanges();
+                                }
+                                catch (Exception e)
+                                {
+                                    string s = e.ToString();
+                                }
+                            }
+                        }
+                        var mobileModel = db.MobileModels.FirstOrDefault(x => x.Mobile.brand == company && x.model == model);
+                        mobileAd.mobileId = mobileModel.Id;
+
+                    }
+                    asp.Ads.Add(ad);
+                    db.Ads.Add(ad);
+                    //tags
+                    SaveTags(Request["tags"], ad);
+
+                    mobileAd.Id = ad.Id;
+                    db.MobileAds.Add(mobileAd);
+                    //ad.MobileAd.a(mobileAd);
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        string sbs = e.ToString();
+                    }
+                    //location
+                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Save");
+                    return RedirectToAction("Details", new {  id = ad.Id, title = ad.title });
+                }
+                return View("Create", ad);
+            }
+            return View("Create", ad);
+        }
+        
         public ActionResult Home_Appliances()
         {
             return View();

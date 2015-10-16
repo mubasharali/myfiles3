@@ -21,19 +21,6 @@ function Message(data) {
     self.time = (data.time);
     self.timeAgo = getTimeAgo(data.time);
     self.loginUserId = data.loginUserId;
-    //self.scroll = function () {
-    //    // var id = $(".small-chat-box").attr("id");
-
-    //    //alert("id is = " + id);
-        
-    //    var objDiv = document.getElementById(self.id);
-    //    alert(objDiv);
-    //   // $("html, body").animate({ scrollTop: $("#myID").scrollTop() }, 1000);
-    //    objDiv.scrollTop = objDiv.scrollHeight;
-    //}
-    //if(self.id){
-    //    self.scroll();
-    //}
 }
 function sendMessageTo(id) {
     $.ajax({
@@ -148,11 +135,4 @@ function ChatViewModel() {
         self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
     }
 }
-ko.bindingHandlers.scrollToEnd = {
-    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        ko.utils.unwrapObservable(valueAccessor());
-        var scroller = element.previousSibling.previousSibling;
-        scroller.scrollTop = scroller.scrollHeight;
-    }
-};
-ko.virtualElements.allowedBindings.scrollToEnd = true;
+

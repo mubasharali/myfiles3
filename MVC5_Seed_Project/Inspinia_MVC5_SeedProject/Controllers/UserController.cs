@@ -130,7 +130,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 if(save != null){
                     db.SaveAds.Remove(save);
                     await db.SaveChangesAsync();
-                    return Ok("Deleted");
+                    var ret =await db.SaveAds.CountAsync(x => x.adId.Equals(id));
+                    var obj = new { text = "Deleted", count = ret };
+                    return Ok(obj);
                 }
                 SaveAd ad = new SaveAd();
                 ad.time = DateTime.UtcNow;
@@ -138,7 +140,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 ad.savedBy = User.Identity.GetUserId();
                 db.SaveAds.Add(ad);
                 await db.SaveChangesAsync();
-                return Ok("Saved");
+                var retu =await db.SaveAds.CountAsync(x => x.adId.Equals(id));
+                var obje = new { text = "Saved", count = retu };
+                return Ok(obje);
             }
             return BadRequest("Not login");
         }

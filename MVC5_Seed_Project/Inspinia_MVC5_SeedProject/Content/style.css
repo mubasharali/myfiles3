@@ -1688,7 +1688,7 @@ a.DTTT_button:hover:not(.DTTT_disabled) {
 .pace .pace-progress {
   background: #1ab394;
   position: fixed;
-  z-index: 2000;
+  z-index: 2040;
   top: 0;
   right: 100%;
   width: 100%;

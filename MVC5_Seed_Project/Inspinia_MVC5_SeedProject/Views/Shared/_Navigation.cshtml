@@ -85,6 +85,9 @@
             <li class="@Html.IsSelected(controller: "Entertainment")">
                 <a href="@Url.Action("Index", "Entertainment")"><i class="fa fa-futbol-o"></i> <span class="nav-label">Entertainment</span></a> @*or fa-bullhorn, sports, fa-weixin for community*@ 
             </li>
+            <li class="@Html.IsSelected(controller: "Forum")">
+                <a href="@Url.Action("Index", "Forum")"><i class="fa fa-comments-o"></i> <span class="nav-label">Help</span></a> @*or fa-bullhorn, sports, fa-weixin for community*@
+            </li>
         </ul>
     </div>
 </nav>

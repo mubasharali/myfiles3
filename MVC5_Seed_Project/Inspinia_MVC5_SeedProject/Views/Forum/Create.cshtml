@@ -240,7 +240,7 @@
                 load: function (query, callback) {
                     if (!query.length) return callback();
                     $.ajax({
-                        url: '/api/forum/SearchTags?s=' + encodeURIComponent(query),
+                        url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
                         type: 'POST',
                         error: function () {
                             callback();

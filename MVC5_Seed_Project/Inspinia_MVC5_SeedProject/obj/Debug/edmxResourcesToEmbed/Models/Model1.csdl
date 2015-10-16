@@ -794,9 +794,9 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="brandId" Type="Int32" Nullable="false" />
-    <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="model" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
     <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="addedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_MobileModel_ToTable_1" FromRole="MobileModel" ToRole="AspNetUser" />
     <NavigationProperty Name="Mobile" Relationship="Model.FK_MobileModel_ToTable" FromRole="MobileModel" ToRole="Mobile" />
     <NavigationProperty Name="MobileAds" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="MobileModel" ToRole="MobileAd" />
