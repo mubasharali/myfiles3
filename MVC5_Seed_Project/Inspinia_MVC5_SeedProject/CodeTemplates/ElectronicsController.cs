@@ -453,7 +453,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 if (Request.IsAuthenticated)
                 {
-                   
+                    var ab = Request["postedBy"];
+                    var iddd = User.Identity.GetUserId();
                     if (Request["postedBy"] == User.Identity.GetUserId())
                     {
                         MyAd(ad, "Update");
@@ -540,12 +541,13 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         }
                         //location
                         MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Update");
-                        return RedirectToAction("Index", new { category = "mobiles", subcategory = mobileModel.Mobile.brand, lowcategory = mobileModel.model, id = ad.Id, title = ad.title });
+                        return RedirectToAction("Details", new { id = ad.Id });
+                       // return RedirectToAction("Index", new { category = "mobiles", subcategory = mobileModel.Mobile.brand, lowcategory = mobileModel.model, id = ad.Id, title = ad.title });
                     }
                 }
-                return View("Create", ad);
+                return View("Edit", ad);
             }
-            return View("Create", ad);
+            return View("Edit", ad);
         }
         public void SaveTags(string s,Ad ad)
         {

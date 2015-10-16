@@ -60,8 +60,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-7">
-                                    <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a data-bind="click: function(){return editAd(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
-                                    <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
+                                    <span data-bind="visible:loginUserId == postedById">
+                                        <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a data-bind="click: function(){return editAd(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                    </span>
+                                        <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
                                     <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
                                         <li><a href=""><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
                                     </ul><br /><br />
@@ -156,7 +158,7 @@
                                     <div class="text-right">
                                         <div class="btn-group">
                                             <button data-bind="click:saveAd" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
-                                            <a data-bind="click:sellerProfile" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile</a>
+                                            <a data-bind="click:sellerProfile" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
                                         </div>
                                     </div>
 

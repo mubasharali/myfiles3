@@ -39,7 +39,7 @@
 
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-2">Select Brand</label>
+                                <label class="control-label col-md-2">Select Brand <span class="req">*</span></label>
                                 <div class="col-md-10">
                                     <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
                        value: selectedBrand,
@@ -49,7 +49,7 @@
                             </div>
                             <div data-bind="with:selectedBrand">
                                 <div class="form-group">
-                                    <label class="control-label col-md-2">Select Model</label>
+                                    <label class="control-label col-md-2">Select Model<span class="req">*</span></label>
                                     <div class="col-md-10">
                                         <select id="select-model" required class="demo-default" name="model" data-bind="options: $parent.availableModels,
                        value: $parent.selectedModel,
@@ -60,7 +60,7 @@
                             </div>
 
                                 <div class="form-group">
-                                    <label class="control-label col-md-2" >Color</label>
+                                    <label class="control-label col-md-2" >Color<span class="req">*</span><span data-bind="text:selectedColor"></span></label>
                                     <div class="col-md-10">
                                         <select id="select-color" required class="demo-default" name="color" data-bind="options: availableColors,
                        value: selectedColor,
@@ -69,7 +69,7 @@
                                 </div>
 
                             <div class="form-group">
-                                <label class="control-label col-md-2">Number of sims</label>
+                                <label class="control-label col-md-2">Number of sims<span class="req">*</span></label>
                                 <div class="col-md-10">
                                     <select id="select-sims" required class="demo-default" name="sims" data-bind="options: availableSims,
                        value: selectedSim,
@@ -97,99 +97,13 @@
 
 
 @section Styles {
-<style type="text/css">
-    .selectize-control.repositories .selectize-dropdown > div {
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-    }
 
-    .selectize-control.repositories .selectize-dropdown .by {
-        font-size: 11px;
-        opacity: 0.8;
-    }
-
-        .selectize-control.repositories .selectize-dropdown .by::before {
-            content: 'by ';
-        }
-
-    .selectize-control.repositories .selectize-dropdown .name {
-        font-weight: bold;
-        margin-right: 5px;
-    }
-
-    .selectize-control.repositories .selectize-dropdown .title {
-        display: block;
-    }
-
-    .selectize-control.repositories .selectize-dropdown .description {
-        font-size: 12px;
-        display: block;
-        color: #a0a0a0;
-        white-space: nowrap;
-        width: 100%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-
-    .selectize-control.repositories .selectize-dropdown .meta {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        font-size: 10px;
-    }
-
-        .selectize-control.repositories .selectize-dropdown .meta li {
-            margin: 0;
-            padding: 0;
-            display: inline;
-            margin-right: 10px;
-        }
-
-            .selectize-control.repositories .selectize-dropdown .meta li span {
-                font-weight: bold;
-            }
-
-    .selectize-control.repositories::before {
-        -moz-transition: opacity 0.2s;
-        -webkit-transition: opacity 0.2s;
-        transition: opacity 0.2s;
-        content: ' ';
-        z-index: 2;
-        position: absolute;
-        display: block;
-        top: 12px;
-        right: 34px;
-        width: 16px;
-        height: 16px;
-        background: url(/Images/spinner.gif);
-        background-size: 16px 16px;
-        opacity: 0;
-    }
-
-    .selectize-control.repositories.loading::before {
-        opacity: 0.4;
-    }
-
-    .icon {
-        width: 16px;
-        height: 16px;
-        display: inline-block;
-        vertical-align: middle;
-        background-size: 16px 16px;
-        margin: 0 3px 0 0;
-    }
-
-        .icon.fork {
-            background-image: url(images/repo-fork.png);
-        }
-
-        .icon.source {
-            background-image: url(images/repo-source.png);
-        }
-</style>
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
     @Styles.Render("~/scripts/selectizeStyles")
+@Styles.Render("~/bundles/myStyles")
+@Styles.Render("~/bundles/tagStyles")
 }
 
 @section Scripts {
@@ -222,7 +136,7 @@
             self.availableSims = ["1", "2", "3", "4", "5"];
             self.selectedSim = ko.observable();
             self.availableColors = ["White","Black","Yellow","Red","Blue","Orange","Purple","Violet","Green"];
-            self.selectedColor = ko.observable();
+            self.selectedColor = "";
             self.availableBrands = ko.observableArray();
             self.selectedBrand = ko.observable();
             self.availableModels = ko.observableArray();
@@ -254,6 +168,7 @@
                     success: function (data) {
                         var tags = data[0].adTags;
                         $.each((tags), function (i, item) { self.selectedTags.push(item.name) });
+                      //  console.log(self.selectedTags);
                         self.exectLocation = data[0].location.exectLocation;
                         self.selectedCity(data[0].location.cityName);
                         self.selectedCityOriginal = data[0].location.cityName;
@@ -267,19 +182,18 @@
                         self.mobileId = data[0].mobilead.id;
                         self.selectedModel(data[0].mobilead.model);
                         self.selectedModelOriginal = self.selectedModel();
-                        self.selectedColor(data[0].mobilead.color);
+                        self.selectedColor = data[0].mobilead.color;
+                        self.selectedColor = self.selectedColor.toLowerCase().replace(/\b[a-z]/g, function (letter) {
+                            return letter.toUpperCase();
+                        });
+                     //   alert(self.selectedColor);
                         self.selectedBrand(data[0].mobilead.brand);
-                        //self.selectedPopularPlace(data[0].location.popularPlace);
                         self.selectedSim(data[0].mobilead.sims);
                         self.selectedBrandOriginal = self.selectedBrand();
                         
                         self.selectedPopularPlaceOriginal = data[0].location.popularPlace;
                         
                         self.selectedCityOriginal = self.selectedCity();
-                        
-                        //alert(self.exectLocation);
-                        //alert(self.selectedPopularPlaceOriginal);
-                       // self.selectedPopularPlaceOriginal = self.selectedPopularPlace();
                         
                         $('#select-brand').selectize({
                             create: true,
@@ -350,6 +264,8 @@
                                 direction: 'asc'
                             },
                         });
+                        alert(self.selectedColor);
+                        
                         $('#select-sims').selectize({
                             sortField: {
                                 field: 'text',
