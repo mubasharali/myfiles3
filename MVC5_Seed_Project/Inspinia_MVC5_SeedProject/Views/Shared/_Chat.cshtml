@@ -11,17 +11,17 @@
     <div class="small-chat-box fadeInRight animated">
 
         <div class="heading" draggable="true">
-            @*<small class="chat-date pull-right">
-                    02.19.2015
-                </small>*@
-            Small chat
+            <small class="chat-date" data-bind="text:sendMessageTo">
+            </small>
         </div>
 
         <div id="showChat" class="content" data-bind="foreach:showChat">
 
-            <div data-bind="visible:sentFrom !=$parent.loginUserId">
+            <div data-bind="visible:sentFrom != loginUserId1">
                 <div class="left">
                     <div data-bind="attr:{'id':id}">
+                        sent from<div data-bind="text:sentFrom"></div>
+                        loginUserID<div data-bind="text:loginUserId1"></div>
                         <div class="author-name">
                             <span data-bind="text:sentToName"></span>                                <small data-bind="text:timeAgo" class="chat-date">
 
@@ -32,9 +32,11 @@
                     </div>
                 </div>
             </div>
-            <div data-bind="visible: sentFrom == $parent.loginUserId">
+            <div data-bind="visible: sentFrom == loginUserId1">
                 <div class="right">
                     <div data-bind="attr:{'id':id}">
+                        sent from<div data-bind="text:sentFrom"></div>
+                        loginUserID<div data-bind="text:loginUserId1"></div>
                         <div class="author-name">
                             <span data-bind="text:sentToName"></span>                                <small data-bind="text:timeAgo" class="chat-date">
 

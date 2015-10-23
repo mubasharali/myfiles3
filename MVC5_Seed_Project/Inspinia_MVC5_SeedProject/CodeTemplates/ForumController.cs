@@ -19,10 +19,13 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         // GET: /Forum/
         public ActionResult Index()
         {
-            var questions = db.Questions.Include(q => q.AspNetUser);
-            return View(questions.ToList());
+            return View();
         }
-
+        public ActionResult Mobiles()
+        {
+            ViewBag.type = "mobiles";
+            return View("Index");
+        }
         // GET: /Forum/Details/5
         public ActionResult Details(int? id)
         {

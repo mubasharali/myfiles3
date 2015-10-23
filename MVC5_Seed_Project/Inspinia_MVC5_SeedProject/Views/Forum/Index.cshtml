@@ -4,7 +4,7 @@
    // Layout = "~/Views/Shared/_Layout_3.cshtml";
     ViewBag.Title = "Index";
 }
-
+<input type="hidden" id="type" value="@ViewBag.type" />
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
         <h2>Index</h2>
@@ -17,7 +17,7 @@
 </div>
 <div class="row">
     <div class="col-md-9">
-        <div class="fh-breadcrumb">
+        @*<div class="fh-breadcrumb">
             <div class="fh-column">
                 <div class="full-height-scroll">
                     <ul class="list-group elements-list" data-bind="with:showMobileCategoriesCount">
@@ -31,7 +31,6 @@
                                     </p>
                                     <p class="m-b-none">
                                         <i style="color:green" class="fa fa-comments"></i><span data-bind="text:NokiaCount"></span> Questions<br />
-                                        @*<i style="color:green" class="fa fa-user-plus"></i> 3140 participants*@
                                     </p>
                                 </div>
                             </a>
@@ -46,7 +45,6 @@
                                     </p>
                                     <p class="m-b-none">
                                         <i style="color:green" class="fa fa-comments"></i><span data-bind="text:SamsungCount"></span> Questions<br />
-                                        @*<i style="color:green" class="fa fa-user-plus"></i> 3140 participants*@
                                     </p>
                                 </div>
                             </a>
@@ -324,11 +322,19 @@
 
 
 
+        </div>*@
+
+        <div data-bind="foreach:showQuestions">
+            <div data-bind="text:title">
+
+            </div>
         </div>
+
     </div>
     <div class="col-md-3">this is 3</div>
 </div>
-
+@*@Html.Partial("/Views/Shared/_Chat.cshtml")
+@Html.Partial("~/Views/Shared/_UserLogin.cshtml")*@
 @section Styles {
     @Styles.Render("~/plugins/toastrStyles")
 }
@@ -339,7 +345,10 @@
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
     @Scripts.Render("~/plugins/knockout")
-
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/UserLogin.js"></script>
+<script src="~/Scripts/app/chat.js"></script>
     <script>
         function MobilesCategoriesCount(data) {
             var self = this;
@@ -348,24 +357,45 @@
             self.SamsungCount = data.SamsungCount;
             self.HTC = data.HTC;
         }
-        function ViewModel() {
+        function Question(data) {
             var self = this;
-            self.showMobileCategoriesCount = ko.observable();
-            self.loadMainCount = function () {
-                url_address = '/api/Forum/GetMobileCategoriesCount';
+            data = data || {};
+            self.title = data.title;
+            self.description = data.description;
+            self.postedByName = data.postedByName;
+            self.postedById = data.postedById;
+            self.id = data.id;
+            self.exectTime = data.time;
+            self.time = getTimeAgo(data.time);
+            self.loginUserId = data.islogin || "";
+            self.showQuestionReplies = ko.observableArray();
+            self.showAnswers = ko.observableArray();
+            self.views = data.views;
+            self.voteUpCount = data.voteUpCount;
+            self.voteDownCount = data.voteDownCount;
+
+        }
+        function ViewModel() {
+            ChatViewModel();
+            var self = this;
+            self.showQuestions = ko.observableArray();
+            var type = $("#type").val();
+            self.loadQuestions = function () {
+                url_address = '/api/Forum/GetQuestions?type=' + type;
                 $.ajax({
                     url: url_address,
                     dataType: "json",
                     type: 'GET',
                     success: function (data) {
-                        self.showMobileCategoriesCount(new MobilesCategoriesCount(data));
+                        var reply = $.map(data, function (item) { return new Question(item) });
+                        self.showQuestions(reply);
                     },
                     error: function () {
-                        toastr.error("Unable to load data. Please try again", "Error");
+                        toastr.error("Unable to load Discussions. Please refresh page and try again", "Error");
                     },
                 });
             };
-            self.loadQuestion();
+            self.loadQuestions();
             return self;
         }
         function getTimeAgo(varDate) {
@@ -394,7 +424,9 @@
                 onclick: null
             };
             ko.applyBindings(new ViewModel());
-            //jquery validate
+            $.connection.hub.start().done(function () {
+
+            });
         });
     </script>
 }

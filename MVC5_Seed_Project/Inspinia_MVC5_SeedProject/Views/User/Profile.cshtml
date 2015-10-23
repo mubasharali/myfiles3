@@ -30,6 +30,70 @@
         <div class="col-md-3 hidden-sm hidden-xs">kljf sjdl kfajsdlkf ajfkljadslkfa jdslk
         </div>
         <div class="col-md-6 col-sm-9">
+            <form action="/User/saveProfilePic" method="post" enctype="multipart/form-data">
+                <input type="file" name="image" class="text-center center-block well well-sm">
+                <input type="submit" value="upload" />
+            </form>
+            @*<div class="ibox float-e-margins">
+                <div class="ibox-title  back-change">
+                    <h5>Image cropper <small>http://fengyuanchen.github.io/cropper/</small></h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li>
+                                <a href="#">Config option 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <p>
+                        Crop image
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="image-crop">
+                                <img src="~/Images/p3.jpg">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Preview image</h4>
+                            <div class="img-preview img-preview-sm"></div>
+                            <h4>&nbsp;</h4>
+                            <div class="btn-group">
+                                <form action="/User/saveProfilePic" method="post" id="setProfilePic" enctype="multipart/form-data">
+                                    <label title="Upload image file" for="inputImage" class="btn btn-primary">
+
+                                        <input type="file" accept="image/*" name="file" id="inputImage" class="hide">
+                                        Upload new image
+                                        <input type="submit" style="visibility:hidden" />
+
+                                    </label>
+                                </form>
+                                <button id="setProfilePicBtn" class="btn btn-primary">Set as profile picture</button>
+                            </div>
+                            <h4>Other options</h4>
+                            <div class="btn-group">
+                                <button class="btn btn-white" id="zoomIn" type="button">Zoom In</button>
+                                <button class="btn btn-white" id="zoomOut" type="button">Zoom Out</button>
+                                <button class="btn btn-white" id="rotateLeft" type="button">Rotate Left</button>
+                                <button class="btn btn-white" id="rotateRight" type="button">Rotate Right</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Profile</h5>
@@ -45,66 +109,7 @@
                                         <a href="#" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> Upload profile pic </a>
                                     </td>*@
                                     <td colspan="3">
-                                        <div class="ibox float-e-margins">
-                                            <div class="ibox-title  back-change">
-                                                <h5>Image cropper <small>http://fengyuanchen.github.io/cropper/</small></h5>
-                                                <div class="ibox-tools">
-                                                    <a class="collapse-link">
-                                                        <i class="fa fa-chevron-up"></i>
-                                                    </a>
-                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                                        <i class="fa fa-wrench"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-user">
-                                                        <li>
-                                                            <a href="#">Config option 1</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Config option 2</a>
-                                                        </li>
-                                                    </ul>
-                                                    <a class="close-link">
-                                                        <i class="fa fa-times"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="ibox-content">
-                                                <p>
-                                                    Crop image
-                                                </p>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="image-crop">
-                                                            <img src="~/Images/p3.jpg">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <h4>Preview image</h4>
-                                                        <div class="img-preview img-preview-sm"></div>
-                                                        <h4>&nbsp;</h4>
-                                                        <div class="btn-group">
-                                                            <form action="/User/saveProfilePic" method="post" id="setProfilePic" enctype="multipart/form-data">
-                                                                <label title="Upload image file" for="inputImage" class="btn btn-primary">
-
-                                                                    <input type="file" accept="image/*" name="file" id="inputImage" class="hide">
-                                                                    Upload new image
-                                                                    <input type="submit" style="visibility:hidden" />
-
-                                                                </label>
-                                                            </form>
-                                                            <button id="setProfilePicBtn" class="btn btn-primary">Set as profile picture</button>
-                                                        </div>
-                                                        <h4>Other options</h4>
-                                                        <div class="btn-group">
-                                                            <button class="btn btn-white" id="zoomIn" type="button">Zoom In</button>
-                                                            <button class="btn btn-white" id="zoomOut" type="button">Zoom Out</button>
-                                                            <button class="btn btn-white" id="rotateLeft" type="button">Rotate Left</button>
-                                                            <button class="btn btn-white" id="rotateRight" type="button">Rotate Right</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                     </td>
                                 </tr>
                                 <tr>
@@ -252,7 +257,7 @@
     @Styles.Render("~/plugins/slickStyles")
     @Styles.Render("~/plugins/slickThemeStyles")
     @Styles.Render("~/plugins/toastrStyles")
-@Styles.Render("~/plugins/dataPickerStyles")
+@Styles.Render("~/plugins/imagecropperStyles")
 }
 
 
@@ -261,10 +266,13 @@
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/slick")
-@Scripts.Render("~/plugins/dataPicker")
+@Scripts.Render("~/plugins/imagecropper")
     @*@Scripts.Render("~/bundles/categoryTree")*@
     @Scripts.Render("~/bundles/jqueryui")
-
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/UserLogin.js"></script>
     <script>
         function User(data) {
             var self = this;
@@ -280,6 +288,7 @@
             self.hideEmail = ko.observable(data.hideEmail);
             self.hidePhoneNumber = ko.observable(data.hidePhoneNumber);
             self.dpExtension = ko.observable(data.dpExtension);
+            self.dpLink = '/Images/Users/p' + self.id + self.dpExtension;
             self.shortAbout = ko.observable(data.shortAbout);
             self.longAbout = ko.observable(data.longAbout);
             //self.lastSeen = ko.observable(data.lastSeen);
@@ -313,7 +322,6 @@
                 self.selectedSeePhone("Everyone");
             }
             
-            alert(self.selectedSeePhone());
             self.isNameEditing = ko.observable(false);
             self.editName = function () {
                 self.isNameEditing(true);
@@ -376,6 +384,7 @@
             }
         }
         function viewModel() {
+            ChatViewModel();
             var self = this;
             self.showProfile = ko.observable();
             
@@ -471,8 +480,26 @@
             }
 
             $("#setProfilePicBtn").click(function () {
-                //window.open($image.cropper("getDataURL"));
-                $("#setProfilePic").submit();
+                window.open($image.cropper("getDataURL"));
+                //$("#setProfilePic").submit();
+                $().cropper('getCroppedCanvas').toBlob(function (blob) {
+                    var formData = new FormData();
+
+                    formData.append('croppedImage', blob);
+
+                    $.ajax('/path/to/upload', {
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function () {
+                            console.log('Upload success');
+                        },
+                        error: function () {
+                            console.log('Upload error');
+                        }
+                    });
+                });
                 toastr.info("Your profile picture is changed successfully! Please refresh page to see changes");
             });
 

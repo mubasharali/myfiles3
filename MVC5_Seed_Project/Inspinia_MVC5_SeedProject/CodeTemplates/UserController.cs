@@ -30,33 +30,48 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         }
         public ActionResult saveProfilePic()
         {
-            if (Request.IsAuthenticated)
+            for (int i = 0; i < Request.Files.Count; i++)
             {
-                for (int i = 0; i < Request.Files.Count; i++)
-                {
-                    HttpPostedFileBase file = Request.Files[i];
-                    string extension = System.IO.Path.GetExtension(file.FileName);
-                    HttpClient client = new HttpClient();
-                    var stringContent = new StringContent(extension.ToString());
-
-                 //   content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-                    client.BaseAddress = new Uri("http://localhost:59322/api/User/SaveProfilePic");
-                    HttpResponseMessage response = client.PostAsync("/api/User/SaveProfilePic", stringContent).Result;
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        TempData["errorMessage"] = "Some error occured. Please try again";
-                    }
-                    file.SaveAs(Server.MapPath(@"\Images\userProfilePic" + User.Identity.GetUserId()));
-                }
-                return RedirectToAction("Index", User.Identity.GetUserId());
+                HttpPostedFileBase file = Request.Files[i];
+                string extension = System.IO.Path.GetExtension(file.FileName);
+                file.SaveAs(Server.MapPath(@"~\Images\Users\p" + User.Identity.GetUserId()  + extension));
+                string id = User.Identity.GetUserId();
+                var user = db.AspNetUsers.Find(id);
+                user.dpExtension = extension;
+                db.SaveChanges();
             }
-            else
-            {
-                TempData["errorMessage"] = "You are not login";
-                return RedirectToAction("Login","Account");
-            }
+
+            return RedirectToAction("../User/Profile", new { id = User.Identity.GetUserId() });
         }
+        //public ActionResult saveProfilePic()
+        //{
+        //    if (Request.IsAuthenticated)
+        //    {
+        //        for (int i = 0; i < Request.Files.Count; i++)
+        //        {
+        //            HttpPostedFileBase file = Request.Files[i];
+        //            string extension = System.IO.Path.GetExtension(file.FileName);
+        //            HttpClient client = new HttpClient();
+        //            var stringContent = new StringContent(extension.ToString());
+
+        //         //   content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+        //            client.BaseAddress = new Uri("http://localhost:59322/api/User/SaveProfilePic");
+        //            HttpResponseMessage response = client.PostAsync("/api/User/SaveProfilePic", stringContent).Result;
+        //            if (!response.IsSuccessStatusCode)
+        //            {
+        //                TempData["errorMessage"] = "Some error occured. Please try again";
+        //            }
+        //            file.SaveAs(Server.MapPath(@"\Images\userProfilePic" + User.Identity.GetUserId()));
+        //        }
+        //        return RedirectToAction("Index", User.Identity.GetUserId());
+        //    }
+        //    else
+        //    {
+        //        TempData["errorMessage"] = "You are not login";
+        //        return RedirectToAction("Login","Account");
+        //    }
+        //}
         // GET: /User/Details/5
         public ActionResult Details(string id)
         {

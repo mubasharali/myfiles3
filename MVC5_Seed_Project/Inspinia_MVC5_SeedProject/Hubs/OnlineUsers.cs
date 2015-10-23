@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
-using System.Collections.Concurrent; // for userlist
+
 using Microsoft.AspNet.Identity;
+
 using Inspinia_MVC5_SeedProject.Models;
 namespace Inspinia_MVC5_SeedProject.Hubs
 {
@@ -14,10 +15,16 @@ namespace Inspinia_MVC5_SeedProject.Hubs
         public string name;
         public string dpExtension;
     }
+    public class Map
+    {
+        public string UserId { get; set; }
+        public User User { get; set; }
+        public List<string> Connections { get; set; }
+    }
     public class OnlineUsers : Hub
     {
+        public static readonly List<Map> maps = new List<Map>();
         private Entities db = new Entities();
-        public static ConcurrentDictionary<string, User> users = new ConcurrentDictionary<string, User>();
         public override System.Threading.Tasks.Task OnConnected()
         {
             User u = new User();
@@ -31,20 +38,37 @@ namespace Inspinia_MVC5_SeedProject.Hubs
                 u.name = da.Email;
                 u.dpExtension = da.dpExtension;
             }
-            User abc;
-            var data = users.TryGetValue(Context.ConnectionId, out abc); 
-            if (!data)
+            Map data = maps.FirstOrDefault(t => t.UserId == u.id);
+            if (data == null)
             {
-                users.TryAdd(Context.ConnectionId, u);
+                maps.Add(new Map()
+                {
+                    UserId = u.id,
+                    User = u,
+                    Connections = new List<string>() { Context.ConnectionId }
+                });
             }
-            Clients.All.showConnected(users);
+            else
+            {
+                data.Connections.Add(Context.ConnectionId);
+            }
+
+            Clients.All.showConnected(maps.Select(m => m.User));
             return base.OnConnected();
         }
         public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
         {
-            User abc;
-            users.TryRemove(Context.ConnectionId, out abc);
-            Clients.All.showConnected(users);
+            var map = maps.FirstOrDefault(t => t.Connections.Contains(Context.ConnectionId));
+            if (map != null)
+            {
+                map.Connections.Remove(Context.ConnectionId);
+                if (map.Connections.Count <= 0)
+                {
+                    maps.Remove(map);
+                }
+            }
+
+            Clients.All.showConnected(maps.Select(m => m.User));
             return base.OnDisconnected(stopCalled);
         }
     }

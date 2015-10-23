@@ -115,25 +115,31 @@ function AccountViewModel() {
     self.registerNewUser = function () {
         self.error("");
         if (self.password() === self.confirmPassword()) {
-            $.ajax({
-                url: '/Account/RegisterUser?email=' + self.email() + '&password=' + self.password(),
-                dataType: "json",
-                contentType: "application/json",
-                cache: false,
-                type: 'POST',
-                success: function (data) {
-                    if (data == "Done") {
-                        self.error("");
-                        $("#newUser").modal('hide');
-                        $("#inputName").modal('show');
-                    } else {
-                        self.error("Some error has occured");
+            if (typeof self.password() != "undefined") {
+                console.log(self.password());
+                $.ajax({
+                    url: '/Account/RegisterUser?email=' + self.email() + '&password=' + self.password(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        if (data == "Done") {
+                            self.error("");
+                            $("#newUser").modal('hide');
+                            $("#inputName").modal('show');
+                        } else {
+                            self.error("Some error has occured");
+                        }
+                    },
+                    error: function () {
+                        self.error("failed to send password. Please refresh page and try again", "Error!");
                     }
-                },
-                error: function () {
-                    self.error("failed to send password. Please refresh page and try again", "Error!");
-                }
-            });
+                });
+            }
+            else {
+                self.error("Please enter password");
+            }
         }
         else {
             self.error("password does not match");

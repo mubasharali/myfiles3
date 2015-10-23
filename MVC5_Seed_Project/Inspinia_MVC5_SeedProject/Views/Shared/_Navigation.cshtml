@@ -19,17 +19,26 @@
                     IN+
                 </div>
             </li>
+            <li class="@Html.IsSelected(controller: "Animals")">
+                <a href="@Url.Action("Mobiles", "Electronics")"><i class="fa fa-laptop"></i> <span class="nav-label">Mobiles, Tablets</span> </a>
+            </li>
+            <li class="@Html.IsSelected(controller: "Animals")">
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-laptop"></i> <span class="nav-label">Laptops, Computers</span> </a>
+            </li>
+            <li class="@Html.IsSelected(controller: "Animals")">
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-laptop"></i> <span class="nav-label">Technology</span> </a> @*contains tags of softwares and other technolgy products*@
+            </li>
+            @*<li class="@Html.IsSelected(controller: "Animals")">
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-laptop"></i> <span class="nav-label">Electronics and appliances</span> </a> 
+            </li>*@
             <li class="@Html.IsSelected(controller: "Electronics")">
-                <a href="@Url.Action("Index", "Electronics")"><i class="fa fa-laptop"></i> <span class="nav-label">Electronics</span><span class="fa arrow"></span> </a>
+                <a href="@Url.Action("Index", "Electronics")"><i class="fa fa-laptop"></i> <span class="nav-label">Electronics, Appliances</span><span class="fa arrow"></span> </a>
                 <ul class="nav nav-second-level collapse">
-                    <li class="@Html.IsSelected(action: "Mobiles")"><a href="@Url.Action("Mobiles","Electronics")"><i class="fa fa-laptop"></i> Mobiles, Tablets</a></li>
-                    <li class="@Html.IsSelected(action: "Laptops")"><a href="@Url.Action("Laptops", "Electronics")"><i class="fa fa-laptop"></i> Laptops, Computers</a></li>
                     <li class="@Html.IsSelected(action: "Camera")"><a href="@Url.Action("Camera", "Electronics")">Camera</a></li>
-                    <li class="@Html.IsSelected(action: "Watches")"><a href="@Url.Action("Watches", "Electronics")">Watches</a></li>@*merge camera and watch*@
                     <li class="@Html.IsSelected(action: "Games")"><a href="@Url.Action("Games", "Electronics")">Games</a></li>
                     <li class="@Html.IsSelected(action: "Home_Appliances")"><a href="@Url.Action("Home_Appliances", "Electronics")">Home Appliances</a></li>
+                    <li class="@Html.IsSelected(action: "Games")"><a href="@Url.Action("Games", "Electronics")">Audio, Video</a></li>
                     <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")">Others</a></li>
-
                 </ul>
             </li>
             <li class="@Html.IsSelected(controller: "Vehicles")">
@@ -68,12 +77,31 @@
                 <ul class="nav nav-second-level collapse">
                     <li class="@Html.IsSelected(action: "Cars")"><a href="@Url.Action("Mobiles","Electronics")"><i class="fa fa-laptop"></i> Announcements</a></li>
                     <li class="@Html.IsSelected(action: "Bikes")"><a href="@Url.Action("Laptops", "Electronics")"><i class="fa fa-laptop"></i> Volunteers</a></li>
-                    <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")">Lost Found</a></li>
+                    <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")">Lost Found</a></li> @*tickets and vouchers*@
                     <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")">Others</a></li>
                 </ul>
             </li>
             <li class="@Html.IsSelected(controller: "Vehicles")">
                 <a href="@Url.Action("Index", "Vehicles")"><i class="fa fa-group"></i> <span class="nav-label">Life Style</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Watches")"><a href="@Url.Action("Watches", "Electronics")">Watches</a></li>
+                    <li class="@Html.IsSelected(action: "Watches")"><a href="@Url.Action("Watches", "Electronics")">Clothes</a></li>
+                    <li class="@Html.IsSelected(action: "Watches")"><a href="@Url.Action("Watches", "Electronics")">Footware</a></li>
+                    <li class="@Html.IsSelected(action: "Watches")"><a href="@Url.Action("Watches", "Electronics")">Jewellery</a></li>
+                    <li class="@Html.IsSelected(action: "Bikes")"><a href="@Url.Action("Laptops", "Electronics")"><i class="fa fa-laptop"></i> Baby Products</a></li>
+                    <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")"> Health and beauty</a></li>
+                    <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")"> Child Adaption</a></li> @*fitness*@
+                    <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")">Others</a></li>
+                </ul>
+            </li>
+            <li class="@Html.IsSelected(controller: "Entertainment")">
+                <a href="@Url.Action("Index", "Entertainment")"><i class="fa fa-futbol-o"></i> <span class="nav-label">Entertainment</span></a> @*or fa-bullhorn, sports, fa-weixin for community*@ 
+            </li>
+            <li class="@Html.IsSelected(action: "Index")">
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> <span class="nav-label">Matrimonal</span> </a>
+            </li>
+            <li class="@Html.IsSelected(controller: "Forum")">
+                <a href="@Url.Action("Index", "Forum")"><i class="fa fa-comment-o"></i> <span class="nav-label">Help (Forum)</span><span class="fa arrow"></span> </a>
                 <ul class="nav nav-second-level collapse">
                     <li class="@Html.IsSelected(action: "Cars")"><a href="@Url.Action("Mobiles","Electronics")"><i class="fa fa-laptop"></i> Matrimonal</a></li>
                     <li class="@Html.IsSelected(action: "Bikes")"><a href="@Url.Action("Laptops", "Electronics")"><i class="fa fa-laptop"></i> Baby Products</a></li>
@@ -81,12 +109,6 @@
                     <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")"> Child Adaption</a></li>
                     <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")">Others</a></li>
                 </ul>
-            </li>
-            <li class="@Html.IsSelected(controller: "Entertainment")">
-                <a href="@Url.Action("Index", "Entertainment")"><i class="fa fa-futbol-o"></i> <span class="nav-label">Entertainment</span></a> @*or fa-bullhorn, sports, fa-weixin for community*@ 
-            </li>
-            <li class="@Html.IsSelected(controller: "Forum")">
-                <a href="@Url.Action("Index", "Forum")"><i class="fa fa-comments-o"></i> <span class="nav-label">Help</span></a> @*or fa-bullhorn, sports, fa-weixin for community*@
             </li>
         </ul>
     </div>

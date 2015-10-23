@@ -143,6 +143,10 @@
     @Scripts.Render("~/plugins/slick")
     @Scripts.Render("~/plugins/jsTree")
 <script src="~/Scripts/app/MobileTree.js"></script>
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/UserLogin.js"></script>
     <script>
         function Tag(data) {
             var self = this;
@@ -235,6 +239,7 @@
         
         function viewModel() {
             TreeViewModel();
+            ChatViewModel();
             var self = this;
             
             return self;
@@ -273,7 +278,9 @@
 
            // ko.applyBindings(new treeModel, document.getElementById('navigation'));
             ko.applyBindings(new viewModel);
+            $.connection.hub.start().done(function () {
 
+            });
         });
 
     </script>

@@ -23,7 +23,23 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return db.Questions;
         }
+        public async Task<IHttpActionResult> GetQuestions(string type)
+        {
+            var ret = from q in db.Questions
+                      where q.category.Equals(type)
+                      select new
+                      {
+                          title = q.title,
+                          id = q.Id,
+                          views = q.QuestionViews.Count,
+                          postedById = q.postedBy,
+                          postedByName = q.AspNetUser.Email,
+                          time = q.time,
+                          answers = q.Answers.Count,
 
+                      };
+            return Ok(ret);
+        }
         // GET api/Forum/5
         [ResponseType(typeof(Question))]
         public async Task<IHttpActionResult> GetQuestion(int id)
@@ -256,8 +272,13 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
 
             db.QuestionReplies.Remove(comment);
+            try { 
             await db.SaveChangesAsync();
-
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString();
+            }
             return Ok(comment);
         }
         [HttpPost]

@@ -28,13 +28,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> GetMobileTree()
         {
-            var mobiles = (from mobile in db.Mobiles.ToList()
-                          orderby mobile.Id
+            var mobiles = (from mobile in db.Mobiles
+                           where mobile.brand != ""
                           select new
                           {
                               id = mobile.Id,
                               companyName = mobile.brand,
-                              models = from model in mobile.MobileModels.ToList()
+                              models = from model in mobile.MobileModels
+                                       where model.model != ""
                                        select new
                                        {
                                            id = model.Id,
@@ -319,7 +320,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> GetBrands()
         {
-            var brands =  db.Mobiles.Select(x => x.brand);
+            var brands =  db.Mobiles.Where(x=>x.brand != "").Select(x => x.brand);
             //var brands = await db.Mobiles.ToListAsync();
             return Ok(brands);
         }

@@ -1259,7 +1259,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_QuestionReplyVote_ToTable">
-          <End Role="QuestionReply" Type="Self.QuestionReply" Multiplicity="1" />
+          <End Role="QuestionReply" Type="Self.QuestionReply" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="QuestionReplyVote" Type="Self.QuestionReplyVote" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="QuestionReply">
@@ -1271,9 +1273,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_QuestionReplyVote_ToTable_1">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="QuestionReplyVote" Type="Self.QuestionReplyVote" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">

@@ -6,10 +6,10 @@
 <input type="hidden" value="@ViewBag.id" id="userId" />
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
-        <h2>Index</h2>
+        <h2>Profile</h2>
         <ol class="breadcrumb">
             <li class="active">
-                <strong>AspNetUser</strong>
+                <strong>Profile</strong>
             </li>
             
         </ol>
@@ -28,21 +28,20 @@
 </div>*@
 
 <div class="wrapper wrapper-content animated fadeInRight" id="profile" >
-    abcdef <div data-bind="text:showOnline"></div>
+    abcdef <div data-bind="text:isOnline"></div>
     <div class="row m-b-lg m-t-lg" data-bind="with:showProfile">
         <div class="col-md-5">
 
             <div class="profile-image">
-                <img src="~/Images/a4.jpg" class="img-circle circle-border m-b-md" alt="profile">
+                <img data-bind="attr:{src:dpLink}" class="img-circle circle-border m-b-md" alt="profile">
             </div>
             <div class="profile-info">
                 <div class="">
                     <div>
-                        <div data-bind="text:showOnline"></div>
                         <h2 class="no-margins" data-bind="text:email"></h2>
                         <h4 data-bind="text:shortAbout"></h4>
                         <small>
-                            <button class="btn btn-sm" data-bind="click:function(){ return sendMessage(id)}" style="margin-bottom:1px">Send message</button> &nbsp;<button style="margin-bottom:1px" class="btn btn-sm">Follow</button>
+                            <button class="btn btn-sm" data-bind="click:function(){ return sendMessage(id,email)}" style="margin-bottom:1px">Send message</button> &nbsp;<button style="margin-bottom:1px" class="btn btn-sm">Follow</button>
                         </small>
                     </div>
                 </div>
@@ -106,14 +105,9 @@
                 </tbody>
             </table>
         </div>
-        @*<div class="col-md-3">
-                <small>Sales in last 24h</small>
-                <h2 class="no-margins">206 480</h2>
-                <div id="sparkline1"></div>
-            </div>*@
-
-
+       
     </div>
+
     @*<div class="row">
 
         <div class="col-lg-3" >
@@ -548,17 +542,17 @@
     @Styles.Render("~/plugins/toastrStyles")
 @Styles.Render("~/plugins/imagecropperStyles")
 }
-
-
+@Html.Partial("/Views/Shared/_Chat.cshtml")
+@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 @section Scripts{
     @Scripts.Render("~/plugins/toastr")
 @Scripts.Render("~/plugins/imagecropper")
 <script src="~/Scripts/jquery.timeago.js"></script>
 <script src="~/Scripts/knockout-3.3.0.js"></script>
-
 <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
 <script src="~/signalr/hubs"></script>
-
+<script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/UserLogin.js"></script>
     <script>
         function profile(data) {
             var self = this;
@@ -573,14 +567,17 @@
             self.hideEmail = data.hideEmail;
             self.hidePhoneNumber = data.hidePhoneNumber;
             self.dpExtension = data.dpExtension;
+            self.dpLink = '/Images/Users/p' + self.id + self.dpExtension;
             self.shortAbout = data.shortAbout;
             self.longAbout = data.longAbout;
             self.lastSeen = data.lastSeen;
             self.reputation = data.reputation;
             self.since = data.since;
             
-            self.sendMessage = function (id) {
-               
+            self.sendMessage = function (id,email) {
+                console.log(id + " " + email);
+                sendMessageTo(id);
+                console.log("Message will be sent to : " + email);
                 $(".open-small-chat").trigger('click');
                 
             }
@@ -590,7 +587,6 @@
             self.isUserOnline = function(id){
                 
             }
-            self.isOnline = self.isUserOnline(self.UserName);
             //console.log(self.isUserOnline(self.id));
             function getAge(dateString) {
                 var today = new Date();
@@ -614,9 +610,12 @@
             }
         }
         function viewModel() {
+            ChatViewModel();
+            AccountViewModel();
+            
             var self = this;
             self.showProfile = ko.observable();
-            self.showOnline = ko.observable("Offline");
+            
             self.openProfile = function () {
                 var userId = $("#userId").val();
                 window.location.href = "/User/Profile/" + userId;
@@ -631,14 +630,7 @@
                 self.onlineUsers(mape);
             }
             
-           //execute script when page is completely loaded.
-            self.onlineUserChecker = function () {
-                for (var i = 0; i < self.onlineUsers.length ; i++) {
-                    if (self.onlineUsers[i] == userId) {
-                        self.showOnline("Online");
-                    }
-                }
-            }
+           
 
             self.loadProfile = function () {
                 var userId = $("#userId").val();
@@ -658,7 +650,6 @@
                 })
             }
             self.loadProfile();
-            self.onlineUserChecker();
             return self;
         }
         function getTimeAgo(varDate) {
@@ -733,9 +724,12 @@
             $("#setDrag").click(function () {
                 $image.cropper("setDragMode", "crop");
             });
-
-            ko.applyBindings(new viewModel(), document.getElementById("profile"));
             $.connection.hub.start().done();
+            //   ko.applyBindings(new viewModel(), document.getElementById("profile"));
+           // ChatViewModel();
+            ko.applyBindings(new viewModel());
+            //  ko.applyBindings(new ChatViewModel(), document.getElementById("chatViewModel"));
+            
         });
     </script>
 }
