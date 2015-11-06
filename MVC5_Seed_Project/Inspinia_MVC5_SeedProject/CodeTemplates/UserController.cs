@@ -25,22 +25,34 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         }
         public ActionResult Profile(string id)
         {
-            ViewBag.userId = id;
-            return View();
+            if (Request.IsAuthenticated)
+            {
+                if (id == User.Identity.GetUserId())
+                {
+                    ViewBag.userId = id;
+                    return View();
+                }
+                return RedirectToAction("../User/Profile", new { id = User.Identity.GetUserId() });
+            }
+            return RedirectToAction("/Home/Index");
         }
         public ActionResult saveProfilePic()
         {
-            for (int i = 0; i < Request.Files.Count; i++)
+            if (Request.IsAuthenticated)
             {
-                HttpPostedFileBase file = Request.Files[i];
-                string extension = System.IO.Path.GetExtension(file.FileName);
-                file.SaveAs(Server.MapPath(@"~\Images\Users\p" + User.Identity.GetUserId()  + extension));
-                string id = User.Identity.GetUserId();
-                var user = db.AspNetUsers.Find(id);
-                user.dpExtension = extension;
-                db.SaveChanges();
+                string s = Request["userId"];
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    string id = User.Identity.GetUserId();
+                    var user = db.AspNetUsers.Find(id);
+                    System.IO.File.Delete(Server.MapPath(@"~\Images\Users\p" + id + user.dpExtension));
+                    HttpPostedFileBase file = Request.Files[i];
+                    string extension = System.IO.Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath(@"~\Images\Users\p" + User.Identity.GetUserId() + extension));
+                    user.dpExtension = extension;
+                    db.SaveChanges();
+                }
             }
-
             return RedirectToAction("../User/Profile", new { id = User.Identity.GetUserId() });
         }
         //public ActionResult saveProfilePic()

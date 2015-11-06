@@ -33,7 +33,7 @@
                 </div>
                 <div class="ibox-content">
 
-				@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form"}))
+				@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form my-awesome-dropzone", @class = "dropzone", enctype = "multipart/form-data" }))
                 {
     @Html.AntiForgeryToken()
 
@@ -124,7 +124,7 @@
 @Styles.Render("~/scripts/selectizeStyles")
 @Styles.Render("~/bundles/myStyles")
 @Styles.Render("~/bundles/tagStyles")
-
+@Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
 }
 
 @section Scripts {
@@ -136,6 +136,8 @@
 @Scripts.Render("~/scripts/selectize")
     @Scripts.Render("~/plugins/toastr")
 @Scripts.Render("~/plugins/autosize")
+@Scripts.Render("~/plugins/dropZone")
+@*<script src="~/Scripts/_CreateAd.js"></script>*@
     <script type="text/javascript">
         
         function ViewModel() {
@@ -298,6 +300,34 @@
         };
 
         $(document).ready(function () {
+            
+
+            Dropzone.autoDiscover = false;
+            Dropzone.options.myAwesomeDropzone = {
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 100,
+                maxFiles: 100,
+                addRemoveLinks: true,
+                autoDiscover: false,
+                clickable: '#dropzonePreview',
+                init: function () {
+                    var myDropzone = this;
+                    this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        myDropzone.processQueue();
+                    });
+                    this.on("sendingmultiple", function () {
+                    });
+                    this.on("successmultiple", function (files, response) {
+                    });
+                    this.on("errormultiple", function (files, response) {
+                    });
+                }
+
+            }
+
             ko.applyBindings(new ViewModel);
 
             Selectize.define('inputMaxlength', function (options) {
@@ -398,7 +428,7 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
-
+            
         });
 </script>
     }

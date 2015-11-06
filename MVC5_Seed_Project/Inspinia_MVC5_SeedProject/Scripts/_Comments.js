@@ -4,6 +4,9 @@
     self.description = ko.observable(data.description);
     self.postedByName = data.postedByName;
     self.postedById = data.postedById;
+    self.imageExtension = data.imageExtension;
+    self.postedByLink = '/User/Index/' + self.postedById;
+    self.profileLink = '/Images/Users/p' + self.postedById + self.imageExtension;
     self.time = getTimeAgo(data.time);
     self.id = data.id;
     self.isliked = ko.observable(data.isUp);
@@ -80,11 +83,21 @@
 function comment(data) {
     var self = this;
     data = data || {};
+    self.loginUserId = data.islogin || "";
     self.description = ko.observable(data.description);
     self.voteUpCount = ko.observable();
     self.voteDownCount = ko.observable();
     self.postedByName = data.postedByName;
     self.postedById = data.postedById;
+    self.imageExtension = data.imageExtension;
+    self.postedByLink = '/User/Index/' + self.postedById;
+    self.profileLink = '/Images/Users/p' + self.postedById + self.imageExtension;
+    if (self.loginUserId == "" || data.loginUserProfileExtension == null) {
+        self.loginUserProfileLink = '/Images/Users/default.jpg';
+    } else {
+        self.loginUserProfileLink = '/Images/Users/p' + self.loginUserId + data.loginUserProfileExtension;
+    }
+    
     self.time = getTimeAgo(data.time);
     self.adId = data.adId;
     self.id = data.id;
@@ -96,7 +109,6 @@ function comment(data) {
 
     self.isFocus = ko.observable(true);
     self.isEditing = ko.observable(false);
-    self.loginUserId = data.islogin || "";
     self.isVisible = ko.observable(false);
     self.showCommentReply = ko.observableArray();
     if (data.commentReply) {
@@ -109,7 +121,7 @@ function comment(data) {
 
     self.checkEnter1 = function (d, e) {
         if (e.keyCode == 13) {
-            self.description(self.description().slice(0, -1));
+           // self.description(self.description().slice(0, -1));
             self.addCommentReply(self.loginUserId);
         }
     }
@@ -219,8 +231,6 @@ function comment(data) {
                 });
             }
         } else {
-            var login = $("#loginPage").val();
-            toastr.options.onclick = function () { login };
             toastr.info("You must be login to reply this comment", "Oops!");
         }
     }

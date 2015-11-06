@@ -3,7 +3,11 @@
     data = data || {};
     self.id = data.id;
     self.name = data.name;
-    self.dpExtension = data.dpExtension;
+    self.dpLink = '/Images/Users/p' + self.id + data.dpExtension;
+    //self.profileLink = '/Users/Index/' + self.id;
+    self.openProfile = function () {
+        window.location.href = '/User/Index/' + self.id;
+    }
 }
 function Message(data) {
     var self = this;
@@ -46,13 +50,29 @@ function ChatViewModel() {
     self.loginUserId1 = "abc";
     self.onlineUsers = ko.observableArray();
     self.sendMessageTo = ko.observable();
+    self.sendMessgeToName = ko.observable();
     self.sendTo = function (data) {
         self.sendMessageTo(data.id);
+        self.sendMessgeToName(data.name);
     }
-    self.isOnline = ko.observable();
+    self.isOnline = ko.observable("Offline");
     
     var sub = self.sendMessageTo.subscribe(function (value) {
         self.loadMessages();
+    })
+    self.checkUserOnline = function () {
+        if (window.location.pathname.indexOf("/User/Index/") > -1 || window.location.pathname.indexOf("/User/Profile/") > -1) {
+            var userId = $("#userId").val();
+            self.isOnline("Offline");
+            $.each(self.onlineUsers(), function (key, value) {
+                if (value.id == userId) {
+                    self.isOnline("Online");
+                }
+            })
+        }
+    }
+    self.onlineUsers.subscribe(function (value) {
+        self.checkUserOnline();
     })
     self.getLoginUserId = function () {
         $.ajax({
@@ -71,6 +91,7 @@ function ChatViewModel() {
         });
     };
     self.getLoginUserId();
+    self.checkUserOnline();
     self.loadMessages = function () {
         $.ajax({
             url: '/api/Chat/GetChat?with=' + self.sendMessageTo(),
@@ -83,7 +104,7 @@ function ChatViewModel() {
                 self.showChat(msg);
             },
             error: function () {
-                toastr.error("failed to send message", "Error!");
+               // toastr.error("failed to load message", "Error!");
                 return null;
             }
         });
@@ -111,9 +132,8 @@ function ChatViewModel() {
     self.onlineUsersHub.client.showConnected = function (connectionId) {
         var mape = $.map(connectionId, function (item) { return new OnlineUsers(item) });
         self.onlineUsers(mape);
-        self.isOnline(self.onlineUsers().indexOf(self.loginUserId) > -1);
+        self.checkUserOnline();
         console.log(self.onlineUsers());
-        console.log(self.isOnline());
     }
     self.getReceiverId = function (email) {
         $.ajax({
@@ -132,16 +152,20 @@ function ChatViewModel() {
         });
     }
     self.sendMessage = function () {
-        var msg = new Message();
-        // msg.sentTo = "287c5c50-c632-41f7-811c-6939ff23f331";
-        msg.sentTo = self.sendMessageTo();
-        msg.message = self.newMessage();
-        msg.message = $.trim(msg.message);
-        if (msg.message != "") {
-            self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+        if (self.sendMessageTo()) {
+            var msg = new Message();
+            msg.sentTo = self.sendMessageTo();
+            msg.message = self.newMessage();
+            msg.message = $.trim(msg.message);
+            if (msg.message != "") {
+                self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+            } else {
+                toastr.info("You cannot send empty message");
+            }
         } else {
-            toastr.info("You cannot send empty message");
+            toastr.info("Go to online users list or user profile to send message","send messge to whom?");
         }
     }
+
 }
 

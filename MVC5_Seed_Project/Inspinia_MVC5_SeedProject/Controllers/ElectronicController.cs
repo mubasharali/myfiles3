@@ -53,7 +53,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            {
                                id = mobile.Id,
                                companyName = mobile.brand,
-                               models = from model in mobile.LaptopModels.ToList()
+                               models = from model in mobile.LaptopModels
+                                        where model.model != ""
                                         select new
                                         {
                                             id = model.Id,
@@ -455,6 +456,127 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                       };
             return Ok(res);
         }
+        public async Task<IHttpActionResult> SearchLaptopAds(string brand, string model)
+        {
+            string islogin = "";
+            if (User.Identity.IsAuthenticated)
+            {
+                islogin = User.Identity.GetUserId();
+            }
+            if (brand == null)
+            {
+                var ret = from ad in db.LaptopAds
+                          select new
+                          {
+                              title = ad.Ad.title,
+                              postedById = ad.Ad.AspNetUser.Id,
+                              postedByName = ad.Ad.AspNetUser.Email,
+                              description = ad.Ad.description,
+                              id = ad.Ad.Id,
+                              time = ad.Ad.time,
+                              islogin = islogin,
+                              isNegotiable = ad.Ad.isnegotiable,
+                              price = ad.Ad.price,
+                              reportedCount = ad.Ad.Reporteds.Count,
+                              isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                              views = ad.Ad.AdViews.Count,
+                              condition = ad.Ad.condition,
+                              savedCount = ad.Ad.SaveAds.Count,
+                              color = ad.color,
+                              brand = ad.LaptopModel.LaptopBrand.brand,
+                              model = ad.LaptopModel.model,
+                              adTags = from tag in ad.Ad.AdTags.ToList()
+                                       select new
+                                       {
+                                           id = tag.Id,
+                                           name = tag.Tag.name,
+                                           //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                           //info = tag.Tag.info,
+                                       },
+                              bid = from biding in ad.Ad.Bids.ToList()
+                                    select new
+                                    {
+                                        price = biding.price,
+                                    },
+                          };
+                return Ok(ret);
+            }
+            if (model == null)
+            {
+                var re = from ad in db.Ads
+                         where ad.LaptopAd.LaptopModel.LaptopBrand.brand.Equals(brand)
+                         select new
+                         {
+                             title = ad.title,
+                             postedById = ad.AspNetUser.Id,
+                             postedByName = ad.AspNetUser.Email,
+                             description = ad.description,
+                             id = ad.Id,
+                             time = ad.time,
+                             islogin = islogin,
+                             isNegotiable = ad.isnegotiable,
+                             price = ad.price,
+                             reportedCount = ad.Reporteds.Count,
+                             isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
+                             views = ad.AdViews.Count,
+                             condition = ad.condition,
+
+                             color = ad.LaptopAd.color,
+                             brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                             model = ad.LaptopAd.LaptopModel.model,
+                             adTags = from tag in ad.AdTags.ToList()
+                                      select new
+                                      {
+                                          id = tag.Id,
+                                          name = tag.Tag.name,
+                                          //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                          //info = tag.Tag.info,
+                                      },
+                             bid = from biding in ad.Bids.ToList()
+                                   select new
+                                   {
+                                       price = biding.price,
+                                   },
+                         };
+                return Ok(re);
+            }
+            var res = from ad in db.Ads
+                      where ad.LaptopAd.LaptopModel.LaptopBrand.brand.Equals(brand) && ad.LaptopAd.LaptopModel.model.Equals(model)
+                      select new
+                      {
+                          title = ad.title,
+                          postedById = ad.AspNetUser.Id,
+                          postedByName = ad.AspNetUser.Email,
+                          description = ad.description,
+                          id = ad.Id,
+                          time = ad.time,
+                          islogin = islogin,
+                          isNegotiable = ad.isnegotiable,
+                          price = ad.price,
+                          reportedCount = ad.Reporteds.Count,
+                          isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
+                          views = ad.AdViews.Count,
+                          condition = ad.condition,
+
+                          color = ad.LaptopAd.color,
+                          brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                          model = ad.LaptopAd.LaptopModel.model,
+                          adTags = from tag in ad.AdTags.ToList()
+                                   select new
+                                   {
+                                       id = tag.Id,
+                                       name = tag.Tag.name,
+                                       //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                       //info = tag.Tag.info,
+                                   },
+                          bid = from biding in ad.Bids.ToList()
+                                select new
+                                {
+                                    price = biding.price,
+                                },
+                      };
+            return Ok(res);
+        }
         // GET api/Electronic/5
         [ResponseType(typeof(Ad))]
         public async Task<IHttpActionResult> GetAd(int id)
@@ -466,9 +588,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             await AdViews(id);
             string islogin = "";
+            string loginUserProfileExtension = "";
             if (User.Identity.IsAuthenticated)
             {
                 islogin = User.Identity.GetUserId();
+                var ide = await db.AspNetUsers.FindAsync(islogin);
+                loginUserProfileExtension = ide.dpExtension;
             }
             var ret = (from ad in db.Ads
                        where ad.Id == id
@@ -482,6 +607,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            id = ad.Id,
                            time = ad.time,
                            islogin = islogin,
+                           loginUserProfileExtension = loginUserProfileExtension,
                            isNegotiable = ad.isnegotiable,
                            price = ad.price,
                            reportedCount = ad.Reporteds.Count,
@@ -570,10 +696,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                          description = comment.description,
                                          postedById = comment.postedBy,
                                          postedByName = comment.AspNetUser.Email,
+                                         imageExtension = comment.AspNetUser.dpExtension,
                                          time = comment.time,
                                          id = comment.Id,
                                          adId = comment.adId,
                                          islogin = islogin,
+                                         loginUserProfileExtension = loginUserProfileExtension,
                                          voteUpCount = comment.CommentVotes.Where(x => x.isup == true).Count(),
                                          voteDownCount = comment.CommentVotes.Where(x => x.isup == false).Count(),
                                          isUp = comment.CommentVotes.Any(x => x.votedBy == islogin && x.isup),
@@ -586,6 +714,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                             description = commentreply.description,
                                                             postedById = commentreply.postedBy,
                                                             postedByName = commentreply.AspNetUser.Email,
+                                                            imageExtension = commentreply.AspNetUser.dpExtension,
+                                                            loginUserProfileExtension = loginUserProfileExtension,
                                                             time = commentreply.time,
                                                             voteUpCount = commentreply.CommentReplyVotes.Where(x => x.isup == true).Count(),
                                                             voteDownCount = commentreply.CommentReplyVotes.Where(x => x.isup == false).Count(),

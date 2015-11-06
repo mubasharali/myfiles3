@@ -11,7 +11,9 @@
     <div class="small-chat-box fadeInRight animated">
 
         <div class="heading" draggable="true">
-            <small class="chat-date" data-bind="text:sendMessageTo">
+            <small class="chat-date" >
+                <span data-bind="visible:sendMessageTo(),text:sendMessgeToName"></span>
+                <span data-bind="visible:!sendMessageTo()">Chat Box</span>
             </small>
         </div>
 
@@ -20,8 +22,8 @@
             <div data-bind="visible:sentFrom != loginUserId1">
                 <div class="left">
                     <div data-bind="attr:{'id':id}">
-                        sent from<div data-bind="text:sentFrom"></div>
-                        loginUserID<div data-bind="text:loginUserId1"></div>
+                        @*sent from<div data-bind="text:sentFrom"></div>
+        loginUserID<div data-bind="text:loginUserId1"></div>*@
                         <div class="author-name">
                             <span data-bind="text:sentToName"></span>                                <small data-bind="text:timeAgo" class="chat-date">
 
@@ -35,8 +37,8 @@
             <div data-bind="visible: sentFrom == loginUserId1">
                 <div class="right">
                     <div data-bind="attr:{'id':id}">
-                        sent from<div data-bind="text:sentFrom"></div>
-                        loginUserID<div data-bind="text:loginUserId1"></div>
+                        @*sent from<div data-bind="text:sentFrom"></div>
+                        loginUserID<div data-bind="text:loginUserId1"></div>*@
                         <div class="author-name">
                             <span data-bind="text:sentToName"></span>                                <small data-bind="text:timeAgo" class="chat-date">
 

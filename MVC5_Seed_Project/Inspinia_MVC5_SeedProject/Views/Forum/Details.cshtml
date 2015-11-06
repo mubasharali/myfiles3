@@ -51,7 +51,7 @@
                                                 <a data-bind="click:toggleQuestionReply" class="btn btn-xs btn-white"><i class="fa fa-reply"></i> Reply </a>
                                                 <i class="fa fa-eye"></i> <a><span data-bind="text:views"></span>  Views</a>
                                                 <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
-                                                <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
+                                                <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
                                                 <i data-bind="style:{color: isFollowed()? 'red' : 'gray'}" class="fa fa-rss"></i> <a data-bind="click: function(){ return follow(id,loginUserId)},text:followText"></a>
                                                 <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"><i class="fa fa-flag"></i></span> <a><span data-bind="text:reportedCount()"></span> Report</a></span>
 
@@ -79,7 +79,7 @@
                                                             <span data-bind="text:voteDownCount"></span>
                                                         </a>
                                                             <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
-                                                            <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
+                                                            <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
                                                             <span data-bind="if: postedById === $parent.loginUserId"><a data-bind="click:editQuestionReply">edit</a> <a data-bind="click:$parent.deleteQuestionReply">delete</a></span>
 
 </div>
@@ -126,7 +126,7 @@
                                             <p data-bind="text:description"></p>
                                             <div class="vote-info">
                                                 <a data-bind="click:toggleAnswerReply" class="btn btn-xs btn-white"><i class="fa fa-reply"></i> Reply </a>
-                                                <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
+                                                <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
                                                 <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
                                             </div>
                                         </div>
@@ -147,7 +147,7 @@
                                                             <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-thumbs-down"> </i>
                                                             <span data-bind="text:voteDownCount"></span>
                                                         </a>
-                                                        <i class="fa fa-user"></i> <a data-bind="text:postedByName"></a>
+                                                        <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
                                                         <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
                                                         <span data-bind="if: postedById === $parents[1].loginUserId"><a data-bind="click:function(d,e){return editAnswerReply(id,d,e)}">edit</a>-<a data-bind="click:$parent.deleteAnswerReply">delete</a></span>
 
@@ -232,6 +232,7 @@
             self.id = data.id;
             self.postedById = data.postedById;
             self.postedByName = data.postedByName;
+            self.postedByLink = '/User/Index/' + self.postedById;
             self.exectTime = data.time;
             self.time = getTimeAgo(data.time);
             self.description = ko.observable(data.description);
@@ -320,6 +321,7 @@
             self.isAnswerEditing = ko.observable(false);
             self.postedById = data.postedById;
             self.postedByName = data.postedByName;
+            self.postedByLink = '/User/Index/' + self.postedById;
             self.exectTime = data.time;
             self.time = getTimeAgo(data.time);
             self.description =ko.observable( data.description);
@@ -481,6 +483,7 @@
             self.id = data.id;
             self.postedById = data.postedById;
             self.postedByName = data.postedByName;
+            self.postedByLink = '/User/Index/' + self.postedById;
             self.exectTime = data.time;
             self.time = getTimeAgo(data.time);
             self.description = ko.observable(data.description);
@@ -579,6 +582,7 @@
             self.description = ko.observable( data.description);
             self.postedByName = data.postedByName;
             self.postedById = data.postedById;
+            self.postedByLink = '/User/Index/' + self.postedById;
             self.id = data.id;
             self.exectTime = data.time;
             self.time = getTimeAgo(data.time);

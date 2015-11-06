@@ -22,121 +22,120 @@
         </div>
     </div>
 </div>
-<input type="hidden" value="@ViewBag.userId" id="userId" />
+<input type="hidden" value="@ViewBag.userId" name="userId" id="userId" />
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-md-3 hidden-sm hidden-xs">kljf sjdl kfajsdlkf ajfkljadslkfa jdslk
+    <div class="row" data-bind="with:showProfile">
+        <div class="col-md-3 hidden-sm hidden-xs">
         </div>
-        <div class="col-md-6 col-sm-9">
-            <form action="/User/saveProfilePic" method="post" enctype="multipart/form-data">
-                <input type="file" name="image" class="text-center center-block well well-sm">
-                <input type="submit" value="upload" />
-            </form>
+        <div class="col-md-9 col-sm-12">
+            <div class="col-sm-9">
+                <img data-bind="attr:{src:dpLink}" width="200" height="200" class="img-circle circle-border m-b-md" alt="profile">
+            </div>
+            <div class="col-sm-3">
+                <form action="/User/saveProfilePic" method="post" enctype="multipart/form-data">
+                    <input type="hidden" value="@ViewBag.userId" name="userId" id="userId" />
+                    <input type="file" name="image" class="text-center center-block well well-sm">
+                    <input type="submit" value="upload" />
+                </form>
+
+            </div>
             @*<div class="ibox float-e-margins">
-                <div class="ibox-title  back-change">
-                    <h5>Image cropper <small>http://fengyuanchen.github.io/cropper/</small></h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li>
-                                <a href="#">Config option 1</a>
-                            </li>
-                            <li>
-                                <a href="#">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="ibox-content">
-                    <p>
-                        Crop image
-                    </p>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="image-crop">
-                                <img src="~/Images/p3.jpg">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h4>Preview image</h4>
-                            <div class="img-preview img-preview-sm"></div>
-                            <h4>&nbsp;</h4>
-                            <div class="btn-group">
-                                <form action="/User/saveProfilePic" method="post" id="setProfilePic" enctype="multipart/form-data">
-                                    <label title="Upload image file" for="inputImage" class="btn btn-primary">
-
-                                        <input type="file" accept="image/*" name="file" id="inputImage" class="hide">
-                                        Upload new image
-                                        <input type="submit" style="visibility:hidden" />
-
-                                    </label>
-                                </form>
-                                <button id="setProfilePicBtn" class="btn btn-primary">Set as profile picture</button>
-                            </div>
-                            <h4>Other options</h4>
-                            <div class="btn-group">
-                                <button class="btn btn-white" id="zoomIn" type="button">Zoom In</button>
-                                <button class="btn btn-white" id="zoomOut" type="button">Zoom Out</button>
-                                <button class="btn btn-white" id="rotateLeft" type="button">Rotate Left</button>
-                                <button class="btn btn-white" id="rotateRight" type="button">Rotate Right</button>
-                            </div>
+                    <div class="ibox-title  back-change">
+                        <h5>Image cropper <small>http://fengyuanchen.github.io/cropper/</small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li>
+                                    <a href="#">Config option 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Config option 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
                         </div>
                     </div>
-                </div>
-            </div>*@
+                    <div class="ibox-content">
+                        <p>
+                            Crop image
+                        </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="image-crop">
+                                    <img src="~/Images/p3.jpg">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Preview image</h4>
+                                <div class="img-preview img-preview-sm"></div>
+                                <h4>&nbsp;</h4>
+                                <div class="btn-group">
+                                    <form action="/User/saveProfilePic" method="post" id="setProfilePic" enctype="multipart/form-data">
+                                        <label title="Upload image file" for="inputImage" class="btn btn-primary">
+
+                                            <input type="file" accept="image/*" name="file" id="inputImage" class="hide">
+                                            Upload new image
+                                            <input type="submit" style="visibility:hidden" />
+
+                                        </label>
+                                    </form>
+                                    <button id="setProfilePicBtn" class="btn btn-primary">Set as profile picture</button>
+                                </div>
+                                <h4>Other options</h4>
+                                <div class="btn-group">
+                                    <button class="btn btn-white" id="zoomIn" type="button">Zoom In</button>
+                                    <button class="btn btn-white" id="zoomOut" type="button">Zoom Out</button>
+                                    <button class="btn btn-white" id="rotateLeft" type="button">Rotate Left</button>
+                                    <button class="btn btn-white" id="rotateRight" type="button">Rotate Right</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Profile</h5>
                 </div>
                 <div class="ibox-content">
                     <div class="project-list">
-                        
+
                         <table class="table ">
-                            <tbody data-bind="with:showProfile">
+                            <tbody>
                                 <tr>
-                                    @*<td>profile pic</td>
-                                    <td class="project-actions pull-right">
-                                        <a href="#" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> Upload profile pic </a>
-                                    </td>*@
-                                    <td colspan="3">
-                                        
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Name</td>
-                                    <td class="project-title" data-bind="visible:!isNameEditing()">
-                                        <a data-bind="text:UserName" ></a>
-                                        <br>
-                                    </td>
-                                    <td data-bind="visible:isNameEditing()">
-                                        <input type="text" data-bind="value:UserName" class="form-control" />
-                                    </td>
-                                    <td class="hidden-xs"><small>Everyone can see</small></td>
-                                    <td class="project-actions">
-                                        <a data-bind="click:updateProfile,visible:isNameEditing()" class="btn btn-white btn-sm"><i class="fa fa-save"></i> save </a>
-                                        <a data-bind="click:editName,visible:!isNameEditing()" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td >
-                                        email
+                                    <td>
+                                        Name
                                     </td>
                                     <td data-bind="visible: !isEmailEditing()"><span data-bind="text:email"></span></td>
                                     <td data-bind="visible:isEmailEditing()">
                                         <input type="text" data-bind="value:email" class="form-control" />
                                     </td>
-                                    <td class="hidden-xs" data-bind="visible:!isEmailEditing()"><small data-bind="text:selectedSeeEmail()"></small></td>
-                                    <td class="hidden-xs" data-bind="visible:isEmailEditing()">
+                                    <td class="hidden-xs"><small>Everyone can see</small></td>
+                                    <td class="project-actions">
+                                        <a data-bind="visible:isEmailEditing(),click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> save </a>
+                                        <a data-bind="visible:!isEmailEditing(),click:editEmail" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td class="project-title" data-bind="visible:!isNameEditing()">
+                                        <a data-bind="text:UserName"></a>
+                                        <br>
+                                    </td>
+                                    <td data-bind="visible:isNameEditing()">
+                                        <input type="email" data-bind="value:UserName" class="form-control" />
+                                    </td>
+                                    
+                                    <td class="hidden-xs" data-bind="visible:!isNameEditing()"><small data-bind="text:selectedSeeEmail()"></small></td>
+                                    <td class="hidden-xs" data-bind="visible:isNameEditing()">
                                         <small>
                                             <select class="form-control" data-bind="options: seeEmailOptions,
                        value: selectedSeeEmail,
@@ -145,10 +144,11 @@
 
                                     </td>
                                     <td class="project-actions">
-                                        <a data-bind="visible:isEmailEditing(),click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> save </a>
-                                        <a data-bind="visible:!isEmailEditing(),click:editEmail" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                        <a data-bind="click:updateProfile,visible:isNameEditing()" class="btn btn-white btn-sm"><i class="fa fa-save"></i> save </a>
+                                        <a data-bind="click:editName,visible:!isNameEditing()" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                                     </td>
                                 </tr>
+                                
                                 <tr>
                                     <td class="project-title">
                                         phone number
@@ -157,13 +157,15 @@
                                     <td data-bind="visible:isPhoneEditing()">
                                         <input type="text" data-bind="value:phoneNumber" class="form-control" />
                                     </td>
-                                    <td data-bind="visible:!isPhoneEditing()">
+                                    <td class="hidden-xs" data-bind="visible:!isPhoneEditing()">
                                         <small data-bind="text:selectedSeePhone()"></small>
                                     </td>
                                     <td class="hidden-xs" data-bind="visible:isPhoneEditing()">
-                                        <small><select class="form-control"  data-bind="options: seePhoneOptions,
+                                        <small>
+                                            <select class="form-control" data-bind="options: seePhoneOptions,
                        value: selectedSeePhone,
-                       "></select></small>
+                       "></select>
+                                        </small>
 
                                     </td>
                                     <td class="project-actions">
@@ -187,8 +189,8 @@
                                         <a data-bind="visible:!isCityEditing(), click:editCity" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                                     </td>
                                 </tr>
-                                
-                                
+
+
                                 <tr>
                                     <td class="project-title">
                                         Date of birth
@@ -237,21 +239,16 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="form-group" id="data_3">
-                            <label class="font-noraml">Decade view</label>
-                            <div class="input-group date">
-                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="10/11/2013">
-                            </div>
-                        </div>
                     </div>
 
 
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">jdsakldjfaklsd fjaksdjfalksd</div>
     </div>
  </div>
+@Html.Partial("/Views/Shared/_Chat.cshtml")
+@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 
 @section Styles {
     @Styles.Render("~/plugins/slickStyles")
@@ -259,6 +256,7 @@
     @Styles.Render("~/plugins/toastrStyles")
 @Styles.Render("~/plugins/imagecropperStyles")
 }
+
 
 
 @section Scripts{
@@ -281,13 +279,17 @@
             self.UserName = ko.observable( data.UserName);
             self.city = ko.observable(data.city);
             self.gender = ko.observable(data.gender);
-            self.dateOfBirth = ko.observable(data.dateOfBirth);
+            
+            self.dateOfBirth = ko.observable();
+            if (data.dateOfBirth != null) {
+                self.dateOfBirth(data.dateOfBirth.split("T")[0]);
+            }
             self.hideDateOfBirth = ko.observable(data.hideDateOfBirth);
             self.email = ko.observable( data.Email);
             self.phoneNumber = ko.observable( data.phoneNumber);
             self.hideEmail = ko.observable(data.hideEmail);
             self.hidePhoneNumber = ko.observable(data.hidePhoneNumber);
-            self.dpExtension = ko.observable(data.dpExtension);
+            self.dpExtension = data.dpExtension;
             self.dpLink = '/Images/Users/p' + self.id + self.dpExtension;
             self.shortAbout = ko.observable(data.shortAbout);
             self.longAbout = ko.observable(data.longAbout);
@@ -385,6 +387,7 @@
         }
         function viewModel() {
             ChatViewModel();
+            AccountViewModel();
             var self = this;
             self.showProfile = ko.observable();
             
@@ -421,8 +424,9 @@
         }
         
         $(function () {
-
+            
             ko.applyBindings(new viewModel);
+            $.connection.hub.start().done();
             toastr.options = {
                 closeButton: true,
                 progressBar: true,
@@ -433,13 +437,7 @@
             $('.product-images').slick({
                 dots: true
             });
-            $('#data_3 .input-group.date').datepicker({
-                startView: 2,
-                todayBtn: "linked",
-                keyboardNavigation: false,
-                forceParse: false,
-                autoclose: true
-            });
+            
             //below is of cropper
             $('#setProfilePicBtn').prop('disabled', true);
             var $image = $(".image-crop > img")

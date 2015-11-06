@@ -5,13 +5,13 @@
         <div data-bind="attr:{'id':id}">
 
             <div class="social-comment">
-                <a href="" class="pull-left">
-                    <img alt="image" class="img-circle" src="/Images/profile.jpg">
+                <a data-bind="attr:{href:postedByLink}" class="pull-left">
+                    <img data-bind="attr:{src:profileLink}" alt=" image" class="img-circle">
                 </a>
                 <div class="media-body">
 
                     <span data-bind="visible:!isEditing()">
-                        <a href="#">
+                        <a data-bind="attr:{href:postedByLink}">
                             <span data-bind="text: postedByName"></span>
                         </a>
                         <span data-bind="text: description"></span>
@@ -32,12 +32,12 @@
                 <div data-bind="foreach: showCommentReply">
                     <div data-bind="attr:{'id':id}">
                         <div class="social-comment">
-                            <a href="" class="pull-left">
-                                <img alt="image" class="img-circle" src="/Images/profile.jpg">
+                            <a data-bind="attr:{href:postedByLink}" class="pull-left">
+                                <img data-bind="attr:{src:profileLink}" alt="image" class="img-circle">
                             </a>
                             <div class="media-body">
                                 <span data-bind="visible:!isEditing()">
-                                    <a href="#">
+                                    <a data-bind="attr:{href:postedByLink}">
                                         <span data-bind="text: postedByName"></span>
                                     </a>
                                     <span data-bind="text: description"></span>
@@ -59,8 +59,8 @@
 
                 <span data-bind="visible:isVisible">
                     <div class="social-comment">
-                        <a href="" class="pull-left">
-                            <img alt="image" src="/Images/profile.jpg">
+                        <a href="#" class="pull-left">
+                            <img data-bind="attr:{src:$parent.loginUserProfileLink}" alt="image" class="img-circle">
                         </a>
                         <div class="media-body">
                             <textarea class="msgTextArea form-control" data-bind="value:newCommentReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}" placeholder="reply.."></textarea>
@@ -69,25 +69,11 @@
                     </div>
                 </span>
             </div>
-
-
-
-
-
-            @*<div class="social-comment">
-                    <a href="" class="pull-left">
-                        <img alt="image" src="/Images/a3.jpg">
-                    </a>
-                    <div class="media-body">
-                        <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="value:newComment, jqAutoresize: {}"></textarea>
-                        <input type="button" data-url="/api/comment" data-bind="click: addcomment" value="submit" />
-                    </div>
-                </div>*@
         </div>
     </div>
     <div class="social-comment">
-        <a href="" class="pull-left">
-            <img alt="image" src="/Images/profile.jpg">
+        <a href="#" class="pull-left">
+            <img data-bind="attr:{src:loginUserProfileLink}" alt="image" src="/Images/profile.jpg" class="img-circle">
         </a>
         <div class="media-body">
             <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="value:newComment,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter}"></textarea>

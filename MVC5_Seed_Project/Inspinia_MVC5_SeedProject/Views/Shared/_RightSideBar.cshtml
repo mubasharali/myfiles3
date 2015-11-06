@@ -33,9 +33,9 @@
                 <div data-bind="foreach:onlineUsers">
 
                     <div class="sidebar-message">
-                        <a href="#">
-                            <div class="pull-left text-center">
-                                <img alt="image" class="img-circle message-avatar" src="~/Images/a1.jpg">
+                        <a>
+                            <div class="pull-left text-center" data-bind="click:openProfile">
+                                <img alt="image" class="img-circle message-avatar" data-bind="attr:{src:dpLink}">
 
                             </div>
                             <div class="media-body" data-bind="click:sendTo,text:name">

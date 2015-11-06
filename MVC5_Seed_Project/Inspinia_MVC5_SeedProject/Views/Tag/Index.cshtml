@@ -47,11 +47,11 @@
                                     </div>
                                     <div class="col-md-4">
                                         <dt>Created by:</dt>
-                                        <dd><a><span data-bind="text:createdByName"></span></a></dd>
+                                        <dd><a data-bind="attr:{href:createdByLink}"><span data-bind="text:createdByName"></span></a></dd>
                                         <dt>Created:</dt>
                                         <dd data-bind="text:time"></dd>
                                         <dt>Latest Updated by:</dt>
-                                        <dd><a><span data-bind="text:updatedByName"></span></a></dd>
+                                        <dd><a data-bind="attr:{href:updatedByLink}"><span data-bind="text:updatedByName"></span></a></dd>
                                         <dt>Latest Updated:</dt>
                                         <dd data-bind="text:updatedTime"></dd>
                                     </div>
@@ -83,17 +83,23 @@
                                                 <div class="tab-pane active" id="tab-1">
                                                     <div data-bind="foreach:showAds">
                                                         <div class="feed-activity-list">
-                                                            <div class=" profile-content" style="border:2px">
-                                                                <h4><strong data-bind="text:title"></strong></h4>
-                                                                <div class="row m-t-md">
-                                                                    <div class="col-md-3">
-                                                                        <h5><strong>169</strong> Likes</h5>
-                                                                    </div>
-                                                                    <div class="col-md-9">
-                                                                        <h5><strong>28</strong> Comments</h5>
-                                                                    </div>
+
+                                                            <div class="vote-item">
+                                                                @*<div class="vote-actions">
+                                                                    <button type="button" class="btn btn-default m-r-sm" data-bind="text:questionVoteCount"></button>
+                                                                </div>*@
+
+                                                                <a data-bind="attr:{href:adDetailLink}"> <div class="vote-title" style="font-size:small" data-bind="text:title"></div></a>
+                                                                <div class="vote-info">
+                                                                    <i class="fa fa-comment"></i> <a> <span></span> WishList</a>
+                                                                    <i class="fa fa-eye"></i> <a> <span data-bind="text:views"></span> Views</a>
+                                                                    <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
                                                                 </div>
                                                             </div>
+                                                            @*<div class=" profile-content" style="border:2px">
+                                                                <h4><a data-bind="attr:{href:adDetailLink}"> <strong data-bind="text:title"></strong></a></h4>
+                                                                
+                                                            </div>*@
                                                             
                                                         </div>
                                                     </div>
@@ -107,7 +113,7 @@
                                                                 <button type="button" class="btn btn-default m-r-sm" data-bind="text:questionVoteCount"></button>
                                                             </div>
                                                             
-                                                            <a> <div class="vote-title" style="font-size:small" data-bind="text:title"></div></a>
+                                                            <a data-bind="attr:{href:questionDetailLink}"> <div class="vote-title" style="font-size:small" data-bind="text:title"></div></a>
                                                             <div class="vote-info">
                                                                 <i class="fa fa-comment"></i> <a > <span data-bind="text:answers"></span> Answers</a>
                                                                 <i class="fa fa-eye"></i> <a> <span data-bind="text:views"></span> Views</a> 
@@ -148,7 +154,10 @@
             data = data || {};
             self.title = data.title;
             self.id = data.id;
-            //others
+            self.views = data.views;
+            self.wishlist = data.wishlist;
+            self.time =getTimeAgo( data.time);
+            self.adDetailLink = '/Electronics/Details/' + self.id;
         }
         function Question(data) {
             var self = this;
@@ -158,6 +167,7 @@
             self.views = data.views;
             self.answers = data.answers;
             self.time = getTimeAgo(data.time);
+            self.questionDetailLink = '/Forum/Details/' + self.id;
             self.questionVoteUpCount = data.questionVoteUpCount || 0;
             self.questionVoteDownCount = data.questionVoteDownCount || 0;
             self.questionVoteCount = self.questionVoteUpCount - self.questionVoteDownCount;
@@ -180,6 +190,8 @@
             self.updatedTime = ko.observable( getTimeAgo( data.updatedTime));
             self.updatedByName = ko.observable( data.updatedByName);
             self.updatedById = ko.observable(data.updatedById);
+            self.createdByLink = '/User/Index/' + self.createdById;
+            self.updatedByLink = '/User/Index/' + self.updatedById();
             self.isEditing = ko.observable(false);
             self.followers = ko.observable( data.followers || 0);
             self.isFollowed = ko.observable(false);

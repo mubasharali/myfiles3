@@ -6,10 +6,10 @@
     @Html.AntiForgeryToken()
 
     <ul class="nav navbar-top-links navbar-right">
-        <li>
+        <li class="hidden-xs">
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        <li class="hidden-xs"><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
         <li class="pull-right">
             
             <a class="right-sidebar-toggle">

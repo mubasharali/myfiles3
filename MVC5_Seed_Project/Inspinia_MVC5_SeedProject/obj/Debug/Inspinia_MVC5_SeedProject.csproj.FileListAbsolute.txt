@@ -305,3 +305,4 @@ C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedPro
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Microsoft.AspNet.SignalR.Core.xml
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\ChatJs.Lib.dll

@@ -27,6 +27,7 @@
         <div class="col-md-9" id="adsBinding">
 
             <div data-bind="foreach: showAds">
+                <input type="hidden" id="loginUserId" data-bind="value:loginUserId" />
                 <div data-bind="attr:{'id':id}">
                     <div class="ibox product-detail">
                         <div class="ibox-content">
@@ -158,7 +159,7 @@
                                     <div class="text-right">
                                         <div class="btn-group">
                                             <button data-bind="click:saveAd" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
-                                            <a data-bind="click:sellerProfile" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
+                                            <a data-bind="attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
                                         </div>
                                     </div>
 
@@ -220,64 +221,68 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal inmodal fade" id="report" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content animated ">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <i class="fa fa-flag modal-icon"></i>
+                                <h4 class="modal-title">Report Ad</h4>
+                                <small class="font-bold">Make sure you have provided right information or you can loose reputation</small>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 ">
+                                        <div class="radio">
+                                            <label>
+                                                <input class="radio i-checks" type="radio" data-bind=" checked: selectedVal " name="report" value="duplicate" required /> Ad is duplicate
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="wrong_category" required /> Wrong category
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="Irrelevent_content" required /> Irrelevent content
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="spam" required /> Spam/Offensive content
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input class="radio i-checks" type="radio" data-bind="checked: selectedVal" name="report" value="fraud" required /> Fraud reason
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <label>Addational details:</label>
+                                    <textarea class="msgTextArea form-control" placeholder="Addational info.." data-bind="jqAutoresize: {},value:reportText"></textarea>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-white" data-dismiss="modal">I didn't mean to</button>
+                                @*<span data-bind="text:$parent.id"></span>*@
+                                @*<span data-bind="text:loginUserId"></span>*@
+                                <button type="button" data-bind="click: function(){ return report()}" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
 
     </div>
-    <div class="modal inmodal fade" id="report" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content animated ">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <i class="fa fa-flag modal-icon"></i>
-                    <h4 class="modal-title">Report Ad</h4>
-                    <small class="font-bold">Make sure you have provided right information or you can loose reputation</small>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="col-sm-offset-3 ">
-                            <div class="radio">
-                                <label>
-                                    <input class="radio i-checks" type="radio" data-bind=" checked: selectedVal " name="report" value="duplicate" required /> Ad is duplicate
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="wrong_category" required /> Wrong category
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="Irrelevent_content" required /> Irrelevent content
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="spam" required /> Spam/Offensive content
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal" name="report" value="fraud" required /> Fraud reason
-                                </label>
-                            </div>
-                        </div>
-                        <label>Addational details:</label>
-                        <textarea class="msgTextArea form-control" placeholder="Addational info.." data-bind="jqAutoresize: {}"></textarea>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">I didn't mean to</button>
-                    <button type="button" data-bind="click: function(){ return report()}" class="btn btn-primary">Submit</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
+    
 </div>
 
+@Html.Partial("/Views/Shared/_Chat.cshtml")
+@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 
 @section Styles {
     @Styles.Render("~/plugins/slickStyles")
@@ -298,14 +303,19 @@
     @Scripts.Render("~/bundles/categoryTree")
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/plugins/sweetAlert")
-<script src="~/Scripts/_Comments.js"></script>
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
 <script src="~/Scripts/UserLogin.js"></script>
+<script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/_Comments.js"></script>
     <script>
+        var myAdId = $("#adId").val();
         function Biding(data) {
             var self = this;
             data = data || {};
             self.postedById = data.postedById;
             self.postedByName = data.postedByName;
+            self.postedByLink = '/Images/Users/p' + self.postedById;
             self.exectTime = data.time;
             self.time = getTimeAgo(data.time);
             self.id = data.id;
@@ -393,6 +403,7 @@
             self.id = data.id;
             self.time = getTimeAgo(data.time);
             self.loginUserId = data.islogin || "";
+            self.loginUserProfileLink = '/Images/Users/p' + self.loginUserId + data.loginUserProfileExtension;
             self.showMobileAd = ko.observable();
             self.showLocation = ko.observable();
             self.showComment = ko.observableArray();
@@ -427,10 +438,7 @@
             self.bidAmount = ko.observable();
 
             self.showTags = ko.observableArray();
-
-            self.sellerProfile = function () {
-                window.location.href = "/User/Index/" + self.postedById;
-            }
+            self.sellerProfile = "/User/Index/" + self.postedById;
             self.placeBidButton = function () {
                 if(self.loginUserId){
                     self.placeBid(true);
@@ -596,39 +604,13 @@
                     }
                 });
             }
-            //self.report = function (id, loginUserId) {
-            //    if (loginUserId) {
-            //        var data = {
-            //            adId: id,
-            //            details: self.reportText,
-            //            type: self.selectedVal,
-            //        };
-            //        $.ajax({
-            //            url: '/api/Electronic/reportAd',
-            //            dataType: "json",
-            //            contentType: "application/json",
-            //            cache: false,
-            //            type: 'POST',
-            //            data: ko.toJSON(data),
-            //            success: function (data) {
-            //                self.isReported(true);
-            //                self.reportedCount(data);
-            //            },
-            //            error: function (xhr, status, error) {
-            //                var err = eval("(" + xhr.responseText + ")");
-            //                toastr.info(err.Message);
-            //            }
-            //        })
-            //    } else {
-            //        toastr.info("You must be login to report this ad", "Na na!");
-            //    }
-            //}
+            
             self.checkEnter = function (d, e) {
                 if (e.keyCode == 13) {
                     self.addcomment();
                 }
             }
-
+            
             self.newComment = ko.observable();
             self.addcomment = function () {
                 if (self.loginUserId) {
@@ -660,13 +642,52 @@
                     toastr.info("You must be login to post comment", "Oops!");
                 }
             }
+            
         }
-
+        function Report() {
+            var self = this;
+            self.selectedVal = ko.observable("spam");
+            self.reportText = "";
+            self.report = function () {
+                if ($("#loginUserId").val()) {
+                    var data = {
+                        adId: myAdId,
+                        details: self.reportText,
+                        type: self.selectedVal(),
+                    };
+                    console.log(data);
+                    $.ajax({
+                        url: '/api/Electronic/reportAd',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(data),
+                        success: function (data) {
+                            //self.isReported(true);
+                            //self.reportedCount(data);
+                            $("#report").modal('hide');
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                            $("#report").modal('hide');
+                        }
+                    })
+                } else {
+                    toastr.info("You must be login to report this ad", "Na na!");
+                }
+            }
+        }
         function viewModel() {
             var self = this;
+            treeModel();
+            AccountViewModel();
+            ChatViewModel();
+            Report();
             self.showAds = ko.observableArray();
             self.loadad = function () {
-                var adId = $("#adId").val();
+                var adId = myAdId;
                 url_address = '/api/Electronic/GetAd/' + adId;
                 $.ajax({
                     url: url_address,
@@ -683,13 +704,8 @@
                 .fail(function () {
                     toastr.error("Unable to load data. Please try again", "Error");
                 });
-                
             }
-            self.selectedVal =ko.observable( "spam");
-            self.reportText = "";
-            self.report = function () {
-                alert(self.selectedVal());
-            }
+            
             self.loadad();
             return self;
         }
@@ -734,9 +750,11 @@
             $('.product-images').slick({
                 dots: true
             });
-            ko.applyBindings(new viewModel, (document.getElementById('adsBinding')));
+            ko.applyBindings(new viewModel());
+            $.connection.hub.start().done();
+          //  ko.applyBindings(new viewModel, (document.getElementById('adsBinding')));
 
-            ko.applyBindings(new treeModel, document.getElementById('navigation'));
+          //  ko.applyBindings(new treeModel, document.getElementById('navigation'));
             
         });
 

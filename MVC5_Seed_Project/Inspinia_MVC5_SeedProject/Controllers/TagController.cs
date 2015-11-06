@@ -49,7 +49,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 {
                                     title = ad.Ad.title,
                                     id = ad.Ad.Id,
-                                    //other s
+                                    views = ad.Ad.AdViews.Count,
+                                    time = ad.Ad.time,
+                                    wishlist = ad.Ad.SaveAds.Count
                                 },
                           questions = from question in tag.QuestionTags
                                       where question.tagId.Equals(id)
@@ -67,24 +69,24 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                       }).FirstOrDefaultAsync();
             return Ok(ret);
         }
-        [HttpPost]
-        public async Task<IHttpActionResult> UpdateTag(Tag id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-           // db.Entry(tag).State = EntityState.Modified;
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-            return StatusCode(HttpStatusCode.NoContent);
-        }
+        //[HttpPost]
+        //public async Task<IHttpActionResult> UpdateTag(Tag id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest();
+        //    }
+        //   // db.Entry(tag).State = EntityState.Modified;
+        //    try
+        //    {
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        throw;
+        //    }
+        //    return StatusCode(HttpStatusCode.NoContent);
+        //}
         [HttpPost]
         public async Task<IHttpActionResult> DeleteTag(int id)
         {

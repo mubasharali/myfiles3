@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "Index";
 }
+
+@* replaced email by name *@
 <input type="hidden" value="@ViewBag.id" id="userId" />
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
@@ -28,7 +30,7 @@
 </div>*@
 
 <div class="wrapper wrapper-content animated fadeInRight" id="profile" >
-    abcdef <div data-bind="text:isOnline"></div>
+   
     <div class="row m-b-lg m-t-lg" data-bind="with:showProfile">
         <div class="col-md-5">
 
@@ -38,10 +40,11 @@
             <div class="profile-info">
                 <div class="">
                     <div>
-                        <h2 class="no-margins" data-bind="text:email"></h2>
+                        <h2 class="no-margins" data-bind="text:name"></h2>(<span data-bind="text:isOnline"></span> @*<span data-bind="if:isOnline()"><i class="fa fa-circle text-navy"></i> online</span>
+                        <span data-bind="if:!isOnline()"><i class="fa fa-circle text-warning"></i> offline</span>*@)
                         <h4 data-bind="text:shortAbout"></h4>
                         <small>
-                            <button class="btn btn-sm" data-bind="click:function(){ return sendMessage(id,email)}" style="margin-bottom:1px">Send message</button> &nbsp;<button style="margin-bottom:1px" class="btn btn-sm">Follow</button>
+                            <button class="btn btn-sm" data-bind="click:function(){ return sendMessage(id,name)}" style="margin-bottom:1px">Send message</button> &nbsp;<button style="margin-bottom:1px" class="btn btn-sm">Follow</button>
                         </small>
                     </div>
                 </div>
@@ -68,7 +71,7 @@
                     </tr>
                     <tr>
                         <td>
-                            Age: <strong data-bind="text:age"></strong>  &nbsp; Gender: <strong data-bind="text:gender"></strong>
+                            Date of birth: <strong data-bind="text:dateOfBirth"></strong>  &nbsp; Gender: <strong data-bind="text:gender"></strong>
                         </td>
                     </tr>
                 </tbody>
@@ -201,7 +204,7 @@
 
                             <div class="form-group">
                                 <label>Subject</label>
-                                <input type="email" class="form-control" placeholder="Message subject">
+                                <input type="name" class="form-control" placeholder="Message subject">
                             </div>
                             <div class="form-group">
                                 <label>Message</label>
@@ -561,8 +564,11 @@
             self.UserName = data.UserName;
             self.city = data.city;
             self.gender = data.gender;
-            self.dateOfBirth = data.dateOfBirth;
-            self.email = data.Email;
+            self.dateOfBirth = "";
+            if (data.dateOfBirth != null) {
+                self.dateOfBirth = data.dateOfBirth.split("T")[0];
+            }
+            self.name = data.Email;
             self.phoneNumber = data.phoneNumber;
             self.hideEmail = data.hideEmail;
             self.hidePhoneNumber = data.hidePhoneNumber;
@@ -574,10 +580,11 @@
             self.reputation = data.reputation;
             self.since = data.since;
             
-            self.sendMessage = function (id,email) {
-                console.log(id + " " + email);
+            self.sendMessage = function (id,name) {
+                console.log(id + " " + name);
                 sendMessageTo(id);
-                console.log("Message will be sent to : " + email);
+                sendMessgeToName(name);
+                console.log("Message will be sent to : " + name);
                 $(".open-small-chat").trigger('click');
                 
             }
@@ -622,13 +629,14 @@
             }
 
             //online users
-            var userId = $("#userId").val();
-            self.onlineUsersHub = $.connection.onlineUsers;
-            self.onlineUsers = ko.observableArray();
-            self.onlineUsersHub.client.showConnected = function (connectionId) {
-                var mape = $.map(connectionId, function (item) { return item });
-                self.onlineUsers(mape);
-            }
+            //var userId = $("#userId").val();
+            //self.onlineUsersHub = $.connection.onlineUsers;
+            //self.onlineUsers = ko.observableArray();
+            //self.onlineUsersHub.client.showConnected = function (connectionId) {
+            //    var mape = $.map(connectionId, function (item) { return item });
+            //    self.onlineUsers(mape);
+            //    console.log("hi i am here");
+            //}
             
            
 

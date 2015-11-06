@@ -137,6 +137,14 @@ namespace Inspinia_MVC5_SeedProject
             bundles.Add(new ScriptBundle("~/plugins/rickshaw").Include(
                       "~/Scripts/plugins/rickshaw/vendor/d3.v3.js",
                       "~/Scripts/plugins/rickshaw/rickshaw.min.js"));
+
+            // dropZone styles
+            bundles.Add(new StyleBundle("~/Content/plugins/dropzone/dropZoneStyles").Include(
+                      "~/Content/plugins/dropzone/basic.css",
+                      "~/Content/plugins/dropzone/dropzone.css"));
+            // dropZone 
+            bundles.Add(new ScriptBundle("~/plugins/dropZone").Include(
+                      "~/Scripts/plugins/dropzone/dropzone.js"));
         }
     }
 }

@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
-
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
     public class ElectronicsController : Controller
@@ -49,7 +48,37 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             //db.Ads.Where(x => x.Id.Equals(x.MobileAds.Where(x.));
             return View();
         }
-
+        [HttpPost]
+        public ActionResult FileUploadHandler(Ad ad)
+        {
+            int count = 1;
+            var imaa = ad.AdImages.ToList();
+            foreach (var img in imaa)
+            {
+                System.IO.File.Delete(Server.MapPath(@"~\Images\Ads\" + ad.Id + "_" + count++ + img.imageExtension));
+                db.AdImages.Remove(img);
+            }
+            count = 1;
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+                try
+                {
+                    HttpPostedFileBase file = Request.Files[i];
+                    string extension = System.IO.Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath("~/Images/Ads/" + ad.Id + "_" + count++ + extension));
+                    AdImage image = new AdImage();
+                    image.imageExtension = extension;
+                    image.adId = ad.Id;
+                    db.AdImages.Add(image);
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { Message = "Error in saving file" });
+                }
+            }
+            return Json(new { Message = "File saved" });
+        }
         public ActionResult CreateMobileAccessoriesAd()
         {
             Ad ad = new Ad();
@@ -831,6 +860,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 if (Request.IsAuthenticated)
                 {
+
+                    
+
                     MyAd(ad, "Save");
                     MobileAd mobileAd= new MobileAd();
                     mobileAd.sims =Request["sims"];
@@ -892,11 +924,11 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     }
                     var mobileModel = db.MobileModels.FirstOrDefault(x => x.Mobile.brand == company && x.model == model);
                     mobileAd.mobileId = mobileModel.Id;
-                    asp.Ads.Add(ad);
+                   // asp.Ads.Add(ad);
                     db.Ads.Add(ad);
                     //tags
                     SaveTags(Request["tags"], ad);
-
+                    FileUploadHandler(ad);
                     mobileAd.Id = ad.Id;
                     db.MobileAds.Add(mobileAd);
                     //ad.MobileAd.a(mobileAd);

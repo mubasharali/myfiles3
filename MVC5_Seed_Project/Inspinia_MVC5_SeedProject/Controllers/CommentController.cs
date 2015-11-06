@@ -103,6 +103,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 time = x.time,
                 id = x.Id,
                 adId = x.adId,
+                imageExtension = x.AspNetUser.dpExtension,
                 islogin = x.postedBy
             }).FirstOrDefault();
 
@@ -120,7 +121,6 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             if (!(HttpContext.Current.Request.IsAuthenticated))
             {
                 return BadRequest();
-                //return BadRequest("you must be logged in post comment");
             }
             comment.time = DateTime.UtcNow;
             comment.postedBy = User.Identity.GetUserId();
@@ -132,10 +132,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 postedById = x.postedBy,
                 postedByName = x.AspNetUser.Email,
                 time = x.time,
+                imageExtension = x.AspNetUser.dpExtension,
                 id = x.Id,
             }).FirstOrDefault();
             return Ok(ret);
-            // return CreatedAtRoute("DefaultApi", new { id = comment.Id }, comment);
         }
         public async Task<IHttpActionResult> updateCommentReply(CommentReply comment)
         {
