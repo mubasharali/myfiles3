@@ -38,6 +38,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string subcategory { get; set; }
         public Nullable<bool> type { get; set; }
         public string condition { get; set; }
+        public string status { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual ICollection<AdImage> AdImages { get; set; }

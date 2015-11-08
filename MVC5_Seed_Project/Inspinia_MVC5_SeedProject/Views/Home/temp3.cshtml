@@ -1,14 +1,20 @@
-﻿<form id="my-awesome-dropzone" class="dropzone" action="@Url.Action("FileUploadHandler", "Electronics")" method="post" enctype="multipart/form-data">
-   <div data-bind="text:name"></div>
-    <input type="text" name="myName" />
-     <div id="dropzonePreview" class="dz-default dz-message">
-    </div>
-</form>
+﻿<form id="my-awesome-dropzone"  data-bind="dropzone: { url: '/Electronics/Temp' }" action="@Url.Action("FileUploadHandler", "Electronics")" method="post" enctype="multipart/form-data">
+    <div data-bind="text:name"></div>
 
+        <input type="text" name="myName" required />
+        <div id="dropzonePreview" class="dz-default dz-message">
+        </div>
+        <button type="submit">Submit</button>
+
+    @*<input type="submit" />*@
+</form>
+jlkjfdlkasjflkas
+@*<div data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }"> </div>*@
 @section Styles {
     @Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
 }
 @section Scripts{
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/dropZone")
     <script>
@@ -17,37 +23,82 @@
             self.name = ko.observable("Irfan");
         };
         $(document).ready(function () {
-            ko.applyBindings(new VM());
-            Dropzone.options.myAwesomeDropzone = { 
 
-                autoProcessQueue: false,
-                uploadMultiple: true,
-                parallelUploads: 100,
-                maxFiles: 100,
-                addRemoveLinks: true,
-                clickable:'#dropzonePreview',
-                init: function () {
-                    var myDropzone = this;
-                    this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        myDropzone.processQueue();
-                    });
-                    this.on("sendingmultiple", function () {
-                        // Gets triggered when the form is actually being sent.
-                        // Hide the success button or the complete form.
-                    });
-                    this.on("successmultiple", function (files, response) {
-                        // Gets triggered when the files have successfully been sent.
-                        // Redirect user or notify of success.
-                    });
-                    this.on("errormultiple", function (files, response) {
-                        // Gets triggered when there was an error sending the files.
-                        // Maybe show form again, and notify user of error
-                    });
+            ko.bindingHandlers.dropzone = {
+                init: function (element, valueAccessor) {
+                    var value = ko.unwrap(valueAccessor());
+
+                    var options = {
+                        maxFileSize: 15,
+                        autoProcessQueue: false,
+                        uploadMultiple: true,
+                        parallelUploads: 100,
+                        maxFiles: 100,
+                        addRemoveLinks: true,
+                        clickable: '#dropzonePreview',
+                        init: function () {
+                            var myDropzone = this;
+                            this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+
+                                e.preventDefault();
+                                e.stopPropagation();
+                                var form = $(this).closest("#my-awesome-dropzone");
+                                if (form.valid() == true) {
+                                    if (myDropzone.getQueuedFiles().length > 0) {
+                                        myDropzone.processQueue();
+                                    } else {
+                                        myDropzone.uploadFiles([]); //send empty 
+                                    }
+                                }
+                            });
+                        }
+                    };
+
+                    $.extend(options, value);
+
+                    $(element).addClass('dropzone');
+                    new Dropzone(element, options); // jshint ignore:line
                 }
+            };
 
-            }
+            ko.applyBindings(new VM());
+            //Dropzone.options.myAwesomeDropzone = { 
+
+            //    autoProcessQueue: false,
+            //    uploadMultiple: true,
+            //    parallelUploads: 100,
+            //    maxFiles: 100,
+            //    addRemoveLinks: true,
+            //    clickable:'#dropzonePreview',
+            //    init: function () {
+            //        var myDropzone = this;
+            //        this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+            //            e.preventDefault();
+            //            e.stopPropagation();
+            //            var form = $(this).closest("#my-awesome-dropzone");
+            //            if (form.valid() == true) {
+            //                if (myDropzone.getQueuedFiles().length > 0) {
+            //                    myDropzone.processQueue();
+            //                } else {
+            //                    myDropzone.uploadFiles([]); //send empty 
+            //                }
+            //            }
+            //        });
+            //        this.on("sendingmultiple", function () {
+            //            // Gets triggered when the form is actually being sent.
+            //            // Hide the success button or the complete form.
+            //        });
+            //        this.on("successmultiple", function (files, response) {
+            //            // Gets triggered when the files have successfully been sent.
+            //            // Redirect user or notify of success.
+            //        });
+            //        this.on("errormultiple", function (files, response) {
+            //            // Gets triggered when there was an error sending the files.
+            //            // Maybe show form again, and notify user of error
+            //        });
+            //    }
+
+            //}
         });
         
     </script>

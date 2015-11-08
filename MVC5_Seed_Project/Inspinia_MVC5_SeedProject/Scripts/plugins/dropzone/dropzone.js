@@ -1363,8 +1363,10 @@
                     xhr.onload = (function(_this) {
                         return function(e) {
                             var _ref;
-                            if (files[0].status === Dropzone.CANCELED) {
-                                return;
+                            if (files[0] != undefined) {
+                                if (files[0].status === Dropzone.CANCELED) {
+                                    return;
+                                }
                             }
                             if (xhr.readyState !== 4) {
                                 return;

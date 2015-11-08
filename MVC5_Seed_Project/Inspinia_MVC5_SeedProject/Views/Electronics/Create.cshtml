@@ -18,7 +18,7 @@
     </div>
     <div class="col-sm-8">
         <div class="title-action">
-			@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary"})
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
         </div>
     </div>
 </div>
@@ -33,86 +33,87 @@
                 </div>
                 <div class="ibox-content">
 
-				@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form my-awesome-dropzone", @class = "dropzone", enctype = "multipart/form-data" }))
-                {
-    @Html.AntiForgeryToken()
+                   @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form", data_bind="dropzone: { url: '/Electronics/Create' }" , enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true)
-        <div class="form-group">
-            <label class="control-label col-md-2">Select Brand<span class="req">*</span></label>
-            <div class="col-md-10">
-                <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true)
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Select Brand<span class="req">*</span></label>
+                                <div class="col-md-10">
+                                    <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
                        value: selectedBrand,
                        optionsCaption: 'Choose brand...'"></select>
-                
-            </div>
-        </div>
-        <div data-bind="with:selectedBrand">
-            <div class="form-group">
-                <label class="control-label col-md-2">Select Model<span class="req">*</span></label>
-                <div class="col-md-10">
-                    <select id="select-model" required class="demo-default" name="model" data-bind="options: $parent.availableModels,
+
+                                </div>
+                            </div>
+                            <div data-bind="with:selectedBrand">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Select Model<span class="req">*</span></label>
+                                    <div class="col-md-10">
+                                        <select id="select-model" required class="demo-default" name="model" data-bind="options: $parent.availableModels,
                        value: $parent.selectedModel,
                        optionsCaption: 'Choose model...'"></select>
+                                    </div>
+                                    @*<div data-bind="text:$parent.selectedModel"></div>*@
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Color<span class="req">*</span></label>
+                                <div class="col-md-10">
+                                    <select id="select-color" name="color" required placeholder="choose color">
+                                        <option value="">Choose color</option>
+                                        <option value="white">White</option>
+                                        <option value="Black">Black</option>
+                                        <option value="Yellow">Yellow</option>
+                                        <option value="Red">Red</option>
+                                        <option value="Blue">Blue</option>
+                                        <option value="Orange">Orange</option>
+                                        <option value="Purple">Purple</option>
+                                        <option value="Violet">Violet</option>
+                                        <option value="Green">Green</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Number of sims<span class="req">*</span></label>
+                                <div class="col-md-10">
+                                    <select id="select-sims" name="sims" required placeholder="choose sims">
+                                        <option value="">Choose sims</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @Html.Partial("~/Views/Shared/_CreateAd.cshtml")
+                            <div id="dropzonePreview" class="dz-default dz-message">
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+
                 </div>
-                @*<div data-bind="text:$parent.selectedModel"></div>*@
             </div>
-        </div>  
-        
-
-        
-        <div class="form-group">
-            <label class="control-label col-md-2">Color<span class="req">*</span></label>
-            <div class="col-md-10">
-                <select id="select-color" name="color" required placeholder="choose color">
-                    <option value="">Choose color</option>
-                    <option value="white">White</option>
-                    <option value="Black">Black</option>
-                    <option value="Yellow">Yellow</option>
-                    <option value="Red">Red</option>
-                    <option value="Blue">Blue</option>
-                    <option value="Orange">Orange</option>
-                    <option value="Purple">Purple</option>
-                    <option value="Violet">Violet</option>
-                    <option value="Green">Green</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2">Number of sims<span class="req">*</span></label>
-            <div class="col-md-10">
-                <select id="select-sims" name="sims" required placeholder="choose sims">
-                    <option value="">Choose sims</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-        </div>
-        @Html.Partial("~/Views/Shared/_CreateAd.cshtml")
-        
-        <br />
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-primary" />
-            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
-        </div>
-    </div>
-
-</div>
-                }
-
-        </div>
-    </div>
         </div>
         <div class="col-sm-6">
             The fields with <span class="req">*</span> are mendatory
         </div>
     </div>
- </div>
+</div>
 
 
 
@@ -121,25 +122,24 @@
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
-@Styles.Render("~/scripts/selectizeStyles")
-@Styles.Render("~/bundles/myStyles")
-@Styles.Render("~/bundles/tagStyles")
+    @Styles.Render("~/scripts/selectizeStyles")
+    @Styles.Render("~/bundles/myStyles")
+    @Styles.Render("~/bundles/tagStyles")
 @Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
 }
 
 @section Scripts {
-
+<script src="~/Scripts/app/dropzone-knockout-binding.js"> </script>
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/plugins/validate")
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/iCheck")
-@Scripts.Render("~/scripts/selectize")
+    @Scripts.Render("~/scripts/selectize")
     @Scripts.Render("~/plugins/toastr")
-@Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/autosize")
 @Scripts.Render("~/plugins/dropZone")
-@*<script src="~/Scripts/_CreateAd.js"></script>*@
     <script type="text/javascript">
-        
+
         function ViewModel() {
             var self = this;
             self.conditionChecked = ko.observable(false);
@@ -163,7 +163,7 @@
             })
             self.isAllowBidingChecked = ko.observable(false);
             self.isFixPriceChecked = ko.observable(false);
-            
+
             self.loadBrands = function () {
                 $.ajax({
                     url: '/api/Electronic/GetBrands',
@@ -181,7 +181,7 @@
                                 field: 'text',
                                 direction: 'asc'
                             },
-                            
+
                         });
                     },
                     error: function (jqXHR, status, thrownError) {
@@ -300,34 +300,6 @@
         };
 
         $(document).ready(function () {
-            
-
-            Dropzone.autoDiscover = false;
-            Dropzone.options.myAwesomeDropzone = {
-                autoProcessQueue: false,
-                uploadMultiple: true,
-                parallelUploads: 100,
-                maxFiles: 100,
-                addRemoveLinks: true,
-                autoDiscover: false,
-                clickable: '#dropzonePreview',
-                init: function () {
-                    var myDropzone = this;
-                    this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        myDropzone.processQueue();
-                    });
-                    this.on("sendingmultiple", function () {
-                    });
-                    this.on("successmultiple", function (files, response) {
-                    });
-                    this.on("errormultiple", function (files, response) {
-                    });
-                }
-
-            }
-
             ko.applyBindings(new ViewModel);
 
             Selectize.define('inputMaxlength', function (options) {
@@ -392,20 +364,20 @@
                 },
             });
             $("#form").validate({
-                ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+                ignore: '.ignoreit, :hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input ',
                 rules: {
                     title: {
                         required: true,
                         maxlength: 50,
-                        minlength:15
+                        minlength: 15
                     },
                     company: {
                         required: true,
-                        maxlength:15
+                        maxlength: 15
                     },
                     model: {
                         required: true,
-                        maxlength:20
+                        maxlength: 20
                     },
                     description: {
                         required: true,
@@ -428,8 +400,8 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
-            
+
         });
-</script>
-    }
+    </script>
+}
 

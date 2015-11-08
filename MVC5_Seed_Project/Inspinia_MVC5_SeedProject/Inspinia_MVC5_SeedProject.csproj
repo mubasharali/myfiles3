@@ -496,6 +496,7 @@
     <Content Include="Images\others\1f415.png" />
     <Content Include="Images\spinner.gif" />
     <Content Include="Scripts\app\chat.js" />
+    <Content Include="Scripts\app\dropzone-knockout-binding.js" />
     <Content Include="Scripts\app\inspinia.js" />
     <Content Include="Scripts\app\LaptopTree.js" />
     <Content Include="Scripts\app\MobileTree.js" />

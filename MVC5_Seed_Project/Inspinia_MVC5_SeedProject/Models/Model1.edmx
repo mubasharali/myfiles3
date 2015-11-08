@@ -30,6 +30,7 @@
           <Property Name="subcategory" Type="nvarchar" MaxLength="20" />
           <Property Name="type" Type="bit" />
           <Property Name="condition" Type="char" MaxLength="1" />
+          <Property Name="status" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="AdImage">
           <Key>
@@ -428,8 +429,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="adId" Type="int" Nullable="false" />
           <Property Name="reportedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="details" Type="nvarchar" MaxLength="500" />
-          <Property Name="type" Type="varchar" MaxLength="20" />
+          <Property Name="details" Type="nvarchar" MaxLength="50" />
+          <Property Name="type" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="ReportedQuestion">
           <Key>
@@ -2239,6 +2240,7 @@
           <NavigationProperty Name="MobileAd" Relationship="Model.FK_MobileAds_ToTable" FromRole="Ad" ToRole="MobileAd" />
           <NavigationProperty Name="Reporteds" Relationship="Model.FK_Reported_ToTable" FromRole="Ad" ToRole="Reported" />
           <NavigationProperty Name="SaveAds" Relationship="Model.FK_SaveAd_ToTable" FromRole="Ad" ToRole="SaveAd" />
+          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="AdImage">
           <Key>
@@ -2743,8 +2745,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="adId" Type="Int32" Nullable="false" />
           <Property Name="reportedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="details" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="details" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Ad" Relationship="Model.FK_Reported_ToTable" FromRole="Reported" ToRole="Ad" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Reported_ToTable_1" FromRole="Reported" ToRole="AspNetUser" />
         </EntityType>
@@ -3845,6 +3847,7 @@
           <EntitySetMapping Name="Ads">
             <EntityTypeMapping TypeName="Model.Ad">
               <MappingFragment StoreEntitySet="Ad">
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="condition" ColumnName="condition" />
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="subcategory" ColumnName="subcategory" />

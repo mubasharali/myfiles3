@@ -48,6 +48,37 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             //db.Ads.Where(x => x.Id.Equals(x.MobileAds.Where(x.));
             return View();
         }
+        public ActionResult Temp(Ad ad)
+        {
+            var nam = Request["myName"];
+            int count = 1;
+            var imaa = ad.AdImages.ToList();
+            foreach (var img in imaa)
+            {
+                System.IO.File.Delete(Server.MapPath(@"~\Images\Ads\" + ad.Id + "_" + count++ + img.imageExtension));
+                db.AdImages.Remove(img);
+            }
+            count = 1;
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+                try
+                {
+                    HttpPostedFileBase file = Request.Files[i];
+                    string extension = System.IO.Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath("~/Images/Ads/" + ad.Id + "_" + count++ + extension));
+                    AdImage image = new AdImage();
+                    image.imageExtension = extension;
+                    image.adId = ad.Id;
+                    db.AdImages.Add(image);
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { Message = "Error in saving file" });
+                }
+            }
+            return Json(new { Message = "File saved" });
+        }
         [HttpPost]
         public ActionResult FileUploadHandler(Ad ad)
         {
@@ -77,7 +108,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     return Json(new { Message = "Error in saving file" });
                 }
             }
-            return Json(new { Message = "File saved" });
+            return Json(new { Message = "File saved",adId = ad.Id });
         }
         public ActionResult CreateMobileAccessoriesAd()
         {
