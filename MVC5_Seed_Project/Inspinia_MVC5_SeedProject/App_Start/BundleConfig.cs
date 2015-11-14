@@ -145,6 +145,13 @@ namespace Inspinia_MVC5_SeedProject
             // dropZone 
             bundles.Add(new ScriptBundle("~/plugins/dropZone").Include(
                       "~/Scripts/plugins/dropzone/dropzone.js"));
+            // Lightbox gallery css styles
+            bundles.Add(new StyleBundle("~/Content/plugins/blueimp/css/").Include(
+                      "~/Content/plugins/blueimp/css/blueimp-gallery.min.css"));
+
+            // Lightbox gallery
+            bundles.Add(new ScriptBundle("~/plugins/lightboxGallery").Include(
+                      "~/Scripts/plugins/blueimp/jquery.blueimp-gallery.min.js"));
         }
     }
 }

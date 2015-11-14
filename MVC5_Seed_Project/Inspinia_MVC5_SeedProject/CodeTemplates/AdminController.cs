@@ -24,6 +24,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         {
             return View();
         }
+        public async Task<ActionResult> Ads()
+        {
+            return View();
+        }
         public async Task<ActionResult> Location()
         {
             return View();

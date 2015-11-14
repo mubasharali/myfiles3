@@ -30,7 +30,7 @@
                 <div data-bind="visible:!isBrandEditing()">
                     <div data-bind="text:brand"></div>
                     <div data-bind="text:time"></div>
-                    <div data-bind="text:addedByName"></div>
+                    <div data-bind="text:addedByName"> </div><button data-bind="visible:!status(),click:function(){ return approve($data,$parent.selectedOption())}">Approve</button>
                     <button data-bind="click:editBrandBtn">Edit</button>
                     <button data-bind="click:$parent.deleteBrandBtn">Delete</button>
                 </div>
@@ -47,6 +47,7 @@
 
                     <div data-bind="text:time"></div>
                     <div data-bind="text:addedByName"></div>
+                    <button data-bind="visible:!status(),click: function(){ return approve($data,$parent.selectedOption())}">Approve</button>
                     <button data-bind="click:editModelBtn">Edit</button>
                     <button data-bind="click:$parent.deleteModelBtn">Delete</button>
                 </div>
@@ -55,9 +56,6 @@
                     <input type="submit" data-bind="click:function(){ return updateModel($data,$parent.selectedOption())}" />
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            Laptop Brands/Models
         </div>
     </div>
 </div>
@@ -84,10 +82,47 @@
             self.time = data.time;
             self.addedById = data.addedById;
             self.addedByName = data.addedByName;
+            self.status = ko.observable(true);
+            if (data.status == "p") {
+                self.status(false);
+            }
+            
 
             self.isBrandEditing = ko.observable(false);
             self.editBrandBtn = function () {
                 self.isBrandEditing(true);
+            }
+            self.approve = function (brand, selectedOption) {
+                if (selectedOption == "Mobiles") {
+                    var url = "/api/Admin/ApproveMobileBrand?id=" + brand.id;
+                } else if (selectedOption == "Laptops") {
+                    url = "/api/Admin/ApproveLaptopBrand?id=" + brand.id;
+                }
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, approve it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.status(true);
+                            swal("Approved!", "success");
+                        },
+                        error: function () {
+                            swal("please refresh page and try again", "error");
+                        }
+                    });
+                });
+                
             }
             self.updateBrand = function (brand,selectedOption) {
                 if (selectedOption == "Mobiles") {
@@ -137,6 +172,41 @@
             self.isModelEditing = ko.observable(false);
             self.editModelBtn = function () {
                 self.isModelEditing(true);
+            }
+            self.status = ko.observable(true);
+            if (data.status == "p") {
+                self.status(false);
+            }
+            self.approve = function (brand,selectedOption) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, approve it!",
+                    closeOnConfirm: false
+                }, function () {
+                    if (selectedOption == "Mobiles") {
+                        var url = '/api/Admin/ApproveMobileModel?id=' + brand.id;
+                    } else {
+                        url = '/api/Admin/ApproveLaptopModel?id=' + brand.id;
+                    }
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.status(true);
+                            swal("Approved!" , "success");
+                        },
+                        error: function () {
+                            swal("please refresh page and try again", "error");
+                        }
+                    });
+                });
             }
             self.updateModel = function (model,selectedOption) {
                 if (selectedOption == "Mobiles") {

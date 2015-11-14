@@ -102,9 +102,9 @@
     <Reference Include="MvcSiteMapProvider.WebActivator">
       <HintPath>..\packages\MvcSiteMapProvider.MVC5.4.6.18\lib\net45\MvcSiteMapProvider.WebActivator.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -229,6 +229,7 @@
     <Compile Include="CodeTemplates\UserController.cs" />
     <Compile Include="CodeTemplates\VehiclesController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\ElectronicController.cs" />
@@ -243,6 +244,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
+    <Compile Include="Hubs\AdComments.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\OnlineUsers.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -436,6 +438,18 @@
     <Content Include="Content\patterns\otis_redding.png" />
     <Content Include="Content\patterns\shattered.png" />
     <Content Include="Content\patterns\triangular.png" />
+    <Content Include="Content\plugins\blueimp\css\blueimp-gallery-indicator.css" />
+    <Content Include="Content\plugins\blueimp\css\blueimp-gallery-video.css" />
+    <Content Include="Content\plugins\blueimp\css\blueimp-gallery.css" />
+    <Content Include="Content\plugins\blueimp\css\blueimp-gallery.min.css" />
+    <Content Include="Content\plugins\blueimp\css\demo.css" />
+    <Content Include="Content\plugins\blueimp\img\error.png" />
+    <Content Include="Content\plugins\blueimp\img\error.svg" />
+    <Content Include="Content\plugins\blueimp\img\loading.gif" />
+    <Content Include="Content\plugins\blueimp\img\play-pause.png" />
+    <Content Include="Content\plugins\blueimp\img\play-pause.svg" />
+    <Content Include="Content\plugins\blueimp\img\video-play.png" />
+    <Content Include="Content\plugins\blueimp\img\video-play.svg" />
     <Content Include="Content\plugins\cropper\cropper.min.css" />
     <Content Include="Content\plugins\datapicker\datepicker3.css" />
     <Content Include="Content\plugins\dropzone\basic.css" />
@@ -593,6 +607,7 @@
     <Content Include="Content\plugins\chosen\chosen.css" />
     <Content Include="Scripts\knockout-3.3.0.debug.js" />
     <Content Include="Scripts\knockout-3.3.0.js" />
+    <Content Include="Scripts\plugins\blueimp\jquery.blueimp-gallery.min.js" />
     <Content Include="Scripts\plugins\chosen\chosen.jquery.js" />
     <Content Include="Scripts\plugins\cropper\cropper.min.js" />
     <Content Include="Scripts\plugins\datapicker\bootstrap-datepicker.js" />
@@ -837,6 +852,7 @@
     <Content Include="Views\LaptopsComputers\Edit.cshtml" />
     <Content Include="Views\LaptopsComputers\Index.cshtml" />
     <Content Include="Views\Electronics\_TreeLaptop.cshtml" />
+    <Content Include="Views\Admin\Ads.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

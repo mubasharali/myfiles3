@@ -29,13 +29,13 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         public async Task<IHttpActionResult> GetMobileTree()
         {
             var mobiles = (from mobile in db.Mobiles
-                           where mobile.brand != ""
+                           where mobile.brand != "" && mobile.status != "p"
                           select new
                           {
                               id = mobile.Id,
                               companyName = mobile.brand,
                               models = from model in mobile.MobileModels
-                                       where model.model != ""
+                                       where model.model != "" && model.status != "p"
                                        select new
                                        {
                                            id = model.Id,
@@ -48,13 +48,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         public async Task<IHttpActionResult> GetLaptopTree()
         {
             var mobiles = (from mobile in db.LaptopBrands.ToList()
+                           where mobile.status != "p" && mobile.brand != ""
                            orderby mobile.Id
                            select new
                            {
                                id = mobile.Id,
                                companyName = mobile.brand,
                                models = from model in mobile.LaptopModels
-                                        where model.model != ""
+                                        where model.model != "" && model.status != "p"
                                         select new
                                         {
                                             id = model.Id,
@@ -77,6 +78,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               brand = mob.brand,
                               time = mob.time,
                               addedById = mob.addedBy,
+                              status = mob.status,
                               addedByName = mob.AspNetUser.Email
                           };
                 return Ok(ret);
@@ -88,6 +90,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           id = b.Id,
                           brand = b.brand,
                           time = b.time,
+                          status = b.status,
                           addedById = b.AspNetUser.Id,
                           addedByName = b.AspNetUser.Email
                       };
@@ -107,6 +110,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               brand = mob.Mobile.brand,
                               brandId = mob.brandId,
                               model = mob.model,
+                              status = mob.status,
                               time = mob.time,
                               addedById = mob.AspNetUser.Id,
                               addedByName = mob.AspNetUser.Email,
@@ -122,6 +126,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           brandId = mob.brandId,
                           model = mob.model,
                           time = mob.time,
+                          status = mob.status,
                           addedById = mob.AspNetUser.Id,
                           addedByName = mob.AspNetUser.Email,
                       };
@@ -252,6 +257,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     return NotFound();
                 }
                 db.Mobiles.Remove(bid);
+                
+                var ads = db.Ads.Where(x => x.MobileAd.MobileModel.brandId.Equals(id));
+                foreach (var ad in ads)
+                {
+                    db.Ads.Remove(ad);
+                }
                 await db.SaveChangesAsync();
                 return Ok(bid);
             }
@@ -268,7 +279,13 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     return NotFound();
                 }
                 db.MobileModels.Remove(bid);
+                var ads = db.Ads.Where(x => x.MobileAd.MobileModel.Id.Equals(id));
+                foreach (var ad in ads)
+                {
+                    db.Ads.Remove(ad);
+                }
                 await db.SaveChangesAsync();
+                
                 return Ok(bid);
             }
             return BadRequest();
@@ -284,6 +301,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     return NotFound();
                 }
                 db.LaptopBrands.Remove(bid);
+                var ads = db.Ads.Where(x => x.LaptopAd.LaptopModel.brandId.Equals(id));
+                foreach (var ad in ads)
+                {
+                    db.Ads.Remove(ad);
+                }
                 await db.SaveChangesAsync();
                 return Ok(bid);
             }
@@ -300,6 +322,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     return NotFound();
                 }
                 db.LaptopModels.Remove(bid);
+                var ads = db.Ads.Where(x => x.LaptopAd.LaptopModel.Id.Equals(id));
+                foreach (var ad in ads)
+                {
+                    db.Ads.Remove(ad);
+                }
                 await db.SaveChangesAsync();
                 return Ok(bid);
             }
@@ -308,27 +335,28 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> GetLaptopBrands()
         {
-            //var brands =  (db.LaptopBrands.Select(x => x.Id)).AsEnumerable();
-            var brands =  db.LaptopBrands.Select(x => x.brand);
+            var brands = db.LaptopBrands.Where(x => x.brand != "" && x.status != "p").Select(x => x.brand);
+            //var brands =  db.LaptopBrands.Select(x => x.brand);
             return Ok(brands);
         }
         [HttpPost]
         public async Task<IHttpActionResult> GetLaptopModels(string brand)
         {
-            var models =  db.LaptopModels.Where(x => x.LaptopBrand.brand == brand).Select(x => x.model);
+            var models = db.LaptopModels.Where(x => x.LaptopBrand.brand.Equals(brand) && x.status != "p").Select(x => x.model);
+            //var models =  db.LaptopModels.Where(x => x.LaptopBrand.brand == brand).Select(x => x.model);
             return Ok(models);
         }
         [HttpPost]
         public async Task<IHttpActionResult> GetBrands()
         {
-            var brands =  db.Mobiles.Where(x=>x.brand != "").Select(x => x.brand);
+            var brands =  db.Mobiles.Where(x=>x.brand != "" && x.status != "p").Select(x => x.brand);
             //var brands = await db.Mobiles.ToListAsync();
             return Ok(brands);
         }
         [HttpPost]
         public async Task<IHttpActionResult> GetModels(string brand)
         {
-            var models = db.MobileModels.Where(x=>x.Mobile.brand.Equals(brand)).Select(x=>x.model);
+            var models = db.MobileModels.Where(x=>x.Mobile.brand.Equals(brand) && x.status != "p").Select(x=>x.model);
             //var models =await db.MobileModels.Where(x => x.Mobile == brand).ToListAsync();
             return Ok(models);
         }
@@ -606,6 +634,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            description = ad.description,
                            id = ad.Id,
                            time = ad.time,
+                           status = ad.status,
                            islogin = islogin,
                            loginUserProfileExtension = loginUserProfileExtension,
                            isNegotiable = ad.isnegotiable,
@@ -615,7 +644,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            views = ad.AdViews.Count,
                            condition = ad.condition,
                            type = ad.type,
-                           isSaved = ad.SaveAds.Any(x=>x.savedBy == islogin),
+                           isSaved = ad.SaveAds.Any(x => x.savedBy == islogin),
                            savedCount = ad.SaveAds.Count,
                            mobilead = new
                            {
@@ -646,6 +675,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                         followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                         //info = tag.Tag.info,
                                     },
+                           adImages = from image in ad.AdImages.ToList()
+                                      select new
+                                      {
+                                          imageExtension = image.imageExtension,
+                                      },
                            bid = from biding in ad.Bids.ToList()
                                  select new
                                  {

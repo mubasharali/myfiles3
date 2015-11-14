@@ -25,6 +25,7 @@
     <Property Name="subcategory" Type="nvarchar" MaxLength="20" />
     <Property Name="type" Type="bit" />
     <Property Name="condition" Type="char" MaxLength="1" />
+    <Property Name="status" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="AdImage">
     <Key>
@@ -306,6 +307,7 @@
     <Property Name="brand" Type="nvarchar" MaxLength="30" Nullable="false" />
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
+    <Property Name="status" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="LaptopModel">
     <Key>
@@ -316,6 +318,7 @@
     <Property Name="model" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="status" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="Mobile">
     <Key>
@@ -325,6 +328,7 @@
     <Property Name="brand" Type="nvarchar" MaxLength="30" Nullable="false" />
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
+    <Property Name="status" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="MobileAds">
     <Key>
@@ -344,6 +348,7 @@
     <Property Name="model" Type="nvarchar" MaxLength="30" />
     <Property Name="time" Type="datetime" Nullable="false" />
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="status" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="popularPlace">
     <Key>
@@ -423,8 +428,8 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="adId" Type="int" Nullable="false" />
     <Property Name="reportedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="details" Type="nvarchar" MaxLength="500" />
-    <Property Name="type" Type="varchar" MaxLength="20" />
+    <Property Name="details" Type="nvarchar" MaxLength="50" />
+    <Property Name="type" Type="varchar" MaxLength="20" Nullable="false" />
   </EntityType>
   <EntityType Name="ReportedQuestion">
     <Key>

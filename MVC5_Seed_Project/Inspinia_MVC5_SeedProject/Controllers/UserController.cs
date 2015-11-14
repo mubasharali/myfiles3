@@ -121,6 +121,40 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             //save extension in database.
             return Ok();
         }
+        [HttpPost]
+        public async Task<IHttpActionResult> AddFriend(string id)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (id == User.Identity.GetUserId())
+                {
+                    return BadRequest("You are already friend of yourself :) ");
+                }
+                Friend friend = new Friend();
+                friend.friendId = id;
+                friend.userId = User.Identity.GetUserId();
+                friend.time = DateTime.UtcNow;
+                db.Friends.Add(friend);
+                await db.SaveChangesAsync();
+                return Ok("Done");
+            }
+            return BadRequest("Not login");
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> UnFriend(string id)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var fr =await db.Friends.FirstOrDefaultAsync(x=>x.friendId.Equals(id) || x.userId.Equals(id)) ;
+                if (fr.userId == User.Identity.GetUserId() || fr.friendId == User.Identity.GetUserId())
+                {
+                    db.Friends.Remove(fr);
+                    await db.SaveChangesAsync();
+                    return Ok("Done");
+                }
+            }
+            return BadRequest();
+        }
         public async Task<IHttpActionResult> SaveAd(int id)
         {
             if (User.Identity.IsAuthenticated)
@@ -184,7 +218,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            reputation = u.reputation,
                            since = u.since,
                            city = u.city,
-                           
+                           isFriend = u.Friends.Any(x=>x.friendId.Equals(loginUserId) || x.userId.Equals(loginUserId)),
                            loginUserId = loginUserId,
                        }).FirstOrDefault();
             if (user == null)

@@ -32,13 +32,18 @@
                     <h5>Create Ad</h5>
                 </div>
                 <div class="ibox-content">
-
-                   @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form", data_bind="dropzone: { url: '/Electronics/Create' }" , enctype = "multipart/form-data" }))
+                    <form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" action="@Url.Action("FileUploadHandler", "Electronics")" method="post" enctype="multipart/form-data">
+                        <h2>Add Images</h2>
+                        <div id="dropzonePreview" class="dz-default dz-message">
+                        </div>
+                    </form>
+                   @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form"}))
                     {
                         @Html.AntiForgeryToken()
-
+                       <input type="hidden" name="files" id="fileNames" />
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true)
+                            <br />
                             <div class="form-group">
                                 <label class="control-label col-md-2">Select Brand<span class="req">*</span></label>
                                 <div class="col-md-10">
@@ -93,12 +98,10 @@
                                 </div>
                             </div>
                             @Html.Partial("~/Views/Shared/_CreateAd.cshtml")
-                            <div id="dropzonePreview" class="dz-default dz-message">
-                            </div>
                             <br />
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" data-bind="click:submitClicked" class="btn btn-primary">Submit</button>
                                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
                                 </div>
                             </div>
@@ -109,9 +112,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
+        @*<div class="col-sm-6">
             The fields with <span class="req">*</span> are mendatory
-        </div>
+        </div>*@
     </div>
 </div>
 
@@ -129,7 +132,7 @@
 }
 
 @section Scripts {
-<script src="~/Scripts/app/dropzone-knockout-binding.js"> </script>
+@*<script src="~/Scripts/app/dropzone-knockout-binding.js"> </script>*@
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/plugins/validate")
     @Scripts.Render("~/plugins/knockout")
@@ -139,9 +142,14 @@
     @Scripts.Render("~/plugins/autosize")
 @Scripts.Render("~/plugins/dropZone")
     <script type="text/javascript">
-
+        var fileList = new Array;
         function ViewModel() {
             var self = this;
+            self.submitClicked = function () {
+                console.log(fileList);
+                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                $("#form").submit();
+            }
             self.conditionChecked = ko.observable(false);
             self.typeValue = ko.observable();
             self.selectedVal = ko.observable();
@@ -286,6 +294,39 @@
                 $(element).autosize();
             }
         };
+        ko.bindingHandlers.dropzone = {
+            init: function (element, valueAccessor) {
+                var value = ko.unwrap(valueAccessor());
+
+                var options = {
+                    maxFileSize: 15,
+                    // autoProcessQueue: false,
+                    uploadMultiple: true,
+                    parallelUploads: 100,
+                    maxFiles: 5,
+                    addRemoveLinks: true,
+                  //  clickable: '#dropzonePreview',
+                    init: function () {
+                        var myDropzone = this;
+                        this.on("success", function (file, serverFileName) {
+                            fileList = [];
+                            i = 1;
+                            console.log(serverFileName);
+                            var abc = $.map(serverFileName, function (item) { return (item); });
+                            $.each(abc, function (index, value) {
+                                fileList[i] = { "fileName": value, "fileId": i++ };
+                            })
+                            console.log(fileList);
+                        });
+                    }
+                };
+
+                $.extend(options, value);
+
+                $(element).addClass('dropzone');
+                new Dropzone(element, options); // jshint ignore:line
+            }
+        };
         ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
             init: function (element, valueAccessor) {
                 //initialize icheck to the element
@@ -301,7 +342,16 @@
 
         $(document).ready(function () {
             ko.applyBindings(new ViewModel);
-
+            window.onbeforeunload = function (e) {
+                e = e || window.event;
+                if (e) {
+                    e.returnValue = 'Sure?';
+                    
+                }
+                console.log("ok");
+                return 'Sure?';
+                
+            };
             Selectize.define('inputMaxlength', function (options) {
                 var self = this;
                 this.setup = (function () {

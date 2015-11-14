@@ -44,7 +44,8 @@
                         <span data-bind="if:!isOnline()"><i class="fa fa-circle text-warning"></i> offline</span>*@)
                         <h4 data-bind="text:shortAbout"></h4>
                         <small>
-                            <button class="btn btn-sm" data-bind="click:function(){ return sendMessage(id,name)}" style="margin-bottom:1px">Send message</button> &nbsp;<button style="margin-bottom:1px" class="btn btn-sm">Follow</button>
+                            <button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return addFriend(id)} " style="margin-bottom:1px"><span data-bind="visible:!isFriend()">Add Friend</span><span data-bind="visible:isFriend">UnFriend</span></button> 
+                            &nbsp;<button class="btn btn-sm" data-bind="click:function(){ return sendMessage(id,name)}" style="margin-bottom:1px">Send message</button> &nbsp;<button style="margin-bottom:1px" class="btn btn-sm">Follow</button>
                         </small>
                     </div>
                 </div>
@@ -579,22 +580,61 @@
             self.lastSeen = data.lastSeen;
             self.reputation = data.reputation;
             self.since = data.since;
-            
-            self.sendMessage = function (id,name) {
-                console.log(id + " " + name);
+            self.isFriend = ko.observable(data.isFriend);
+            self.addFriend = function (id) {
+                if (self.loginUserId) {
+                    if (self.isFriend()) {
+                        self.unFriend(id);
+                    } else {
+                        self.isFriend(true);
+                        $.ajax({
+                            url: '/api/User/AddFriend?id=' + id,
+                            dataType: "json",
+                            contentType: "application/json",
+                            cache: false,
+                            type: 'POST',
+                            success: function (data) {
+                                //self.isFriend(true);
+                            },
+                            error: function () {
+                                self.isFriend(false);
+                                toastr.error("failed to add friend. Please refresh page and try again", "Error");
+                            }
+                        })
+                    }
+                }
+            }
+            self.unFriend = function (id) {
+                self.isFriend(false);
+                $.ajax({
+                    url: '/api/User/UnFriend?id=' + id,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        //self.isFriend(false);
+                    },
+                    error: function () {
+                        self.isFriend(true);
+                        toastr.error("failed to unFriend. Please refresh page and try again", "Error");
+                    }
+                })
+            }
+
+            self.sendMessage = function (id, name) {
                 sendMessageTo(id);
                 sendMessgeToName(name);
                 console.log("Message will be sent to : " + name);
                 $(".open-small-chat").trigger('click');
-                
+
             }
 
             self.loginUserId = data.loginUserId || "";
             self.age = getAge(self.dateOfBirth);
-            self.isUserOnline = function(id){
-                
+            self.isUserOnline = function (id) {
+
             }
-            //console.log(self.isUserOnline(self.id));
             function getAge(dateString) {
                 var today = new Date();
                 var birthDate = new Date(dateString);

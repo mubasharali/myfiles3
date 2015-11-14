@@ -18,257 +18,275 @@
 </div>
 
 
+<style>
+    .carouselContainer {
+        overflow: visible;
+        //height:350px;
+    }
 
+        .carouselContainer img {
+           // height: 350px;
+           height:auto;
+           width:100%;
+        }
+</style>
 
 <div class="wrapper wrapper-content animated fadeInRight">
 
     <div class="row">
         <div class="col-sm-3 hidden-sm hidden-xs">@Html.Partial("~/Views/Shared/_Tree.cshtml")</div>
         <div class="col-md-9" id="adsBinding">
-
+            <div data-bind="visible:error()" class="alert alert-success">
+                <strong>Error! </strong><span data-bind="text:error"></span>
+            </div>
             <div data-bind="foreach: showAds">
-                <input type="hidden" id="loginUserId" data-bind="value:loginUserId" />
-                <div data-bind="attr:{'id':id}">
-                    <div class="ibox product-detail">
-                        <div class="ibox-content">
+                <div data-bind="visible:statusError" class="alert alert-success">
+                    <strong>Pending admin approval! </strong><span data-bind="text:statusError"></span>
+                </div>
 
-                            <div class="row">
-                                <div data-bind="foreach: showImages">
-                                    <div class="col-md-5">
+                <div data-bind="visible:isVisible">
+                    <input type="hidden" id="loginUserId" data-bind="value:loginUserId" />
 
+                    <div data-bind="attr:{'id':id}">
+                        <div class="ibox product-detail">
+                            <div class="ibox-content">
 
-                                        <div class="product-images">
+                                <div class="row">
+                                    <div class="lightBoxGallery">
 
-                                            <div>
-                                                <div class="image-imitation">
-                                                    [IMAGE 1]
+                                        <div class="col-md-5 col-sm-7">
+
+                                            <div class="carouselContainer">
+                                                <div id="gallery" data-gallery=""
+                                                     data-bind="slick: images,
+                slickOptions: {dots:true, initialSlide:1},
+                slickIndex: imageIndex">
                                                 </div>
                                             </div>
-                                            <div>
-                                                <div class="image-imitation">
-                                                    [IMAGE 2]
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="image-imitation">
-                                                    [IMAGE 3]
-                                                </div>
-                                            </div>
-
+                                            
 
                                         </div>
-
+                                        <div class="col-sm-5 hidden-lg hidden-md hidden-xs">Display your banner ad here</div>
                                     </div>
-                                </div>
-                                <div class="col-md-7">
-                                    <span data-bind="visible:loginUserId == postedById">
-                                        <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a data-bind="click: function(){return editAd(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
-                                    </span>
+                                    @*<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+                                        <div class="slides"></div>
+                                        <h3 class="title"></h3>
+                                        <a class="prev">‹</a>
+                                        <a class="next">›</a>
+                                        <a class="close">×</a>
+                                        <a class="play-pause"></a>
+                                        <ol class="indicator"></ol>
+                                    </div>*@
+                                    <div class="col-md-7 col-sm-12">
+                                        <span data-bind="visible:loginUserId == postedById">
+                                            <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a data-bind="click: function(){return editAd(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                        </span>
                                         <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
-                                    <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
-                                        <li><a href=""><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
-                                    </ul><br /><br />
-                                    <hr>
-                                    <span data-bind="if:isBidingAllowed">
-                                        <button data-bind="click:placeBidButton" class="btn btn-primary pull-right">Place Bid</button>
-                                    </span>
-                                    <span data-bind="if:!isBidingAllowed">
-                                        <button data-bind="" class="btn btn-primary pull-right">Chat with seller</button>
-                                    </span>
-                                    <h1 class="product-main-price">
-                                        <span data-bind="if:!isBidingAllowed">
-                                            <span data-bind="if:price">
-                                                <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
-                                            </span>
-                                            <span data-bind="if:!price">Price on contact</span>
-                                        </span>
+                                        <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
+                                            <li><a href=""><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                        </ul><br /><br />
+                                        <hr>
                                         <span data-bind="if:isBidingAllowed">
-                                            <span data-bind="if:price">
-                                                <span data-bind="if:highestBid() == '-Infinity'">
-                                                    <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
-                                                </span>
-                                                <span data-bind="ifnot:highestBid() == '-Infinity'">
-                                                    <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) Initial Bid = <span data-bind="text:price"></span> </small>
-                                                </span>
-                                            </span>
-                                            <span data-bind="if:!price">
-                                                <span data-bind="if:highestBid() == '-Infinity'">
-                                                    No Bit yet
-                                                </span>
-                                                <span data-bind="ifnot:highestBid() == '-Infinity'">
-                                                    <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
-                                                </span>
-                                            </span>
+                                            <button data-bind="click:placeBidButton" class="btn btn-primary pull-right">Place Bid</button>
                                         </span>
-                                    </h1>
-                                    <hr>
-                                    <dl class="dl-horizontal m-t-md small">
-                                        <dt>condition:</dt>
-                                        <dd data-bind="text:condition"></dd>
-                                        <dt>Tye:</dt>
-                                        <dd data-bind="text:type"></dd>
-                                        <span data-bind="with: showMobileAd">
-                                            <dt data-bind="with:brand">Brand:</dt>
-                                            <dd data-bind="text:brand"></dd>
-                                            <dt data-bind="with:model">Model:</dt>
-                                            <dd data-bind="text:model"></dd>
-                                            <dt data-bind="with:color">color:</dt>
-                                            <dd data-bind="text:color"></dd>
-                                            <span data-bind="if:sims">
-                                                <dt>Number of sims:</dt>
-                                                <dd data-bind="text:sims"></dd>
-                                            </span>
-
+                                        <span data-bind="if:!isBidingAllowed">
+                                            <button data-bind="" class="btn btn-primary pull-right">Chat with seller</button>
                                         </span>
-                                    </dl>
-                                    <div data-bind="foreach: showCarAd">
+                                        <h1 class="product-main-price">
+                                            <span data-bind="if:!isBidingAllowed">
+                                                <span data-bind="if:price">
+                                                    <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
+                                                </span>
+                                                <span data-bind="if:!price">Price on contact</span>
+                                            </span>
+                                            <span data-bind="if:isBidingAllowed">
+                                                <span data-bind="if:price">
+                                                    <span data-bind="if:highestBid() == '-Infinity'">
+                                                        <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
+                                                    </span>
+                                                    <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                        <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) Initial Bid = <span data-bind="text:price"></span> </small>
+                                                    </span>
+                                                </span>
+                                                <span data-bind="if:!price">
+                                                    <span data-bind="if:highestBid() == '-Infinity'">
+                                                        No Bit yet
+                                                    </span>
+                                                    <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                        <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </h1>
                                         <hr>
                                         <dl class="dl-horizontal m-t-md small">
-                                            <dt>Brand:</dt>
-                                            <dd data-bind="text:brand"></dd>
-                                            <dt>Model:</dt>
-                                            <dd data-bind="text:model"></dd>
-                                            <dt>color:</dt>
-                                            <dd data-bind="text:color"></dd>
                                             <dt>condition:</dt>
                                             <dd data-bind="text:condition"></dd>
-                                            <dt>Fuel type</dt>
-                                            <dd data-bind="text:fuelType"></dd>
-                                            <dt>Km Driven</dt>
-                                            <dd data-bind="text:kmDriven"></dd>
-                                            <dt>Year</dt>
-                                            <dd data-bind="text:year"></dd>
+                                            <dt>Tye:</dt>
+                                            <dd data-bind="text:type"></dd>
+                                            <span data-bind="with: showMobileAd">
+                                                <dt data-bind="with:brand">Brand:</dt>
+                                                <dd data-bind="text:brand"></dd>
+                                                <dt data-bind="with:model">Model:</dt>
+                                                <dd data-bind="text:model"></dd>
+                                                <dt data-bind="with:color">color:</dt>
+                                                <dd data-bind="text:color"></dd>
+                                                <span data-bind="if:sims">
+                                                    <dt>Number of sims:</dt>
+                                                    <dd data-bind="text:sims"></dd>
+                                                </span>
+
+                                            </span>
                                         </dl>
-                                    </div>
-
-                                    <h4>Details</h4>
-                                    <div data-bind="text:description" class="small text-muted">
-                                    </div>
-
-                                    <div data-bind="with:showLocation">
-                                        <h5 data-bind="with:cityName">Location</h5>
-                                        <span data-bind="if:exectLocation">
-                                            <span data-bind="text:exectLocation"></span>,
-                                        </span>
-                                        <span data-bind="if:popularPlace">
-                                            <span data-bind="text:popularPlace"></span>,
-                                        </span>
-                                        <span data-bind="text:cityName"></span>
-                                    </div>
-                                    <br />
-                                    <div class="text-right">
-                                        <div class="btn-group">
-                                            <button data-bind="click:saveAd" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
-                                            <a data-bind="attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
+                                        <div data-bind="foreach: showCarAd">
+                                            <hr>
+                                            <dl class="dl-horizontal m-t-md small">
+                                                <dt>Brand:</dt>
+                                                <dd data-bind="text:brand"></dd>
+                                                <dt>Model:</dt>
+                                                <dd data-bind="text:model"></dd>
+                                                <dt>color:</dt>
+                                                <dd data-bind="text:color"></dd>
+                                                <dt>condition:</dt>
+                                                <dd data-bind="text:condition"></dd>
+                                                <dt>Fuel type</dt>
+                                                <dd data-bind="text:fuelType"></dd>
+                                                <dt>Km Driven</dt>
+                                                <dd data-bind="text:kmDriven"></dd>
+                                                <dt>Year</dt>
+                                                <dd data-bind="text:year"></dd>
+                                            </dl>
                                         </div>
+
+                                        <h4>Details</h4>
+                                        <div data-bind="text:description" class="small text-muted">
+                                        </div>
+
+                                        <div data-bind="with:showLocation">
+                                            <h5 data-bind="with:cityName">Location</h5>
+                                            <span data-bind="if:exectLocation">
+                                                <span data-bind="text:exectLocation"></span>,
+                                            </span>
+                                            <span data-bind="if:popularPlace">
+                                                <span data-bind="text:popularPlace"></span>,
+                                            </span>
+                                            <span data-bind="text:cityName"></span>
+                                        </div>
+                                        <br />
+                                        <div class="text-right">
+                                            <div class="btn-group">
+                                                <button data-bind="click:saveAd" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
+                                                <a data-bind="attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
+                                            </div>
+                                        </div>
+
+
                                     </div>
-
-
                                 </div>
+
                             </div>
-
-                        </div>
-                        <div class="ibox-footer">
-                            <span class="pull-right">
-                                <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
-                            </span>
-                            Views (<span data-bind="text:views"></span>) -  wishlist (<span data-bind="text:savedCount"></span> ) - <span data-toggle="modal" data-target="#report"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
+                            <div class="ibox-footer">
+                                <span class="pull-right">
+                                    <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
+                                </span>
+                                Views (<span data-bind="text:views"></span>) -  wishlist (<span data-bind="text:savedCount"></span> ) - <span data-toggle="modal" data-target="#report"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
 
 
 
 
-                            <div data-bind="visible:isBidingAllowed">
-                                <hr />
-                                <h2>Bidings:</h2>
-                                <div data-bind="visible:placeBid">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <label class="control-label col-sm-2">Bid amount</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-group m-b">
-                                                    <span class="input-group-addon">Rs</span><input type="number" placeholder="place bid.." data-bind="value:newBidPrice" class="form-control" pattern="[0-9]*" name="price" required />
+                                <div data-bind="visible:isBidingAllowed">
+                                    <hr />
+                                    <h2>Bidings:</h2>
+                                    <div data-bind="visible:placeBid">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="control-label col-sm-2">Bid amount</label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group m-b">
+                                                        <span class="input-group-addon">Rs</span><input type="number" placeholder="place bid.." data-bind="value:newBidPrice" class="form-control" pattern="[0-9]*" name="price" required />
+                                                    </div>
                                                 </div>
+                                                <div class="col-sm-2"><button class="btn btn-success" data-bind="click:postBid">Submit</button></div>
                                             </div>
-                                            <div class="col-sm-2"><button class="btn btn-success" data-bind="click:postBid">Submit</button></div>
                                         </div>
+
                                     </div>
+                                    <span data-bind="text:showBidings().length"></span> bidings
+                                    <ul class="sortable-list connectList agile-list" data-bind="foreach:showBidings">
+                                        <li class="success-element">
+                                            <span data-bind="visible:!isEditing()">
+                                                <a href="#"><span data-bind="text:postedByName"></span></a>
+                                                <strong class="col-xs-offset-3"> <span data-bind="text:price"></span></strong>
+                                                <div class="agile-detail">
+                                                    <a data-bind="click:$parent.deleteBid" class="pull-right btn btn-xs btn-white">delete</a><a data-bind="click:editBidButton" class="pull-right btn btn-xs btn-white">edit</a>
+                                                    <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
+                                                </div>
+                                            </span>
+                                            <span data-bind="visible:isEditing()">
+                                                <div class="input-group m-b">
+                                                    <span class="input-group-addon">Rs</span><input type="number" data-bind="value:price" class="form-control" pattern="[0-9]*" name="price" required />
+                                                </div>
+                                                <button class="btn btn-success" data-bind="click:function(){return updateBid($parent.id)}">Update</button>
+                                            </span>
+                                        </li>
+                                    </ul>
 
                                 </div>
-                                <span data-bind="text:showBidings().length"></span> bidings
-                                <ul class="sortable-list connectList agile-list" data-bind="foreach:showBidings">
-                                    <li class="success-element">
-                                        <span data-bind="visible:!isEditing()">
-                                            <a href="#"><span data-bind="text:postedByName"></span></a>
-                                            <span data-bind="text:price"></span>
-                                            <div class="agile-detail">
-                                                <a data-bind="click:$parent.deleteBid" class="pull-right btn btn-xs btn-white">delete</a><a data-bind="click:editBidButton" class="pull-right btn btn-xs btn-white">edit</a>
-                                                <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
-                                            </div>
-                                        </span>
-                                        <span data-bind="visible:isEditing()">
-                                            <div class="input-group m-b">
-                                                <span class="input-group-addon">Rs</span><input type="number" data-bind="value:price" class="form-control" pattern="[0-9]*" name="price" required />
-                                            </div>
-                                            <button class="btn btn-success" data-bind="click:function(){return updateBid($parent.id)}">Update</button>
-                                        </span>
-                                    </li>
-                                </ul>
-
                             </div>
-                        </div>
-                        <div class="">
-                            @Html.Partial("~/Views/Shared/_Comments.cshtml")
+                            <div class="">
+                                @Html.Partial("~/Views/Shared/_Comments.cshtml")
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal inmodal fade" id="report" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content animated ">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <i class="fa fa-flag modal-icon"></i>
-                                <h4 class="modal-title">Report Ad</h4>
-                                <small class="font-bold">Make sure you have provided right information or you can loose reputation</small>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <div class="col-sm-offset-3 ">
-                                        <div class="radio">
-                                            <label>
-                                                <input class="radio i-checks" type="radio" data-bind=" checked: selectedVal " name="report" value="duplicate" required /> Ad is duplicate
-                                            </label>
-                                        </div>
-                                        <div class="radio">
-                                            <label>
-                                                <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="wrong_category" required /> Wrong category
-                                            </label>
-                                        </div>
-                                        <div class="radio">
-                                            <label>
-                                                <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="Irrelevent_content" required /> Irrelevent content
-                                            </label>
-                                        </div>
-                                        <div class="radio">
-                                            <label>
-                                                <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="spam" required /> Spam/Offensive content
-                                            </label>
-                                        </div>
-                                        <div class="radio">
-                                            <label>
-                                                <input class="radio i-checks" type="radio" data-bind="checked: selectedVal" name="report" value="fraud" required /> Fraud reason
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <label>Addational details:</label>
-                                    <textarea class="msgTextArea form-control" placeholder="Addational info.." data-bind="jqAutoresize: {},value:reportText"></textarea>
-
+                    <div class="modal inmodal fade" id="report" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content animated ">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <i class="fa fa-flag modal-icon"></i>
+                                    <h4 class="modal-title">Report Ad</h4>
+                                    <small class="font-bold">Make sure you have provided right information or you can loose reputation</small>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-white" data-dismiss="modal">I didn't mean to</button>
-                                @*<span data-bind="text:$parent.id"></span>*@
-                                @*<span data-bind="text:loginUserId"></span>*@
-                                <button type="button" data-bind="click: function(){ return report()}" class="btn btn-primary">Submit</button>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 ">
+                                            <div class="radio">
+                                                <label>
+                                                    <input class="radio i-checks" type="radio" data-bind=" checked: selectedVal " name="report" value="duplicate" required /> Ad is duplicate
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="wrong_category" required /> Wrong category
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="Irrelevent_content" required /> Irrelevent content
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="spam" required /> Spam/Offensive content
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal" name="report" value="fraud" required /> Fraud reason
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <label>Addational details:</label>
+                                        <textarea class="msgTextArea form-control" placeholder="Addational info.." data-bind="jqAutoresize: {},value:reportText"></textarea>
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">I didn't mean to</button>
+                                    @*<span data-bind="text:$parent.id"></span>*@
+                                    @*<span data-bind="text:loginUserId"></span>*@
+                                    <button type="button" data-bind="click: function(){ return report()}" class="btn btn-primary">Submit</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -379,11 +397,12 @@
             self.popularPlace = data.popularPlace;
             self.exectLocation = data.exectLocation;
         }
-        function adImages(data) {
+        var imageUrls = [];
+        function adImages(data,adId,imagesCount) {
             var self = this;
             data = data || {};
-            self.id = data.id;
-            self.name = data.adId + '_' + data.imageExtension;// also loop after _
+            self.link = "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;// also loop after _
+            imageUrls.push(self.link);
         }
         function Tag(data) {
             var self = this;
@@ -395,6 +414,12 @@
         };
         function ad(data) {
             var self = this;
+
+            //slick
+            self.images = ko.observableArray(imageUrls);
+            self.options = {};
+            self.imageIndex = ko.observable(1);
+
             data = data || {};
             self.title = data.title;
             self.description = ko.observable( data.description);
@@ -416,6 +441,15 @@
             self.price = data.price || "";
             self.newBidPrice = ko.observable();
             self.showCarAd = ko.observable();
+            self.statusError = "";
+            self.isVisible = true;
+            if (data.status == "p") {
+                self.statusError = "This ad will be visible to public once it is approved by admin";
+                if (self.loginUserId != self.postedById) {
+                    self.isVisible = false;
+                }
+                
+            }
             self.type = "";
             if (data.type == true) {
                 self.type = "For sell";
@@ -524,8 +558,9 @@
                 var cmt = $.map(data.comment, function (item) { return new comment(item); });
                 self.showComment(cmt);
             }
-            if (data.image) {
-                var img = $.map(data.image, function (item) { return new adImages(item); });
+            if (data.adImages) {
+                var imagesCount = 1;
+                var img = $.map(data.adImages, function (item,ia) { return new adImages(item,data.id,imagesCount++); });
                 self.showImages(img);
             }
             self.saveAd = function (ad) {
@@ -685,7 +720,10 @@
             AccountViewModel();
             ChatViewModel();
             Report();
+            
+
             self.showAds = ko.observableArray();
+            self.error = ko.observable();
             self.loadad = function () {
                 var adId = myAdId;
                 url_address = '/api/Electronic/GetAd/' + adId;
@@ -702,7 +740,7 @@
                     }).disableSelection();
                 })
                 .fail(function () {
-                    toastr.error("Unable to load data. Please try again", "Error");
+                    self.error ( "This ad has been deleted or is unavailable. " );
                 });
             }
             
@@ -738,6 +776,104 @@
                 });
             }
         };
+        ko.bindingHandlers.slick = (function () {
+            var createImageDiv = function (imgUrl) {
+
+                $a = $('<a>');
+                $a.attr('href', imgUrl);
+                //$a.attr('data-gallery', '#blueimp-gallery');
+                $a.attr('target', '_blank');
+                $div = $('<div>');
+                $image = $('<img>');
+                $image.attr('src', imgUrl);
+                // $div.append($image);
+                $a.append($image);
+                $div.append($a);
+                return $div;
+            };
+
+            // Initializes the carousel
+            var init = function (element, valueAccessor, allBindingsAccessor) {
+                // Clears the div
+                $(element).empty();
+                // Creates the inner divs with images
+                var images = ko.unwrap(valueAccessor());
+                if (images) {
+                    images.forEach(function (imgUrl) {
+                        $(element).append(createImageDiv(imgUrl));
+                    });
+                }
+
+                // try to recover slickOptions
+                var options = allBindingsAccessor().slickOptions || {};
+
+                // Initialize slick on the div, with provided options
+                $(element).slick(options);
+
+                //handle disposal, if KO removes the element
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(element).slick('unslick');
+                });
+
+                // check if there is slickIndex
+                var slickIndex = allBindingsAccessor().slickIndex;
+                if (slickIndex) {
+                    $(element).slick('slickGoTo', ko.unwrap(slickIndex));
+                }
+                // If it's obervable, subscribe to its changes
+                if (ko.isObservable(slickIndex)) {
+                    slickIndex.subscribe(function (idx) {
+                        $(element).slick('slickGoTo', idx);
+                    });
+                }
+                // It if's writable observable, update when slick current index changes
+                if (ko.isWritableObservable(slickIndex)) {
+                    $(element).on('afterChange', function (evt, slick, pos) {
+                        slickIndex(pos);
+                    })
+                }
+
+                // Check if the array of images is an observable array
+                var imagesArray = valueAccessor();
+                // If it's observable array, subscribe to changes
+                if (ko.isObservable(imagesArray) && 'destroyAll' in imagesArray) {
+                    imagesArray.subscribe(function (changes) {
+                        console.log(changes);
+                        if (changes) {
+                            changes.forEach(function (change) {
+                                if (change.status == 'added') {
+                                    // Add new img div at index
+                                    var imgDiv = createImageDiv(change.value)[0];
+                                    var index = change.index;
+                                    var slideCount = $(element).slick('getSlick').slideCount;
+                                    // if the index is out of range (which can happen 
+                                    // with push, and splice), include at the end
+                                    var addBefore = true;
+                                    if (index >= slideCount) {
+                                        index = slideCount - 1;
+                                        addBefore = false;
+                                    }
+                                    $(element).slick('slickAdd', imgDiv, index, addBefore);
+                                } else if (change.status == 'deleted') {
+                                    // delete img div at index
+                                    $(element).slick('slickRemove', change.index);
+                                }
+                            });
+                        }
+                    }, null, 'arrayChange');
+                } // if observable array
+            }
+
+            //update the control when the view model changes
+            var update = function (element, valueAccessor) {
+                var images = ko.unwrap(valueAccessor());
+                // Do something to update the content
+                console.log('update');
+            }
+
+            return { init: init, update: update };
+        })();
+
         $(function () {
             
             toastr.options = {
@@ -747,14 +883,9 @@
                 positionClass: 'toast-top-right',
                 onclick: null
             };
-            $('.product-images').slick({
-                dots: true
-            });
             ko.applyBindings(new viewModel());
             $.connection.hub.start().done();
-          //  ko.applyBindings(new viewModel, (document.getElementById('adsBinding')));
-
-          //  ko.applyBindings(new treeModel, document.getElementById('navigation'));
+            //commentsFile();
             
         });
 

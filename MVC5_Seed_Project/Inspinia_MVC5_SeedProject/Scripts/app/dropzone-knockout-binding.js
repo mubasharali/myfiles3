@@ -6,7 +6,7 @@
 
             var options = {
                 maxFileSize: 15,
-                autoProcessQueue: false,
+               // autoProcessQueue: false,
                 uploadMultiple: true,
                 parallelUploads: 100,
                 maxFiles: 100,
@@ -14,23 +14,15 @@
                 clickable: '#dropzonePreview',
                 init: function () {
                     var myDropzone = this;
-                    this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-
-                        e.preventDefault();
-                        e.stopPropagation();
-                        var form = $(this).closest("#form");
-                        if (form.valid() == true) {
-                            if (myDropzone.getQueuedFiles().length > 0) {
-                                myDropzone.processQueue();
-                            } else {
-                                myDropzone.uploadFiles([]); //send empty 
-                            }
-                        }
-                    });
-                    this.on("success", function (file, responseText) {
-                       // var responseText = file.id // or however you would point to your assigned file ID here;
-                       // console.log(responseText); // console should show the ID you pointed to
-                        console.log(responseText);
+                    this.on("success", function (file, serverFileName) {
+                        fileList = [];
+                        i = 1;
+                        console.log(serverFileName);
+                        var abc = $.map(serverFileName, function (item) { return (item); });
+                        $.each(abc, function (index, value) {
+                            fileList[i] = { "fileName": value, "fileId": i++ };
+                        })
+                        console.log(fileList);
                     });
                 }
             };

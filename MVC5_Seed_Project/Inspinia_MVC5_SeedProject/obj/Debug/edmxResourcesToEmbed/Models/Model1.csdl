@@ -398,6 +398,7 @@
     <NavigationProperty Name="MobileAd" Relationship="Model.FK_MobileAds_ToTable" FromRole="Ad" ToRole="MobileAd" />
     <NavigationProperty Name="Reporteds" Relationship="Model.FK_Reported_ToTable" FromRole="Ad" ToRole="Reported" />
     <NavigationProperty Name="SaveAds" Relationship="Model.FK_SaveAd_ToTable" FromRole="Ad" ToRole="SaveAd" />
+    <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
   </EntityType>
   <EntityType Name="AdImage">
     <Key>
@@ -752,6 +753,7 @@
     <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_LaptopBrand_ToTable" FromRole="LaptopBrand" ToRole="AspNetUser" />
     <NavigationProperty Name="LaptopModels" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopBrand" ToRole="LaptopModel" />
+    <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
   </EntityType>
   <EntityType Name="LaptopModel">
     <Key>
@@ -765,6 +767,7 @@
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_LaptopModel_ToTable_1" FromRole="LaptopModel" ToRole="AspNetUser" />
     <NavigationProperty Name="LaptopAds" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopModel" ToRole="LaptopAd" />
     <NavigationProperty Name="LaptopBrand" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopModel" ToRole="LaptopBrand" />
+    <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
   </EntityType>
   <EntityType Name="Mobile">
     <Key>
@@ -776,6 +779,7 @@
     <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Mobile_ToTable" FromRole="Mobile" ToRole="AspNetUser" />
     <NavigationProperty Name="MobileModels" Relationship="Model.FK_MobileModel_ToTable" FromRole="Mobile" ToRole="MobileModel" />
+    <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
   </EntityType>
   <EntityType Name="MobileAd">
     <Key>
@@ -800,6 +804,7 @@
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_MobileModel_ToTable_1" FromRole="MobileModel" ToRole="AspNetUser" />
     <NavigationProperty Name="Mobile" Relationship="Model.FK_MobileModel_ToTable" FromRole="MobileModel" ToRole="Mobile" />
     <NavigationProperty Name="MobileAds" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="MobileModel" ToRole="MobileAd" />
+    <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
   </EntityType>
   <EntityType Name="popularPlace">
     <Key>
@@ -902,8 +907,8 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="adId" Type="Int32" Nullable="false" />
     <Property Name="reportedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="details" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-    <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="details" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="Ad" Relationship="Model.FK_Reported_ToTable" FromRole="Reported" ToRole="Ad" />
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Reported_ToTable_1" FromRole="Reported" ToRole="AspNetUser" />
   </EntityType>

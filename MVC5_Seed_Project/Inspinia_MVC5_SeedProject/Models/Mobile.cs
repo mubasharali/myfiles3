@@ -23,6 +23,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string brand { get; set; }
         public string addedBy { get; set; }
         public System.DateTime time { get; set; }
+        public string status { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual ICollection<MobileModel> MobileModels { get; set; }

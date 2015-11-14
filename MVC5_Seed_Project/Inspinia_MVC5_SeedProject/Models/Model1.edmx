@@ -312,6 +312,7 @@
           <Property Name="brand" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="time" Type="datetime" Nullable="false" />
+          <Property Name="status" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="LaptopModel">
           <Key>
@@ -322,6 +323,7 @@
           <Property Name="model" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="time" Type="datetime" Nullable="false" />
           <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="status" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="Mobile">
           <Key>
@@ -331,6 +333,7 @@
           <Property Name="brand" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="time" Type="datetime" Nullable="false" />
+          <Property Name="status" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="MobileAds">
           <Key>
@@ -350,6 +353,7 @@
           <Property Name="model" Type="nvarchar" MaxLength="30" />
           <Property Name="time" Type="datetime" Nullable="false" />
           <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="status" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="popularPlace">
           <Key>
@@ -2595,6 +2599,7 @@
           <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_LaptopBrand_ToTable" FromRole="LaptopBrand" ToRole="AspNetUser" />
           <NavigationProperty Name="LaptopModels" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopBrand" ToRole="LaptopModel" />
+          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="LaptopModel">
           <Key>
@@ -2608,6 +2613,7 @@
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_LaptopModel_ToTable_1" FromRole="LaptopModel" ToRole="AspNetUser" />
           <NavigationProperty Name="LaptopAds" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopModel" ToRole="LaptopAd" />
           <NavigationProperty Name="LaptopBrand" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopModel" ToRole="LaptopBrand" />
+          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="Mobile">
           <Key>
@@ -2619,6 +2625,7 @@
           <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Mobile_ToTable" FromRole="Mobile" ToRole="AspNetUser" />
           <NavigationProperty Name="MobileModels" Relationship="Model.FK_MobileModel_ToTable" FromRole="Mobile" ToRole="MobileModel" />
+          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="MobileAd">
           <Key>
@@ -2643,6 +2650,7 @@
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_MobileModel_ToTable_1" FromRole="MobileModel" ToRole="AspNetUser" />
           <NavigationProperty Name="Mobile" Relationship="Model.FK_MobileModel_ToTable" FromRole="MobileModel" ToRole="Mobile" />
           <NavigationProperty Name="MobileAds" Relationship="Model.FK_MobileAds_ToTable_1" FromRole="MobileModel" ToRole="MobileAd" />
+          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="popularPlace">
           <Key>
@@ -4142,6 +4150,7 @@
           <EntitySetMapping Name="LaptopBrands">
             <EntityTypeMapping TypeName="Model.LaptopBrand">
               <MappingFragment StoreEntitySet="LaptopBrand">
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="time" ColumnName="time" />
                 <ScalarProperty Name="addedBy" ColumnName="addedBy" />
                 <ScalarProperty Name="brand" ColumnName="brand" />
@@ -4152,6 +4161,7 @@
           <EntitySetMapping Name="LaptopModels">
             <EntityTypeMapping TypeName="Model.LaptopModel">
               <MappingFragment StoreEntitySet="LaptopModel">
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="addedBy" ColumnName="addedBy" />
                 <ScalarProperty Name="time" ColumnName="time" />
                 <ScalarProperty Name="model" ColumnName="model" />
@@ -4163,6 +4173,7 @@
           <EntitySetMapping Name="Mobiles">
             <EntityTypeMapping TypeName="Model.Mobile">
               <MappingFragment StoreEntitySet="Mobile">
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="time" ColumnName="time" />
                 <ScalarProperty Name="addedBy" ColumnName="addedBy" />
                 <ScalarProperty Name="brand" ColumnName="brand" />
@@ -4183,6 +4194,7 @@
           <EntitySetMapping Name="MobileModels">
             <EntityTypeMapping TypeName="Model.MobileModel">
               <MappingFragment StoreEntitySet="MobileModel">
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="addedBy" ColumnName="addedBy" />
                 <ScalarProperty Name="time" ColumnName="time" />
                 <ScalarProperty Name="model" ColumnName="model" />

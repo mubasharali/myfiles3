@@ -77,14 +77,5 @@ namespace Inspinia_MVC5_SeedProject.Hubs
            // Clients.Caller.loadNewMessage(ret);
           //  Clients.All.loadNewMessage(ret);
         }
-        public void GetAlert()
-        {
-            Clients.All.showAlert();
-        }
-        public void Hello()
-        {
-
-            Clients.All.hello();
-        }
     }
 }
