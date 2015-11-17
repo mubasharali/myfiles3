@@ -148,6 +148,7 @@
             self.submitClicked = function () {
                 console.log(fileList);
                 $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                window.btn_clicked = true;
                 $("#form").submit();
             }
             self.conditionChecked = ko.observable(false);
@@ -300,12 +301,11 @@
 
                 var options = {
                     maxFileSize: 15,
-                    // autoProcessQueue: false,
                     uploadMultiple: true,
                     parallelUploads: 100,
-                    maxFiles: 5,
+                    maxFiles: 30,
                     addRemoveLinks: true,
-                  //  clickable: '#dropzonePreview',
+                    acceptedFiles: ".jpeg,.jpg,.png,.gif",
                     init: function () {
                         var myDropzone = this;
                         this.on("success", function (file, serverFileName) {
@@ -343,14 +343,13 @@
         $(document).ready(function () {
             ko.applyBindings(new ViewModel);
             window.onbeforeunload = function (e) {
-                e = e || window.event;
-                if (e) {
-                    e.returnValue = 'Sure?';
-                    
+                if (!window.btn_clicked) {
+                    e = e || window.event;
+                    if (e) {
+                        e.returnValue = 'Sure?';
+                    }
+                    return 'Sure?';
                 }
-                console.log("ok");
-                return 'Sure?';
-                
             };
             Selectize.define('inputMaxlength', function (options) {
                 var self = this;

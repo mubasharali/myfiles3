@@ -57,26 +57,20 @@
                                         <div class="col-md-5 col-sm-7">
 
                                             <div class="carouselContainer">
+                                                <div><span data-bind="text:images().length"></span>  images attched with this ad</div>
+                                                
                                                 <div id="gallery" data-gallery=""
                                                      data-bind="slick: images,
-                slickOptions: {dots:true, initialSlide:1},
+                slickOptions: {dots:true, initialSlide:0},
                 slickIndex: imageIndex">
                                                 </div>
+                                                <div data-bind="visible:images().length == 0">Display your banner ad here</div>
                                             </div>
                                             
 
                                         </div>
                                         <div class="col-sm-5 hidden-lg hidden-md hidden-xs">Display your banner ad here</div>
                                     </div>
-                                    @*<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
-                                        <div class="slides"></div>
-                                        <h3 class="title"></h3>
-                                        <a class="prev">‹</a>
-                                        <a class="next">›</a>
-                                        <a class="close">×</a>
-                                        <a class="play-pause"></a>
-                                        <ol class="indicator"></ol>
-                                    </div>*@
                                     <div class="col-md-7 col-sm-12">
                                         <span data-bind="visible:loginUserId == postedById">
                                             <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a data-bind="click: function(){return editAd(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
@@ -690,7 +684,6 @@
                         details: self.reportText,
                         type: self.selectedVal(),
                     };
-                    console.log(data);
                     $.ajax({
                         url: '/api/Electronic/reportAd',
                         dataType: "json",
@@ -699,9 +692,8 @@
                         type: 'POST',
                         data: ko.toJSON(data),
                         success: function (data) {
-                            //self.isReported(true);
-                            //self.reportedCount(data);
                             $("#report").modal('hide');
+                            toastr.info("Our team can contact you for details", "Thanks for feedback!");
                         },
                         error: function (xhr, status, error) {
                             var err = eval("(" + xhr.responseText + ")");

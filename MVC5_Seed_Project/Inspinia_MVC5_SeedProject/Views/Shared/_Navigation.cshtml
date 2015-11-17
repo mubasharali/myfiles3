@@ -4,10 +4,13 @@
             <li class="nav-header hidden-lg hidden-md hidden-sm">
                 @if (Request.IsAuthenticated) { 
                 <div class="dropdown profile-element">
+                    @*<span> no image extension
+                        <img alt="image" class="img-circle" src="/Images/Users/@User.Identity.GetUserId()" />
+                    </span>*@
                     <a data-toggle="dropdown" class="dropdown-toggle" href="/User/Index/@User.Identity.GetUserId()">
                         <span class="clear">
                             <span class="block m-t-xs">
-                                <strong class="font-bold">User Name</strong>
+                                <strong class="font-bold">@Html.Action("GetUserEmail","Shared")</strong>
                             </span> <span class="text-muted text-xs block">options <b class="caret"></b></span>
                         </span>
                     </a>

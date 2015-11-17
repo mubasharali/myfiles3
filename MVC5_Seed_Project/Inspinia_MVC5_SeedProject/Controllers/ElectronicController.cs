@@ -12,9 +12,14 @@ using System.Web.Http.Description;
 using Microsoft.AspNet.Identity;
 using System.Web;
 using Inspinia_MVC5_SeedProject.Models;
-
+using System.IO;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
+    public class Image
+    {
+        public string extension;
+        public long size;
+    }
     public class ElectronicController : ApiController
     {
         private Entities db = new Entities();
@@ -24,7 +29,36 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return db.Ads;
         }
-        
+        public async Task<IHttpActionResult> getAdImages(int id)
+        {
+            var ad = await db.Ads.FindAsync(id);
+            if (ad != null)
+            {
+
+                var ret = ad.AdImages.Select(x => x.imageExtension);
+                Image [] img  = new Image[ret.Count()];
+                for (int ij = 0; ij < ret.Count(); ij++)
+                {
+                    img[ij] = new Image();
+                }
+                int i = 0;
+                try
+                {
+                    foreach (var ext in ret)
+                    {
+                        img[i].extension = ext;
+                        img[i++].size = new FileInfo(System.Web.Hosting.HostingEnvironment.MapPath(@"~\Images\Ads\" + id + "_" + i + ext)).Length;
+                    }
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Ok(img);
+            }
+            //File f = "";
+            return NotFound();
+        }
         [HttpPost]
         public async Task<IHttpActionResult> GetMobileTree()
         {
@@ -64,6 +98,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            }).AsEnumerable();
             return Ok(mobiles);
         }
+        
         public async Task<IHttpActionResult> GetBrandsWithTime(int daysAgo,string MobileOrLaptop)
         {
             TimeSpan duration = DateTime.UtcNow - DateTime.Today.AddDays(-daysAgo);
@@ -403,6 +438,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                     {
                                         price = biding.price,
                                     },
+                              adImages = from image in ad.Ad.AdImages.ToList()
+                                         select new
+                                         {
+                                             imageExtension = image.imageExtension,
+                                         },
                           };
                 return Ok(ret);
             }
@@ -443,6 +483,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                    {
                                        price = biding.price,
                                    },
+                             adImages = from image in ad.AdImages.ToList()
+                                        select new
+                                        {
+                                            imageExtension = image.imageExtension,
+                                        },
                          };
                 return Ok(re);
             }
@@ -481,6 +526,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 {
                                     price = biding.price,
                                 },
+                          adImages = from image in ad.AdImages.ToList()
+                                     select new
+                                     {
+                                         imageExtension = image.imageExtension,
+                                     },
                       };
             return Ok(res);
         }
@@ -526,6 +576,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                     {
                                         price = biding.price,
                                     },
+                              adImages = from image in ad.Ad.AdImages.ToList()
+                                         select new
+                                         {
+                                             imageExtension = image.imageExtension,
+                                         },
                           };
                 return Ok(ret);
             }
@@ -565,6 +620,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                    {
                                        price = biding.price,
                                    },
+                             adImages = from image in ad.AdImages.ToList()
+                                        select new
+                                        {
+                                            imageExtension = image.imageExtension,
+                                        },
                          };
                 return Ok(re);
             }
@@ -602,6 +662,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 {
                                     price = biding.price,
                                 },
+                          adImages = from image in ad.AdImages.ToList()
+                                     select new
+                                     {
+                                         imageExtension = image.imageExtension,
+                                     },
                       };
             return Ok(res);
         }

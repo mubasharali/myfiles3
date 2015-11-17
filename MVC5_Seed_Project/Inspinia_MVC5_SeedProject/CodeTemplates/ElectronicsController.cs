@@ -203,6 +203,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             db.SaveChanges();
         }
+        
         [HttpPost]
         public ActionResult FileUploadHandler()
         {

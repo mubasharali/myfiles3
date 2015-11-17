@@ -17,7 +17,30 @@
     </div>
 </div>
 
-
+<style>
+    .carouselContainer {
+        overflow: hidden;
+        //height:350px;
+        margin:0px;
+        padding:0px;
+    }
+    #gallery {
+        margin: 0px;
+        padding: 0px;
+    }
+    .product-imitation {
+        margin: 0px;
+        padding: 0px;
+        /apply max-padding or default image
+    }
+     .carouselContainer img {
+        // height: 350px;
+        /*height: auto;
+            width: 100%;*/
+        width: 250px;
+        height: 250px;
+    }
+</style>
 
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
@@ -36,8 +59,17 @@
                 <div class="ibox">
                     <div class="ibox-content product-box">
 
-                        <div class="product-imitation">
-                            [ INFO ]
+                        <div class="product-imitation" >
+                            <div class="carouselContainer">
+                                @*<div><span data-bind="text:images().length"></span>  images attched with this ad</div>*@
+
+                                <span id="gallery" data-gallery=""
+                                     data-bind="slick: images,
+                slickOptions: { initialSlide:0},
+                slickIndex: imageIndex">
+                                </span>
+                                <div data-bind="visible:images().length == 0">Display your banner ad here Display your banner ad hereDisplay your banner ad hereDisplay your banner ad hereDisplay your banner ad here</div>
+                            </div>
                         </div>
                         <div class="product-desc">
                             <span class="product-price">
@@ -127,7 +159,8 @@
         <div class="col-lg-3"></div>
     </div>
  </div>
-
+@Html.Partial("/Views/Shared/_Chat.cshtml")
+@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 @section Styles {
     @Styles.Render("~/plugins/slickStyles")
     @Styles.Render("~/plugins/slickThemeStyles")
@@ -159,8 +192,24 @@
             data = data || {};
             self.price = data.price;
         }
+        var imageUrls = [];
+        function adImages(data, adId, imagesCount) {
+            //var self = this;
+            //data = data || {};
+            //self.link = "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;// also loop after _
+            //imageUrls.push(self.link);
+            return "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;
+            
+        }
         function ad(data) {
             var self = this;
+
+            //slick
+            // self.images = ko.observableArray(imageUrls);
+            self.images = ko.observable();
+            self.options = {};
+            self.imageIndex = ko.observable(1);
+
             data = data || {};
             self.title = data.title;
             self.description = ko.observable(data.description);
@@ -209,11 +258,12 @@
                 var tags = $.map(data.adTags, function (item) { return new Tag(item); });
                 self.showTags(tags);
             }
-
-            //if (data.image) {
-            //    var img = $.map(data.image, function (item) { return new adImages(item); });
-            //    self.showImages(img);
-            //}
+            if (data.adImages) {
+                var imagesCount = 1;
+                var img = $.map(data.adImages, function (item, ia) { return adImages(item, data.id, imagesCount++); });
+                self.showImages(img);
+                self.images(img);
+            }
             self.report = function (id, loginUserId) {
                 if (loginUserId) {
                     $.ajax({
@@ -240,6 +290,8 @@
         function viewModel() {
             TreeViewModel();
             ChatViewModel();
+            AccountViewModel();
+            ChatViewModel();
             var self = this;
             
             return self;
@@ -262,7 +314,103 @@
                 $(element).autosize();
             }
         };
+        ko.bindingHandlers.slick = (function () {
+            var createImageDiv = function (imgUrl) {
 
+                $a = $('<a>');
+                $a.attr('href', imgUrl);
+                //$a.attr('data-gallery', '#blueimp-gallery');
+                $a.attr('target', '_blank');
+                $div = $('<div>');
+                $image = $('<img>');
+                $image.attr('src', imgUrl);
+                // $div.append($image);
+                $a.append($image);
+                $div.append($a);
+                return $div;
+            };
+
+            // Initializes the carousel
+            var init = function (element, valueAccessor, allBindingsAccessor) {
+                // Clears the div
+                $(element).empty();
+                // Creates the inner divs with images
+                var images = ko.unwrap(valueAccessor());
+                if (images) {
+                    images.forEach(function (imgUrl) {
+                        $(element).append(createImageDiv(imgUrl));
+                    });
+                }
+
+                // try to recover slickOptions
+                var options = allBindingsAccessor().slickOptions || {};
+
+                // Initialize slick on the div, with provided options
+                $(element).slick(options);
+
+                //handle disposal, if KO removes the element
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(element).slick('unslick');
+                });
+
+                // check if there is slickIndex
+                var slickIndex = allBindingsAccessor().slickIndex;
+                if (slickIndex) {
+                    $(element).slick('slickGoTo', ko.unwrap(slickIndex));
+                }
+                // If it's obervable, subscribe to its changes
+                if (ko.isObservable(slickIndex)) {
+                    slickIndex.subscribe(function (idx) {
+                        $(element).slick('slickGoTo', idx);
+                    });
+                }
+                // It if's writable observable, update when slick current index changes
+                if (ko.isWritableObservable(slickIndex)) {
+                    $(element).on('afterChange', function (evt, slick, pos) {
+                        slickIndex(pos);
+                    })
+                }
+
+                // Check if the array of images is an observable array
+                var imagesArray = valueAccessor();
+                // If it's observable array, subscribe to changes
+                if (ko.isObservable(imagesArray) && 'destroyAll' in imagesArray) {
+                    imagesArray.subscribe(function (changes) {
+                        console.log(changes);
+                        if (changes) {
+                            changes.forEach(function (change) {
+                                if (change.status == 'added') {
+                                    // Add new img div at index
+                                    var imgDiv = createImageDiv(change.value)[0];
+                                    var index = change.index;
+                                    var slideCount = $(element).slick('getSlick').slideCount;
+                                    // if the index is out of range (which can happen 
+                                    // with push, and splice), include at the end
+                                    var addBefore = true;
+                                    if (index >= slideCount) {
+                                        index = slideCount - 1;
+                                        addBefore = false;
+                                    }
+                                    $(element).slick('slickAdd', imgDiv, index, addBefore);
+                                } else if (change.status == 'deleted') {
+                                    // delete img div at index
+                                    $(element).slick('slickRemove', change.index);
+                                }
+                            });
+                        }
+                    }, null, 'arrayChange');
+                } // if observable array
+            }
+
+            //update the control when the view model changes
+            var update = function (element, valueAccessor) {
+                var images = ko.unwrap(valueAccessor());
+                // Do something to update the content
+                console.log('update');
+            }
+
+            return { init: init, update: update };
+        })();
         $(function () {
             toastr.options = {
                 closeButton: true,
@@ -271,16 +419,14 @@
                 positionClass: 'toast-top-right',
                 onclick: null
             };
-            $('.product-images').slick({
-                dots: true
-            });
+            //$('.product-images').slick({
+            //    dots: true
+            //});
            // ko.applyBindings(new viewModel, (document.getElementById('ads')));
 
            // ko.applyBindings(new treeModel, document.getElementById('navigation'));
             ko.applyBindings(new viewModel);
-            $.connection.hub.start().done(function () {
-
-            });
+            $.connection.hub.start().done();
         });
 
     </script>

@@ -224,6 +224,7 @@
     <Compile Include="CodeTemplates\LaptopsComputersController.cs" />
     <Compile Include="CodeTemplates\MobilesTabletsController.cs" />
     <Compile Include="CodeTemplates\RealEstateController.cs" />
+    <Compile Include="CodeTemplates\SharedController.cs" />
     <Compile Include="CodeTemplates\TagController.cs" />
     <Compile Include="CodeTemplates\TechnologyController.cs" />
     <Compile Include="CodeTemplates\UserController.cs" />
