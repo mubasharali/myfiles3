@@ -33,7 +33,7 @@ namespace Inspinia_MVC5_SeedProject
 
             // jQuery plugins
             bundles.Add(new ScriptBundle("~/plugins/metsiMenu").Include(
-                      "~/Scripts/plugins/metisMenu/metisMenu.min.js"));
+                      "~/Scripts/plugins/metisMenu/metisMenu.js"));
 
             bundles.Add(new ScriptBundle("~/plugins/pace").Include(
                       "~/Scripts/plugins/pace/pace.min.js"));
