@@ -11,7 +11,7 @@ namespace Inspinia_MVC5_SeedProject
             
             // Vendor scripts
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-2.1.1.min.js"));
+                        "~/Scripts/jquery-2.1.4.js"));
             // jQuery Validation
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
             "~/Scripts/jquery.validate.min.js"));
