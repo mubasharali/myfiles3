@@ -43,6 +43,13 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return View();
         }
+        [Route("Search/{s?}")]
+        public ActionResult search(string s = null)
+        {
+            ViewBag.search = s;
+            return View("search");
+        }
+
         public ActionResult Temp()
         {
             return View();
@@ -68,6 +75,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             ViewBag.adId = id;
             return View();
         }
+        
         public ActionResult Index1(string category, string subcategory, string lowercategory,string lowercategory1,int id = 0, string ignore = "")
         {
             var currentNode = this.GetCurrentSiteMapNode();

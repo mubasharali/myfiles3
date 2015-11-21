@@ -12,7 +12,7 @@ namespace Inspinia_MVC5_SeedProject
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            routes.MapMvcAttributeRoutes();
             //routes.MapRoute(
             //    name: "default1",
             //    url: "{controller}/{action}/{id}",

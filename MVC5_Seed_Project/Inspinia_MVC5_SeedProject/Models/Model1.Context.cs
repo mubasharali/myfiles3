@@ -28,7 +28,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<Ad> Ads { get; set; }
         public virtual DbSet<AdImage> AdImages { get; set; }
-        public virtual DbSet<AdsLike> AdsLikes { get; set; }
         public virtual DbSet<AdsLocation> AdsLocations { get; set; }
         public virtual DbSet<AdTag> AdTags { get; set; }
         public virtual DbSet<AdView> AdViews { get; set; }

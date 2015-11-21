@@ -35,14 +35,6 @@
     <Property Name="adId" Type="int" Nullable="false" />
     <Property Name="imageExtension" Type="char" MaxLength="7" Nullable="false" />
   </EntityType>
-  <EntityType Name="AdsLike">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="adId" Type="int" Nullable="false" />
-    <Property Name="likedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
-  </EntityType>
   <EntityType Name="AdsLocation">
     <Key>
       <PropertyRef Name="Id" />
@@ -492,20 +484,6 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="AdImage">
-        <PropertyRef Name="adId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AdsLike_ToTable">
-    <End Role="Ad" Type="Self.Ad" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="AdsLike" Type="Self.AdsLike" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Ad">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AdsLike">
         <PropertyRef Name="adId" />
       </Dependent>
     </ReferentialConstraint>
@@ -1484,7 +1462,6 @@
     <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Ad" EntityType="Self.Ad" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AdImage" EntityType="Self.AdImage" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="AdsLike" EntityType="Self.AdsLike" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AdsLocation" EntityType="Self.AdsLocation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AdTag" EntityType="Self.AdTag" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AdView" EntityType="Self.AdView" Schema="dbo" store:Type="Tables" />
@@ -1535,10 +1512,6 @@
     <AssociationSet Name="FK_AdImage_ToTable" Association="Self.FK_AdImage_ToTable">
       <End Role="Ad" EntitySet="Ad" />
       <End Role="AdImage" EntitySet="AdImage" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AdsLike_ToTable" Association="Self.FK_AdsLike_ToTable">
-      <End Role="Ad" EntitySet="Ad" />
-      <End Role="AdsLike" EntitySet="AdsLike" />
     </AssociationSet>
     <AssociationSet Name="FK_AdsLocation_ToTable" Association="Self.FK_AdsLocation_ToTable">
       <End Role="Ad" EntitySet="Ad" />

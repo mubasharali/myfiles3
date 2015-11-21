@@ -4,7 +4,6 @@
     <EntitySet Name="C__MigrationHistory" EntityType="Model.C__MigrationHistory" />
     <EntitySet Name="Ads" EntityType="Model.Ad" />
     <EntitySet Name="AdImages" EntityType="Model.AdImage" />
-    <EntitySet Name="AdsLikes" EntityType="Model.AdsLike" />
     <EntitySet Name="AdsLocations" EntityType="Model.AdsLocation" />
     <EntitySet Name="AdTags" EntityType="Model.AdTag" />
     <EntitySet Name="AdViews" EntityType="Model.AdView" />
@@ -52,10 +51,6 @@
     <AssociationSet Name="FK_AdImage_ToTable" Association="Model.FK_AdImage_ToTable">
       <End Role="Ad" EntitySet="Ads" />
       <End Role="AdImage" EntitySet="AdImages" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AdsLike_ToTable" Association="Model.FK_AdsLike_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="AdsLike" EntitySet="AdsLikes" />
     </AssociationSet>
     <AssociationSet Name="FK_AdsLocation_ToTable" Association="Model.FK_AdsLocation_ToTable">
       <End Role="Ad" EntitySet="Ads" />
@@ -387,7 +382,6 @@
     <Property Name="condition" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Ad_ToTable" FromRole="Ad" ToRole="AspNetUser" />
     <NavigationProperty Name="AdImages" Relationship="Model.FK_AdImage_ToTable" FromRole="Ad" ToRole="AdImage" />
-    <NavigationProperty Name="AdsLikes" Relationship="Model.FK_AdsLike_ToTable" FromRole="Ad" ToRole="AdsLike" />
     <NavigationProperty Name="AdsLocation" Relationship="Model.FK_AdsLocation_ToTable" FromRole="Ad" ToRole="AdsLocation" />
     <NavigationProperty Name="AdTags" Relationship="Model.FK_AdTag_ToTable" FromRole="Ad" ToRole="AdTag" />
     <NavigationProperty Name="AdViews" Relationship="Model.FK_AdView_ToTable" FromRole="Ad" ToRole="AdView" />
@@ -408,15 +402,6 @@
     <Property Name="adId" Type="Int32" Nullable="false" />
     <Property Name="imageExtension" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="false" />
     <NavigationProperty Name="Ad" Relationship="Model.FK_AdImage_ToTable" FromRole="AdImage" ToRole="Ad" />
-  </EntityType>
-  <EntityType Name="AdsLike">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="adId" Type="Int32" Nullable="false" />
-    <Property Name="likedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_AdsLike_ToTable" FromRole="AdsLike" ToRole="Ad" />
   </EntityType>
   <EntityType Name="AdsLocation">
     <Key>
@@ -974,20 +959,6 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="AdImage">
-        <PropertyRef Name="adId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AdsLike_ToTable">
-    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.AdsLike" Role="AdsLike" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Ad">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AdsLike">
         <PropertyRef Name="adId" />
       </Dependent>
     </ReferentialConstraint>

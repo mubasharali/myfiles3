@@ -38,15 +38,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="AdsLikes">
-      <EntityTypeMapping TypeName="Model.AdsLike">
-        <MappingFragment StoreEntitySet="AdsLike">
-          <ScalarProperty Name="likedBy" ColumnName="likedBy" />
-          <ScalarProperty Name="adId" ColumnName="adId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="AdsLocations">
       <EntityTypeMapping TypeName="Model.AdsLocation">
         <MappingFragment StoreEntitySet="AdsLocation">

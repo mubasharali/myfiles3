@@ -450,7 +450,7 @@
                         if (images) {
                             for (i = 0; i < images.length; i++) {
                                 myDropzone.emit("addedfile", images[i]);
-                                myDropzone.emit("thumbnail", images[i], "/Images/Ads");
+                                myDropzone.emit("thumbnail", images[i], "/Images/Ads/");
                                 myDropzone.emit("complete", images[i]);
                             }
                         }

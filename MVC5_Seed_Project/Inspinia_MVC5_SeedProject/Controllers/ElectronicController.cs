@@ -443,6 +443,15 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                          {
                                              imageExtension = image.imageExtension,
                                          },
+                              location = new
+                              {
+                                  cityName = ad.Ad.AdsLocation.City.cityName,
+                                  cityId = ad.Ad.AdsLocation.cityId,
+                                  popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                  popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                  exectLocation = ad.Ad.AdsLocation.exectLocation,
+                              },
+
                           };
                 return Ok(ret);
             }
@@ -488,6 +497,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                         {
                                             imageExtension = image.imageExtension,
                                         },
+                             location = new
+                             {
+                                 cityName = ad.AdsLocation.City.cityName,
+                                 cityId = ad.AdsLocation.cityId,
+                                 popularPlaceId = ad.AdsLocation.popularPlaceId,
+                                 popularPlace = ad.AdsLocation.popularPlace.name,
+                                 exectLocation = ad.AdsLocation.exectLocation,
+                             },
                          };
                 return Ok(re);
             }
@@ -531,6 +548,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                      {
                                          imageExtension = image.imageExtension,
                                      },
+                          location = new
+                          {
+                              cityName = ad.AdsLocation.City.cityName,
+                              cityId = ad.AdsLocation.cityId,
+                              popularPlaceId = ad.AdsLocation.popularPlaceId,
+                              popularPlace = ad.AdsLocation.popularPlace.name,
+                              exectLocation = ad.AdsLocation.exectLocation,
+                          },
                       };
             return Ok(res);
         }
@@ -581,6 +606,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                          {
                                              imageExtension = image.imageExtension,
                                          },
+                              location = new
+                              {
+                                  cityName = ad.Ad.AdsLocation.City.cityName,
+                                  cityId = ad.Ad.AdsLocation.cityId,
+                                  popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                  popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                  exectLocation = ad.Ad.AdsLocation.exectLocation,
+                              },
                           };
                 return Ok(ret);
             }
@@ -625,6 +658,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                         {
                                             imageExtension = image.imageExtension,
                                         },
+                             location = new
+                             {
+                                 cityName = ad.AdsLocation.City.cityName,
+                                 cityId = ad.AdsLocation.cityId,
+                                 popularPlaceId = ad.AdsLocation.popularPlaceId,
+                                 popularPlace = ad.AdsLocation.popularPlace.name,
+                                 exectLocation = ad.AdsLocation.exectLocation,
+                             },
                          };
                 return Ok(re);
             }
@@ -667,6 +708,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                      {
                                          imageExtension = image.imageExtension,
                                      },
+                          location = new
+                          {
+                              cityName = ad.AdsLocation.City.cityName,
+                              cityId = ad.AdsLocation.cityId,
+                              popularPlaceId = ad.AdsLocation.popularPlaceId,
+                              popularPlace = ad.AdsLocation.popularPlace.name,
+                              exectLocation = ad.AdsLocation.exectLocation,
+                          },
                       };
             return Ok(res);
         }
