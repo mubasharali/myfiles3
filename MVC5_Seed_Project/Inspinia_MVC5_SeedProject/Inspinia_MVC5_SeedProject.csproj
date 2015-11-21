@@ -705,7 +705,6 @@
     <Content Include="Scripts\plugins\jquery-ui\jquery-ui.min.css" />
     <Content Include="Scripts\plugins\jquery-ui\jquery-ui.min.js" />
     <Content Include="Scripts\plugins\jsTree\jstree.min.js" />
-    <Content Include="Scripts\plugins\metisMenu\jquery.metisMenu.js" />
     <Content Include="Scripts\plugins\pace\pace.min.js" />
     <Content Include="Scripts\plugins\rickshaw\rickshaw.min.js" />
     <Content Include="Scripts\plugins\rickshaw\vendor\d3.v3.js" />
@@ -862,6 +861,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Images\Ads\" />
     <Folder Include="Images\Users\" />
+    <Folder Include="Scripts\plugins\metisMenu\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
