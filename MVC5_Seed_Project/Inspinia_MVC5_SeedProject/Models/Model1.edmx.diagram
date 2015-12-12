@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="815ee3eabea747c5bd662a6f75d487f4" Name="Diagram1" ZoomLevel="94">
+      <Diagram DiagramId="815ee3eabea747c5bd662a6f75d487f4" Name="Diagram1" ZoomLevel="77">
         <EntityTypeShape EntityType="Model.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="Model.Ad" Width="1.5" PointX="68.25" PointY="46.625" />
         <EntityTypeShape EntityType="Model.AdImage" Width="1.5" PointX="71.375" PointY="45.875" />
@@ -127,6 +127,36 @@
         <EntityTypeShape EntityType="Model.SaveAd" Width="1.5" PointX="61.5" PointY="47" />
         <AssociationConnector Association="Model.FK_SaveAd_ToTable" />
         <AssociationConnector Association="Model.FK_SaveAd_ToTable_1" />
+        <EntityTypeShape EntityType="Model.Company" Width="1.5" PointX="43.375" PointY="86.5" />
+        <AssociationConnector Association="Model.FK_Company_ToTable" />
+        <AssociationConnector Association="Model.FK_Company_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Company_ToTable_2" />
+        <EntityTypeShape EntityType="Model.CompanyAnswerReply" Width="1.5" PointX="51" PointY="95.375" />
+        <EntityTypeShape EntityType="Model.CompanyImage" Width="1.5" PointX="41" PointY="96.5" />
+        <EntityTypeShape EntityType="Model.CompanyOffice" Width="1.5" PointX="40.25" PointY="80.875" />
+        <EntityTypeShape EntityType="Model.CompanyQuestion" Width="1.5" PointX="47.25" PointY="93.375" />
+        <EntityTypeShape EntityType="Model.FollowCompany" Width="1.5" PointX="44.625" PointY="82.875" />
+        <EntityTypeShape EntityType="Model.Review" Width="1.5" PointX="47.25" PointY="83.625" />
+        <EntityTypeShape EntityType="Model.ReviewReply" Width="1.5" PointX="49.125" PointY="82.75" />
+        <EntityTypeShape EntityType="Model.ReviewVote" Width="1.5" PointX="50" PointY="85.625" />
+        <AssociationConnector Association="Model.FK_CompanyAnswerReply_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyQuestion_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyReviewReply_ToTable_1" />
+        <AssociationConnector Association="Model.FK_FollowCompany_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Review_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyOffice_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyOffice_ToTable" />
+        <AssociationConnector Association="Model.FK_CompanyQuestion_ToTable" />
+        <AssociationConnector Association="Model.FK_FollowCompany_ToTable" />
+        <AssociationConnector Association="Model.FK_Image_ToTable" />
+        <AssociationConnector Association="Model.FK_Review_ToTable" />
+        <AssociationConnector Association="Model.FK_CompanyOffice_ToTable_2" />
+        <AssociationConnector Association="Model.FK_CompanyReviewReply_ToTable" />
+        <AssociationConnector Association="Model.FK_ReviewVote_ToTable" />
+        <EntityTypeShape EntityType="Model.CompanyAnswer" Width="1.5" PointX="49.25" PointY="95.5" />
+        <AssociationConnector Association="Model.FK_CompanyAnswer_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyAnswer_ToTable" />
+        <AssociationConnector Association="Model.FK_CompanyAnswerReply_ToTable" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

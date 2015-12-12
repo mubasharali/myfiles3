@@ -57,7 +57,7 @@
                                         <div class="col-md-5 col-sm-7">
 
                                             <div class="carouselContainer">
-                                                <div><span data-bind="text:images().length"></span>  images attched with this ad</div>
+                                                <div><span data-bind="text:images().length"></span>  images attched</div>
                                                 
                                                 <div id="gallery" data-gallery=""
                                                      data-bind="slick: images,
@@ -406,14 +406,14 @@
             self.info = data.info || "";
             self.followers = data.followers || 0;
         };
-        function ad(data) {
+        function ad(data,commentsHub) {
             var self = this;
-
+            self.commentsHub = commentsHub;
             //slick
             self.images = ko.observableArray(imageUrls);
             self.options = {};
             self.imageIndex = ko.observable(1);
-
+            
             data = data || {};
             self.title = data.title;
             self.description = ko.observable( data.description);
@@ -582,7 +582,7 @@
                 if (data.laptopad.brand != null) {
                     window.location.href = "/Electronics/EditLaptopAd/" + id;
                 }
-                 else if (data.mobilead.brand != null) {
+                else if (data.mobilead.brand != null) {
                     window.location.href = "/Electronics/Edit/" + id;
                 }
                 else  {
@@ -590,30 +590,30 @@
                 }
             }
             self.deleteAd = function (id) {
-                    swal({
-                        title: "Are you sure?",
-                        text: "You will not be able to recover this Ad!",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Yes, delete it!",
-                        closeOnConfirm: false
-                    }, function () {
-                        $.ajax({
-                            url: '/api/Electronic/DeleteAd/' + id,
-                            dataType: "json",
-                            contentType: "application/json",
-                            cache: false,
-                            type: 'POST',
-                            success: function (data) {
-                                swal("Deleted!", "Your Ad has been deleted.", "success");
-                                window.location.href = "/User/Index/"+self.loginUserId;
-                            },
-                            error: function () {
-                                toastr.error("failed to delete Ad. Please refresh page and try again", "Error!");
-                            }
-                        });
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this Ad!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Electronic/DeleteAd/' + id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            swal("Deleted!", "Your Ad has been deleted.", "success");
+                            window.location.href = "/User/Index/"+self.loginUserId;
+                        },
+                        error: function () {
+                            toastr.error("failed to delete Ad. Please refresh page and try again", "Error!");
+                        }
                     });
+                });
             }
             self.deleteComment = function (id) {
                 $.ajax({
@@ -639,7 +639,10 @@
                     self.addcomment();
                 }
             }
-            
+            //self.commentsHub.client.appendCommentToMe = function (com) {
+            //    self.showComment.push(new comment(com));
+            //    self.newComment('');
+            //}
             self.newComment = ko.observable();
             self.addcomment = function () {
                 if (self.loginUserId) {
@@ -647,8 +650,10 @@
                     com.adId = self.id;
                     com.description (self.newComment());
                     com.description(com.description().slice(0, -1));
-                    if (com.description) {
+                    if (com.description() != null && com.description().trim() != "") {
                         com.time = new Date($.now());
+                        com.description = com.description().slice(0, - 1);
+                        //self.commentsHub.server.addComment(com).fail(function (err) { toastr.error("failed to post comment ", "Error!"); });
                         $.ajax({
                             url: '/api/Comment/PostComment',
                             dataType: "json",
@@ -666,8 +671,7 @@
                         });
                     }
                 } else {
-                    var currentPage = $("#currentPage").val();
-                    toastr.options.onclick = function () { window.location.href = '/Account/Login?returnUrl=' + currentPage }
+                    //show modal
                     toastr.info("You must be login to post comment", "Oops!");
                 }
             }
@@ -712,8 +716,8 @@
             AccountViewModel();
             ChatViewModel();
             Report();
-            
-
+            //initillizing hub
+            self.commentsHub = $.connection.adComments;
             self.showAds = ko.observableArray();
             self.error = ko.observable();
             self.loadad = function () {
@@ -725,7 +729,7 @@
                     type: 'GET'
                 })
                 .done(function (data) {
-                    var mappedads = $.map(data, function (item) { return new ad(item); });
+                    var mappedads = $.map(data, function (item) { return new ad(item,self.commentsHub); });
                     self.showAds(mappedads);
                     $(".sortable-list").sortable({
                         connectWith: ".connectList"
@@ -877,8 +881,6 @@
             };
             ko.applyBindings(new viewModel());
             $.connection.hub.start().done();
-            //commentsFile();
-            
         });
 
     </script>

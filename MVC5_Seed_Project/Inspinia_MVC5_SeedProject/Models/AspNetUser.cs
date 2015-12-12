@@ -55,6 +55,13 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.Cities = new HashSet<City>();
             this.Cities1 = new HashSet<City>();
             this.SaveAds = new HashSet<SaveAd>();
+            this.Companies = new HashSet<Company>();
+            this.CompanyAnswerReplies = new HashSet<CompanyAnswerReply>();
+            this.CompanyQuestions = new HashSet<CompanyQuestion>();
+            this.ReviewReplies = new HashSet<ReviewReply>();
+            this.FollowCompanies = new HashSet<FollowCompany>();
+            this.Reviews = new HashSet<Review>();
+            this.CompanyAnswers = new HashSet<CompanyAnswer>();
         }
     
         public string Id { get; set; }
@@ -122,5 +129,12 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<City> Cities { get; set; }
         public virtual ICollection<City> Cities1 { get; set; }
         public virtual ICollection<SaveAd> SaveAds { get; set; }
+        public virtual ICollection<Company> Companies { get; set; }
+        public virtual ICollection<CompanyAnswerReply> CompanyAnswerReplies { get; set; }
+        public virtual ICollection<CompanyQuestion> CompanyQuestions { get; set; }
+        public virtual ICollection<ReviewReply> ReviewReplies { get; set; }
+        public virtual ICollection<FollowCompany> FollowCompanies { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<CompanyAnswer> CompanyAnswers { get; set; }
     }
 }

@@ -43,5 +43,26 @@ namespace Inspinia_MVC5_SeedProject.Hubs
                 Clients.Others.appendCommentReply(ret);
             }
         }
+        public void AddComment(Comment comment)
+        {
+            if (Context.User.Identity.IsAuthenticated)
+            {
+                comment.time = DateTime.UtcNow;
+                comment.postedBy = Context.User.Identity.GetUserId();
+                db.Comments.Add(comment);
+                db.SaveChanges();
+                var ret = db.Comments.Where(x => x.Id == comment.Id).Select(x => new
+                {
+                    description = x.description,
+                    postedById = x.postedBy,
+                    postedByName = x.AspNetUser.Email,
+                    time = x.time,
+                    imageExtension = x.AspNetUser.dpExtension,
+                    id = x.Id,
+                }).FirstOrDefault();
+                Clients.Caller.AppendCommentToMe(ret);
+                Clients.Others.appendComment(ret);
+            }
+        }
     }
 }

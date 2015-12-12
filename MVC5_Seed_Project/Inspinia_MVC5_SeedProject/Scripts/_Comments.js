@@ -1,5 +1,5 @@
 ﻿//function commentsFile() {
-    var myhub = $.connection.AdComments;
+    //var myhub = $.connection.AdComments;
     function commentReply(data) {
         var self = this;
         data = data || {};
@@ -83,8 +83,9 @@
             }
         }
     }
-    function comment(data) {
+    function comment(data,hub) {
         var self = this;
+        self.hub = hub;
         data = data || {};
         self.loginUserId = data.islogin || "";
         self.description = ko.observable(data.description);
@@ -219,21 +220,21 @@
                 if (reply.description() != null && reply.description().trim() != "") {
                     //myhub.server.AddCommentReply(reply).fail(function (err) { toastr.error("failed to post comment reply", "Error!"); });
 
-                    //$.ajax({
-                    //    url: '/api/Comment/PostCommentReply',
-                    //    dataType: "json",
-                    //    contentType: "application/json",
-                    //    cache: false,
-                    //    type: 'POST',
-                    //    data: ko.toJSON(reply),
-                    //    success: function (data) {
-                    //        self.showCommentReply.push(new commentReply(data));
-                    //        self.newCommentReply('');
-                    //    },
-                    //    error: function () {
-                    //        toastr.error("failed to post comment reply", "Error!");
-                    //    }
-                    //});
+                    $.ajax({
+                        url: '/api/Comment/PostCommentReply',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(reply),
+                        success: function (data) {
+                            self.showCommentReply.push(new commentReply(data));
+                            self.newCommentReply('');
+                        },
+                        error: function () {
+                            toastr.error("failed to post comment reply", "Error!");
+                        }
+                    });
                 }
             } else {
                 toastr.info("You must be login to reply this comment", "Oops!");
