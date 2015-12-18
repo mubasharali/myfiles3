@@ -152,6 +152,14 @@ namespace Inspinia_MVC5_SeedProject
             // Lightbox gallery
             bundles.Add(new ScriptBundle("~/plugins/lightboxGallery").Include(
                       "~/Scripts/plugins/blueimp/jquery.blueimp-gallery.min.js"));
+
+            // wizardSteps styles
+            bundles.Add(new StyleBundle("~/plugins/wizardStepsStyles").Include(
+                      "~/Content/plugins/steps/jquery.steps.css"));
+
+            // wizardSteps 
+            bundles.Add(new ScriptBundle("~/plugins/wizardSteps").Include(
+                      "~/Scripts/plugins/staps/jquery.steps.min.js"));
         }
     }
 }

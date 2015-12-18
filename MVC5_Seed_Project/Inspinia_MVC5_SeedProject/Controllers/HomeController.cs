@@ -9,26 +9,26 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class HomeController : Controller
     {
-       
-        //public string subdomainName
-        //{
-        //    get
-        //    {
-        //        string s = Request.Url.Host;
-        //        var index = s.IndexOf(".");
 
-        //        if (index < 0)
-        //        {
-        //            return null;
-        //        }
-        //        var sub = s.Split('.')[0];
-        //        if (sub == "www" || sub == "localhsot")
-        //        {
-        //            return null;
-        //        }
-        //        return sub;
-        //    }
-        //}
+        public string subdomainName
+        {
+            get
+            {
+                string s = Request.Url.Host;
+                var index = s.IndexOf(".");
+
+                if (index < 0)
+                {
+                    return null;
+                }
+                var sub = s.Split('.')[0];
+                if (sub == "www" || sub == "localhsot")
+                {
+                    return null;
+                }
+                return sub;
+            }
+        }
         //public ActionResult Index()
         //{
         //    if (this.subdomainName != null)
@@ -39,9 +39,13 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             
         //    return View();
         //}
-        public ActionResult Index()
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
+        public string Index()
         {
-            return View();
+            return subdomainName;
         }
         [Route("Search/{s?}")]
         public ActionResult search(string s = null)

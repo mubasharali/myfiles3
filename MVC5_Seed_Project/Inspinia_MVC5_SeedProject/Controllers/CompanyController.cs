@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Net.Http.Formatting;
 using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
 
@@ -66,78 +67,223 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           createdById = company.AspNetUser.Id,
                           createdByName = company.AspNetUser.Email,
                           cityName = company.City.cityName,
-                          cityId =(int?) company.City.Id,
+                          cityId = (int?)company.City.Id,
                           popularPlaceId = (int?)company.popularPlaceId,
                           popularPlaceName = company.popularPlace.name,
                           exectLocation = company.exectLocation,
+                          branches = from branch in company.CompanyOffices.ToList()
+                                     select new
+                                     {
+                                         id = branch.Id,
+                                         since = branch.since,
+                                         cityId = branch.cityId,
+                                         cityName = branch.City.cityName,
+                                         popularPlaceId = branch.popularPlaceId,
+                                         popularPlace = branch.popularPlace.name,
+                                         exectLocation = branch.exectLocation,
+                                         contactNo1 = branch.contactNo1,
+                                         contactNo2 = branch.contactNo2
+                                     }
+
                       };
 
             return Ok(ret);
         }
-        //public async Task<IHttpActionResult> UpdateLocation(string city, string popularPlace, string exectLocation)
-        //{
-        //    if (city != null)
-        //    {
-        //        var citydb = db.Cities.FirstOrDefault(x => x.cityName.Equals(city, StringComparison.OrdinalIgnoreCase));
-        //        if (citydb == null)
-        //        {
-        //            City cit = new City();
-        //            cit.cityName = city;
-        //            cit.addedBy = User.Identity.GetUserId();
-        //            cit.addedBy = User.Identity.GetUserId();
-        //            cit.addedOn = DateTime.UtcNow;
-        //            db.Cities.Add(cit);
-        //            db.SaveChanges();
-        //            // loc.cityId = cit.Id;
-        //            if (popularPlace != null)
-        //            {
-        //                popularPlace pop = new popularPlace();
-        //                pop.cityId = cit.Id;
-        //                pop.name = popularPlace;
-        //                pop.addedBy = User.Identity.GetUserId();
-        //                pop.addedOn = DateTime.UtcNow;
-        //                db.popularPlaces.Add(pop);
-        //                db.SaveChanges();
-        //                //  loc.popularPlaceId = pop.Id;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            // loc.cityId = citydb.Id;
-        //            if (popularPlace != null)
-        //            {
-        //                var ppp = db.popularPlaces.FirstOrDefault(x => x.City.cityName.Equals(city, StringComparison.OrdinalIgnoreCase) && x.name.Equals(popularPlace, StringComparison.OrdinalIgnoreCase));
-        //                if (ppp == null)
-        //                {
-        //                    popularPlace pop = new popularPlace();
-        //                    pop.cityId = citydb.Id;
-        //                    pop.name = popularPlace;
-        //                    pop.addedBy = User.Identity.GetUserId();
-        //                    pop.addedOn = DateTime.UtcNow;
-        //                    db.popularPlaces.Add(pop);
-        //                    db.SaveChanges();
-        //                    //   loc.popularPlaceId = pop.Id;
-        //                }
-        //                else
-        //                {
-        //                    //   loc.popularPlaceId = ppp.Id;
-        //                }
-        //            }
-        //        }
-        //        //  loc.exectLocation = exectLocation;
-        //        //   loc.Id = ad.Id;
-        //        if (SaveOrUpdate == "Save")
-        //        {
-        //            db.AdsLocations.Add(loc);
-        //        }
-        //        else if (SaveOrUpdate == "Update")
-        //        {
-        //            db.Entry(loc).State = EntityState.Modified;
-        //        }
-        //        db.SaveChanges();
-        //        return Ok();
-        //    }
-        //}
+        public async Task<IHttpActionResult> HeadOfficeLocation(Company branch, string city, string popularPlace, string exectLocation)
+        {
+           // var branch = await db.Companies.FindAsync(companyId);
+            if (city != null)
+            {
+                var citydb = db.Cities.FirstOrDefault(x => x.cityName.Equals(city, StringComparison.OrdinalIgnoreCase));
+                if (citydb == null)
+                {
+                    City cit = new City();
+                    cit.cityName = city;
+                    cit.addedBy = User.Identity.GetUserId();
+                    cit.addedBy = User.Identity.GetUserId();
+                    cit.addedOn = DateTime.UtcNow;
+                    db.Cities.Add(cit);
+                    await db.SaveChangesAsync();
+                    // loc.cityId = cit.Id;
+                    branch.cityId = cit.Id;
+                    if (popularPlace != null)
+                    {
+                        popularPlace pop = new popularPlace();
+                        pop.cityId = cit.Id;
+                        pop.name = popularPlace;
+                        pop.addedBy = User.Identity.GetUserId();
+                        pop.addedOn = DateTime.UtcNow;
+                        db.popularPlaces.Add(pop);
+                        await db.SaveChangesAsync();
+                        //  loc.popularPlaceId = pop.Id;
+                        branch.popularPlaceId = pop.Id;
+                    }
+                }
+                else
+                {
+                    // loc.cityId = citydb.Id;
+                    branch.cityId = citydb.Id;
+                    if (popularPlace != null)
+                    {
+                        var ppp = db.popularPlaces.FirstOrDefault(x => x.City.cityName.Equals(city, StringComparison.OrdinalIgnoreCase) && x.name.Equals(popularPlace, StringComparison.OrdinalIgnoreCase));
+                        if (ppp == null)
+                        {
+                            popularPlace pop = new popularPlace();
+                            pop.cityId = citydb.Id;
+                            pop.name = popularPlace;
+                            pop.addedBy = User.Identity.GetUserId();
+                            pop.addedOn = DateTime.UtcNow;
+                            db.popularPlaces.Add(pop);
+                            await db.SaveChangesAsync();
+                            //   loc.popularPlaceId = pop.Id;
+                            branch.popularPlaceId = pop.Id;
+                        }
+                        else
+                        {
+                            //   loc.popularPlaceId = ppp.Id;
+                            branch.popularPlaceId = ppp.Id;
+                        }
+                    }
+                }
+                branch.exectLocation = exectLocation;
+                
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+            }
+            //var ret = await (from br in db.CompanyOffices
+            //                 where br.Id.Equals(branch.Id)
+            //                 select new
+            //                 {
+            //                     id = br.Id,
+            //                     cityId = br.cityId,
+            //                     cityName = br.City.cityName,
+            //                     popularPlace = br.popularPlace.name,
+            //                     popularPlaceId = br.popularPlaceId,
+            //                     contactNo1 = br.contactNo1,
+            //                     contactNo2 = br.contactNo2,
+            //                     since = br.since,
+            //                     exectLocation = br.exectLocation,
+            //                 }).FirstOrDefaultAsync();
+            return Ok("Done");
+        }
+
+        public async Task<IHttpActionResult> OfficeBranch(CompanyOffice branch, string city, string popularPlace, string exectLocation,string SaveOrUpdate)
+        {
+            //var company = await db.Companies.FindAsync(companyId);
+            if (city != null)
+            {
+                var citydb = db.Cities.FirstOrDefault(x => x.cityName.Equals(city, StringComparison.OrdinalIgnoreCase));
+                if (citydb == null)
+                {
+                    City cit = new City();
+                    cit.cityName = city;
+                    cit.addedBy = User.Identity.GetUserId();
+                    cit.addedBy = User.Identity.GetUserId();
+                    cit.addedOn = DateTime.UtcNow;
+                    db.Cities.Add(cit);
+                    await db.SaveChangesAsync();
+                    // loc.cityId = cit.Id;
+                    branch.cityId = cit.Id;
+                    if (popularPlace != null)
+                    {
+                        popularPlace pop = new popularPlace();
+                        pop.cityId = cit.Id;
+                        pop.name = popularPlace;
+                        pop.addedBy = User.Identity.GetUserId();
+                        pop.addedOn = DateTime.UtcNow;
+                        db.popularPlaces.Add(pop);
+                        await db.SaveChangesAsync();
+                        //  loc.popularPlaceId = pop.Id;
+                        branch.popularPlaceId = pop.Id;
+                    }
+                }
+                else
+                {
+                    // loc.cityId = citydb.Id;
+                    branch.cityId = citydb.Id;
+                    if (popularPlace != null)
+                    {
+                        var ppp = db.popularPlaces.FirstOrDefault(x => x.City.cityName.Equals(city, StringComparison.OrdinalIgnoreCase) && x.name.Equals(popularPlace, StringComparison.OrdinalIgnoreCase));
+                        if (ppp == null)
+                        {
+                            popularPlace pop = new popularPlace();
+                            pop.cityId = citydb.Id;
+                            pop.name = popularPlace;
+                            pop.addedBy = User.Identity.GetUserId();
+                            pop.addedOn = DateTime.UtcNow;
+                            db.popularPlaces.Add(pop);
+                            await db.SaveChangesAsync();
+                            //   loc.popularPlaceId = pop.Id;
+                            branch.popularPlaceId = pop.Id;
+                        }
+                        else
+                        {
+                            //   loc.popularPlaceId = ppp.Id;
+                            branch.popularPlaceId = ppp.Id;
+                        }
+                    }
+                }
+                branch.exectLocation = exectLocation;
+                if (SaveOrUpdate == "Save")
+                {
+                    db.CompanyOffices.Add(branch);
+                }
+                else if (SaveOrUpdate == "Update")
+                {
+                    //var bra = db.CompanyOffices.Find(branch.Id);
+                    //bra.popularPlaceId = branch.popularPlaceId;
+                    //bra.since = branch.since;
+                    //bra.cityId = branch.cityId;
+                    //bra.contactNo1 = branch.contactNo1;
+                    //bra.contactNo2 = branch.contactNo2;
+                    //await db.SaveChangesAsync();
+                    db.Entry(branch).State = EntityState.Modified;
+                }
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+            }
+            var ret = await (from br in db.CompanyOffices
+                      where br.Id.Equals(branch.Id)
+                      select new
+                      {
+                          id = br.Id,
+                          cityId = br.cityId,
+                          cityName = br.City.cityName,
+                          popularPlace = br.popularPlace.name,
+                          popularPlaceId = br.popularPlaceId,
+                          contactNo1 = br.contactNo1,
+                          contactNo2 = br.contactNo2,
+                          since = br.since,
+                          exectLocation = br.exectLocation,
+                      }).FirstOrDefaultAsync();
+            return Ok(ret);
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> DeleteBranch(int id)
+        {
+            CompanyOffice company = await db.CompanyOffices.FindAsync(id);
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            db.CompanyOffices.Remove(company);
+            await db.SaveChangesAsync();
+
+            return Ok("Done");
+        }
         public async Task<IHttpActionResult> UpdatePage(Company comment)
         {
             if (!ModelState.IsValid)
@@ -169,55 +315,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return StatusCode(HttpStatusCode.NoContent);
         }
-        // PUT api/Company/5
-        public async Task<IHttpActionResult> PutCompany(int id, Company company)
+        public class BranchLocation1
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != company.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(company).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CompanyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            public string cityName;
+            public string popularPlace;
         }
-
-        // POST api/Company
-        [ResponseType(typeof(Company))]
-        public async Task<IHttpActionResult> PostCompany(Company company)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Companies.Add(company);
-            await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = company.Id }, company);
-        }
-
+        
         // DELETE api/Company/5
         [ResponseType(typeof(Company))]
         public async Task<IHttpActionResult> DeleteCompany(int id)

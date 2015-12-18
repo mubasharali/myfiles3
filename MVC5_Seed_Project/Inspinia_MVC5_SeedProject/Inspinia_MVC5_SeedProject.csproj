@@ -511,6 +511,7 @@
     <Content Include="Content\plugins\slick\fonts\slick.svg" />
     <Content Include="Content\plugins\slick\slick-theme.css" />
     <Content Include="Content\plugins\slick\slick.css" />
+    <Content Include="Content\plugins\steps\jquery.steps.css" />
     <Content Include="Content\plugins\sweetalert\sweetalert.css" />
     <Content Include="Content\plugins\toastr\toastr.min.css" />
     <Content Include="Content\style.css" />
@@ -746,6 +747,7 @@
     <Content Include="Scripts\plugins\selectize\selectize.min.js" />
     <Content Include="Scripts\plugins\slick\slick.min.js" />
     <Content Include="Scripts\plugins\slimscroll\jquery.slimscroll.min.js" />
+    <Content Include="Scripts\plugins\staps\jquery.steps.min.js" />
     <Content Include="Scripts\plugins\sweetalert\sweetalert.min.js" />
     <Content Include="Scripts\plugins\toastr\toastr.min.js" />
     <Content Include="Scripts\plugins\validate\jquery.validate.min.js" />

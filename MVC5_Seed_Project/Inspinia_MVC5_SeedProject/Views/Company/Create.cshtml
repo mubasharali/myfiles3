@@ -32,8 +32,130 @@
                     <h5>Create Business Page</h5>
                 </div>
                 <div class="ibox-content">
+                    <h2>
+                        Validation Wizard Form
+                    </h2>
+                    <p>
+                        This example show how to use Steps with jQuery Validation plugin.
+                    </p>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form",@class = "wizard-big" }))
+                    {
+                         <h1>Category</h1>
+                        <fieldset>
+                            <h2>Select category</h2>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label>Which category will best fit for your comany/business/service<span class="req">*</span></label>
+                                        <select id="select-category" class="required" name="category" required >
+                                            <option value="">Choose </option>
+                                            <option value="Mobiles & Tablets">Mobiles & Tablets</option>
+                                            <option value="Laptops & Computers">Laptops & Computers</option>
+                                            <option value="Buy & sell Business">Buy & sell Business</option>
+                                            <option value="Services">Services</option>
+                                            <option value="Jobs">Jobs</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="text-center">
+                                        <div style="margin-top: 20px">
+                                            <i class="fa fa-sign-in" style="font-size: 180px;color: #e5e5e5 "></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+    <h1>Location</h1>
+    <fieldset>
+        
+        <div class="form-group">
+            <label class="control-label col-md-2">City</label>
+            <div class="col-md-10">
+                <select id="select-city" class="demo-default" name="city" data-bind="options: availableCities,
+                       value: selectedCity,
+                       optionsCaption: 'Choose City...'"></select>
+
+            </div>
+        </div>
+        <div data-bind="with:selectedCity">
+            <div class="form-group">
+                <label class="control-label col-md-2">Famous Place</label>
+                <div class="col-md-10">
+                    <select id="select-popularPlace" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
+                       value: $parent.selectedPopularPlace,
+                       optionsCaption: 'Choose Famous place...'"></select>
+                </div>
+            </div>
+        </div>
+        <div data-bind="with:selectedPopularPlace">
+            <div class="form-group">
+                <label class="control-label col-md-2">Exect location</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" name="exectLocation" />
+                </div>
+            </div>
+        </div>
+    </fieldset>
+                        <h1>Account</h1>
+                        <fieldset>
+                            <h2>Basic Info</h2>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label>Business/Company Name <span class="req">*</span></label>
+                                        <input type="text" class="form-control required" name="title" value="@Model.title" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>About *</label>
+                                        <input type="text" class="form-control required" name="shortabout" value="@Model.shortabout" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tags </label>
+                                        <input id="select-tag" name="tags" class="repositories required" placeholder="start typing key words of your business /  services" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="text-center">
+                                        <div style="margin-top: 20px">
+                                            <i class="fa fa-sign-in" style="font-size: 180px;color: #e5e5e5 "></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                        <h1>Location</h1>
+                        <fieldset>
+                            <h2>Main Location (HeadOffice)</h2>
+                            <div class="row">
+                                <div class="control-group">
+                                    <label class="control-label col-md-2" for="select-repo">Tags <br /><small class="text-navy">optional</small></label>
+                                    <div class="col-md-10">
+                                        <input id="select-tag" name="tags" class="repositories" placeholder="Pick tags..." />
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <h1>Warning</h1>
+                        <fieldset>
+                            <div class="text-center" style="margin-top: 120px">
+                                <h2>You did it Man :-)</h2>
+                            </div>
+                        </fieldset>
+
+                        <h1>Finish</h1>
+                        <fieldset>
+                            <h2>Terms and Conditions</h2>
+                            <input id="acceptTerms" name="acceptTerms" type="checkbox" class="required"> <label for="acceptTerms">I agree with the Terms and Conditions.</label>
+                        </fieldset>
+}
+                </div>
+                @*<div class="ibox-content">
                     
-                    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form" }))
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form",@class = "wizard-big" }))
                     {
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="files" id="fileNames" />
@@ -76,7 +198,8 @@
                         
                     }
 
-                </div>
+                </div>*@
+
             </div>
         </div>
         @*<div class="col-sm-6">
@@ -96,6 +219,8 @@
     @Styles.Render("~/bundles/myStyles")
     @Styles.Render("~/bundles/tagStyles")
     @Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
+
+@Styles.Render("~/plugins/wizardStepsStyles")
 }
 
 @section Scripts {
@@ -108,6 +233,8 @@
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/autosize")
     @Scripts.Render("~/plugins/dropZone")
+
+@Scripts.Render("~/plugins/wizardSteps")
     <script type="text/javascript">
         var fileList = new Array;
         function ViewModel() {
@@ -118,6 +245,7 @@
                 window.btn_clicked = true;
                 $("#form").submit();
             }
+            self.categories = ["Mobiles & Tablets", "Laptops & Computers", "Buy & sell Business", "Services", "Jobs"];
             self.conditionChecked = ko.observable(false);
             self.typeValue = ko.observable();
             self.selectedVal = ko.observable();
@@ -208,6 +336,7 @@
                     type: 'GET',
                     success: function (data) {
                         $.each((data), function (i, item) { self.availableCities.push(item) });
+
                         $('#select-city').selectize({
                             create: true,
                             plugins: ['inputMaxlength'],
@@ -309,6 +438,74 @@
 
         $(document).ready(function () {
             ko.applyBindings(new ViewModel);
+
+            $("#wizard").steps();
+            $("#form").steps({
+                bodyTag: "fieldset",
+                onStepChanging: function (event, currentIndex, newIndex) {
+                    // Always allow going backward even if the current step contains invalid fields!
+                    if (currentIndex > newIndex) {
+                        return true;
+                    }
+
+                    // Forbid suppressing "Warning" step if the user is to young
+                    if (newIndex === 3 && Number($("#age").val()) < 18) {
+                        return false;
+                    }
+
+                    var form = $(this);
+
+                    // Clean up if user went backward before
+                    if (currentIndex < newIndex) {
+                        // To remove error styles
+                        $(".body:eq(" + newIndex + ") label.error", form).remove();
+                        $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+                    }
+
+                    // Disable validation on fields that are disabled or hidden.
+                    form.validate().settings.ignore = ":disabled,:hidden";
+
+                    // Start validation; Prevent going forward if false
+                    return form.valid();
+                },
+                onStepChanged: function (event, currentIndex, priorIndex) {
+                    // Suppress (skip) "Warning" step if the user is old enough.
+                    if (currentIndex === 2 && Number($("#age").val()) >= 18) {
+                        $(this).steps("next");
+                    }
+
+                    // Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
+                    if (currentIndex === 2 && priorIndex === 3) {
+                        $(this).steps("previous");
+                    }
+                },
+                onFinishing: function (event, currentIndex) {
+                    var form = $(this);
+
+                    // Disable validation on fields that are disabled.
+                    // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
+                    form.validate().settings.ignore = ":disabled";
+
+                    // Start validation; Prevent form submission if false
+                    return form.valid();
+                },
+                onFinished: function (event, currentIndex) {
+                    var form = $(this);
+
+                    // Submit form input
+                    form.submit();
+                }
+            }).validate({
+                errorPlacement: function (error, element) {
+                    element.before(error);
+                },
+                rules: {
+                    confirm: {
+                        equalTo: "#password"
+                    }
+                }
+            });
+
             window.onbeforeunload = function (e) {
                 if (!window.btn_clicked) {
                     e = e || window.event;
@@ -373,7 +570,7 @@
                     direction: 'asc'
                 },
             });
-            $('#select-sims').selectize({
+            $('#select-category').selectize({
                 sortField: {
                     field: 'text',
                     direction: 'asc'
@@ -390,6 +587,9 @@
                     company: {
                         required: true,
                         maxlength: 15
+                    },
+                    category:{
+                        required: true
                     },
                     model: {
                         required: true,
