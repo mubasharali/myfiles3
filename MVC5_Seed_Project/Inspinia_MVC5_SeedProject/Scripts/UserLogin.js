@@ -19,6 +19,7 @@ function AccountViewModel() {
     }
     self.loginBtn = function () {
         $("#inputEmail").modal('show');
+        self.error("");
     }
     self.hasConfirmPasswordFocus = ko.observable(false);
     self.checkEnterNewPassword = function (d, e) {

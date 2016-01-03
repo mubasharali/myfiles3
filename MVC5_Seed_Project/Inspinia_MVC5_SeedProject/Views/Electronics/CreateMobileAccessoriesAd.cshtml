@@ -32,11 +32,15 @@
                     <h5>Create Ad</h5>
                 </div>
                 <div class="ibox-content">
-
+                    <form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" action="@Url.Action("FileUploadHandler", "Electronics")" method="post" enctype="multipart/form-data">
+                        <h2>Add Images</h2>
+                        <div id="dropzonePreview" class="dz-default dz-message">
+                        </div>
+                    </form><br /><br />
                     @using (Html.BeginForm("CreateMobileAccessoriesAd", "Electronics", FormMethod.Post, new { id = "form" }))
                     {
                         @Html.AntiForgeryToken()
-
+                        <input type="hidden" name="files" id="fileNames" />
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true)
                             <div class="form-group">
@@ -83,7 +87,7 @@
                             <br />
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                    <input type="submit" data-bind="click:submitClicked" value="Create" class="btn btn-primary" />
                                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
                                 </div>
                             </div>
@@ -110,6 +114,7 @@
     @Styles.Render("~/scripts/selectizeStyles")
 @Styles.Render("~/bundles/myStyles")
 @Styles.Render("~/bundles/tagStyles")
+@Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
 }
 
 @section Scripts {
@@ -121,10 +126,18 @@
     @Scripts.Render("~/scripts/selectize")
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/autosize")
+@Scripts.Render("~/plugins/dropZone")
+<script src="~/Scripts/app/dropzone-knockout-binding.js"> </script>
     <script type="text/javascript">
 
         function ViewModel() {
             var self = this;
+            self.submitClicked = function () {
+                console.log(fileList);
+                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                window.btn_clicked = true;
+                $("#form").submit();
+            }
             self.conditionChecked = ko.observable(false);
             self.typeValue = ko.observable();
             self.selectedVal = ko.observable();
@@ -284,7 +297,15 @@
 
         $(document).ready(function () {
             ko.applyBindings(new ViewModel);
-
+            window.onbeforeunload = function (e) {
+                if (!window.btn_clicked) {
+                    e = e || window.event;
+                    if (e) {
+                        e.returnValue = 'Sure?';
+                    }
+                    return 'Sure?';
+                }
+            };
             Selectize.define('inputMaxlength', function (options) {
                 var self = this;
                 this.setup = (function () {

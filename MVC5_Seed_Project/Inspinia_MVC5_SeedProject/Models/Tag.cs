@@ -20,6 +20,7 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.FollowTags = new HashSet<FollowTag>();
             this.QuestionTags = new HashSet<QuestionTag>();
             this.ReportedTags = new HashSet<ReportedTag>();
+            this.CompanyTags = new HashSet<CompanyTag>();
         }
     
         public int Id { get; set; }
@@ -29,12 +30,14 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string createdBy { get; set; }
         public Nullable<System.DateTime> updatedTime { get; set; }
         public string updatedBy { get; set; }
+        public string updatedInfo { get; set; }
     
         public virtual ICollection<AdTag> AdTags { get; set; }
-        public virtual AspNetUser AspNetUser { get; set; }
-        public virtual AspNetUser AspNetUser1 { get; set; }
         public virtual ICollection<FollowTag> FollowTags { get; set; }
         public virtual ICollection<QuestionTag> QuestionTags { get; set; }
         public virtual ICollection<ReportedTag> ReportedTags { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
+        public virtual AspNetUser AspNetUser1 { get; set; }
+        public virtual ICollection<CompanyTag> CompanyTags { get; set; }
     }
 }

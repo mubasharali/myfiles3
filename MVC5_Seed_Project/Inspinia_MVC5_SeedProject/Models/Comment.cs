@@ -27,8 +27,8 @@ namespace Inspinia_MVC5_SeedProject.Models
         public int adId { get; set; }
     
         public virtual Ad Ad { get; set; }
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual ICollection<CommentReply> CommentReplies { get; set; }
         public virtual ICollection<CommentVote> CommentVotes { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

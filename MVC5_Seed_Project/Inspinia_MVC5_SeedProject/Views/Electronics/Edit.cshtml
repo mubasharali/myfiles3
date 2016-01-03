@@ -220,12 +220,15 @@
                                 direction: 'asc'
                             },
                         });
-                        $('#select-tag').selectize({
+                        console.log(self.selectedTags);
+                        
+                        var selecti = $('#select-tag').selectize({
                             valueField: 'name',
                             labelField: 'name',
                             searchField: 'name',
                             maxItems: 4,
-                            options: self.selectedTags, //not working
+                            //options: self.selectedTags, //not working
+                            //setValue: self.selectedTags,
                             create: true,
                             render: {
                                 option: function (item, escape) {
@@ -256,6 +259,9 @@
                                 });
                             }
                         });
+                        var sel = selecti[0].selectize;
+                        sel.setValue(self.selectedTags);
+                        console.log(self.selectedTags);
                         if (self.selectedBrandOriginal == self.selectedBrand()) {
                             self.selectedModel(self.selectedModelOriginal);
                         }

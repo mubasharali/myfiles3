@@ -18,7 +18,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         {
             this.AdImages = new HashSet<AdImage>();
             this.AdTags = new HashSet<AdTag>();
-            this.AdViews = new HashSet<AdView>();
             this.Bids = new HashSet<Bid>();
             this.CarAds = new HashSet<CarAd>();
             this.Comments = new HashSet<Comment>();
@@ -38,12 +37,11 @@ namespace Inspinia_MVC5_SeedProject.Models
         public Nullable<bool> type { get; set; }
         public string condition { get; set; }
         public string status { get; set; }
+        public int views { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual ICollection<AdImage> AdImages { get; set; }
         public virtual AdsLocation AdsLocation { get; set; }
         public virtual ICollection<AdTag> AdTags { get; set; }
-        public virtual ICollection<AdView> AdViews { get; set; }
         public virtual ICollection<Bid> Bids { get; set; }
         public virtual ICollection<CarAd> CarAds { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
@@ -51,5 +49,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual MobileAd MobileAd { get; set; }
         public virtual ICollection<Reported> Reporteds { get; set; }
         public virtual ICollection<SaveAd> SaveAds { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

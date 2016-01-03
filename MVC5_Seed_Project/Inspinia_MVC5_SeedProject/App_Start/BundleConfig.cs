@@ -153,6 +153,15 @@ namespace Inspinia_MVC5_SeedProject
             bundles.Add(new ScriptBundle("~/plugins/lightboxGallery").Include(
                       "~/Scripts/plugins/blueimp/jquery.blueimp-gallery.min.js"));
 
+            // ionRange styles
+            bundles.Add(new StyleBundle("~/Content/plugins/ionRangeSlider/ionRangeStyles").Include(
+                      "~/Content/plugins/ionRangeSlider/ion.rangeSlider.css",
+                      "~/Content/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css"));
+
+            // ionRange 
+            bundles.Add(new ScriptBundle("~/plugins/ionRange").Include(
+                      "~/Scripts/plugins/ionRangeSlider/ion.rangeSlider.min.js"));
+
             // wizardSteps styles
             bundles.Add(new StyleBundle("~/plugins/wizardStepsStyles").Include(
                       "~/Content/plugins/steps/jquery.steps.css"));

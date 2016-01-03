@@ -115,10 +115,27 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return View();
         }
+        public void MakeAdmin()
+        {
+            
+        }
         [HttpPost]
         [AllowAnonymous]
         public async Task<JsonResult> RegisterUser(string email, string password = "aa")
         {
+
+            var roleManager = new RoleManager<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+
+
+            if (!roleManager.RoleExists("Admin"))
+            {
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                role.Name = "Admin";
+                roleManager.Create(role);
+
+            }
+
+
             var ab = email.Split('@');
 
             var user = new ApplicationUser() { UserName = email };
@@ -130,7 +147,17 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             var result = await UserManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
+                var currentUser = UserManager.FindByName(user.UserName);
+
+                var roleresult = UserManager.AddToRole(currentUser.Id, "Admin");
+
+                try { 
                 await SignInAsync(user, isPersistent: true);
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
                 var id = user.Id;
                 var data =await db.AspNetUsers.FindAsync(id);
                 if (password == "aa")

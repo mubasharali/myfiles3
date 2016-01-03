@@ -11,17 +11,18 @@ using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
-    public class TechnologyController : Controller
+    public class BusinessController : Controller
     {
         private Entities db = new Entities();
 
-        // GET: /Technology/
+        // GET: /Business/
         public async Task<ActionResult> Index()
         {
-            return View();
+            var ads = db.Ads.Include(a => a.AspNetUser).Include(a => a.AdsLocation).Include(a => a.LaptopAd).Include(a => a.MobileAd);
+            return View(await ads.ToListAsync());
         }
 
-        // GET: /Technology/Details/5
+        // GET: /Business/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,7 +37,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return View(ad);
         }
 
-        // GET: /Technology/Create
+        // GET: /Business/Create
         public ActionResult Create()
         {
             ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email");
@@ -46,12 +47,12 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return View();
         }
 
-        // POST: /Technology/Create
+        // POST: /Business/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include="Id,category,postedBy,title,description,time,price,isnegotiable,subcategory,type,condition")] Ad ad)
+        public async Task<ActionResult> Create([Bind(Include="Id,category,postedBy,title,description,time,price,isnegotiable,subcategory,type,condition,status,views")] Ad ad)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +68,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return View(ad);
         }
 
-        // GET: /Technology/Edit/5
+        // GET: /Business/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,12 +87,12 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return View(ad);
         }
 
-        // POST: /Technology/Edit/5
+        // POST: /Business/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include="Id,category,postedBy,title,description,time,price,isnegotiable,subcategory,type,condition")] Ad ad)
+        public async Task<ActionResult> Edit([Bind(Include="Id,category,postedBy,title,description,time,price,isnegotiable,subcategory,type,condition,status,views")] Ad ad)
         {
             if (ModelState.IsValid)
             {
@@ -106,7 +107,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return View(ad);
         }
 
-        // GET: /Technology/Delete/5
+        // GET: /Business/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -121,7 +122,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return View(ad);
         }
 
-        // POST: /Technology/Delete/5
+        // POST: /Business/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)

@@ -30,7 +30,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<AdImage> AdImages { get; set; }
         public virtual DbSet<AdsLocation> AdsLocations { get; set; }
         public virtual DbSet<AdTag> AdTags { get; set; }
-        public virtual DbSet<AdView> AdViews { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<AnswerReply> AnswerReplies { get; set; }
         public virtual DbSet<AnswerReplyVote> AnswerReplyVotes { get; set; }
@@ -38,7 +37,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Bid> Bids { get; set; }
         public virtual DbSet<CarAd> CarAds { get; set; }
         public virtual DbSet<CarBrand> CarBrands { get; set; }
@@ -62,7 +60,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<QuestionReply> QuestionReplies { get; set; }
         public virtual DbSet<QuestionReplyVote> QuestionReplyVotes { get; set; }
         public virtual DbSet<QuestionTag> QuestionTags { get; set; }
-        public virtual DbSet<QuestionView> QuestionViews { get; set; }
         public virtual DbSet<QuestionVote> QuestionVotes { get; set; }
         public virtual DbSet<Reported> Reporteds { get; set; }
         public virtual DbSet<ReportedQuestion> ReportedQuestions { get; set; }
@@ -80,5 +77,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<ReviewReply> ReviewReplies { get; set; }
         public virtual DbSet<ReviewVote> ReviewVotes { get; set; }
         public virtual DbSet<CompanyAnswer> CompanyAnswers { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<CompanyTag> CompanyTags { get; set; }
     }
 }

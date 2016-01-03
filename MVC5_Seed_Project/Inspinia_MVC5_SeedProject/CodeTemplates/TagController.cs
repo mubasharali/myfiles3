@@ -3,17 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using Inspinia_MVC5_SeedProject.Models;
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
     public class TagController : Controller
     {
+        public Entities db = new Entities();
         //
         // GET: /Tag/
-        public ActionResult Index(int ?id)
+        [Route("Tag/{name?}")]
+        public ActionResult Index(string name)
         {
-            ViewBag.tagId = id;
-            return View();
+            var data = db.Tags.FirstOrDefault(x=>x.name.Equals(name));
+            if (data != null)
+            {
+                ViewBag.tagId = data.Id;
+                return View(data);
+            }
+            return RedirectToAction("../not-found");
         }
 
         //

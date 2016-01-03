@@ -18,7 +18,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string followedBy { get; set; }
         public int questionId { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual Question Question { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

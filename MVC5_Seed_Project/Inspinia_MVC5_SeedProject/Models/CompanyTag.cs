@@ -12,13 +12,13 @@ namespace Inspinia_MVC5_SeedProject.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AdView
+    public partial class CompanyTag
     {
         public int Id { get; set; }
-        public string viewedBy { get; set; }
-        public Nullable<int> adId { get; set; }
+        public int companyId { get; set; }
+        public int tagId { get; set; }
     
-        public virtual Ad Ad { get; set; }
-        public virtual AspNetUser AspNetUser { get; set; }
+        public virtual Company Company { get; set; }
+        public virtual Tag Tag { get; set; }
     }
 }

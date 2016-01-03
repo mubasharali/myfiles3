@@ -16,7 +16,6 @@ function Company(data) {
 
 function TreeViewModel() {
     var self = this;
-
     self.showAds = ko.observableArray();
     self.brand = ko.observable("");
     self.model = ko.observable("");
@@ -74,7 +73,7 @@ function TreeViewModel() {
     self.loadTree();
     
     self.loadad = function () {
-        url_address = '/api/Electronic/SearchMobileAds?brand=' + self.brand() + '&model=' + self.model();
+        url_address = '/api/Electronic/SearchMobileAds?brand=' + self.brand() + '&model=' + self.model() + '&tags= ';
         $.ajax({
             url: url_address,
             dataType: "json",
@@ -84,13 +83,37 @@ function TreeViewModel() {
             success: function (data) {
                 var mappedads = $.map(data, function (item) { return new ad(item); });
                 self.showAds(mappedads);
-
             },
             error: function () {
                 toastr.error("Unable to load data. Please try again", "Error");
             }
         });
-
     }
     self.loadad();
+    //Search();
+}
+
+function Search() {
+    var self = this;
+    self.title = $("#search").val();
+    self.tags = ko.observable();
+    self.price = ko.observable();
+    
+    
+    self.tags.subscribe(function () {
+        $.ajax({
+            url: '/api/Electronic/SearchMobileAds?brand=' + self.brand() + '&model=' + self.model() + '&tags=' + self.tags(),
+            dataType: "json",
+            contentType: "application/json",
+            cache: false,
+            type: 'POST',
+            success: function (data) {
+                var mappedads = $.map(data, function (item) { return new ad(item); });
+                self.showAds(mappedads);
+            },
+            error: function () {
+                toastr.error("failed to search. Please refresh page and try again", "Error!");
+            }
+        });
+    })
 }

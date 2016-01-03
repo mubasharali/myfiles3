@@ -38,14 +38,72 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             ViewBag.companyId = company.Id;
             return View();
         }
-
+        public ActionResult Ask()
+        {
+            return View();
+        }
+        public ActionResult Discussion(int id)
+        {
+            ViewBag.discussionId = id;
+            return View();
+        }
         // GET: /Company/Create
         public ActionResult Create()
         {
             Company company = new Company();
             return View(company);
         }
+        public void SaveTags(Company ad)
+        {
+            string s = Request["tags"];
+            string[] values = s.Split(',');
+            Tag[] tags = new Tag[values.Length];
+            CompanyTag[] qt = new CompanyTag[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = values[i].Trim();
+                string ss = values[i];
+                if (ss != "")
+                {
+                    var data = db.Tags.FirstOrDefault(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
 
+                    tags[i] = new Tag();
+                    if (data != null)
+                    {
+                        tags[i].Id = data.Id;
+                    }
+                    else
+                    {
+                        tags[i].name = values[i];
+                        tags[i].time = DateTime.UtcNow;
+                        tags[i].createdBy = User.Identity.GetUserId();
+                        db.Tags.Add(tags[i]);
+                    }
+                }
+                else
+                {
+                    tags[i] = null;
+                }
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                string sb = e.ToString();
+            }
+            for (int i = 0; i < values.Length; i++)
+            {
+                if (tags[i] != null)
+                {
+                    qt[i] = new CompanyTag();
+                    qt[i].companyId = ad.Id;
+                    qt[i].tagId = tags[i].Id;
+                    db.CompanyTags.Add(qt[i]);
+                }
+            }
+        }
         // POST: /Company/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -62,6 +120,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     company.status = "a";
                     company.category = "Services";
                     db.Companies.Add(company);
+                    SaveTags(company);
                     try
                     {
                         db.SaveChanges();

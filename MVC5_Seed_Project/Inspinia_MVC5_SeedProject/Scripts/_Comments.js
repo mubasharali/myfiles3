@@ -6,9 +6,11 @@
         self.description = ko.observable(data.description);
         self.postedByName = data.postedByName;
         self.postedById = data.postedById;
-        self.imageExtension = data.imageExtension;
         self.postedByLink = '/User/Index/' + self.postedById;
-        self.profileLink = '/Images/Users/p' + self.postedById + self.imageExtension;
+        self.profileLink = '/Images/Users/p' + self.postedById + data.imageExtension;
+        if (!data.imageExtension) {
+            self.profileLink = '/Images/Users/default.jpg';
+        }
         self.time = getTimeAgo(data.time);
         self.id = data.id;
         self.isliked = ko.observable(data.isUp);
@@ -79,7 +81,7 @@
                 });
             }
             else {
-                toastr.info("You are not login", "Oops!");
+                loginBtn();
             }
         }
     }
@@ -93,9 +95,11 @@
         self.voteDownCount = ko.observable();
         self.postedByName = data.postedByName;
         self.postedById = data.postedById;
-        self.imageExtension = data.imageExtension;
         self.postedByLink = '/User/Index/' + self.postedById;
-        self.profileLink = '/Images/Users/p' + self.postedById + self.imageExtension;
+        self.profileLink = '/Images/Users/p' + self.postedById + data.imageExtension;
+        if (!data.imageExtension) {
+            self.profileLink = '/Images/Users/default.jpg';
+        }
         if (self.loginUserId == "" || data.loginUserProfileExtension == null) {
             self.loginUserProfileLink = '/Images/Users/default.jpg';
         } else {
@@ -124,9 +128,12 @@
         }
 
         self.checkEnter1 = function (d, e) {
-            if (e.keyCode == 13) {
-                // self.description(self.description().slice(0, -1));
-                self.addCommentReply(self.loginUserId);
+            if (self.loginUserId) {
+                if (e.keyCode == 13) {
+                    self.addCommentReply(self.loginUserId);
+                }
+            } else {
+                loginBtn();
             }
         }
         self.checkEnterEditing = function (d, e) {
@@ -207,7 +214,7 @@
                 });
             }
             else {
-                toastr.info("You are not login", "Oops!");
+                loginBtn();
             }
         }
         self.newCommentReply = ko.observable();
@@ -237,7 +244,7 @@
                     });
                 }
             } else {
-                toastr.info("You must be login to reply this comment", "Oops!");
+                loginBtn();
             }
         }
         //myhub.client.appendCommentReplyToMe = function (reply) {

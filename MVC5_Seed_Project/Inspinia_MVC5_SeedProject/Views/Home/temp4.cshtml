@@ -1,1 +1,92 @@
 ﻿
+<span data-toggle="modal" data-target="#setLocation"> Report </span>
+
+<div data-bind="text:text1"></div>
+<div class="modal inmodal fade" id="setLocation" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <i class="fa fa-flag modal-icon"></i>
+                <h4 class="modal-title">Location</h4>
+                <small class="font-bold">Make sure you have provided right information or you can loose reputation</small>
+            </div>
+            <div class="modal-body">
+                thsi is aksd<div data-bind="text:text1"></div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">I didn't mean to</button>
+                
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/Content/plugins/jsTree")
+    @Styles.Render("~/plugins/sweetAlertStyles")
+    @Styles.Render("~/scripts/selectizeStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/slick")
+    @Scripts.Render("~/plugins/jsTree")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/plugins/sweetAlert")
+    @Scripts.Render("~/scripts/selectize")
+    <script>
+        function SearchingLocation() {
+            var self = this;
+            self.text1 = "i am irfan";
+            
+        }
+        function viewModel() {
+            SearchingLocation();
+            var self = this;
+
+        }
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+
+        $(function () {
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new viewModel);
+            $.connection.hub.start().done();
+        });
+    </script>
+}
+
+
+
+

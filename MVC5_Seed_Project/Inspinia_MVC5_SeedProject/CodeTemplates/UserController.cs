@@ -16,12 +16,17 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
     {
         private Entities db = new Entities();
 
-        // GET: /User/
+        //[Route("User/{s?}")]
         public ActionResult Index(string id)
         {
             //return View(db.AspNetUsers.ToList());
+            var data = db.AspNetUsers.Find(id);
+            if (data == null)
+            {
+                return RedirectToAction("../not-found");
+            }
             ViewBag.id = id;
-            return View();
+            return View(data);
         }
         public ActionResult Profile(string id)
         {
@@ -34,7 +39,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 }
                 return RedirectToAction("../User/Profile", new { id = User.Identity.GetUserId() });
             }
-            return RedirectToAction("/Home/Index");
+            return RedirectToAction("../Home/Index");
         }
         public ActionResult saveProfilePic()
         {

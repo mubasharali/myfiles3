@@ -18,7 +18,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         // GET: /MobilesTablets/
         public async Task<ActionResult> Index()
         {
-            return View("../Electronics/Mobiles");
+            return View();
         }
 
         // GET: /MobilesTablets/Details/5

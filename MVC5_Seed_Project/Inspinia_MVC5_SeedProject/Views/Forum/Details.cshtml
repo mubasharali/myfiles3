@@ -3,30 +3,18 @@
 }
 <input type="hidden" id="questionId" value="@ViewBag.questionId" />
 <input type="hidden" id="currentPage" value="@HttpContext.Current.Request.Url.AbsolutePath" />
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-sm-4">
-        <h2>Details</h2>
-        <ol class="breadcrumb">
-            <li>
-                @Html.ActionLink("List", "Index")
-            </li>
-            <li class="active">
-                <strong>Details</strong>
-            </li>
-        </ol>
-    </div>
-</div>
+
 
 <div class="wrapper wrapper-content animated fadeInUp">
     <div class="row">
         <div class="col-md-3"></div>
-        <div class="col-md-6">
+        <div class="col-md-9">
             <div class="ibox">
                 <div id="QuestionViewModel" data-bind="foreach: showQuestions">
                     <div class="ibox-content" data-bind="attr:{'id':id}">
                         <div class="row">
                             <div class="col-lg-12">
-                                    <a href="#" class="btn btn-white btn-xs pull-right">Delete</a><a href="#" class="btn btn-white btn-xs pull-right">Edit</a>
+                                    <a data-bind="visible:postedById==loginUserId" class="btn btn-white btn-xs pull-right">Delete</a><a data-bind="visible:postedById==loginUserId" class="btn btn-white btn-xs pull-right">Edit</a>
                                 <div class="vote-item">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -42,8 +30,8 @@
                                             <a data-bind="text:title" class="vote-title"></a>
                                             <p data-bind="text:description"></p>
                                             <div>
-                                                <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
-                                                    <li><a href=""><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                                <ul class="tag-list" data-bind="foreach:showTags" @*style="padding: 0"*@>
+                                                    <li><a target="_blank" data-bind="attr:{href:'/Tag/' + name}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
                                                 </ul>
                                             </div>
                                             <br /><br />
@@ -205,7 +193,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">this is 3</div>
     </div>
 </div>
 @Html.Partial("/Views/Shared/_Chat.cshtml")
@@ -874,8 +861,6 @@
                 positionClass: 'toast-top-right',
                 onclick: null
             };
-           // ko.applyBindings(new ChatViewModel(), document.getElementById("chatViewModel"));
-           // ko.applyBindings(new ViewModel(),document.getElementById("QuestionViewModel"));
             ko.applyBindings(new ViewModel());
             $.connection.hub.start().done(function () {
                 //model.init();

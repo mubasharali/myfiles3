@@ -18,7 +18,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public int tagId { get; set; }
         public string reportedBy { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual Tag Tag { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

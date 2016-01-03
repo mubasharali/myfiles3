@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Microsoft.AspNet.Identity;
 using System.Web;
+using System.Web.Security;
 using Inspinia_MVC5_SeedProject.Models;
 using System.IO;
 namespace Inspinia_MVC5_SeedProject.Controllers
@@ -396,16 +397,22 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return Ok(models);
         }
 
-        public async Task<IHttpActionResult> SearchMobileAds(string brand, string model)
+        public async Task<IHttpActionResult> SearchMobileAds(string brand, string model,string tags)
         {
             string islogin = "";
             if (User.Identity.IsAuthenticated)
             {
                 islogin = User.Identity.GetUserId();
             }
+            if (tags != null)
+            {
+                string[] tagsArray = tags.Split(',');
+            }
             if (brand == null)
             {
                 var ret = from ad in db.MobileAds
+                          where ad.Ad.AdTags.Any(x=>x.Tag.name.Equals(tags))
+                          where ad.Ad.status.Equals("a")
                           select new{
                               title = ad.Ad.title,
                               postedById = ad.Ad.AspNetUser.Id,
@@ -418,7 +425,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               price = ad.Ad.price,
                               reportedCount = ad.Ad.Reporteds.Count,
                               isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
-                              views = ad.Ad.AdViews.Count,
+                             // views = ad.Ad.AdViews.Count,
+                             views = ad.Ad.views,
                               condition = ad.Ad.condition,
                               savedCount = ad.Ad.SaveAds.Count,
                               color = ad.color,
@@ -459,6 +467,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 var re = from ad in db.Ads
                          where ad.MobileAd.MobileModel.Mobile.brand.Equals(brand)
+                         where ad.status.Equals("a")
                          select new
                          {
                              title = ad.title,
@@ -472,7 +481,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                              price = ad.price,
                              reportedCount = ad.Reporteds.Count,
                              isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
-                             views = ad.AdViews.Count,
+                             //views = ad.AdViews.Count,
+                             views = ad.views,
                              condition = ad.condition,
 
                              color = ad.MobileAd.color,
@@ -510,6 +520,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             var res = from ad in db.Ads
                       where ad.MobileAd.MobileModel.Mobile.brand.Equals(brand) && ad.MobileAd.MobileModel.model.Equals(model)
+                      where ad.status.Equals("a")
                       select new
                       {
                           title = ad.title,
@@ -523,7 +534,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           price = ad.price,
                           reportedCount = ad.Reporteds.Count,
                           isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
-                          views = ad.AdViews.Count,
+                         // views = ad.AdViews.Count,
+                         views = ad.views,
                           condition = ad.condition,
 
                           color = ad.MobileAd.color,
@@ -559,7 +571,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                       };
             return Ok(res);
         }
-        public async Task<IHttpActionResult> SearchLaptopAds(string brand, string model)
+       
+        public async Task<IHttpActionResult> SearchLaptopAds(string brand, string model,string tags)
         {
             string islogin = "";
             if (User.Identity.IsAuthenticated)
@@ -569,6 +582,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             if (brand == null)
             {
                 var ret = from ad in db.LaptopAds
+                          where ad.Ad.status.Equals("a")
                           select new
                           {
                               title = ad.Ad.title,
@@ -582,7 +596,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               price = ad.Ad.price,
                               reportedCount = ad.Ad.Reporteds.Count,
                               isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
-                              views = ad.Ad.AdViews.Count,
+                              //views = ad.Ad.AdViews.Count,
+                              views = ad.Ad.views,
                               condition = ad.Ad.condition,
                               savedCount = ad.Ad.SaveAds.Count,
                               color = ad.color,
@@ -621,6 +636,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 var re = from ad in db.Ads
                          where ad.LaptopAd.LaptopModel.LaptopBrand.brand.Equals(brand)
+                         where ad.status.Equals("a")
                          select new
                          {
                              title = ad.title,
@@ -634,7 +650,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                              price = ad.price,
                              reportedCount = ad.Reporteds.Count,
                              isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
-                             views = ad.AdViews.Count,
+                             //views = ad.AdViews.Count,
+                             views = ad.views,
                              condition = ad.condition,
 
                              color = ad.LaptopAd.color,
@@ -645,8 +662,6 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                       {
                                           id = tag.Id,
                                           name = tag.Tag.name,
-                                          //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
-                                          //info = tag.Tag.info,
                                       },
                              bid = from biding in ad.Bids.ToList()
                                    select new
@@ -671,6 +686,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             var res = from ad in db.Ads
                       where ad.LaptopAd.LaptopModel.LaptopBrand.brand.Equals(brand) && ad.LaptopAd.LaptopModel.model.Equals(model)
+                      where ad.status.Equals("a")
                       select new
                       {
                           title = ad.title,
@@ -684,7 +700,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           price = ad.price,
                           reportedCount = ad.Reporteds.Count,
                           isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
-                          views = ad.AdViews.Count,
+                          //views = ad.AdViews.Count,
+                          views = ad.views,
                           condition = ad.condition,
 
                           color = ad.LaptopAd.color,
@@ -719,8 +736,68 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                       };
             return Ok(res);
         }
-        // GET api/Electronic/5
-        [ResponseType(typeof(Ad))]
+        public async Task<IHttpActionResult> GetMobileTrends()
+        {
+            string islogin = "";
+            if (User.Identity.IsAuthenticated)
+            {
+                islogin = User.Identity.GetUserId();
+            }
+            var ret = (from ad in db.MobileAds
+                      orderby ad.Ad.views
+                      where ad.Ad.AdImages.Count > 0
+                      select new
+                      {
+                          title = ad.Ad.title,
+                          postedById = ad.Ad.AspNetUser.Id,
+                          postedByName = ad.Ad.AspNetUser.Email,
+                          description = ad.Ad.description,
+                          id = ad.Ad.Id,
+                          time = ad.Ad.time,
+                          islogin = islogin,
+                          isNegotiable = ad.Ad.isnegotiable,
+                          price = ad.Ad.price,
+                          reportedCount = ad.Ad.Reporteds.Count,
+                          isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                          // views = ad.Ad.AdViews.Count,
+                          views = ad.Ad.views,
+                          condition = ad.Ad.condition,
+                          savedCount = ad.Ad.SaveAds.Count,
+                          color = ad.color,
+                          sims = ad.sims,
+                          brand = ad.MobileModel.Mobile.brand,
+                          model = ad.MobileModel.model,
+                          adTags = from tag in ad.Ad.AdTags.ToList()
+                                   select new
+                                   {
+                                       id = tag.Id,
+                                       name = tag.Tag.name,
+                                       //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                       //info = tag.Tag.info,
+                                   },
+                          bid = from biding in ad.Ad.Bids.ToList()
+                                select new
+                                {
+                                    price = biding.price,
+                                },
+                          adImages = from image in ad.Ad.AdImages.ToList()
+                                     select new
+                                     {
+                                         imageExtension = image.imageExtension,
+                                     },
+                          location = new
+                          {
+                              cityName = ad.Ad.AdsLocation.City.cityName,
+                              cityId = ad.Ad.AdsLocation.cityId,
+                              popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                              popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                              exectLocation = ad.Ad.AdsLocation.exectLocation,
+                          },
+                      });
+            return Ok(ret);
+        }
+        
+        //[InitializeSimpleMembership]
         public async Task<IHttpActionResult> GetAd(int id)
         {
             Ad add = await db.Ads.FindAsync(id);
@@ -728,20 +805,38 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 return NotFound();
             }
-            await AdViews(id);
+            //await AdViews(id);
+            add.views++;
+            db.Entry(add).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             string islogin = "";
             string loginUserProfileExtension = "";
+            bool isAdmin = false;
             if (User.Identity.IsAuthenticated)
             {
+                if (System.Web.Security.Roles.Enabled) {
+                    string adfnadf = "Ok";
+                }
                 islogin = User.Identity.GetUserId();
                 var ide = await db.AspNetUsers.FindAsync(islogin);
                 loginUserProfileExtension = ide.dpExtension;
+                
+                try
+                {
+                    isAdmin = Roles.IsUserInRole("Admin");
+                    //isAdmin = Roles.GetRolesForUser().Contains("Admin");
+                }
+                catch (Exception e)
+                {
+                    string ss = e.ToString();
+                }
             }
             var ret = (from ad in db.Ads
                        where ad.Id == id
                        orderby ad.time
                        select new
                        {
+                           isAdmin = isAdmin,
                            title = ad.title,
                            postedById = ad.AspNetUser.Id,
                            postedByName = ad.AspNetUser.Email,
@@ -755,7 +850,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            price = ad.price,
                            reportedCount = ad.Reporteds.Count,
                            isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
-                           views = ad.AdViews.Count,
+                          // views = ad.AdViews.Count,
+                          views = ad.views,
                            condition = ad.condition,
                            type = ad.type,
                            isSaved = ad.SaveAds.Any(x => x.savedBy == islogin),
@@ -884,12 +980,21 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             if (!(HttpContext.Current.Request.IsAuthenticated))
             {
-                return BadRequest();
-                //return BadRequest("you must be logged in post comment");
+                return BadRequest("not login");
             }
-            bid.time = DateTime.UtcNow;
             bid.postedBy = User.Identity.GetUserId();
-            db.Bids.Add(bid);
+            var BidAlreadyPlaced = await db.Bids.FirstOrDefaultAsync(x => x.adId.Equals(bid.adId) && x.postedBy.Equals(bid.postedBy));
+            if (BidAlreadyPlaced != null)
+            {
+                BidAlreadyPlaced.price = bid.price;
+                //db.Bids.Add(BidAlreadyPlaced);
+            }
+            else
+            {
+                bid.time = DateTime.UtcNow;
+                db.Bids.Add(bid);
+            }
+            
             await db.SaveChangesAsync();
             var ret = db.Bids.Where(x => x.Id == bid.Id).Select(x => new
             {
@@ -900,7 +1005,6 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 id = x.Id,
             }).FirstOrDefault();
             return Ok(ret);
-            // return CreatedAtRoute("DefaultApi", new { id = comment.Id }, comment);
         }
         [HttpPost]
         public async Task<IHttpActionResult> UpdateBid(Bid bid)
@@ -1017,46 +1121,46 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
             return context.Request.ServerVariables["REMOTE_ADDR"];
         }
-        public async Task<IHttpActionResult> AdViews(int id)
-        {
-            Ad ad = await db.Ads.FindAsync(id);
-            if (ad == null)
-            {
-                return NotFound();
-            }
-            var userId = User.Identity.GetUserId();
-            if (userId != null)
-            {
-                var isAlreadyViewed = ad.AdViews.Any(x => x.viewedBy == userId);
-                if (isAlreadyViewed)
-                {
-                    return Ok();
-                }
-                AdView rep = new AdView();
-                rep.viewedBy = userId;
-                rep.adId = id;
-                db.AdViews.Add(rep);
-                await db.SaveChangesAsync();
+        //public async Task<IHttpActionResult> AdViews(int id)
+        //{
+        //    Ad ad = await db.Ads.FindAsync(id);
+        //    if (ad == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var userId = User.Identity.GetUserId();
+        //    if (userId != null)
+        //    {
+        //        var isAlreadyViewed = ad.AdViews.Any(x => x.viewedBy == userId);
+        //        if (isAlreadyViewed)
+        //        {
+        //            return Ok();
+        //        }
+        //        AdView rep = new AdView();
+        //        rep.viewedBy = userId;
+        //        rep.adId = id;
+        //        db.AdViews.Add(rep);
+        //        await db.SaveChangesAsync();
 
-                return Ok();
-            }
-            else
-            {
-                string ip = GetIPAddress();
-                var isAlreadyViewed = ad.AdViews.Any(x => x.viewedBy == ip);
-                if (isAlreadyViewed)
-                {
-                    return Ok();
-                }
-                AdView rep = new AdView();
-                rep.viewedBy = ip;
-                rep.adId = id;
-                db.AdViews.Add(rep);
-                await db.SaveChangesAsync();
-                return Ok();
-            }
+        //        return Ok();
+        //    }
+        //    else
+        //    {
+        //        string ip = GetIPAddress();
+        //        var isAlreadyViewed = ad.AdViews.Any(x => x.viewedBy == ip);
+        //        if (isAlreadyViewed)
+        //        {
+        //            return Ok();
+        //        }
+        //        AdView rep = new AdView();
+        //        rep.viewedBy = ip;
+        //        rep.adId = id;
+        //        db.AdViews.Add(rep);
+        //        await db.SaveChangesAsync();
+        //        return Ok();
+        //    }
 
-        }
+        //}
         public async Task<IHttpActionResult> ReportAd(Reported report)
         {
             var userId = User.Identity.GetUserId();

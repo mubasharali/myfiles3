@@ -14,6 +14,7 @@
     <EntitySetMapping Name="Ads">
       <EntityTypeMapping TypeName="Model.Ad">
         <MappingFragment StoreEntitySet="Ad">
+          <ScalarProperty Name="views" ColumnName="views" />
           <ScalarProperty Name="status" ColumnName="status" />
           <ScalarProperty Name="condition" ColumnName="condition" />
           <ScalarProperty Name="type" ColumnName="type" />
@@ -53,15 +54,6 @@
         <MappingFragment StoreEntitySet="AdTag">
           <ScalarProperty Name="tagId" ColumnName="tagId" />
           <ScalarProperty Name="adId" ColumnName="adId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AdViews">
-      <EntityTypeMapping TypeName="Model.AdView">
-        <MappingFragment StoreEntitySet="AdView">
-          <ScalarProperty Name="adId" ColumnName="adId" />
-          <ScalarProperty Name="viewedBy" ColumnName="viewedBy" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -132,37 +124,6 @@
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
           <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AspNetUsers">
-      <EntityTypeMapping TypeName="Model.AspNetUser">
-        <MappingFragment StoreEntitySet="AspNetUsers">
-          <ScalarProperty Name="IsPasswordSaved" ColumnName="IsPasswordSaved" />
-          <ScalarProperty Name="hideFriends" ColumnName="hideFriends" />
-          <ScalarProperty Name="hideDateOfBirth" ColumnName="hideDateOfBirth" />
-          <ScalarProperty Name="city" ColumnName="city" />
-          <ScalarProperty Name="longAbout" ColumnName="longAbout" />
-          <ScalarProperty Name="shortAbout" ColumnName="shortAbout" />
-          <ScalarProperty Name="dateOfBirth" ColumnName="dateOfBirth" />
-          <ScalarProperty Name="gender" ColumnName="gender" />
-          <ScalarProperty Name="dpExtension" ColumnName="dpExtension" />
-          <ScalarProperty Name="hidePhoneNumber" ColumnName="hidePhoneNumber" />
-          <ScalarProperty Name="hideEmail" ColumnName="hideEmail" />
-          <ScalarProperty Name="reputation" ColumnName="reputation" />
-          <ScalarProperty Name="since" ColumnName="since" />
-          <ScalarProperty Name="UserName" ColumnName="UserName" />
-          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
-          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -371,13 +332,11 @@
     <EntitySetMapping Name="Questions">
       <EntityTypeMapping TypeName="Model.Question">
         <MappingFragment StoreEntitySet="Question">
-          <ScalarProperty Name="lowCategory" ColumnName="lowCategory" />
+          <ScalarProperty Name="views" ColumnName="views" />
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="title" ColumnName="title" />
           <ScalarProperty Name="time" ColumnName="time" />
           <ScalarProperty Name="postedBy" ColumnName="postedBy" />
-          <ScalarProperty Name="subCategory" ColumnName="subCategory" />
-          <ScalarProperty Name="category" ColumnName="category" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -408,15 +367,6 @@
         <MappingFragment StoreEntitySet="QuestionTag">
           <ScalarProperty Name="questionId" ColumnName="questionId" />
           <ScalarProperty Name="tagId" ColumnName="tagId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="QuestionViews">
-      <EntityTypeMapping TypeName="Model.QuestionView">
-        <MappingFragment StoreEntitySet="QuestionView">
-          <ScalarProperty Name="questionId" ColumnName="questionId" />
-          <ScalarProperty Name="viewedBy" ColumnName="viewedBy" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -463,6 +413,7 @@
     <EntitySetMapping Name="Tags">
       <EntityTypeMapping TypeName="Model.Tag">
         <MappingFragment StoreEntitySet="Tag">
+          <ScalarProperty Name="updatedInfo" ColumnName="updatedInfo" />
           <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
           <ScalarProperty Name="updatedTime" ColumnName="updatedTime" />
           <ScalarProperty Name="createdBy" ColumnName="createdBy" />
@@ -473,14 +424,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="AspNetUserRoles" TypeName="Model.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
-      <EndProperty Name="AspNetUser">
-        <ScalarProperty Name="Id" ColumnName="UserId" />
-      </EndProperty>
-      <EndProperty Name="AspNetRole">
-        <ScalarProperty Name="Id" ColumnName="RoleId" />
-      </EndProperty>
-    </AssociationSetMapping>
     <EntitySetMapping Name="Cities">
       <EntityTypeMapping TypeName="Model.City">
         <MappingFragment StoreEntitySet="City">
@@ -623,6 +566,53 @@
           <ScalarProperty Name="time" ColumnName="time" />
           <ScalarProperty Name="postedBy" ColumnName="postedBy" />
           <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="Model.AspNetUser">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="IsPasswordSaved" ColumnName="IsPasswordSaved" />
+          <ScalarProperty Name="hideFriends" ColumnName="hideFriends" />
+          <ScalarProperty Name="hideDateOfBirth" ColumnName="hideDateOfBirth" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="about" ColumnName="about" />
+          <ScalarProperty Name="dateOfBirth" ColumnName="dateOfBirth" />
+          <ScalarProperty Name="gender" ColumnName="gender" />
+          <ScalarProperty Name="dpExtension" ColumnName="dpExtension" />
+          <ScalarProperty Name="hidePhoneNumber" ColumnName="hidePhoneNumber" />
+          <ScalarProperty Name="hideEmail" ColumnName="hideEmail" />
+          <ScalarProperty Name="reputation" ColumnName="reputation" />
+          <ScalarProperty Name="since" ColumnName="since" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AspNetUserRoles" TypeName="Model.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+      <EndProperty Name="AspNetUser">
+        <ScalarProperty Name="Id" ColumnName="UserId" />
+      </EndProperty>
+      <EndProperty Name="AspNetRole">
+        <ScalarProperty Name="Id" ColumnName="RoleId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <EntitySetMapping Name="CompanyTags">
+      <EntityTypeMapping TypeName="Model.CompanyTag">
+        <MappingFragment StoreEntitySet="CompanyTag">
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="companyId" ColumnName="companyId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

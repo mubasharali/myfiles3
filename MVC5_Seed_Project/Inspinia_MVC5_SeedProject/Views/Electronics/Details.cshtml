@@ -3,7 +3,7 @@
 }
 <input type="hidden" id="adId" value="@ViewBag.adId" />
 <input type="hidden" id="currentPage" value="@HttpContext.Current.Request.Url.AbsolutePath" />
-<div class="row wrapper border-bottom white-bg page-heading">
+@*<div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
         <h2>Details</h2>
         <ol class="breadcrumb">
@@ -15,7 +15,7 @@
             </li>
         </ol>
     </div>
-</div>
+</div>*@
 
 
 <style>
@@ -34,11 +34,11 @@
 <div class="wrapper wrapper-content animated fadeInRight">
 
     <div class="row">
-        <div class="col-sm-3 hidden-sm hidden-xs">@Html.Partial("~/Views/Shared/_Tree.cshtml")</div>
+        <div class="col-sm-3 hidden-sm hidden-xs">@*@Html.Partial("~/Views/Shared/_Tree.cshtml")*@</div>
         <div class="col-md-9" id="adsBinding">
-            <div data-bind="visible:error()" class="alert alert-success">
+            @*<div data-bind="visible:error()" class="alert alert-success">
                 <strong>Error! </strong><span data-bind="text:error"></span>
-            </div>
+            </div>*@
             <div data-bind="foreach: showAds">
                 <div data-bind="visible:statusError" class="alert alert-success">
                     <strong>Pending admin approval! </strong><span data-bind="text:statusError"></span>
@@ -72,19 +72,19 @@
                                         <div class="col-sm-5 hidden-lg hidden-md hidden-xs">Display your banner ad here</div>
                                     </div>
                                     <div class="col-md-7 col-sm-12">
+                                        <span data-bind="visible:loginUserId != postedById && isAdmin">
+                                            <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a>
+                                        </span>
                                         <span data-bind="visible:loginUserId == postedById">
                                             <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a data-bind="click: function(){return editAd(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
                                         </span>
                                         <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
                                         <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
-                                            <li><a href=""><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                            <li><a target="_blank" data-bind="attr:{href:'/Tag/' + name}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
                                         </ul><br /><br />
                                         <hr>
-                                        <span data-bind="if:isBidingAllowed">
-                                            <button data-bind="click:placeBidButton" class="btn btn-primary pull-right">Place Bid</button>
-                                        </span>
-                                        <span data-bind="if:!isBidingAllowed">
-                                            <button data-bind="" class="btn btn-primary pull-right">Chat with seller</button>
+                                        <span data-bind="">
+                                            <button data-bind="click:function(){ return sendMessage(postedById,postedByName)}" class="btn btn-primary pull-right">Chat with seller</button>
                                         </span>
                                         <h1 class="product-main-price">
                                             <span data-bind="if:!isBidingAllowed">
@@ -189,7 +189,8 @@
 
 
                                 <div data-bind="visible:isBidingAllowed">
-                                    <hr />
+                                    <button data-bind="click:placeBidButton" class="btn btn-primary pull-right">Place Bid</button>
+
                                     <h2>Bidings:</h2>
                                     <div data-bind="visible:placeBid">
                                         <div class="form-group">
@@ -209,10 +210,13 @@
                                     <ul class="sortable-list connectList agile-list" data-bind="foreach:showBidings">
                                         <li class="success-element">
                                             <span data-bind="visible:!isEditing()">
-                                                <a href="#"><span data-bind="text:postedByName"></span></a>
-                                                <strong class="col-xs-offset-3"> <span data-bind="text:price"></span></strong>
+                                                <a data-bind="attr:{href:postedByProfileLink}"><span data-bind="text:postedByName"></span></a>
+                                                <strong class="col-xs-offset-3"> Rs <span data-bind="text:price"></span></strong>
                                                 <div class="agile-detail">
-                                                    <a data-bind="click:$parent.deleteBid" class="pull-right btn btn-xs btn-white">delete</a><a data-bind="click:editBidButton" class="pull-right btn btn-xs btn-white">edit</a>
+                                                    
+                                                    <div data-bind="visible:$parent.loginUserId==postedById">
+                                                        <a data-bind="click:$parent.deleteBid" class="pull-right btn btn-xs btn-white">Delete</a><a data-bind="click:editBidButton" class="pull-right btn btn-xs btn-white">Edit</a>
+                                                    </div>
                                                     <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
                                                 </div>
                                             </span>
@@ -300,7 +304,7 @@
     @Styles.Render("~/plugins/slickStyles")
     @Styles.Render("~/plugins/slickThemeStyles")
     @Styles.Render("~/plugins/toastrStyles")
-    @Styles.Render("~/Content/plugins/jsTree")
+    @*@Styles.Render("~/Content/plugins/jsTree")*@
 @Styles.Render("~/plugins/sweetAlertStyles")
 }
 
@@ -311,14 +315,15 @@
     @Scripts.Render("~/plugins/autosize")
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/slick")
-    @Scripts.Render("~/plugins/jsTree")
-    @Scripts.Render("~/bundles/categoryTree")
+    @*@Scripts.Render("~/plugins/jsTree")
+    @Scripts.Render("~/bundles/categoryTree")*@
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/plugins/sweetAlert")
 <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
 <script src="~/signalr/hubs"></script>
 <script src="~/Scripts/UserLogin.js"></script>
 <script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/app/slick-knockout-binding.js"></script>
 <script src="~/Scripts/_Comments.js"></script>
     <script>
         var myAdId = $("#adId").val();
@@ -327,7 +332,7 @@
             data = data || {};
             self.postedById = data.postedById;
             self.postedByName = data.postedByName;
-            self.postedByLink = '/Images/Users/p' + self.postedById;
+            self.postedByProfileLink = '/User/Index/' + self.postedById;
             self.exectTime = data.time;
             self.time = getTimeAgo(data.time);
             self.id = data.id;
@@ -413,8 +418,18 @@
             self.images = ko.observableArray(imageUrls);
             self.options = {};
             self.imageIndex = ko.observable(1);
-            
+            self.sendMessage = function (id, name) {
+                if (self.loginUserId) {
+                    sendMessageTo(id);
+                    sendMessgeToName(name);
+                    console.log("Message will be sent to : " + name);
+                    $(".open-small-chat").trigger('click');
+                } else {
+                    loginBtn();
+                }
+            }
             data = data || {};
+            self.isAdmin = data.isAdmin;
             self.title = data.title;
             self.description = ko.observable( data.description);
             self.postedByName = data.postedByName;
@@ -423,6 +438,9 @@
             self.time = getTimeAgo(data.time);
             self.loginUserId = data.islogin || "";
             self.loginUserProfileLink = '/Images/Users/p' + self.loginUserId + data.loginUserProfileExtension;
+            if (!data.loginUserProfileExtension) {
+                self.loginUserProfileLink = '/Images/Users/default.jpg';
+            }
             self.showMobileAd = ko.observable();
             self.showLocation = ko.observable();
             self.showComment = ko.observableArray();
@@ -468,52 +486,94 @@
             self.showTags = ko.observableArray();
             self.sellerProfile = "/User/Index/" + self.postedById;
             self.placeBidButton = function () {
-                if(self.loginUserId){
-                    self.placeBid(true);
+                if (self.loginUserId) {
+                    var isalreadybid = false;
+                    $.each((self.showBidings()), function (i, item) {
+                        if (item.postedById == self.loginUserId) {
+                            isalreadybid = true;
+                        }
+                    });
+                    if (!isalreadybid) {
+                        self.placeBid(true);
+                    } else {
+                        toastr.info("You cannot post multiple bids on one ad. Just edit your previous bid", "Wait!");
+                    }
                 } else {
-                    toastr.info("You must login to place bid!");
+                    loginBtn();
                 }
             }
             
             self.deleteBid = function (bid) {
-                $.ajax({
-                    url: '/api/Electronic/DeleteBid/' + bid.id,
-                    dataType: "json",
-                    contentType: "application/json",
-                    cache: false,
-                    type: 'POST',
-                    success: function (data) {
-                        self.showBidings.remove(bid);
-                    },
-                    error: function () {
-                        toastr.error("failed to delete bid. Please refresh page and try again", "Error!");
-                    }
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this Bid!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Electronic/DeleteBid/' + bid.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.showBidings.remove(bid);
+                            swal("Deleted!", "Your Bid has been deleted.", "success");
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
                 });
             }
             self.postBid = function () {
-                var bid = new Biding();
-                bid.adId = self.id;
-                bid.price = self.newBidPrice();
-                bid.time = new Date($.now());
-                $.ajax({
-                    url: '/api/Electronic/PostBid',
-                    dataType: "json",
-                    contentType: "application/json",
-                    cache: false,
-                    type: 'POST',
-                    data: ko.toJSON(bid),
-                    success: function (data) {
-                        self.showBidings.push(new Biding(data));
-                        self.highestBid ( Math.max.apply(Math, self.showBidings().map(function (o) { return o.price(); })));
-                        self.newBidPrice('');
-                        $(".sortable-list").sortable({
-                            connectWith: ".connectList"
-                        }).disableSelection();
-                    },
-                    error: function () {
-                        toastr.error("failed to delete Ad. Please refresh page and try again", "Error!");
+                if (self.loginUserId) {
+
+                    var isalreadybid = false;
+                    $.each((self.showBidings()), function (i, item) {
+                        if (item.postedById == self.loginUserId) {
+                            isalreadybid = true;
+                        }
+                    });
+                    if (isalreadybid) {
+                        toastr.info("You cannot post multiple bids on one ad. Just edit your previous bid", "Wait!");
+                        return;
                     }
-                });
+
+                    var bid = new Biding();
+                    bid.adId = self.id;
+                    bid.price = self.newBidPrice();
+                    bid.time = new Date($.now());
+                    if (bid.price >= 0) {
+                        $.ajax({
+                            url: '/api/Electronic/PostBid',
+                            dataType: "json",
+                            contentType: "application/json",
+                            cache: false,
+                            type: 'POST',
+                            data: ko.toJSON(bid),
+                            success: function (data) {
+                                    self.showBidings.push(new Biding(data));
+                                    self.highestBid(Math.max.apply(Math, self.showBidings().map(function (o) { return o.price(); })));
+                                self.newBidPrice('');
+                                $(".sortable-list").sortable({
+                                    connectWith: ".connectList"
+                                }).disableSelection();
+                            },
+                            error: function () {
+                                toastr.error("failed to Post Bid. Please refresh page and try again", "Error!");
+                            }
+                        });
+                    } else {
+                        toastr.info("Bid cannot be negative", "Are you drunk!");
+                    }
+                }
+                else {
+                    loginBtn();
+                }
             }
             if (data.isNegotiable == "b") {
                 self.isBidingAllowed = true;
@@ -558,25 +618,30 @@
                 self.showImages(img);
             }
             self.saveAd = function (ad) {
-                $.ajax({
-                    url: '/api/User/SaveAd/' + ad.id,
-                    dataType: "json",
-                    contentType: "application/json",
-                    cache: false,
-                    type: 'POST',
-                    success: function (data) {
-                        self.savedCount(data.count);
-                        if (data.text == "Deleted") {
-                            self.isSaved(false);
-                            
-                        } else {
-                            self.isSaved(true);
+                if (self.loginUserId) {
+                    $.ajax({
+                        url: '/api/User/SaveAd/' + ad.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.savedCount(data.count);
+                            if (data.text == "Deleted") {
+                                self.isSaved(false);
+
+                            } else {
+                                self.isSaved(true);
+                            }
+                        },
+                        error: function () {
+                            toastr.error("failed to Save Ad. Please refresh page and try again", "Error!");
                         }
-                    },
-                    error: function () {
-                        toastr.error("failed to Save Ad. Please refresh page and try again", "Error!");
-                    }
-                });
+                    });
+                }
+                else {
+                    loginBtn();
+                }
             }
             self.editAd = function (id) {
                 if (data.laptopad.brand != null) {
@@ -610,7 +675,7 @@
                             window.location.href = "/User/Index/"+self.loginUserId;
                         },
                         error: function () {
-                            toastr.error("failed to delete Ad. Please refresh page and try again", "Error!");
+                            swal("Error", "please refresh page and try again", "error");
                         }
                     });
                 });
@@ -635,8 +700,12 @@
             }
             
             self.checkEnter = function (d, e) {
-                if (e.keyCode == 13) {
-                    self.addcomment();
+                if (self.loginUserId) {
+                    if (e.keyCode == 13) {
+                        self.addcomment();
+                    }
+                } else {
+                    loginBtn();
                 }
             }
             //self.commentsHub.client.appendCommentToMe = function (com) {
@@ -649,7 +718,7 @@
                     var com = new comment();
                     com.adId = self.id;
                     com.description (self.newComment());
-                    com.description(com.description().slice(0, -1));
+                    //com.description(com.description().slice(0, -1));
                     if (com.description() != null && com.description().trim() != "") {
                         com.time = new Date($.now());
                         com.description = com.description().slice(0, - 1);
@@ -671,8 +740,7 @@
                         });
                     }
                 } else {
-                    //show modal
-                    toastr.info("You must be login to post comment", "Oops!");
+                    loginBtn();
                 }
             }
             
@@ -706,13 +774,14 @@
                         }
                     })
                 } else {
-                    toastr.info("You must be login to report this ad", "Na na!");
+                    toastr.info("You must be login to report this ad", "Oops!");
+                    loginBtn();
                 }
             }
         }
         function viewModel() {
             var self = this;
-            treeModel();
+           // treeModel();
             AccountViewModel();
             ChatViewModel();
             Report();
@@ -772,103 +841,7 @@
                 });
             }
         };
-        ko.bindingHandlers.slick = (function () {
-            var createImageDiv = function (imgUrl) {
-
-                $a = $('<a>');
-                $a.attr('href', imgUrl);
-                //$a.attr('data-gallery', '#blueimp-gallery');
-                $a.attr('target', '_blank');
-                $div = $('<div>');
-                $image = $('<img>');
-                $image.attr('src', imgUrl);
-                // $div.append($image);
-                $a.append($image);
-                $div.append($a);
-                return $div;
-            };
-
-            // Initializes the carousel
-            var init = function (element, valueAccessor, allBindingsAccessor) {
-                // Clears the div
-                $(element).empty();
-                // Creates the inner divs with images
-                var images = ko.unwrap(valueAccessor());
-                if (images) {
-                    images.forEach(function (imgUrl) {
-                        $(element).append(createImageDiv(imgUrl));
-                    });
-                }
-
-                // try to recover slickOptions
-                var options = allBindingsAccessor().slickOptions || {};
-
-                // Initialize slick on the div, with provided options
-                $(element).slick(options);
-
-                //handle disposal, if KO removes the element
-                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-                    $(element).slick('unslick');
-                });
-
-                // check if there is slickIndex
-                var slickIndex = allBindingsAccessor().slickIndex;
-                if (slickIndex) {
-                    $(element).slick('slickGoTo', ko.unwrap(slickIndex));
-                }
-                // If it's obervable, subscribe to its changes
-                if (ko.isObservable(slickIndex)) {
-                    slickIndex.subscribe(function (idx) {
-                        $(element).slick('slickGoTo', idx);
-                    });
-                }
-                // It if's writable observable, update when slick current index changes
-                if (ko.isWritableObservable(slickIndex)) {
-                    $(element).on('afterChange', function (evt, slick, pos) {
-                        slickIndex(pos);
-                    })
-                }
-
-                // Check if the array of images is an observable array
-                var imagesArray = valueAccessor();
-                // If it's observable array, subscribe to changes
-                if (ko.isObservable(imagesArray) && 'destroyAll' in imagesArray) {
-                    imagesArray.subscribe(function (changes) {
-                        console.log(changes);
-                        if (changes) {
-                            changes.forEach(function (change) {
-                                if (change.status == 'added') {
-                                    // Add new img div at index
-                                    var imgDiv = createImageDiv(change.value)[0];
-                                    var index = change.index;
-                                    var slideCount = $(element).slick('getSlick').slideCount;
-                                    // if the index is out of range (which can happen 
-                                    // with push, and splice), include at the end
-                                    var addBefore = true;
-                                    if (index >= slideCount) {
-                                        index = slideCount - 1;
-                                        addBefore = false;
-                                    }
-                                    $(element).slick('slickAdd', imgDiv, index, addBefore);
-                                } else if (change.status == 'deleted') {
-                                    // delete img div at index
-                                    $(element).slick('slickRemove', change.index);
-                                }
-                            });
-                        }
-                    }, null, 'arrayChange');
-                } // if observable array
-            }
-
-            //update the control when the view model changes
-            var update = function (element, valueAccessor) {
-                var images = ko.unwrap(valueAccessor());
-                // Do something to update the content
-                console.log('update');
-            }
-
-            return { init: init, update: update };
-        })();
+        
 
         $(function () {
             

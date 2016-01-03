@@ -83,12 +83,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                          exectLocation = branch.exectLocation,
                                          contactNo1 = branch.contactNo1,
                                          contactNo2 = branch.contactNo2
-                                     }
+                                     },
+                          tags = company.CompanyTags.Select(x => x.Tag.name)
 
                       };
 
             return Ok(ret);
         }
+        [HttpPost]
         public async Task<IHttpActionResult> HeadOfficeLocation(Company branch, string city, string popularPlace, string exectLocation)
         {
            // var branch = await db.Companies.FindAsync(companyId);
@@ -149,6 +151,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 
                 try
                 {
+                    db.Entry(branch).State = EntityState.Modified;
                     await db.SaveChangesAsync();
                 }
                 catch (Exception e)

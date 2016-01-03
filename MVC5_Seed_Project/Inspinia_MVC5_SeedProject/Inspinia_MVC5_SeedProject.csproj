@@ -218,6 +218,7 @@
     <Compile Include="App_Start\WebApiConfig2.cs" />
     <Compile Include="CodeTemplates\AdminController.cs" />
     <Compile Include="CodeTemplates\AnimalsController.cs" />
+    <Compile Include="CodeTemplates\BusinessController.cs" />
     <Compile Include="CodeTemplates\CompanyController.cs" />
     <Compile Include="CodeTemplates\ElectronicsController.cs" />
     <Compile Include="CodeTemplates\ForumController.cs" />
@@ -227,7 +228,6 @@
     <Compile Include="CodeTemplates\RealEstateController.cs" />
     <Compile Include="CodeTemplates\SharedController.cs" />
     <Compile Include="CodeTemplates\TagController.cs" />
-    <Compile Include="CodeTemplates\TechnologyController.cs" />
     <Compile Include="CodeTemplates\UserController.cs" />
     <Compile Include="CodeTemplates\VehiclesController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -239,6 +239,7 @@
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TempController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -262,9 +263,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AdTag.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AdView.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Answer.cs">
@@ -339,6 +337,9 @@
     <Compile Include="Models\CompanyQuestion.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CompanyTag.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -401,9 +402,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestionTag.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\QuestionView.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestionVote.cs">
@@ -501,6 +499,10 @@
     <Content Include="Content\plugins\images\sprite-skin-simple.png" />
     <Content Include="Content\plugins\images\spritemap%402x.png" />
     <Content Include="Content\plugins\images\spritemap.png" />
+    <Content Include="Content\plugins\ionRangeSlider\ion.rangeSlider.css" />
+    <Content Include="Content\plugins\ionRangeSlider\ion.rangeSlider.skinFlat.css" />
+    <Content Include="Content\plugins\ionRangeSlider\ion.rangeSlider.skinNice.css" />
+    <Content Include="Content\plugins\ionRangeSlider\ion.rangeSlider.skinSimple.css" />
     <Content Include="Content\plugins\jsTree\32px.png" />
     <Content Include="Content\plugins\jsTree\39px.png" />
     <Content Include="Content\plugins\jsTree\40px.png" />
@@ -541,10 +543,13 @@
     <Content Include="Images\others\1f415.png" />
     <Content Include="Images\spinner.gif" />
     <Content Include="Scripts\app\chat.js" />
+    <Content Include="Scripts\app\CreateAlert.js" />
     <Content Include="Scripts\app\dropzone-knockout-binding.js" />
     <Content Include="Scripts\app\inspinia.js" />
     <Content Include="Scripts\app\LaptopTree.js" />
     <Content Include="Scripts\app\MobileTree.js" />
+    <Content Include="Scripts\app\Selectize-Knockout-binding.js" />
+    <Content Include="Scripts\app\slick-knockout-binding.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\bootstrap-theme.css.map" />
@@ -645,6 +650,7 @@
     <Content Include="Scripts\plugins\datapicker\bootstrap-datepicker.js" />
     <Content Include="Scripts\plugins\dropzone\dropzone.js" />
     <Content Include="Scripts\plugins\iCheck\icheck.min.js" />
+    <Content Include="Scripts\plugins\ionRangeSlider\ion.rangeSlider.min.js" />
     <Content Include="Scripts\plugins\jquery-ui\i18n\jquery-ui-i18n.min.js" />
     <Content Include="Scripts\plugins\jquery-ui\i18n\jquery.ui.datepicker-af.min.js" />
     <Content Include="Scripts\plugins\jquery-ui\i18n\jquery.ui.datepicker-ar-DZ.min.js" />
@@ -868,11 +874,6 @@
     <Content Include="Views\Shared\_Layout_Without_Signalr.cshtml" />
     <Content Include="Views\Electronics\CreateMobileAccessoriesAd.cshtml" />
     <Content Include="Views\Electronics\EditMobileAccessoriesAd.cshtml" />
-    <Content Include="Views\Technology\Create.cshtml" />
-    <Content Include="Views\Technology\Delete.cshtml" />
-    <Content Include="Views\Technology\Details.cshtml" />
-    <Content Include="Views\Technology\Edit.cshtml" />
-    <Content Include="Views\Technology\Index.cshtml" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
     <Content Include="Views\MobilesTablets\Create.cshtml" />
     <Content Include="Views\MobilesTablets\Delete.cshtml" />
@@ -897,11 +898,20 @@
     <Content Include="Views\Company\Details.cshtml" />
     <Content Include="Views\Company\Edit.cshtml" />
     <Content Include="Views\Company\Index.cshtml" />
+    <Content Include="Views\Company\Ask.cshtml" />
+    <Content Include="Views\Shared\_CreateAlert.cshtml" />
+    <Content Include="Views\Business\Create.cshtml" />
+    <Content Include="Views\Business\Delete.cshtml" />
+    <Content Include="Views\Business\Details.cshtml" />
+    <Content Include="Views\Business\Edit.cshtml" />
+    <Content Include="Views\Business\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Filters\" />
     <Folder Include="Images\Ads\" />
     <Folder Include="Images\Users\" />
+    <Folder Include="Views\Filter\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

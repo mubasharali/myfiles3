@@ -1,67 +1,61 @@
-﻿<div id="vm1">
-    <button data-toggle="modal" data-target="#report">click kro</button>
-
-    <div class="modal inmodal fade" id="report" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content animated ">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <i class="fa fa-flag modal-icon"></i>
-                    <h4 class="modal-title">Report Ad</h4>
-                    <small class="font-bold">Make sure you have provided right information or you can loose reputation</small>
+﻿
+<span data-toggle="modal" data-target="#setLocation"> Report </span>
+@*<div data-bind="foreach:availableCities">
+    <div data-bind="text:$data"></div>
+</div>*@
+<div class="modal inmodal fade" id="setLocation" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <i class="fa fa-flag modal-icon"></i>
+                <h4 class="modal-title">Location</h4>
+                <small class="font-bold">Make sure you have provided right information or you can loose reputation</small>
+            </div>
+            <div class="modal-body">
+                thsi is aksd<div data-bind="text:text1"></div>
+            </div>
+            @*<div class="modal-body">
+                <div data-bind="foreach:availableCities">
+                    <div data-bind="text:$data"></div>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="col-sm-offset-3 ">
-                            <div class="radio">
-                                <label>
-                                    <input class="radio i-checks" type="radio" data-bind=" checked: selectedVal " name="report" value="duplicate" required /> Ad is duplicate
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="wrong_category" required /> Wrong category
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="Irrelevent_content" required /> Irrelevent content
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="spam" required /> Spam/Offensive content
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal" name="report" value="fraud" required /> Fraud reason
-                                </label>
-                            </div>
-                        </div>
-                        <label>Addational details:</label>
-                        <textarea class="msgTextArea form-control" placeholder="Addational info.." data-bind="jqAutoresize: {}"></textarea>
+                <div class="form-group">
+                    <label class="control-label col-md-2">City</label>
+                    <div class="col-md-10">
+                        <select id="select-city" class="demo-default" name="city" data-bind="options: loadedCities,
+                       value: selectedCity,
+                       optionsCaption: 'Choose City...'"></select>
 
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">I didn't mean to</button>
-                    <button type="button" data-bind="click: function(){ return report()}" class="btn btn-primary">Submit</button>
-                </div>
+                <div data-bind="with:selectedCity">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Famous Place</label>
+                        <div class="col-md-10">
+                            <select id="select-popularPlace" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
+                       value: $parent.selectedPopularPlace,
+                       optionsCaption: 'Choose Famous place...'"></select>
+                        </div>
+                    </div>
+                </div> 
+            </div>*@
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">I didn't mean to</button>
+                @*<span data-bind="text:$parent.id"></span>*@
+                @*<span data-bind="text:loginUserId"></span>*@
+                <button type="button" class="btn btn-primary">Submit</button>
             </div>
-
         </div>
     </div>
 </div>
-<div id="vm2">
-    <div data-bind="text:sample"></div>
-</div>
+
 @section Styles {
     @Styles.Render("~/plugins/slickStyles")
     @Styles.Render("~/plugins/slickThemeStyles")
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/jsTree")
     @Styles.Render("~/plugins/sweetAlertStyles")
+@Styles.Render("~/scripts/selectizeStyles")
 }
 
 
@@ -74,25 +68,170 @@
 @Scripts.Render("~/plugins/jsTree")
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/plugins/sweetAlert")
-<script src="~/Scripts/_Comments.js"></script>
+@Scripts.Render("~/scripts/selectize")
     <script>
-        function VM1() {
+        function SearchingLocation() {
             var self = this;
-            self.selectedVal = "spam";
-            self.report = function () {
-                alert(self.selectedVal);
+            self.text1 = "i am irfan";
+            //self.availableCities = ko.observableArray();
+            //self.loadedCities = ko.observableArray();
+            //self.selectedCity = ko.observable();
+            //self.availablePopularPlaces = ko.observableArray();
+            //self.selectedPopularPlace = ko.observable();
+            //self.loadCities = function () {
+            //    console.log(" i am here" + self.availableCities());
+            //    $.ajax({
+            //        url: '/api/Location/GetCities',
+            //        dataType: "json",
+            //        contentType: "application/json",
+            //        cache: false,
+            //        type: 'GET',
+            //        success: function (data) {
+            //            $.each((data), function (i, item) { self.availableCities.push(item) });
+            //            console.log(self.availableCities());
+            //            //self.loadCities(self.availableCities());
+            //            $('#select-city').selectize({
+            //                //create: true,
+            //                //plugins: ['inputMaxlength'],
+            //                // inputMaxlength: 39,
+            //                sortField: {
+            //                    field: 'text',
+            //                    direction: 'asc'
+            //                },
+
+            //            });
+            //        },
+            //        error: function (jqXHR, status, thrownError) {
+            //            toastr.error("failed to load Cities.Please refresh page and try again", "Error");
+            //        }
+            //    });
+            //}
+            //self.loadPopularPlaces = function () {
+            //    self.availablePopularPlaces.removeAll();
+            //    $.ajax({
+            //        url: '/api/Location/GetPopularPlaces?city=' + self.selectedCity(),
+            //        dataType: "json",
+            //        contentType: "application/json",
+            //        cache: false,
+            //        type: 'GET',
+            //        success: function (data) {
+            //            $.each((data), function (i, item) { self.availablePopularPlaces.push(item) });
+            //            $('#select-popularPlace').selectize({
+            //                //create: true,
+            //                //plugins: ['inputMaxlength'],
+            //                // inputMaxlength: 49,
+            //                sortField: {
+            //                    field: 'text',
+            //                    direction: 'asc'
+            //                },
+            //            });
+            //        },
+            //        error: function (jqXHR, status, thrownError) {
+            //            toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");
+            //        }
+            //    });
+            //}
+            //self.loadCities();
+            //var sub = self.selectedCity.subscribe(function (value) {
+            //    self.loadPopularPlaces();
+            //})
+        }
+        function viewModel() {
+            SearchingLocation();
+            var self = this;
+
+            //self.availableCities = ko.observableArray();
+            //self.loadedCities = ko.observableArray();
+            //self.selectedCity = ko.observable();
+            //self.availablePopularPlaces = ko.observableArray();
+            //self.selectedPopularPlace = ko.observable();
+            //self.loadCities = function () {
+            //    console.log(" i am here" + self.availableCities());
+            //    $.ajax({
+            //        url: '/api/Location/GetCities',
+            //        dataType: "json",
+            //        contentType: "application/json",
+            //        cache: false,
+            //        type: 'GET',
+            //        success: function (data) {
+            //            $.each((data), function (i, item) { self.availableCities.push(item) });
+            //            console.log(self.availableCities());
+            //            //self.loadCities(self.availableCities());
+            //            $('#select-city').selectize({
+            //                //create: true,
+            //                //plugins: ['inputMaxlength'],
+            //               // inputMaxlength: 39,
+            //                sortField: {
+            //                    field: 'text',
+            //                    direction: 'asc'
+            //                },
+
+            //            });
+            //        },
+            //        error: function (jqXHR, status, thrownError) {
+            //            toastr.error("failed to load Cities.Please refresh page and try again", "Error");
+            //        }
+            //    });
+            //}
+            //self.loadPopularPlaces = function () {
+            //    self.availablePopularPlaces.removeAll();
+            //    $.ajax({
+            //        url: '/api/Location/GetPopularPlaces?city=' + self.selectedCity(),
+            //        dataType: "json",
+            //        contentType: "application/json",
+            //        cache: false,
+            //        type: 'GET',
+            //        success: function (data) {
+            //            $.each((data), function (i, item) { self.availablePopularPlaces.push(item) });
+            //            $('#select-popularPlace').selectize({
+            //                //create: true,
+            //                //plugins: ['inputMaxlength'],
+            //               // inputMaxlength: 49,
+            //                sortField: {
+            //                    field: 'text',
+            //                    direction: 'asc'
+            //                },
+            //            });
+            //        },
+            //        error: function (jqXHR, status, thrownError) {
+            //            toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");
+            //        }
+            //    });
+            //}
+            //self.loadCities();
+            //var sub = self.selectedCity.subscribe(function (value) {
+            //    self.loadPopularPlaces();
+            //})
+        }
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
             }
         }
-        function VM2() {
-            var self = this;
-            self.sample = "irfan watoo";
-        }
-        $(function () {
-            ko.applyBindings(new VM1, document.getElementById('vm1'));
-           ko.applyBindings(new VM2, document.getElementById('vm2'));
-           
-        });
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
 
+        $(function () {
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new viewModel);
+            $.connection.hub.start().done();
+        });
     </script>
 }
 

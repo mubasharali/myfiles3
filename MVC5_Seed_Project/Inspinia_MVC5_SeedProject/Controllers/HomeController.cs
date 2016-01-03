@@ -9,7 +9,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class HomeController : Controller
     {
-
+        public Entities db = new Entities();
         public string subdomainName
         {
             get
@@ -39,25 +39,39 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             
         //    return View();
         //}
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-        public string Index()
+        public ActionResult Index()
         {
-            return subdomainName;
+            var mobiles = from ad in db.MobileAds
+                          where ad.Ad.AdImages.Count > 0
+                          orderby ad.Ad.views
+                          select new
+                          {
+                              id = ad.Ad.Id,
+                              title = ad.Ad.title,
+                          };
+            ViewBag.mobiles = mobiles;
+            return View();
         }
+        //public string Index()
+        //{
+        //    if (subdomainName == null)
+        //    {
+        //        return "No subdomain";
+        //    }
+        //    return subdomainName;
+        //}
         [Route("Search/{s?}")]
         public ActionResult search(string s = null)
         {
             ViewBag.search = s;
-            return View("search");
+            return View();
         }
 
         public ActionResult Temp()
         {
             return View();
         }
+        [Route("not-found")]
         public ActionResult notFound()
         {
             return View();
@@ -163,21 +177,43 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return View();
         }
+        [Route("CreateAd")]
         public ActionResult CreateAd(string category,string subcategory)
         {
-            if (category == null || subcategory == null)
+            if (Request.IsAuthenticated)
             {
-                TempData["error"] = "Please mention both category and subcategory";
-                return View();
-            }
-            if (category == "Electronics")
-            {
-                if (subcategory == "Mobiles")
+                if (category == null || subcategory == null)
                 {
-                    return View("/Electronics/Create");
+                    TempData["error"] = "Please mention both category and subcategory";
+                    return View();
+                }
+                if (category == "Electronics")
+                {
+                    if (subcategory == "Mobiles")
+                    {
+                        return View("/Electronics/Create");
+                    }
                 }
             }
-            return View("notFound");
+           // string path = Request.Url.AbsolutePath;
+            if (Request.UrlReferrer == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            try
+            {
+                return View(Request.UrlReferrer.AbsolutePath);
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Index","Home");
+            }
+            //string path = null;
+            //if (Request.UrlReferrer.AbsolutePath != null)
+            //{
+            //    return View(Request.UrlReferrer.AbsolutePath);
+            //}
+                
         }
         public ActionResult About()
         {

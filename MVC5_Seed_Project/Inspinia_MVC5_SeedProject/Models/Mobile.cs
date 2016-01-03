@@ -25,7 +25,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public System.DateTime time { get; set; }
         public string status { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual ICollection<MobileModel> MobileModels { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

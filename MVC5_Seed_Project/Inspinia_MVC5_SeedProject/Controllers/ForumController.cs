@@ -23,22 +23,104 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return db.Questions;
         }
-        public async Task<IHttpActionResult> GetQuestions(string type)
+        public async Task<IHttpActionResult> SearchQuestions(string title, string tags)
         {
-            var ret = from q in db.Questions
-                      where q.category.Equals(type)
-                      select new
-                      {
-                          title = q.title,
-                          id = q.Id,
-                          views = q.QuestionViews.Count,
-                          postedById = q.postedBy,
-                          postedByName = q.AspNetUser.Email,
-                          time = q.time,
-                          answers = q.Answers.Count,
-
-                      };
-            return Ok(ret);
+            if (title != null && tags != null)
+            {
+                var ret = from q in db.Questions
+                          where q.QuestionTags.Any(x => x.Tag.name.Equals(tags))
+                          where q.title.Contains(title)
+                          select new
+                          {
+                              title = q.title,
+                              id = q.Id,
+                              views = q.views,
+                              postedById = q.postedBy,
+                              postedByName = q.AspNetUser.Email,
+                              voteUpCount = q.QuestionVotes.Count(x => x.isUp),
+                              voteDownCount = q.QuestionVotes.Count(x => x.isUp == false),
+                              time = q.time,
+                              answers = q.Answers.Count,
+                              tags = from tag in q.QuestionTags
+                                     select new
+                                     {
+                                         id = tag.tagId,
+                                         name = tag.Tag.name,
+                                     }
+                          };
+                return Ok(ret);
+            }
+            else if (title != null)
+            {
+                var ret = from q in db.Questions
+                          where q.title.Contains(title)
+                          select new
+                          {
+                              title = q.title,
+                              id = q.Id,
+                              views = q.views,
+                              postedById = q.postedBy,
+                              postedByName = q.AspNetUser.Email,
+                              voteUpCount = q.QuestionVotes.Count(x => x.isUp),
+                              voteDownCount = q.QuestionVotes.Count(x => x.isUp == false),
+                              time = q.time,
+                              answers = q.Answers.Count,
+                              tags = from tag in q.QuestionTags
+                                     select new
+                                     {
+                                         id = tag.tagId,
+                                         name = tag.Tag.name,
+                                     }
+                          };
+                return Ok(ret);
+            }
+            else if (tags != null)
+            {
+                var ret = from q in db.Questions
+                          where q.QuestionTags.Any(x => x.Tag.name.Equals(tags))
+                          select new
+                          {
+                              title = q.title,
+                              id = q.Id,
+                              views = q.views,
+                              postedById = q.postedBy,
+                              postedByName = q.AspNetUser.Email,
+                              voteUpCount = q.QuestionVotes.Count(x => x.isUp),
+                              voteDownCount = q.QuestionVotes.Count(x => x.isUp == false),
+                              time = q.time,
+                              answers = q.Answers.Count,
+                              tags = from tag in q.QuestionTags
+                                     select new
+                                     {
+                                         id = tag.tagId,
+                                         name = tag.Tag.name,
+                                     }
+                          };
+                return Ok(ret);
+            }
+            else
+            {
+                var ret = from q in db.Questions
+                          select new
+                          {
+                              title = q.title,
+                              id = q.Id,
+                              views = q.views,
+                              postedById = q.postedBy,
+                              postedByName = q.AspNetUser.Email,
+                              voteUpCount = q.QuestionVotes.Count(x => x.isUp),
+                              voteDownCount = q.QuestionVotes.Count(x => x.isUp == false),
+                              time = q.time,
+                              answers = q.Answers.Count,
+                              tags = from tag in q.QuestionTags
+                                     select new
+                                     {
+                                         id = tag.tagId,
+                                         name = tag.Tag.name,
+                                     }
+                          };
+                return Ok(ret);
+            }
         }
         // GET api/Forum/5
         [ResponseType(typeof(Question))]
@@ -49,7 +131,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 return NotFound();
             }
-            await QuestionViews(id);
+            if (question.views == null)
+            {
+                question.views = 0;
+            }
+            question.views++;
+            db.Entry(question).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+            //await QuestionViews(id);
             string islogin = "";
             if (User.Identity.IsAuthenticated)
             {
@@ -66,7 +155,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           postedByName = q.AspNetUser.Email,
                           time = q.time,
                           islogin = islogin,
-                          views = q.QuestionViews.Count,
+                          views = q.views,
                           reportedCount = q.ReportedQuestions.Count,
                           isReported = q.ReportedQuestions.Any(x=>x.reportedBy == islogin),
                           voteUpCount = q.QuestionVotes.Where(x=>x.isUp == true).Count(),
@@ -135,56 +224,56 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         //               }).FirstOrDefaultAsync();
         //    return Ok(data);
         //}
-        public async Task<IHttpActionResult> QuestionViews(int id)
-        {
-            Question ad = await db.Questions.FindAsync(id);
-            if (ad == null)
-            {
-                return NotFound();
-            }
-            var userId = User.Identity.GetUserId();
-            if (userId != null)
-            {
-                var isAlreadyViewed = ad.QuestionViews.Any(x => x.viewedBy == userId);
-                if (isAlreadyViewed)
-                {
-                    return Ok();
-                }
-                QuestionView rep = new QuestionView();
-                rep.viewedBy = userId;
-                rep.questionId = id;
-                db.QuestionViews.Add(rep);
-                await db.SaveChangesAsync();
+        //public async Task<IHttpActionResult> QuestionViews(int id)
+        //{
+        //    Question ad = await db.Questions.FindAsync(id);
+        //    if (ad == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var userId = User.Identity.GetUserId();
+        //    if (userId != null)
+        //    {
+        //        var isAlreadyViewed = ad.QuestionViews.Any(x => x.viewedBy == userId);
+        //        if (isAlreadyViewed)
+        //        {
+        //            return Ok();
+        //        }
+        //        QuestionView rep = new QuestionView();
+        //        rep.viewedBy = userId;
+        //        rep.questionId = id;
+        //        db.QuestionViews.Add(rep);
+        //        await db.SaveChangesAsync();
 
-                return Ok();
-            }
-            else
-            {
-                string ip = GetIPAddress();
-                var isAlreadyViewed = ad.QuestionViews.Any(x => x.viewedBy == ip);
-                if (isAlreadyViewed)
-                {
-                    return Ok();
-                }
-                QuestionView rep = new QuestionView();
-                rep.viewedBy = ip;
-                rep.questionId = id;
-                //if (rep.viewedBy == "::1")
-                //{
-                //    rep.viewedBy = "abcdef4264";
-                //}
-                db.QuestionViews.Add(rep);
-                try { 
-                await db.SaveChangesAsync();
-                }
-                catch (Exception e)
-                {
-                    string s = e.ToString();
-                }
-                return Ok();
-            }
+        //        return Ok();
+        //    }
+        //    else
+        //    {
+        //        string ip = GetIPAddress();
+        //        var isAlreadyViewed = ad.QuestionViews.Any(x => x.viewedBy == ip);
+        //        if (isAlreadyViewed)
+        //        {
+        //            return Ok();
+        //        }
+        //        QuestionView rep = new QuestionView();
+        //        rep.viewedBy = ip;
+        //        rep.questionId = id;
+        //        //if (rep.viewedBy == "::1")
+        //        //{
+        //        //    rep.viewedBy = "abcdef4264";
+        //        //}
+        //        db.QuestionViews.Add(rep);
+        //        try { 
+        //        await db.SaveChangesAsync();
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            string s = e.ToString();
+        //        }
+        //        return Ok();
+        //    }
 
-        }
+        //}
         // PUT api/Forum/5
         public async Task<IHttpActionResult> PutQuestion(int id, Question question)
         {
@@ -259,7 +348,13 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
 
             db.Answers.Remove(comment);
+            try { 
             await db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString();
+            }
             return Ok(comment);
         }
         [HttpPost]
@@ -442,7 +537,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 var isAlreadyReported = ad.ReportedQuestions.Any(x => x.reportedBy == userId);
                 if (isAlreadyReported)
                 {
-                    return BadRequest("You can report a Question only once.If something really wrong you can contact us");
+                    return BadRequest("You can report a Question only once.If something is really wrong you can contact us");
                 }
                 ReportedQuestion rep = new ReportedQuestion();
                 rep.reportedBy = userId;

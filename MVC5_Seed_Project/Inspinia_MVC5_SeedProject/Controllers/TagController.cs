@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Inspinia_MVC5_SeedProject.Models;
+using System.Data.Entity.Validation;
 using Microsoft.AspNet.Identity;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
@@ -18,55 +19,103 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         private Entities db = new Entities();
 
         // GET api/Tag
-        public async Task<IHttpActionResult> GetTag(int id)
+        public async Task<IHttpActionResult> GetTag(int id= 0,string name = null)
         {
+            if (name != null)
+            {
+                id =await getTagIdByName(name);
+            }
             string loginUserId = "";
             if (User.Identity.IsAuthenticated)
             {
                 loginUserId = User.Identity.GetUserId();
             }
             var ret = await (from tag in db.Tags
-                      where tag.Id.Equals(id)
-                      select new
-                      {
-                          id = tag.Id,
-                          createdById = tag.createdBy,
-                          createdByName = tag.AspNetUser.Email,
-                          updatedById = tag.updatedBy,
-                          updatedByName = tag.AspNetUser1.Email,
-                          updatedTime = tag.updatedTime,
-                          info = tag.info,
-                          time = tag.time,
-                          followers = tag.FollowTags.Count,
-                          isFollowed = tag.FollowTags.Any(x => x.followedBy == loginUserId),
-                          loginUserId = loginUserId,
-                          name = tag.name,
-                          isReported = tag.ReportedTags.Any(x=>x.reportedBy.Equals(loginUserId)),
-                          reportedCount = tag.ReportedTags.Count,
-                          ads = from ad in tag.AdTags
-                                where ad.tagId.Equals(id)
-                                select new
-                                {
-                                    title = ad.Ad.title,
-                                    id = ad.Ad.Id,
-                                    views = ad.Ad.AdViews.Count,
-                                    time = ad.Ad.time,
-                                    wishlist = ad.Ad.SaveAds.Count
-                                },
-                          questions = from question in tag.QuestionTags
-                                      where question.tagId.Equals(id)
-                                      select new
-                                      {
-                                          title = question.Question.title,
-                                          id = question.Question.Id,
-                                          views = question.Question.QuestionViews.Count(),
-                                          answers = question.Question.Answers.Count(),
-                                          questionVoteUpCount = question.Question.QuestionVotes.Count,
-                                          questionVoteDownCount = question.Question.QuestionVotes.Count(x=>x.isUp == false),
-                                          time = question.Question.time,
-                                          //others
-                                      }
-                      }).FirstOrDefaultAsync();
+                             where tag.Id.Equals(id)
+                             select new
+                             {
+                                 id = tag.Id,
+                                 createdById = tag.createdBy,
+                                 createdByName = tag.AspNetUser.Email,
+                                 updatedById = tag.updatedBy,
+                                 updatedByName = tag.AspNetUser1.Email,
+                                 updatedTime = tag.updatedTime,
+                                 updatedInfo = tag.updatedInfo,
+                                 info = tag.info,
+                                 time = tag.time,
+                                 followers = tag.FollowTags.Count,
+                                 isFollowed = tag.FollowTags.Any(x => x.followedBy == loginUserId),
+                                 loginUserId = loginUserId,
+                                 name = tag.name,
+                                 isReported = tag.ReportedTags.Any(x => x.reportedBy.Equals(loginUserId)),
+                                 reportedCount = tag.ReportedTags.Count,
+                                 ads = from ad in tag.AdTags
+                                       where ad.tagId.Equals(id)
+                                       select new
+                                       {
+                                           title = ad.Ad.title,
+                                           postedById = ad.Ad.AspNetUser.Id,
+                                           postedByName = ad.Ad.AspNetUser.Email,
+                                           description = ad.Ad.description,
+                                           id = ad.Ad.Id,
+                                           time = ad.Ad.time,
+                                           islogin = loginUserId,
+                                           isNegotiable = ad.Ad.isnegotiable,
+                                           price = ad.Ad.price,
+                                           reportedCount = ad.Ad.Reporteds.Count,
+                                           isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == loginUserId),
+                                           views = ad.Ad.views,
+                                           condition = ad.Ad.condition,
+
+                                           color = ad.Ad.LaptopAd.color,
+                                           brand = ad.Ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                                           model = ad.Ad.LaptopAd.LaptopModel.model,
+                                           adTags = from tag1 in ad.Ad.AdTags.ToList()
+                                                    select new
+                                                    {
+                                                        id = tag1.tagId,
+                                                        name = tag1.Tag.name,
+                                                    },
+                                           bid = from biding in ad.Ad.Bids.ToList()
+                                                 select new
+                                                 {
+                                                     price = biding.price,
+                                                 },
+                                           adImages = from image in ad.Ad.AdImages.ToList()
+                                                      select new
+                                                      {
+                                                          imageExtension = image.imageExtension,
+                                                      },
+                                           location = new
+                                           {
+                                               cityName = ad.Ad.AdsLocation.City.cityName,
+                                               cityId = ad.Ad.AdsLocation.cityId,
+                                               popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                               popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                           },
+                                       },
+                                 questions = from question in tag.QuestionTags
+                                             where question.tagId.Equals(id)
+                                             select new
+                                             {
+                                                 title = question.Question.title,
+                                                 id = question.Question.Id,
+                                                 views = question.Question.views,
+                                                 answers = question.Question.Answers.Count(),
+                                                 voteUpCount = question.Question.QuestionVotes.Count,
+                                                 voteDownCount = question.Question.QuestionVotes.Count(x => x.isUp == false),
+                                                 time = question.Question.time,
+                                                 postedByName = question.Question.AspNetUser.Email,
+                                                 postedById = question.Question.postedBy,
+                                                 tags = from qtag in question.Question.QuestionTags
+                                                        select new
+                                                        {
+                                                            id = qtag.tagId,
+                                                            name = qtag.Tag.name,
+                                                        }
+                                             }
+
+                             }).FirstOrDefaultAsync();
             return Ok(ret);
         }
         //[HttpPost]
@@ -117,6 +166,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           id = tag.Id,
                           updatedTime = tag.updatedTime,
                           updatedBy = tag.updatedBy,
+                          updatedInfo = tag.updatedInfo,
                       };
             return Ok(ret);
         }
@@ -136,6 +186,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           id = tag.Id,
                           updatedTime = tag.updatedTime,
                           updatedBy = tag.updatedBy,
+                          updatedInfo = tag.updatedInfo,
                       };
             return Ok(ret);
         }
@@ -145,7 +196,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             DateTime days = DateTime.UtcNow - duration;
             var ret = from tag in db.Tags
                       //where tag.time >= days
-                      where tag.ReportedTags.Count > 0
+                      where tag.ReportedTags.Count > 0 || !tag.updatedInfo.Equals(null)
                       orderby tag.ReportedTags.Count
                       select new
                       {
@@ -157,8 +208,18 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           id = tag.Id,
                           updatedTime = tag.updatedTime,
                           updatedBy = tag.updatedBy,
+                          updatedInfo = tag.updatedInfo,
                       };
             return Ok(ret);
+        }
+        public async Task<int> getTagIdByName(string s)
+        {
+            var ret = await db.Tags.FirstOrDefaultAsync(x => x.name.Equals(s));
+            if (ret != null)
+            {
+                return ret.Id;
+            }
+            return -1;
         }
         public async Task<IHttpActionResult> SearchTags(string s)
         {
@@ -170,9 +231,54 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           id = tag.Id,
                           info = tag.info,
                           name = tag.name,
-                          followers = tag.FollowTags.Count()
+                          followers = tag.FollowTags.Count(),
+                          questions = tag.AdTags.Count + tag.QuestionTags.Count ,
                       };
             return Ok(ret);
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> FollowTags(string tags,bool isUnfollowAllowed)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                string[] values = tags.Split(',');
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = values[i].Trim();
+                    string ss = values[i];
+                    if (ss != "")
+                    {
+                        var tagExit = db.Tags.FirstOrDefault(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
+
+                        if (tagExit != null)
+                        {
+                            var alreadyFollowed =await db.FollowTags.FirstOrDefaultAsync(x => x.tagId.Equals(tagExit.Id) && x.followedBy.Equals(userId));
+                            if (alreadyFollowed == null)
+                            {
+                                FollowTag follow = new FollowTag();
+                                follow.followedBy = userId;
+                                follow.tagId = tagExit.Id;
+                                db.FollowTags.Add(follow);
+                                await db.SaveChangesAsync();
+                               // return Ok("Successfully Followed");
+                            }
+                            else
+                            {
+                                if (isUnfollowAllowed)
+                                {
+                                    db.FollowTags.Remove(alreadyFollowed);
+                                    await db.SaveChangesAsync();
+                                   // return Ok("Successfully Unfollowed");
+                                }
+                            }
+                        }
+                        //return BadRequest("Tag does not exit");
+                    }
+                }
+                return Ok("Done");
+            }
+            return BadRequest("Not login");
         }
         public async Task<IHttpActionResult> Follow(int tagId)
         {
@@ -222,7 +328,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 var isAlreadyReported = ad.ReportedTags.Any(x => x.reportedBy == userId);
                 if (isAlreadyReported)
                 {
-                    return BadRequest("You can report a Tag only once.If something really wrong you can contact us");
+                    return BadRequest("You can report a Tag only once.If something is really wrong you can contact us");
                 }
                 ReportedTag rep = new  ReportedTag();
                 rep.reportedBy = userId;
@@ -249,45 +355,74 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     return BadRequest();
                 }
-                comment.updatedBy = null;
-                comment.updatedTime = null;
-                comment.updatedTime = DateTime.UtcNow;
-                comment.updatedBy = User.Identity.GetUserId();
-                db.Entry(comment).State = EntityState.Modified;
-
+                var data1 =await db.Tags.FindAsync(comment.Id);
+                if (data1.updatedInfo != null)
+                {
+                    return BadRequest("Info is pending Approval");
+                }
+                int len = comment.info.Length;
+                data1.updatedInfo = comment.info;
+                data1.updatedTime = DateTime.UtcNow;
+                data1.updatedBy = User.Identity.GetUserId();
+                //if (isAdmin)
+                //{
+                //    db.Entry(comment).State = EntityState.Modified;
+                //    await db.SaveChangesAsync();
+                //    return Ok("Done");
+                //}
                 try
                 {
-                    await db.SaveChangesAsync();
+                    db.Entry(data1).State = EntityState.Modified;
                 }
                 catch (Exception e)
                 {
                     string s = e.ToString();
-                    return BadRequest("Exception");
+                }
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    string s = e.ToString();
+                    List<string> errorMessages = new List<string>();
+                    foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
+                    {
+                        string entityName = validationResult.Entry.Entity.GetType().Name;
+                        foreach (DbValidationError error in validationResult.ValidationErrors)
+                        {
+                            errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                        }
+                    }
                 }
                 var data = new
                 {
-                    updatedById = comment.updatedBy,
-                    updatedByName =db.AspNetUsers.Find(comment.updatedBy).Email,
-                    updatedTime = comment.updatedTime
+                    updatedById = data1.updatedBy,
+                    updatedByName = db.AspNetUsers.Find(data1.updatedBy).Email,
+                    updatedTime = data1.updatedTime,
+                    updatedInfo = data1.updatedInfo,
                 };
                 return Ok(data);
             }
             return BadRequest("Not login");
         }
-        // GET api/Tag/5
-        //[ResponseType(typeof(Tag))]
-        //public async Task<IHttpActionResult> GetTag(int id)
-        //{
-        //    Tag tag = await db.Tags.FindAsync(id);
-        //    if (tag == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        public async Task<IHttpActionResult> updateTagAdmin(Tag comment)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                var data1 = await db.Tags.FindAsync(comment.Id);
 
-        //    return Ok(tag);
-        //}
-
-        // PUT api/Tag/5
+                db.Entry(comment).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return Ok("Done");
+            }
+            return BadRequest();
+        }
         public async Task<IHttpActionResult> PutTag(int id, Tag tag)
         {
             if (!ModelState.IsValid)
@@ -321,21 +456,22 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST api/Tag
-        [ResponseType(typeof(Tag))]
-        public async Task<IHttpActionResult> PostTag(Tag tag)
+        public async Task<IHttpActionResult> ApproveTag(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Tags.Add(tag);
+            var data = await db.Tags.FindAsync(id);
+            data.info = data.updatedInfo;
+            data.updatedInfo = null;
             await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = tag.Id }, tag);
+            return Ok("Done");
         }
-
+        public async Task<IHttpActionResult> RejectTag(int id)
+        {
+            var data = await db.Tags.FindAsync(id);
+           
+            data.updatedInfo = null;
+            await db.SaveChangesAsync();
+            return Ok("Done");
+        }
 
         protected override void Dispose(bool disposing)
         {

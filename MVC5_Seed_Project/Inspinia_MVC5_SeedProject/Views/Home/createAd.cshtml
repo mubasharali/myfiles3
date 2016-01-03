@@ -66,7 +66,8 @@ create electronic ad:
     </div>
    
 </div>
-
+@Html.Partial("/Views/Shared/_Chat.cshtml")
+@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
     @section Styles {
 
         @Styles.Render("~/plugins/toastrStyles")
@@ -76,9 +77,15 @@ create electronic ad:
     @Scripts.Render("~/bundles/jqueryui")
         @Scripts.Render("~/plugins/knockout")
         @Scripts.Render("~/plugins/toastr")
+<script src="~/Scripts/jquery.signalR-2.2.0.js"> </script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/UserLogin.js"></script>
         @*@Scripts.Render("~/plugins/rickshaw")*@
         <script type="text/javascript">
-                function ViewModel() {
+            function ViewModel() {
+                ChatViewModel();
+                AccountViewModel();
                     var self = this;
                     self.categorySelected = ko.observable(false);
                     self.category = ko.observable();
@@ -113,12 +120,7 @@ create electronic ad:
                     $(".sortable-list").sortable({
                         connectWith: ".connectList"
                     }).disableSelection();
-                    
-               
-                    var error = $("#tempdataError").val();
-                    if (error != null) {
-                        toastr.info(error, "Oops!");
-                    }
+                    $.connection.hub.start().done();
 
                     //rickshaw
                     //$('.animation_select').click(function () {

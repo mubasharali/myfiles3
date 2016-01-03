@@ -7,6 +7,9 @@
 
     <ul class="nav navbar-top-links navbar-right">
         <li class="hidden-xs">
+            <a href="/CreateAd">Create Ad</a>
+        </li>
+        <li class="hidden-xs">
             <a href="/User/Index/@User.Identity.GetUserId()">Hello @Html.Action("GetUserEmail", "Shared")</a>
             @*@Html.ActionLink("Hello " + Html.Action("GetUserEmail","Shared") + "!", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })*@
         </li>
@@ -23,7 +26,10 @@
 else
 {
     <ul class="nav navbar-top-links navbar-right">
-        <li data-bind="click:loginBtn"><a> Login &nbsp; Register</a></li>
+        <li class="hidden-xs">
+            <a data-bind="click:loginBtn">Create Ad</a>
+        </li>
+        <li class="hidden-xs" data-bind="click:loginBtn"><a> Login &nbsp; Register</a></li>
         @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
         <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
         <li class="pull-right">

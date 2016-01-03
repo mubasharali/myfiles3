@@ -20,7 +20,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public System.DateTime time { get; set; }
         public string description { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual CompanyAnswer CompanyAnswer { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

@@ -26,8 +26,8 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string addedBy { get; set; }
         public string status { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual Mobile Mobile { get; set; }
         public virtual ICollection<MobileAd> MobileAds { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

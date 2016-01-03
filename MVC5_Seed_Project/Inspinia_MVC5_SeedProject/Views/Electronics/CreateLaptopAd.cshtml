@@ -4,7 +4,7 @@
     Layout = "/Views/Shared/_Layout_Without_Signalr.cshtml";
     ViewBag.Title = "Create";
 }
-<div class="row wrapper border-bottom white-bg page-heading">
+@*<div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
         <h2>Create</h2>
         <ol class="breadcrumb">
@@ -21,7 +21,7 @@
             @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
         </div>
     </div>
-</div>
+</div>*@
 
 <div>@Model.title</div>
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -32,14 +32,21 @@
                     <h5>Create Ad</h5>
                 </div>
                 <div class="ibox-content">
+                    <form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" action="@Url.Action("FileUploadHandler", "Electronics")" method="post" enctype="multipart/form-data">
+                        <h2>Add Images</h2>
+                        <div id="dropzonePreview" class="dz-default dz-message">
+                        </div>
+                    </form>
+                    <br />
                     @using (Html.BeginForm("CreateLaptopAd", "Electronics", FormMethod.Post, new { id = "form" }))
                     {
                         @Html.AntiForgeryToken()
 
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true)
+                            <input type="hidden" name="files" id="fileNames" />
                             <div class="form-group">
-                                <label class="control-label col-md-2">Select Brand</label>
+                                <label class="control-label col-md-2">Select Brand<span class="req">*</span></label>
                                 <div class="col-md-10">
                                     <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
                        value: selectedBrand,
@@ -48,7 +55,7 @@
                             </div>
                             <div data-bind="with:selectedBrand">
                                 <div class="form-group">
-                                    <label class="control-label col-md-2">Select Model</label>
+                                    <label class="control-label col-md-2">Select Model<span class="req">*</span></label>
                                     <div class="col-md-10">
                                         <select id="select-model" required class="demo-default" name="model" data-bind="options: $parent.availableModels,
                        value: $parent.selectedModel,
@@ -60,7 +67,7 @@
 
 
                             <div class="form-group">
-                                <label class="control-label col-md-2">Color</label>
+                                <label class="control-label col-md-2">Color<span class="req">*</span></label>
                                 <div class="col-md-10">
                                     <select id="select-color" name="color" required placeholder="choose color">
                                         <option value="">Choose color</option>
@@ -80,7 +87,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                    <input type="submit" data-bind="click:submitClicked" value="Create" class="btn btn-primary" />
                                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
                                 </div>
                             </div>
@@ -98,99 +105,14 @@
 
 
 @section Styles {
-<style type="text/css">
-    .selectize-control.repositories .selectize-dropdown > div {
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-    }
 
-    .selectize-control.repositories .selectize-dropdown .by {
-        font-size: 11px;
-        opacity: 0.8;
-    }
-
-        .selectize-control.repositories .selectize-dropdown .by::before {
-            content: 'by ';
-        }
-
-    .selectize-control.repositories .selectize-dropdown .name {
-        font-weight: bold;
-        margin-right: 5px;
-    }
-
-    .selectize-control.repositories .selectize-dropdown .title {
-        display: block;
-    }
-
-    .selectize-control.repositories .selectize-dropdown .description {
-        font-size: 12px;
-        display: block;
-        color: #a0a0a0;
-        white-space: nowrap;
-        width: 100%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-
-    .selectize-control.repositories .selectize-dropdown .meta {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        font-size: 10px;
-    }
-
-        .selectize-control.repositories .selectize-dropdown .meta li {
-            margin: 0;
-            padding: 0;
-            display: inline;
-            margin-right: 10px;
-        }
-
-            .selectize-control.repositories .selectize-dropdown .meta li span {
-                font-weight: bold;
-            }
-
-    .selectize-control.repositories::before {
-        -moz-transition: opacity 0.2s;
-        -webkit-transition: opacity 0.2s;
-        transition: opacity 0.2s;
-        content: ' ';
-        z-index: 2;
-        position: absolute;
-        display: block;
-        top: 12px;
-        right: 34px;
-        width: 16px;
-        height: 16px;
-        background: url(/Images/spinner.gif);
-        background-size: 16px 16px;
-        opacity: 0;
-    }
-
-    .selectize-control.repositories.loading::before {
-        opacity: 0.4;
-    }
-
-    .icon {
-        width: 16px;
-        height: 16px;
-        display: inline-block;
-        vertical-align: middle;
-        background-size: 16px 16px;
-        margin: 0 3px 0 0;
-    }
-
-        .icon.fork {
-            background-image: url(images/repo-fork.png);
-        }
-
-        .icon.source {
-            background-image: url(images/repo-source.png);
-        }
-</style>
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
     @Styles.Render("~/scripts/selectizeStyles")
+@Styles.Render("~/bundles/tagStyles")
+@Styles.Render("~/bundles/myStyles")
+@Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
 }
 
 @section Scripts {
@@ -202,10 +124,18 @@
     @Scripts.Render("~/scripts/selectize")
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/autosize")
+@Scripts.Render("~/plugins/dropZone")
+<script src="~/Scripts/app/dropzone-knockout-binding.js"> </script>
     <script type="text/javascript">
 
     function ViewModel() {
         var self = this;
+        self.submitClicked = function () {
+            console.log(fileList);
+            $("input[id*='fileNames']").val(JSON.stringify(fileList));
+            window.btn_clicked = true;
+            $("#form").submit();
+        }
         self.typeValue = ko.observable("sell");
         self.conditionChecked = ko.observable(false);
         self.selectedVal = ko.observable();
@@ -393,7 +323,7 @@
                         '<span class="description">' + escape(item.info) + '</span>' +
                         '<ul class="meta">' +
                             '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
-                            '<li class="forks"><span>' + escape(item.questions) + '</span> questions asked</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times Used</li>' +
                         '</ul>' +
                     '</div>';
                 }

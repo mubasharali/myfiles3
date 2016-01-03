@@ -25,8 +25,8 @@ namespace Inspinia_MVC5_SeedProject.Models
         public System.DateTime time { get; set; }
         public string description { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual CompanyQuestion CompanyQuestion { get; set; }
         public virtual ICollection<CompanyAnswerReply> CompanyAnswerReplies { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

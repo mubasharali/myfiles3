@@ -2,19 +2,6 @@
     ViewBag.Title = "Details";
 }
 <input type="hidden" id="companyId" value="@ViewBag.companyId" />
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-sm-4">
-        <h2>Details</h2>
-        <ol class="breadcrumb">
-            <li>
-                @Html.ActionLink("List", "Index")
-            </li>
-            <li class="active">
-                <strong>Details</strong>
-            </li>
-        </ol>
-    </div>
-</div>
 
 
 <style>
@@ -34,7 +21,7 @@
 
     <div class="row">
 
-        <div class="col-sm-9" id="adsBinding">
+        <div class="col-md-9" id="adsBinding">
             <div data-bind="visible:error()" class="alert alert-success">
                 <strong>Error! </strong><span data-bind="text:error"></span>
             </div>
@@ -43,233 +30,244 @@
                     <strong>Pending admin approval! </strong><span data-bind="text:statusError"></span>
                 </div>
                 <div class="row">
-                    <div class="col-sm-9">
+                    <div class="ibox product-detail">
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="">
+                                    <div class="pull-left" style="margin-right:12px">
+                                        <img src="~/Images/profile.jpg" />
+                                    </div>
+                                    <div data-bind="visible:!isPageEditing()">
+                                        <span data-bind="visible:loginUserId == createdBy">
+                                            <a data-bind="click: function(){return deletePage(id)}" class="btn btn-white btn-xs pull-right "> Delete</a><a data-bind="click: function(){return editPage(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                        </span>
+                                        <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
+                                        <p data-bind="text:shortAbout"></p>
+                                    </div>
+                                    <div data-bind="visible:isPageEditing()">
+                                        <h2 class="font-bold m-b-xs">Company Name:<input type="text" placeholder="Company Name" class="form-control" data-bind="value:title" required /> </h2>
+                                        one line description:<input type="text" class="form-control" placeholder="One line description of company" data-bind="value:shortAbout" required />
+                                        Details:<textarea class="msgTextArea form-control" placeholder="Add company Details.." data-bind="jqAutoresize: {},value:longAbout"></textarea>
+                                        <button class="btn btn-primary" data-bind="click:updatePage">Update</button>
+                                    </div>
+                                    <div>
+                                        <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
+                                            <li><a target="_blank" data-bind="attr:{href:'/Tag/' + $data}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:$data"></span> </a></li>
+                                        </ul>
+                                    </div>
+                                    <br /><br />
 
-                        <div data-bind="visible:!isPageEditing()">
-                            <span data-bind="visible:loginUserId == createdBy">
-                                <a data-bind="click: function(){return deletePage(id)}" class="btn btn-white btn-xs pull-right "> Delete</a><a data-bind="click: function(){return editPage(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
-                            </span>
-                            <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
-                            <p data-bind="text:shortAbout"></p>
-                        </div>
-                        <div data-bind="visible:isPageEditing()">
-                            <h2 class="font-bold m-b-xs">Company Name:<input type="text" placeholder="Company Name" class="form-control" data-bind="value:title" required /> </h2>
-                            one line description:<input type="text" class="form-control" placeholder="One line description of company" data-bind="value:shortAbout" required />
-                            Details:<textarea class="msgTextArea form-control" placeholder="Add company Details.." data-bind="jqAutoresize: {},value:longAbout"></textarea>
-                            <button class="btn btn-primary" data-bind="click:updatePage">Update</button>
-                        </div>
-                        <div class="">
+                                </div>
+                                <div class="">
+                                    Overview discussion Gallery
+                                </div>
+                            </div>
 
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <img src="~/Images/profile.jpg" />
-                    </div>
-                </div>
-                <div class="">
-                    Overview discussion Gallery
-                </div>
-                <div class="row">
-                    <div class="col-sm-9">
-                        <h2>Location</h2>
-                        <h3>HeadOffice</h3>
-                        <div data-bind="visible:!isMainBranchEditing()">
-                            <span data-bind="visible:loginUserId == createdBy">
-                                <a data-bind="click: function(){return editLocation(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
-                            </span>
-                            <span data-bind="if:exectLocation">
-                                <span data-bind="text:exectLocation"></span>,
-                            </span>
-                            <span data-bind="if:popularPlace">
-                                <span data-bind="text:popularPlace"></span>,
-                            </span>
-                            <span data-bind="text:cityName"></span>
-                            <h4>Contact Info</h4>
-                            <div data-bind="if:contactNo1">
-                                <span data-bind="text:contactNo1"></span>
-                            </div>
-                            <div data-bind="if:contactNo2">
-                                <span data-bind="text:contactNo2"></span>
-                            </div>
-                            <h5>Established since <span data-bind="text:friendlySince"></span></h5>
-                        </div>
-                        <div data-bind="visible:isMainBranchEditing()">
-                            <div class="form-group">
-                                <label class="control-label col-md-2">City</label>
-                                <div class="col-md-10">
-                                    <select id="select-city" class="demo-default" name="city" data-bind="options: availableCities,
-                       value: cityName,
+                            <div class="row">
+                                <div class="col-sm-9">
+                                    <h2>Location</h2>
+                                    <h3>HeadOffice</h3>
+                                    <div data-bind="visible:!isMainBranchEditing()">
+                                        <span data-bind="visible:loginUserId == createdBy">
+                                            <a data-bind="click: function(){return editLocation(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                        </span>
+                                        <span data-bind="if:exectLocation">
+                                            <span data-bind="text:exectLocation"></span>,
+                                        </span>
+                                        <span data-bind="if:popularPlace">
+                                            <span data-bind="text:popularPlace"></span>,
+                                        </span>
+                                        <span data-bind="text:cityName"></span>
+                                        <h4>Contact Info</h4>
+                                        <div data-bind="if:contactNo1">
+                                            <span data-bind="text:contactNo1"></span>
+                                        </div>
+                                        <div data-bind="if:contactNo2">
+                                            <span data-bind="text:contactNo2"></span>
+                                        </div>
+                                        <h5>Established since <span data-bind="text:friendlySince"></span></h5>
+                                    </div>
+                                    <div data-bind="visible:isMainBranchEditing()">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">City</label>
+                                            <div class="col-md-10">
+                                                <select id="select-city" class="demo-default" name="city" data-bind="options: availableCities,
+                       value: selectedcityName,
                        optionsCaption: 'Choose City...'"></select>
-                                </div>
-                            </div>
-                            <div data-bind="with:cityName">
-                                <div class="form-group">
-                                    <label class="control-label col-md-2">Famous Place</label>
-                                    <div class="col-md-10">
-                                        <select id="select-popularPlace" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
-                       value: $parent.popularPlace,
+                                            </div>
+                                        </div>
+                                        <div data-bind="with:selectedcityName">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Famous Place</label>
+                                                <div class="col-md-10">
+                                                    <select id="select-popularPlace" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
+                       value: $parent.selectedpopularPlace,
                        optionsCaption: 'Choose Famous place...'"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div data-bind="with:selectedpopularPlace">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Exect location</label>
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" data-bind="value:$parent.exectLocation" name="exectLocation" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h4>Contact Inof</h4>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Contact No 1</label>
+                                            <div class="col-md-10">
+                                                <input type="text" class="form-control" data-bind="value:contactNo1" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Contact No 2</label>
+                                            <div class="col-md-10">
+                                                <input type="text" class="form-control" data-bind="value:contactNo2" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Company is established since</label>
+                                            <div class="col-md-10">
+                                                <input type="date" class="form-control" data-bind="value:since" />
+                                            </div>
+                                        </div>
+                                        <button data-bind="click:updateMainBranchLocation">Submit</button>
                                     </div>
-                                </div>
-                            </div>
-                            <div data-bind="with:popularPlace">
-                                <div class="form-group">
-                                    <label class="control-label col-md-2">Exect location</label>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" data-bind="value:$parent.exectLocation" name="exectLocation" />
-                                    </div>
-                                </div>
-                            </div>
-                            <h4>Contact Inof</h4>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Contact No 1</label>
-                                <div class="col-md-10">
-                                    <input type="text" class="form-control" data-bind="value:contactNo1" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Contact No 2</label>
-                                <div class="col-md-10">
-                                    <input type="text" class="form-control" data-bind="value:contactNo2" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Branch is established since</label><div data-bind="text:since"></div>
-                                <div class="col-md-10">
-                                    <input type="date" class="form-control" data-bind="value:since" />
-                                </div>
-                            </div>
-                            <button data-bind="click:updateMainBranchLocation">Submit</button>
-                        </div>
-                        @*<p data-bind="text:longAbout"></p>
+                                    @*<p data-bind="text:longAbout"></p>
                             facebook link, tw , website*@
-                        
-                        <span data-bind="visible:loginUserId == createdBy">
-                            <a data-bind="click: function(){return addNewBranch()}" class="btn btn-white btn-xs pull-right"> Add new Branch</a>
-                        </span>
-                        <h3>Comany Network</h3>
-                        <div data-bind="visible:isAddingNewBranch()">
-                            <h4>Location</h4>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">City</label>
-                                <div class="col-md-10">
-                                    <select id="select-city1" class="demo-default" name="city" data-bind="options: availableCities,
+
+                                    <span data-bind="visible:loginUserId == createdBy">
+                                        <a data-bind="click: function(){return addNewBranch()}" class="btn btn-white btn-xs pull-right"> Add new Branch</a>
+                                    </span>
+                                    <h3>Comany Network</h3>
+                                    <div data-bind="visible:isAddingNewBranch()">
+                                        <h4>Location</h4>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">City</label>
+                                            <div class="col-md-10">
+                                                <select id="select-city1" class="demo-default" name="city" data-bind="options: availableCities,
                        value: BcityName,
                        optionsCaption: 'Choose City...'"></select>
 
-                                </div>
-                            </div>
-                            <div data-bind="with:BcityName">
-                                <div class="form-group">
-                                    <label class="control-label col-md-2">Famous Place</label>
-                                    <div class="col-md-10">
-                                        <select id="select-popularPlace1" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
+                                            </div>
+                                        </div>
+                                        <div data-bind="with:BcityName">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Famous Place</label>
+                                                <div class="col-md-10">
+                                                    <select id="select-popularPlace1" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
                        value: $parent.BpopularPlace,
                        optionsCaption: 'Choose Famous place...'"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div data-bind="with:BpopularPlace">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Exect location</label>
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" data-bind="value:$parent.BexectLocation" />
+                                                </div>
+                                            </div>
+                                        </div><hr /><br />
+                                        <h4>Contact Info</h4>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Contact No 1</label>
+                                            <div class="col-md-10">
+                                                <input type="text" class="form-control" data-bind="value:BcontactNo1" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Contact No 2</label>
+                                            <div class="col-md-10">
+                                                <input type="text" class="form-control" data-bind="value:BcontactNo2" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Branch is established since</label>
+                                            <div class="col-md-10">
+                                                <input type="date" class="form-control" data-bind="value:Bsince" name="since" />
+                                            </div>
+                                        </div>
+                                        <button data-bind="click:saveNewBranch">Submit</button>
                                     </div>
-                                </div>
-                            </div>
-                            <div data-bind="with:BpopularPlace">
-                                <div class="form-group">
-                                    <label class="control-label col-md-2">Exect location</label>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" data-bind="value:$parent.BexectLocation" />
-                                    </div>
-                                </div>
-                            </div>
-                            <h4>Contact Inof</h4>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Contact No 1</label>
-                                <div class="col-md-10">
-                                    <input type="text" class="form-control" data-bind="value:BcontactNo1" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Contact No 2</label>
-                                <div class="col-md-10">
-                                    <input type="text" class="form-control" data-bind="value:BcontactNo2" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Branch is established since</label> 
-                                <div class="col-md-10">
-                                    <input type="date" class="form-control" data-bind="value:Bsince" name="since" />
-                                </div>
-                            </div>
-                            <button data-bind="click:saveNewBranch">Submit</button>
-                        </div>
-                        <div data-bind="foreach:showBranches">
-                            <div data-bind="visible:!isBranchEditing()">
-                                <span data-bind="visible:$parent.loginUserId == $parent.createdBy">
-                                    <a data-bind="click: function(){return editBranch()}" class="btn btn-white btn-xs pull-right"> Edit</a>
-                                    <a data-bind="click:  $parent.deleteBranch" class="btn btn-white btn-xs pull-right"> Delete</a>
-                                </span>
-                                <h4>Location</h4>
-                                <span data-bind="if:exectLocation">
-                                    <span data-bind="text:exectLocation"></span>,
-                                </span>
-                                <span data-bind="if:popularPlace1">
-                                    <span data-bind="text:popularPlace1"></span>,
-                                </span>
-                                <span data-bind="text:city"></span>
-                                <h4>Contact Info</h4>
-                                <div data-bind="if:contactNo1">
-                                    <span data-bind="text:contactNo1"></span>
-                                </div>
-                                <div data-bind="if:contactNo2">
-                                    <span data-bind="text:contactNo2"></span>
-                                </div>
-                                <h5>Established since <span data-bind="text:friendlySince"></span></h5>
-                            </div>
-                            <div data-bind="visible:isBranchEditing()">
-                                <h4>Location</h4>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2">City</label>
-                                    <div class="col-md-10">
-                                        <select id="select-city2" class="demo-default" data-bind="options: availableCities,
+                                    <div data-bind="foreach:showBranches">
+                                        <div data-bind="visible:!isBranchEditing()">
+                                            <hr />
+                                            <span data-bind="visible:$parent.loginUserId == $parent.createdBy">
+                                                <a data-bind="click: function(){return editBranch()}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                                <a data-bind="click:  $parent.deleteBranch" class="btn btn-white btn-xs pull-right"> Delete</a>
+                                            </span>
+                                            <h4>Location</h4>
+                                            <span data-bind="if:exectLocation">
+                                                <span data-bind="text:exectLocation"></span>,
+                                            </span>
+                                            <span data-bind="if:popularPlace1">
+                                                <span data-bind="text:popularPlace1"></span>,
+                                            </span>
+                                            <span data-bind="text:city"></span>
+                                            <h4>Contact Info</h4>
+                                            <div data-bind="if:contactNo1">
+                                                <span data-bind="text:contactNo1"></span>
+                                            </div>
+                                            <div data-bind="if:contactNo2">
+                                                <span data-bind="text:contactNo2"></span>
+                                            </div>
+                                            <h5>Established since <span data-bind="text:friendlySince"></span></h5>
+                                        </div>
+                                        <div data-bind="visible:isBranchEditing()">
+                                            <h4>Location</h4>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">City</label>
+                                                <div class="col-md-10">
+                                                    <select id="select-city2" class="demo-default" data-bind="options: availableCities,
                        value: selectedCity,
                        optionsCaption: 'Choose City...'"></select>
 
-                                    </div>
-                                </div>
-                                <div data-bind="with:selectedCity">
-                                    <div class="form-group">
-                                        <label class="control-label col-md-2">Famous Place</label>
-                                        <div class="col-md-10">
-                                            <select id="select-popularPlace2" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
+                                                </div>
+                                            </div>
+                                            <div data-bind="with:selectedCity">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-2">Famous Place</label>
+                                                    <div class="col-md-10">
+                                                        <select id="select-popularPlace2" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
                        value: $parent.selectedPP,
                        optionsCaption: 'Choose Famous place...'"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div data-bind="with:selectedPP">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-2">Exect location</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control" data-bind="value:$parent.exectLocation" /> @*doubt here*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h4>Contact Inof</h4>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Contact No 1</label>
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" data-bind="value:contactNo1" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Contact No 2</label>
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" data-bind="value:contactNo2" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Branch is established since</label><div data-bind="text:since"></div>
+                                                <div class="col-md-10">
+                                                    <input type="date" class="form-control" data-bind="value:since" />
+                                                </div>
+                                            </div>
+                                            <button data-bind="click:function(){return updateBranch($data,$parent.id)}">Submit</button>
                                         </div>
                                     </div>
                                 </div>
-                                <div data-bind="with:selectedPP">
-                                    <div class="form-group">
-                                        <label class="control-label col-md-2">Exect location</label>
-                                        <div class="col-md-10">
-                                            <input type="text" class="form-control" data-bind="value:$parent.exectLocation"/> @*doubt here*@
-                                        </div>
-                                    </div>
-                                </div>
-                                <h4>Contact Inof</h4>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2">Contact No 1</label>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" data-bind="value:contactNo1" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2">Contact No 2</label>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" data-bind="value:contactNo2" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2">Branch is established since</label><div data-bind="text:since"></div>
-                                    <div class="col-md-10">
-                                        <input type="date" class="form-control" data-bind="value:since" />
-                                    </div>
-                                </div>
-                                <button data-bind="click:function(){return updateBranch($data,$parent.id)}">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -322,16 +320,20 @@
             self.cityName = ko.observable(data.cityName);
             self.city = ko.observable(data.cityName);
             self.popularPlaceId = ko.observable(data.popularPlaceId);
-            self.popularPlace = ko.observable(data.popularPlace);
-            self.popularPlace1 = ko.observable(data.popularPlace);
+            self.popularPlace = ko.observable(data.popularPlace || "");
+            self.popularPlace1 = ko.observable(data.popularPlace || "");
             self.exectLocation =ko.observable( data.exectLocation || "");
-            self.since = ko.observable(data.since);
+            self.since = ko.observable(new Date(data.since));
+            //console.log(data.since);
+            console.log(self.since());
+            self.since(self.since().toString('dd-MM-yy'));
+            console.log(self.since());
             self.friendlySince = ko.observable(getTimeAgo(data.since || ""));
             self.contactNo1 = ko.observable(data.contactNo1);
             self.contactNo2 = ko.observable(data.contactNo2);
 
-            self.selectedCity = ko.observable(data.cityName);
-            self.selectedPP = ko.observable(data.popularPlace);
+            self.selectedCity = ko.observable(data.cityName || "");
+            self.selectedPP = ko.observable(data.popularPlace || "");
 
             self.isBranchEditing = ko.observable(false);
             self.editBranch = function () {
@@ -444,6 +446,12 @@
             self.imageIndex = ko.observable(1);
 
             data = data || {};
+
+            self.showTags = ko.observableArray();
+            if (data.tags) {
+                $.each((data.tags), function (i, item) { self.showTags.push(item) });
+            }
+
             self.title = ko.observable( data.title);
             self.shortAbout = ko.observable(data.shortAbout);
             self.longAbout = ko.observable(data.longAbout);
@@ -468,15 +476,16 @@
             
             self.cityId = data.cityId;
             self.cityName = ko.observable(data.cityName);
-            console.log(self.cityName());
+            self.selectedcityName = ko.observable();
             self.popularPlaceId = data.popularPlaceId;
-            self.popularPlace = ko.observable( data.popularPlaceName);
+            self.popularPlace = ko.observable(data.popularPlaceName || "");
+            self.selectedpopularPlace = ko.observable("");
             self.exectLocation =ko.observable( data.exectLocation || "");
             self.category = data.category;
             self.showBranches = ko.observableArray(); // for branches
             
-            self.BcityName = ko.observable();
-            self.BpopularPlace = ko.observable();
+            self.BcityName = ko.observable("");
+            self.BpopularPlace = ko.observable("");
             self.BexectLocation = ko.observable('');
             self.Bsince = ko.observable();
             self.BcontactNo1 = ko.observable();
@@ -493,6 +502,18 @@
                 self.friendlySince(getTimeAgo(self.since()));
             });
             self.saveNewBranch = function (branch) {
+                if (!branch.BcityName()) {
+                    toastr.info("Please enter city name");
+                    return;
+                }
+                if (!branch.BpopularPlace()) {
+                    toastr.info("Please enter a famous place near this branch");
+                    return;
+                }
+                if (!(branch.BcontactNo1() && branch.BcontactNo2())) {
+                    toastr.info("Please provide atleast one contact number");
+                    return;
+                }
                 var aaaa = {companyId:self.id, since:branch.Bsince(), contactNo1: branch.BcontactNo1(), contactNo2: branch.BcontactNo2() };
                 $.ajax({
                     url: '/api/Company/OfficeBranch?city=' + branch.BcityName() + '&popularPlace=' + branch.BpopularPlace() + '&exectLocation=' + branch.BexectLocation() + '&SaveOrUpdate=Save',
@@ -567,6 +588,8 @@
                     success: function (data) {
                         self.availableCities.removeAll();
                         $.each((data), function (i, item) { self.availableCities.push(item) });
+                        self.selectedcityName(self.cityName());
+                        console.log(self.selectedcityName());
                         $('#select-city').selectize({
                             create: true,
                             plugins: ['inputMaxlength'],
@@ -586,13 +609,14 @@
             self.loadPopularPlaces = function () {
                 self.availablePopularPlaces.removeAll();
                 $.ajax({
-                    url: '/api/Location/GetPopularPlaces?city=' + self.cityName(),
+                    url: '/api/Location/GetPopularPlaces?city=' + self.selectedcityName(),
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
                     type: 'GET',
                     success: function (data) {
                         $.each((data), function (i, item) { self.availablePopularPlaces.push(item) });
+                        self.selectedpopularPlace(self.popularPlace());
                         $('#select-popularPlace').selectize({
                             create: true,
                             plugins: ['inputMaxlength'],
@@ -660,7 +684,7 @@
                 });
             }
             
-            var sub = self.cityName.subscribe(function (value) {
+            var sub = self.selectedcityName.subscribe(function (value) {
                 self.loadPopularPlaces();
             });
             var sub = self.BcityName.subscribe(function (value) {
@@ -706,14 +730,16 @@
             }
             self.updateMainBranchLocation = function (page) {
                 $.ajax({
-                    url: '/api/Company/HeadOfficeLocation?city=' + self.cityName() + '&popularPlace=' + self.popularPlace() + '&exectLocation=' + self.exectLocation(),
+                    url: '/api/Company/HeadOfficeLocation?city=' + self.selectedcityName() + '&popularPlace=' + self.selectedpopularPlace() + '&exectLocation=' + self.exectLocation(),
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
                     type: 'POST',
-                    data:  {bbbS : page},
+                    data:  ko.toJSON(page),
                     success: function (data) {
                         self.isMainBranchEditing(false);
+                        self.cityName(self.selectedcityName());
+                        self.popularPlace(self.selectedpopularPlace());
                     },
                     error: function () {
                         toastr.error("failed to update Info", "Error!");

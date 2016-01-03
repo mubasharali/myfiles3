@@ -30,10 +30,10 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string cityName { get; set; }
     
         public virtual ICollection<AdsLocation> AdsLocations { get; set; }
-        public virtual AspNetUser AspNetUser { get; set; }
-        public virtual AspNetUser AspNetUser1 { get; set; }
         public virtual ICollection<popularPlace> popularPlaces { get; set; }
         public virtual ICollection<Company> Companies { get; set; }
         public virtual ICollection<CompanyOffice> CompanyOffices { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
+        public virtual AspNetUser AspNetUser1 { get; set; }
     }
 }

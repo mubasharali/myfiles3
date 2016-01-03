@@ -21,6 +21,7 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.FollowCompanies = new HashSet<FollowCompany>();
             this.CompanyImages = new HashSet<CompanyImage>();
             this.Reviews = new HashSet<Review>();
+            this.CompanyTags = new HashSet<CompanyTag>();
         }
     
         public int Id { get; set; }
@@ -44,7 +45,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public Nullable<int> popularPlaceId { get; set; }
         public string exectLocation { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual City City { get; set; }
         public virtual popularPlace popularPlace { get; set; }
         public virtual ICollection<CompanyOffice> CompanyOffices { get; set; }
@@ -52,5 +52,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<FollowCompany> FollowCompanies { get; set; }
         public virtual ICollection<CompanyImage> CompanyImages { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
+        public virtual ICollection<CompanyTag> CompanyTags { get; set; }
     }
 }
