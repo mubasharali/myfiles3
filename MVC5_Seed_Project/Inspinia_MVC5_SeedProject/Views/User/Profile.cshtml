@@ -313,8 +313,11 @@
             self.phoneNumber = ko.observable( data.phoneNumber);
             self.hideEmail = ko.observable(data.hideEmail);
             self.hidePhoneNumber = ko.observable(data.hidePhoneNumber);
-            self.dpExtension = data.dpExtension;
-            self.dpLink = '/Images/Users/p' + self.id + self.dpExtension;
+            self.dpLink = '/Images/Users/default.jpg';
+            if (data.dpExtension) {
+                self.dpLink = '/Images/Users/p' + self.id + data.dpExtension;
+            }
+            
             self.about = ko.observable(data.about);
             self.reputation = ko.observable(data.reputation);
             self.since = data.since;

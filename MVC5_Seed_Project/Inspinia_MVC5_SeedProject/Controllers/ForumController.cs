@@ -23,12 +23,88 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return db.Questions;
         }
-        public async Task<IHttpActionResult> SearchQuestions(string title, string tags)
+        public async Task<IHttpActionResult> SearchQuestions(string title, string tags, string category)
         {
-            if (title != null && tags != null)
+            
+            if (title != null && tags != null && category != null)
             {
                 var ret = from q in db.Questions
                           where q.QuestionTags.Any(x => x.Tag.name.Equals(tags))
+                          where q.title.Contains(title)
+                          where q.category.Equals(category)
+                          select new
+                          {
+                              title = q.title,
+                              id = q.Id,
+                              views = q.views,
+                              postedById = q.postedBy,
+                              postedByName = q.AspNetUser.Email,
+                              voteUpCount = q.QuestionVotes.Count(x => x.isUp),
+                              voteDownCount = q.QuestionVotes.Count(x => x.isUp == false),
+                              time = q.time,
+                              answers = q.Answers.Count,
+                              tags = from tag in q.QuestionTags
+                                     select new
+                                     {
+                                         id = tag.tagId,
+                                         name = tag.Tag.name,
+                                     }
+                          };
+                return Ok(ret);
+            }
+            else if (title != null && category != null)
+            {
+                var ret = from q in db.Questions
+                          where q.title.Contains(title)
+                          where q.category.Equals(category)
+                          select new
+                          {
+                              title = q.title,
+                              id = q.Id,
+                              views = q.views,
+                              postedById = q.postedBy,
+                              postedByName = q.AspNetUser.Email,
+                              voteUpCount = q.QuestionVotes.Count(x => x.isUp),
+                              voteDownCount = q.QuestionVotes.Count(x => x.isUp == false),
+                              time = q.time,
+                              answers = q.Answers.Count,
+                              tags = from tag in q.QuestionTags
+                                     select new
+                                     {
+                                         id = tag.tagId,
+                                         name = tag.Tag.name,
+                                     }
+                          };
+                return Ok(ret);
+            }
+            else if (tags != null && category != null)
+            {
+                var ret = from q in db.Questions
+                          where q.QuestionTags.Any(x => x.Tag.name.Equals(tags))
+                          where q.category.Equals(category)
+                          select new
+                          {
+                              title = q.title,
+                              id = q.Id,
+                              views = q.views,
+                              postedById = q.postedBy,
+                              postedByName = q.AspNetUser.Email,
+                              voteUpCount = q.QuestionVotes.Count(x => x.isUp),
+                              voteDownCount = q.QuestionVotes.Count(x => x.isUp == false),
+                              time = q.time,
+                              answers = q.Answers.Count,
+                              tags = from tag in q.QuestionTags
+                                     select new
+                                     {
+                                         id = tag.tagId,
+                                         name = tag.Tag.name,
+                                     }
+                          };
+                return Ok(ret);
+            }
+            else if (title != null )
+            {
+                var ret = from q in db.Questions
                           where q.title.Contains(title)
                           select new
                           {
@@ -50,10 +126,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           };
                 return Ok(ret);
             }
-            else if (title != null)
+            else if (category != null)
             {
                 var ret = from q in db.Questions
-                          where q.title.Contains(title)
+                          where q.category.Equals(category)
                           select new
                           {
                               title = q.title,

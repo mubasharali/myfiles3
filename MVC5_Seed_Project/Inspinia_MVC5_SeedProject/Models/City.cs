@@ -18,8 +18,8 @@ namespace Inspinia_MVC5_SeedProject.Models
         {
             this.AdsLocations = new HashSet<AdsLocation>();
             this.popularPlaces = new HashSet<popularPlace>();
-            this.Companies = new HashSet<Company>();
             this.CompanyOffices = new HashSet<CompanyOffice>();
+            this.Companies = new HashSet<Company>();
         }
     
         public int Id { get; set; }
@@ -31,9 +31,9 @@ namespace Inspinia_MVC5_SeedProject.Models
     
         public virtual ICollection<AdsLocation> AdsLocations { get; set; }
         public virtual ICollection<popularPlace> popularPlaces { get; set; }
-        public virtual ICollection<Company> Companies { get; set; }
         public virtual ICollection<CompanyOffice> CompanyOffices { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual AspNetUser AspNetUser1 { get; set; }
+        public virtual ICollection<Company> Companies { get; set; }
     }
 }

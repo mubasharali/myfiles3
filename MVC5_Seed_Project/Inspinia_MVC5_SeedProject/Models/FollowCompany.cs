@@ -18,7 +18,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public int companyId { get; set; }
         public string followedBy { get; set; }
     
-        public virtual Company Company { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

@@ -31,18 +31,33 @@
                 <form id="form" method="post" action="/Forum/create">
                     <div class="row">
                         <div class="form-group">
-                            <label class="control-label col-md-2">Choose category</label>
+                            <label class="control-label col-md-2">Select category</label>
                             <div class="col-md-10">
+                                @*<select id="select-category" required class="demo-default" name="category" @*data-bind="options: availableCategories,
+                       optionsCaption: 'Select cateogry...'">
+                                    <option value="Electronics">Electronics</option>
+                                </select>*@
                                 <select class="form-control" name="category" form="form">
-                                    <option>Electronics</option>
-                                    <option>Vehicles</option>
-                                    <option>RealEstate</option>
-                                    <option>Jobs</option>
+                                    <option value="Mobiles">Mobiles & Tablets</option>
+                                    <option value="Laptops">Laptops & Computers</option>
+                                    <option value="Electronics">Electronics & Appliances</option>
+                                    <option value="Study">Study</option>
+                                    <option value="RealEstate">Real Estate</option>
+                                    <option value="Services">Services</option>
+                                    <option value="Animals">Animals</option>
+                                    <option value="Jobs">Jobs</option>
+                                    <option value="Vehicles">Vehicles</option>
+                                    <option value="Community">Community</option>
+                                    <option value="LifeStyle">LifeStyle</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Matrimonal">Matrimonal</option>
+                                    <option value="Business">Business</option>
+                                    <option value="About Website">About Website</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    @*<div class="row">
                         <div class="form-group">
                             <label class="control-label col-md-2">Choose subcategory</label>
                             <div class="col-md-10">
@@ -54,7 +69,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     @*<div class="row">
                             <div class="form-group">
                                 <label class="control-label col-md-2">Choose low category</label>
@@ -215,7 +230,16 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            
+            //$('#select-category').selectize({
+            //    inputMaxlength: 29,
+            //    options: ['Electronics'],
+            //    sortField: {
+            //        field: 'text',
+            //        direction: 'asc'
+            //    },
+
+            //});
+
             $('#select-tag').selectize({
                 valueField: 'name',
                 labelField: 'name',
@@ -232,7 +256,7 @@
                             '<span class="description">' + escape(item.info) + '</span>' +
                             '<ul class="meta">' +
                                 '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
-                                '<li class="forks"><span>' + escape(item.questions) + '</span> questions asked</li>' +
+                                '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
                             '</ul>' +
                         '</div>';
                     }
@@ -252,6 +276,7 @@
                 }
             });
             
+            //$('#select-category').selectize.addOption({ text: 'electronics' });
             $("#form").validate({
                 rules: {
                     title: {

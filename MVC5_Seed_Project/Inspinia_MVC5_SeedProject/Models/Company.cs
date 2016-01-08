@@ -16,12 +16,13 @@ namespace Inspinia_MVC5_SeedProject.Models
     {
         public Company()
         {
+            this.CompanyAds = new HashSet<CompanyAd>();
             this.CompanyOffices = new HashSet<CompanyOffice>();
             this.CompanyQuestions = new HashSet<CompanyQuestion>();
+            this.CompanyTags = new HashSet<CompanyTag>();
             this.FollowCompanies = new HashSet<FollowCompany>();
             this.CompanyImages = new HashSet<CompanyImage>();
             this.Reviews = new HashSet<Review>();
-            this.CompanyTags = new HashSet<CompanyTag>();
         }
     
         public int Id { get; set; }
@@ -44,15 +45,17 @@ namespace Inspinia_MVC5_SeedProject.Models
         public Nullable<int> cityId { get; set; }
         public Nullable<int> popularPlaceId { get; set; }
         public string exectLocation { get; set; }
+        public string rating { get; set; }
     
+        public virtual AspNetUser AspNetUser { get; set; }
         public virtual City City { get; set; }
         public virtual popularPlace popularPlace { get; set; }
+        public virtual ICollection<CompanyAd> CompanyAds { get; set; }
         public virtual ICollection<CompanyOffice> CompanyOffices { get; set; }
         public virtual ICollection<CompanyQuestion> CompanyQuestions { get; set; }
+        public virtual ICollection<CompanyTag> CompanyTags { get; set; }
         public virtual ICollection<FollowCompany> FollowCompanies { get; set; }
         public virtual ICollection<CompanyImage> CompanyImages { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
-        public virtual AspNetUser AspNetUser { get; set; }
-        public virtual ICollection<CompanyTag> CompanyTags { get; set; }
     }
 }

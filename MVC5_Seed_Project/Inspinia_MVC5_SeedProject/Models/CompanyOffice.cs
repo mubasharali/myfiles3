@@ -24,7 +24,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public string exectLocation { get; set; }
     
         public virtual City City { get; set; }
-        public virtual Company Company { get; set; }
         public virtual popularPlace popularPlace { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

@@ -29,7 +29,8 @@ namespace Inspinia_MVC5_SeedProject.Models
         public System.DateTime time { get; set; }
         public string title { get; set; }
         public string description { get; set; }
-        public Nullable<int> views { get; set; }
+        public int views { get; set; }
+        public string category { get; set; }
     
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<FollowQuestion> FollowQuestions { get; set; }

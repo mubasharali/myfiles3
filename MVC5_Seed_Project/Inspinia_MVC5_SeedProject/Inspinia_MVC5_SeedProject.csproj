@@ -322,6 +322,9 @@
     <Compile Include="Models\Company.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CompanyAd.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CompanyAnswer.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -509,6 +512,8 @@
     <Content Include="Content\plugins\jsTree\style.css" />
     <Content Include="Content\plugins\jsTree\style.min.css" />
     <Content Include="Content\plugins\jsTree\throbber.gif" />
+    <Content Include="Content\plugins\ladda\ladda-themeless.min.css" />
+    <Content Include="Content\plugins\ladda\ladda.min.css" />
     <Content Include="Content\plugins\slick\ajax-loader.gif" />
     <Content Include="Content\plugins\slick\fonts\slick.svg" />
     <Content Include="Content\plugins\slick\slick-theme.css" />
@@ -541,7 +546,9 @@
     <Content Include="Images\landing\laptop.png" />
     <Content Include="Images\landing\perspective.png" />
     <Content Include="Images\others\1f415.png" />
+    <Content Include="Images\others\stars.png" />
     <Content Include="Images\spinner.gif" />
+    <Content Include="Images\Users\default.jpg" />
     <Content Include="Scripts\app\chat.js" />
     <Content Include="Scripts\app\CreateAlert.js" />
     <Content Include="Scripts\app\dropzone-knockout-binding.js" />
@@ -648,6 +655,7 @@
     <Content Include="Scripts\plugins\chosen\chosen.jquery.js" />
     <Content Include="Scripts\plugins\cropper\cropper.min.js" />
     <Content Include="Scripts\plugins\datapicker\bootstrap-datepicker.js" />
+    <Content Include="Scripts\plugins\dotdotdot\jquery.dotdotdot.min.js" />
     <Content Include="Scripts\plugins\dropzone\dropzone.js" />
     <Content Include="Scripts\plugins\iCheck\icheck.min.js" />
     <Content Include="Scripts\plugins\ionRangeSlider\ion.rangeSlider.min.js" />
@@ -744,6 +752,9 @@
     <Content Include="Scripts\plugins\jquery-ui\jquery-ui.min.css" />
     <Content Include="Scripts\plugins\jquery-ui\jquery-ui.min.js" />
     <Content Include="Scripts\plugins\jsTree\jstree.min.js" />
+    <Content Include="Scripts\plugins\ladda\ladda.jquery.min.js" />
+    <Content Include="Scripts\plugins\ladda\ladda.min.js" />
+    <Content Include="Scripts\plugins\ladda\spin.min.js" />
     <Content Include="Scripts\plugins\metisMenu\jquery.metisMenu.js" />
     <Content Include="Scripts\plugins\metisMenu\metisMenu.js" />
     <Content Include="Scripts\plugins\pace\pace.min.js" />
@@ -905,12 +916,12 @@
     <Content Include="Views\Business\Details.cshtml" />
     <Content Include="Views\Business\Edit.cshtml" />
     <Content Include="Views\Business\Index.cshtml" />
+    <Content Include="Views\Home\NewTemp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Images\Ads\" />
-    <Folder Include="Images\Users\" />
     <Folder Include="Views\Filter\" />
   </ItemGroup>
   <ItemGroup>

@@ -67,7 +67,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<SaveAd> SaveAds { get; set; }
-        public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<CompanyAnswerReply> CompanyAnswerReplies { get; set; }
         public virtual DbSet<CompanyImage> CompanyImages { get; set; }
         public virtual DbSet<CompanyOffice> CompanyOffices { get; set; }
@@ -79,5 +78,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<CompanyAnswer> CompanyAnswers { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<CompanyTag> CompanyTags { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
+        public virtual DbSet<CompanyAd> CompanyAds { get; set; }
     }
 }

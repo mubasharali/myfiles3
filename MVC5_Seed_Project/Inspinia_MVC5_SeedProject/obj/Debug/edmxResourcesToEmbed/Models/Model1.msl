@@ -332,6 +332,7 @@
     <EntitySetMapping Name="Questions">
       <EntityTypeMapping TypeName="Model.Question">
         <MappingFragment StoreEntitySet="Question">
+          <ScalarProperty Name="category" ColumnName="category" />
           <ScalarProperty Name="views" ColumnName="views" />
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="title" ColumnName="title" />
@@ -442,32 +443,6 @@
           <ScalarProperty Name="time" ColumnName="time" />
           <ScalarProperty Name="savedBy" ColumnName="savedBy" />
           <ScalarProperty Name="adId" ColumnName="adId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Companies">
-      <EntityTypeMapping TypeName="Model.Company">
-        <MappingFragment StoreEntitySet="Company">
-          <ScalarProperty Name="exectLocation" ColumnName="exectLocation" />
-          <ScalarProperty Name="popularPlaceId" ColumnName="popularPlaceId" />
-          <ScalarProperty Name="cityId" ColumnName="cityId" />
-          <ScalarProperty Name="status" ColumnName="status" />
-          <ScalarProperty Name="time" ColumnName="time" />
-          <ScalarProperty Name="createdBy" ColumnName="createdBy" />
-          <ScalarProperty Name="category" ColumnName="category" />
-          <ScalarProperty Name="logoextension" ColumnName="logoextension" />
-          <ScalarProperty Name="owner" ColumnName="owner" />
-          <ScalarProperty Name="websitelink" ColumnName="websitelink" />
-          <ScalarProperty Name="twlink" ColumnName="twlink" />
-          <ScalarProperty Name="fblink" ColumnName="fblink" />
-          <ScalarProperty Name="email" ColumnName="email" />
-          <ScalarProperty Name="contactNo2" ColumnName="contactNo2" />
-          <ScalarProperty Name="contactNo1" ColumnName="contactNo1" />
-          <ScalarProperty Name="since" ColumnName="since" />
-          <ScalarProperty Name="longabout" ColumnName="longabout" />
-          <ScalarProperty Name="shortabout" ColumnName="shortabout" />
-          <ScalarProperty Name="title" ColumnName="title" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -614,6 +589,45 @@
           <ScalarProperty Name="tagId" ColumnName="tagId" />
           <ScalarProperty Name="companyId" ColumnName="companyId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Companies">
+      <EntityTypeMapping TypeName="Model.Company">
+        <MappingFragment StoreEntitySet="Company">
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="exectLocation" ColumnName="exectLocation" />
+          <ScalarProperty Name="popularPlaceId" ColumnName="popularPlaceId" />
+          <ScalarProperty Name="cityId" ColumnName="cityId" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="logoextension" ColumnName="logoextension" />
+          <ScalarProperty Name="owner" ColumnName="owner" />
+          <ScalarProperty Name="websitelink" ColumnName="websitelink" />
+          <ScalarProperty Name="twlink" ColumnName="twlink" />
+          <ScalarProperty Name="fblink" ColumnName="fblink" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="contactNo2" ColumnName="contactNo2" />
+          <ScalarProperty Name="contactNo1" ColumnName="contactNo1" />
+          <ScalarProperty Name="since" ColumnName="since" />
+          <ScalarProperty Name="longabout" ColumnName="longabout" />
+          <ScalarProperty Name="shortabout" ColumnName="shortabout" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CompanyAds">
+      <EntityTypeMapping TypeName="Model.CompanyAd">
+        <MappingFragment StoreEntitySet="CompanyAd">
+          <ScalarProperty Name="ratedBy" ColumnName="ratedBy" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="companyId" ColumnName="companyId" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

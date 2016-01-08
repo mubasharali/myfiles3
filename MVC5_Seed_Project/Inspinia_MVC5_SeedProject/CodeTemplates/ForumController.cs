@@ -44,7 +44,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create([Bind(Include="Id,category,subCategory,postedBy,time,title,description")] Question question)
+        public ActionResult Create([Bind(Include="Id,category,postedBy,time,title,description")] Question question)
         {
             if (User.Identity.IsAuthenticated) { 
             if (ModelState.IsValid)

@@ -50,5 +50,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<Reported> Reporteds { get; set; }
         public virtual ICollection<SaveAd> SaveAds { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
+        public virtual CompanyAd CompanyAd { get; set; }
     }
 }

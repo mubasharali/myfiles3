@@ -169,6 +169,19 @@ namespace Inspinia_MVC5_SeedProject
             // wizardSteps 
             bundles.Add(new ScriptBundle("~/plugins/wizardSteps").Include(
                       "~/Scripts/plugins/staps/jquery.steps.min.js"));
+
+            // Ladda buttons Styless
+            bundles.Add(new StyleBundle("~/plugins/laddaStyles").Include(
+                      "~/Content/plugins/ladda/ladda-themeless.min.css"));
+
+            // Ladda buttons
+            bundles.Add(new ScriptBundle("~/plugins/ladda").Include(
+                      "~/Scripts/plugins/ladda/spin.min.js",
+                      "~/Scripts/plugins/ladda/ladda.min.js",
+                      "~/Scripts/plugins/ladda/ladda.jquery.min.js"));
+            // Dotdotdot buttons
+            bundles.Add(new ScriptBundle("~/plugins/truncate").Include(
+                      "~/Scripts/plugins/dotdotdot/jquery.dotdotdot.min.js"));
         }
     }
 }

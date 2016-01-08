@@ -279,6 +279,18 @@
           <Property Name="cityId" Type="int" />
           <Property Name="popularPlaceId" Type="int" />
           <Property Name="exectLocation" Type="nvarchar" MaxLength="100" />
+          <Property Name="rating" Type="char" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="CompanyAd">
+          <Key>
+            <PropertyRef Name="adId" />
+          </Key>
+          <Property Name="adId" Type="int" Nullable="false" />
+          <Property Name="companyId" Type="int" Nullable="false" />
+          <Property Name="rating" Type="char" MaxLength="1" />
+          <Property Name="description" Type="nvarchar" MaxLength="500" />
+          <Property Name="time" Type="datetime" />
+          <Property Name="ratedBy" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="CompanyAnswer">
           <Key>
@@ -455,7 +467,8 @@
           <Property Name="time" Type="datetime" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="1000" Nullable="false" />
-          <Property Name="views" Type="int" />
+          <Property Name="views" Type="int" Nullable="false" />
+          <Property Name="category" Type="nvarchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="QuestionReply">
           <Key>
@@ -655,7 +668,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Answer_ToTable">
-          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="Question" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Question">
@@ -667,9 +682,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Answer_ToTable_1">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
@@ -707,7 +720,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AnswerReplyVote_ToTable">
-          <End Role="AnswerReply" Type="Self.AnswerReply" Multiplicity="1" />
+          <End Role="AnswerReply" Type="Self.AnswerReply" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="AnswerReplyVote" Type="Self.AnswerReplyVote" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AnswerReply">
@@ -719,9 +734,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AnswerReplyVote_ToTable_1">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="AnswerReplyVote" Type="Self.AnswerReplyVote" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
@@ -1015,6 +1028,44 @@
             </Principal>
             <Dependent Role="Company">
               <PropertyRef Name="popularPlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyAd_ToTable">
+          <End Role="Ad" Type="Self.Ad" Multiplicity="1" />
+          <End Role="CompanyAd" Type="Self.CompanyAd" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyAd">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyAd_ToTable_1">
+          <End Role="Company" Type="Self.Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CompanyAd" Type="Self.CompanyAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyAd">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyAd_ToTable_2">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="CompanyAd" Type="Self.CompanyAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyAd">
+              <PropertyRef Name="ratedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1545,7 +1596,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_QuestionReply_ToTable">
-          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="Question" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="QuestionReply" Type="Self.QuestionReply" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Question">
@@ -1557,9 +1610,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_QuestionReply_ToTable_1">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="QuestionReply" Type="Self.QuestionReply" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
@@ -1625,7 +1676,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_QuestionVote_ToTable">
-          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="Question" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="QuestionVote" Type="Self.QuestionVote" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Question">
@@ -1637,9 +1690,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_QuestionVote_ToTable_1">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="QuestionVote" Type="Self.QuestionVote" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
@@ -1846,6 +1897,7 @@
           <EntitySet Name="CommentReplyVote" EntityType="Self.CommentReplyVote" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommentVote" EntityType="Self.CommentVote" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompanyAd" EntityType="Self.CompanyAd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyAnswer" EntityType="Self.CompanyAnswer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyAnswerReply" EntityType="Self.CompanyAnswerReply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyImage" EntityType="Self.CompanyImage" Schema="dbo" store:Type="Tables" />
@@ -2011,6 +2063,18 @@
           <AssociationSet Name="FK_Company_ToTable_2" Association="Self.FK_Company_ToTable_2">
             <End Role="popularPlace" EntitySet="popularPlace" />
             <End Role="Company" EntitySet="Company" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyAd_ToTable" Association="Self.FK_CompanyAd_ToTable">
+            <End Role="Ad" EntitySet="Ad" />
+            <End Role="CompanyAd" EntitySet="CompanyAd" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyAd_ToTable_1" Association="Self.FK_CompanyAd_ToTable_1">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="CompanyAd" EntitySet="CompanyAd" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyAd_ToTable_2" Association="Self.FK_CompanyAd_ToTable_2">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="CompanyAd" EntitySet="CompanyAd" />
           </AssociationSet>
           <AssociationSet Name="FK_CompanyAnswer_ToTable" Association="Self.FK_CompanyAnswer_ToTable">
             <End Role="CompanyQuestion" EntitySet="CompanyQuestion" />
@@ -2448,15 +2512,6 @@
             <End Role="Ad" EntitySet="Ads" />
             <End Role="SaveAd" EntitySet="SaveAds" />
           </AssociationSet>
-          <EntitySet Name="Companies" EntityType="Model.Company" />
-          <AssociationSet Name="FK_Company_ToTable_1" Association="Model.FK_Company_ToTable_1">
-            <End Role="City" EntitySet="Cities" />
-            <End Role="Company" EntitySet="Companies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Company_ToTable_2" Association="Model.FK_Company_ToTable_2">
-            <End Role="popularPlace" EntitySet="popularPlaces" />
-            <End Role="Company" EntitySet="Companies" />
-          </AssociationSet>
           <EntitySet Name="CompanyAnswerReplies" EntityType="Model.CompanyAnswerReply" />
           <EntitySet Name="CompanyImages" EntityType="Model.CompanyImage" />
           <EntitySet Name="CompanyOffices" EntityType="Model.CompanyOffice" />
@@ -2468,26 +2523,6 @@
           <AssociationSet Name="FK_CompanyOffice_ToTable_1" Association="Model.FK_CompanyOffice_ToTable_1">
             <End Role="City" EntitySet="Cities" />
             <End Role="CompanyOffice" EntitySet="CompanyOffices" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CompanyOffice_ToTable" Association="Model.FK_CompanyOffice_ToTable">
-            <End Role="Company" EntitySet="Companies" />
-            <End Role="CompanyOffice" EntitySet="CompanyOffices" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CompanyQuestion_ToTable" Association="Model.FK_CompanyQuestion_ToTable">
-            <End Role="Company" EntitySet="Companies" />
-            <End Role="CompanyQuestion" EntitySet="CompanyQuestions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FollowCompany_ToTable" Association="Model.FK_FollowCompany_ToTable">
-            <End Role="Company" EntitySet="Companies" />
-            <End Role="FollowCompany" EntitySet="FollowCompanies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Image_ToTable" Association="Model.FK_Image_ToTable">
-            <End Role="Company" EntitySet="Companies" />
-            <End Role="CompanyImage" EntitySet="CompanyImages" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Review_ToTable" Association="Model.FK_Review_ToTable">
-            <End Role="Company" EntitySet="Companies" />
-            <End Role="Review" EntitySet="Reviews" />
           </AssociationSet>
           <AssociationSet Name="FK_CompanyOffice_ToTable_2" Association="Model.FK_CompanyOffice_ToTable_2">
             <End Role="popularPlace" EntitySet="popularPlaces" />
@@ -2574,10 +2609,6 @@
           <AssociationSet Name="FK_CommentVote_ToTable_1" Association="Model.FK_CommentVote_ToTable_1">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="CommentVote" EntitySet="CommentVotes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Company_ToTable" Association="Model.FK_Company_ToTable">
-            <End Role="AspNetUser" EntitySet="AspNetUsers" />
-            <End Role="Company" EntitySet="Companies" />
           </AssociationSet>
           <AssociationSet Name="FK_CompanyAnswer_ToTable_1" Association="Model.FK_CompanyAnswer_ToTable_1">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
@@ -2688,13 +2719,59 @@
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
           <EntitySet Name="CompanyTags" EntityType="Model.CompanyTag" />
+          <AssociationSet Name="FK_CompanyTag_ToTable_1" Association="Model.FK_CompanyTag_ToTable_1">
+            <End Role="Tag" EntitySet="Tags" />
+            <End Role="CompanyTag" EntitySet="CompanyTags" />
+          </AssociationSet>
+          <EntitySet Name="Companies" EntityType="Model.Company" />
+          <EntitySet Name="CompanyAds" EntityType="Model.CompanyAd" />
+          <AssociationSet Name="FK_CompanyAd_ToTable" Association="Model.FK_CompanyAd_ToTable">
+            <End Role="Ad" EntitySet="Ads" />
+            <End Role="CompanyAd" EntitySet="CompanyAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Company_ToTable" Association="Model.FK_Company_ToTable">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="Company" EntitySet="Companies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyAd_ToTable_2" Association="Model.FK_CompanyAd_ToTable_2">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="CompanyAd" EntitySet="CompanyAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Company_ToTable_1" Association="Model.FK_Company_ToTable_1">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="Company" EntitySet="Companies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Company_ToTable_2" Association="Model.FK_Company_ToTable_2">
+            <End Role="popularPlace" EntitySet="popularPlaces" />
+            <End Role="Company" EntitySet="Companies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyAd_ToTable_1" Association="Model.FK_CompanyAd_ToTable_1">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="CompanyAd" EntitySet="CompanyAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyOffice_ToTable" Association="Model.FK_CompanyOffice_ToTable">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="CompanyOffice" EntitySet="CompanyOffices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyQuestion_ToTable" Association="Model.FK_CompanyQuestion_ToTable">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="CompanyQuestion" EntitySet="CompanyQuestions" />
+          </AssociationSet>
           <AssociationSet Name="FK_CompanyTag_ToTable" Association="Model.FK_CompanyTag_ToTable">
             <End Role="Company" EntitySet="Companies" />
             <End Role="CompanyTag" EntitySet="CompanyTags" />
           </AssociationSet>
-          <AssociationSet Name="FK_CompanyTag_ToTable_1" Association="Model.FK_CompanyTag_ToTable_1">
-            <End Role="Tag" EntitySet="Tags" />
-            <End Role="CompanyTag" EntitySet="CompanyTags" />
+          <AssociationSet Name="FK_FollowCompany_ToTable" Association="Model.FK_FollowCompany_ToTable">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="FollowCompany" EntitySet="FollowCompanies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Image_ToTable" Association="Model.FK_Image_ToTable">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="CompanyImage" EntitySet="CompanyImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Review_ToTable" Association="Model.FK_Review_ToTable">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Review" EntitySet="Reviews" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -2735,6 +2812,7 @@
           <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="views" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Ad_ToTable" FromRole="Ad" ToRole="AspNetUser" />
+          <NavigationProperty Name="CompanyAd" Relationship="Model.FK_CompanyAd_ToTable" FromRole="Ad" ToRole="CompanyAd" />
         </EntityType>
         <EntityType Name="AdImage">
           <Key>
@@ -3069,10 +3147,10 @@
           <Property Name="updatedOn" Type="DateTime" Precision="3" />
           <NavigationProperty Name="AdsLocations" Relationship="Model.FK_AdsLocation_ToTable_2" FromRole="popularPlace" ToRole="AdsLocation" />
           <NavigationProperty Name="City" Relationship="Model.FK_popularPlace_ToTable" FromRole="popularPlace" ToRole="City" />
-          <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable_2" FromRole="popularPlace" ToRole="Company" />
           <NavigationProperty Name="CompanyOffices" Relationship="Model.FK_CompanyOffice_ToTable_2" FromRole="popularPlace" ToRole="CompanyOffice" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_popularPlace_ToTable_1" FromRole="popularPlace" ToRole="AspNetUser" />
           <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_popularPlace_ToTable_2" FromRole="popularPlace" ToRole="AspNetUser" />
+          <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable_2" FromRole="popularPlace" ToRole="Company" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -3090,7 +3168,8 @@
           <NavigationProperty Name="QuestionVotes" Relationship="Model.FK_QuestionVote_ToTable" FromRole="Question" ToRole="QuestionVote" />
           <NavigationProperty Name="ReportedQuestions" Relationship="Model.FK_ReportedQuestion_ToTable" FromRole="Question" ToRole="ReportedQuestion" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Question_ToTable" FromRole="Question" ToRole="AspNetUser" />
-          <Property Name="views" Type="Int32" />
+          <Property Name="views" Type="Int32" Nullable="false" />
+          <Property Name="category" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityType Name="QuestionReply">
           <Key>
@@ -3649,10 +3728,10 @@
           <Property Name="cityName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AdsLocations" Relationship="Model.FK_AdsLocation_ToTable_1" FromRole="City" ToRole="AdsLocation" />
           <NavigationProperty Name="popularPlaces" Relationship="Model.FK_popularPlace_ToTable" FromRole="City" ToRole="popularPlace" />
-          <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable_1" FromRole="City" ToRole="Company" />
           <NavigationProperty Name="CompanyOffices" Relationship="Model.FK_CompanyOffice_ToTable_1" FromRole="City" ToRole="CompanyOffice" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_City_ToTable" FromRole="City" ToRole="AspNetUser" />
           <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_City_ToTable_1" FromRole="City" ToRole="AspNetUser" />
+          <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable_1" FromRole="City" ToRole="Company" />
         </EntityType>
         <Association Name="FK_AdsLocation_ToTable_1">
           <End Type="Model.City" Role="City" Multiplicity="0..1">
@@ -3707,66 +3786,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Company">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="shortabout" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <Property Name="longabout" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="since" Type="DateTime" Precision="0" />
-          <Property Name="contactNo1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="contactNo2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="fblink" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="twlink" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="websitelink" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="owner" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="logoextension" Type="String" MaxLength="7" FixedLength="true" Unicode="true" />
-          <Property Name="category" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="createdBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="cityId" Type="Int32" />
-          <Property Name="popularPlaceId" Type="Int32" />
-          <NavigationProperty Name="City" Relationship="Model.FK_Company_ToTable_1" FromRole="Company" ToRole="City" />
-          <NavigationProperty Name="popularPlace" Relationship="Model.FK_Company_ToTable_2" FromRole="Company" ToRole="popularPlace" />
-          <Property Name="exectLocation" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CompanyOffices" Relationship="Model.FK_CompanyOffice_ToTable" FromRole="Company" ToRole="CompanyOffice" />
-          <NavigationProperty Name="CompanyQuestions" Relationship="Model.FK_CompanyQuestion_ToTable" FromRole="Company" ToRole="CompanyQuestion" />
-          <NavigationProperty Name="FollowCompanies" Relationship="Model.FK_FollowCompany_ToTable" FromRole="Company" ToRole="FollowCompany" />
-          <NavigationProperty Name="CompanyImages" Relationship="Model.FK_Image_ToTable" FromRole="Company" ToRole="CompanyImage" />
-          <NavigationProperty Name="Reviews" Relationship="Model.FK_Review_ToTable" FromRole="Company" ToRole="Review" />
-          <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Company_ToTable" FromRole="Company" ToRole="AspNetUser" />
-          <NavigationProperty Name="CompanyTags" Relationship="Model.FK_CompanyTag_ToTable" FromRole="Company" ToRole="CompanyTag" />
-        </EntityType>
-        <Association Name="FK_Company_ToTable_1">
-          <End Type="Model.City" Role="City" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.Company" Role="Company" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="City">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Company">
-              <PropertyRef Name="cityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Company_ToTable_2">
-          <End Type="Model.popularPlace" Role="popularPlace" Multiplicity="0..1" />
-          <End Type="Model.Company" Role="Company" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="popularPlace">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Company">
-              <PropertyRef Name="popularPlaceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="CompanyAnswerReply">
           <Key>
             <PropertyRef Name="Id" />
@@ -3801,8 +3820,8 @@
           <Property Name="contactNo2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="exectLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="City" Relationship="Model.FK_CompanyOffice_ToTable_1" FromRole="CompanyOffice" ToRole="City" />
-          <NavigationProperty Name="Company" Relationship="Model.FK_CompanyOffice_ToTable" FromRole="CompanyOffice" ToRole="Company" />
           <NavigationProperty Name="popularPlace" Relationship="Model.FK_CompanyOffice_ToTable_2" FromRole="CompanyOffice" ToRole="popularPlace" />
+          <NavigationProperty Name="Company" Relationship="Model.FK_CompanyOffice_ToTable" FromRole="CompanyOffice" ToRole="Company" />
         </EntityType>
         <EntityType Name="CompanyQuestion">
           <Key>
@@ -3814,9 +3833,9 @@
           <Property Name="description" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="postedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Company" Relationship="Model.FK_CompanyQuestion_ToTable" FromRole="CompanyQuestion" ToRole="Company" />
           <NavigationProperty Name="CompanyAnswers" Relationship="Model.FK_CompanyAnswer_ToTable" FromRole="CompanyQuestion" ToRole="CompanyAnswer" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CompanyQuestion_ToTable_1" FromRole="CompanyQuestion" ToRole="AspNetUser" />
+          <NavigationProperty Name="Company" Relationship="Model.FK_CompanyQuestion_ToTable" FromRole="CompanyQuestion" ToRole="Company" />
         </EntityType>
         <EntityType Name="FollowCompany">
           <Key>
@@ -3825,8 +3844,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="companyId" Type="Int32" Nullable="false" />
           <Property Name="followedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Company" Relationship="Model.FK_FollowCompany_ToTable" FromRole="FollowCompany" ToRole="Company" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_FollowCompany_ToTable_1" FromRole="FollowCompany" ToRole="AspNetUser" />
+          <NavigationProperty Name="Company" Relationship="Model.FK_FollowCompany_ToTable" FromRole="FollowCompany" ToRole="Company" />
         </EntityType>
         <EntityType Name="Review">
           <Key>
@@ -3838,10 +3857,10 @@
           <Property Name="rating" Type="Int32" Nullable="false" />
           <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Company" Relationship="Model.FK_Review_ToTable" FromRole="Review" ToRole="Company" />
           <NavigationProperty Name="ReviewReplies" Relationship="Model.FK_CompanyReviewReply_ToTable" FromRole="Review" ToRole="ReviewReply" />
           <NavigationProperty Name="ReviewVotes" Relationship="Model.FK_ReviewVote_ToTable" FromRole="Review" ToRole="ReviewVote" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Review_ToTable_1" FromRole="Review" ToRole="AspNetUser" />
+          <NavigationProperty Name="Company" Relationship="Model.FK_Review_ToTable" FromRole="Review" ToRole="Company" />
         </EntityType>
         <EntityType Name="ReviewReply">
           <Key>
@@ -3873,76 +3892,6 @@
             </Principal>
             <Dependent Role="CompanyOffice">
               <PropertyRef Name="cityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CompanyOffice_ToTable">
-          <End Type="Model.Company" Role="Company" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.CompanyOffice" Role="CompanyOffice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyOffice">
-              <PropertyRef Name="companyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CompanyQuestion_ToTable">
-          <End Type="Model.Company" Role="Company" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.CompanyQuestion" Role="CompanyQuestion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyQuestion">
-              <PropertyRef Name="companyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FollowCompany_ToTable">
-          <End Type="Model.Company" Role="Company" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.FollowCompany" Role="FollowCompany" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="FollowCompany">
-              <PropertyRef Name="companyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Image_ToTable">
-          <End Type="Model.Company" Role="Company" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.CompanyImage" Role="CompanyImage" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyImage">
-              <PropertyRef Name="companyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Review_ToTable">
-          <End Type="Model.Company" Role="Company" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.Review" Role="Review" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Review">
-              <PropertyRef Name="companyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4071,7 +4020,6 @@
           <NavigationProperty Name="CommentReplies" Relationship="Model.FK_CommentReply_ToTable_1" FromRole="AspNetUser" ToRole="CommentReply" />
           <NavigationProperty Name="CommentReplyVotes" Relationship="Model.FK_CommentReplyVote_ToTable_1" FromRole="AspNetUser" ToRole="CommentReplyVote" />
           <NavigationProperty Name="CommentVotes" Relationship="Model.FK_CommentVote_ToTable_1" FromRole="AspNetUser" ToRole="CommentVote" />
-          <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable" FromRole="AspNetUser" ToRole="Company" />
           <NavigationProperty Name="CompanyAnswers" Relationship="Model.FK_CompanyAnswer_ToTable_1" FromRole="AspNetUser" ToRole="CompanyAnswer" />
           <NavigationProperty Name="CompanyAnswerReplies" Relationship="Model.FK_CompanyAnswerReply_ToTable_1" FromRole="AspNetUser" ToRole="CompanyAnswerReply" />
           <NavigationProperty Name="CompanyQuestions" Relationship="Model.FK_CompanyQuestion_ToTable_1" FromRole="AspNetUser" ToRole="CompanyQuestion" />
@@ -4099,6 +4047,8 @@
           <NavigationProperty Name="Tags" Relationship="Model.FK_Tag_ToTable" FromRole="AspNetUser" ToRole="Tag" />
           <NavigationProperty Name="Tags1" Relationship="Model.FK_Tag_ToTable_1" FromRole="AspNetUser" ToRole="Tag" />
           <NavigationProperty Name="AspNetRoles" Relationship="Model.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+          <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable" FromRole="AspNetUser" ToRole="Company" />
+          <NavigationProperty Name="CompanyAds" Relationship="Model.FK_CompanyAd_ToTable_2" FromRole="AspNetUser" ToRole="CompanyAd" />
         </EntityType>
         <Association Name="FK_Ad_ToTable">
           <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -4301,20 +4251,6 @@
             </Principal>
             <Dependent Role="CommentVote">
               <PropertyRef Name="votedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Company_ToTable">
-          <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.Company" Role="Company" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Company">
-              <PropertyRef Name="createdBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4649,9 +4585,179 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="companyId" Type="Int32" Nullable="false" />
           <Property Name="tagId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Company" Relationship="Model.FK_CompanyTag_ToTable" FromRole="CompanyTag" ToRole="Company" />
           <NavigationProperty Name="Tag" Relationship="Model.FK_CompanyTag_ToTable_1" FromRole="CompanyTag" ToRole="Tag" />
+          <NavigationProperty Name="Company" Relationship="Model.FK_CompanyTag_ToTable" FromRole="CompanyTag" ToRole="Company" />
         </EntityType>
+        <Association Name="FK_CompanyTag_ToTable_1">
+          <End Type="Model.Tag" Role="Tag" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.CompanyTag" Role="CompanyTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyTag">
+              <PropertyRef Name="tagId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="shortabout" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="longabout" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="since" Type="DateTime" Precision="0" />
+          <Property Name="contactNo1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="contactNo2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="fblink" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="twlink" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="websitelink" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="owner" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="logoextension" Type="String" MaxLength="7" FixedLength="true" Unicode="true" />
+          <Property Name="category" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="createdBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="cityId" Type="Int32" />
+          <Property Name="popularPlaceId" Type="Int32" />
+          <Property Name="exectLocation" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="rating" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Company_ToTable" FromRole="Company" ToRole="AspNetUser" />
+          <NavigationProperty Name="City" Relationship="Model.FK_Company_ToTable_1" FromRole="Company" ToRole="City" />
+          <NavigationProperty Name="popularPlace" Relationship="Model.FK_Company_ToTable_2" FromRole="Company" ToRole="popularPlace" />
+          <NavigationProperty Name="CompanyAds" Relationship="Model.FK_CompanyAd_ToTable_1" FromRole="Company" ToRole="CompanyAd" />
+          <NavigationProperty Name="CompanyOffices" Relationship="Model.FK_CompanyOffice_ToTable" FromRole="Company" ToRole="CompanyOffice" />
+          <NavigationProperty Name="CompanyQuestions" Relationship="Model.FK_CompanyQuestion_ToTable" FromRole="Company" ToRole="CompanyQuestion" />
+          <NavigationProperty Name="CompanyTags" Relationship="Model.FK_CompanyTag_ToTable" FromRole="Company" ToRole="CompanyTag" />
+          <NavigationProperty Name="FollowCompanies" Relationship="Model.FK_FollowCompany_ToTable" FromRole="Company" ToRole="FollowCompany" />
+          <NavigationProperty Name="CompanyImages" Relationship="Model.FK_Image_ToTable" FromRole="Company" ToRole="CompanyImage" />
+          <NavigationProperty Name="Reviews" Relationship="Model.FK_Review_ToTable" FromRole="Company" ToRole="Review" />
+        </EntityType>
+        <EntityType Name="CompanyAd">
+          <Key>
+            <PropertyRef Name="adId" />
+          </Key>
+          <Property Name="adId" Type="Int32" Nullable="false" />
+          <Property Name="companyId" Type="Int32" Nullable="false" />
+          <Property Name="rating" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="DateTime" Precision="3" />
+          <Property Name="ratedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Ad" Relationship="Model.FK_CompanyAd_ToTable" FromRole="CompanyAd" ToRole="Ad" />
+          <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CompanyAd_ToTable_2" FromRole="CompanyAd" ToRole="AspNetUser" />
+          <NavigationProperty Name="Company" Relationship="Model.FK_CompanyAd_ToTable_1" FromRole="CompanyAd" ToRole="Company" />
+        </EntityType>
+        <Association Name="FK_CompanyAd_ToTable">
+          <End Type="Model.Ad" Role="Ad" Multiplicity="1" />
+          <End Type="Model.CompanyAd" Role="CompanyAd" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyAd">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Company_ToTable">
+          <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Company" Role="Company" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="createdBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyAd_ToTable_2">
+          <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+          <End Type="Model.CompanyAd" Role="CompanyAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyAd">
+              <PropertyRef Name="ratedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Company_ToTable_1">
+          <End Type="Model.City" Role="City" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Company" Role="Company" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="cityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Company_ToTable_2">
+          <End Type="Model.popularPlace" Role="popularPlace" Multiplicity="0..1" />
+          <End Type="Model.Company" Role="Company" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="popularPlace">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="popularPlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyAd_ToTable_1">
+          <End Type="Model.Company" Role="Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.CompanyAd" Role="CompanyAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyAd">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyOffice_ToTable">
+          <End Type="Model.Company" Role="Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.CompanyOffice" Role="CompanyOffice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyOffice">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyQuestion_ToTable">
+          <End Type="Model.Company" Role="Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.CompanyQuestion" Role="CompanyQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyQuestion">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CompanyTag_ToTable">
           <End Type="Model.Company" Role="Company" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -4666,17 +4772,45 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CompanyTag_ToTable_1">
-          <End Type="Model.Tag" Role="Tag" Multiplicity="1">
+        <Association Name="FK_FollowCompany_ToTable">
+          <End Type="Model.Company" Role="Company" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="Model.CompanyTag" Role="CompanyTag" Multiplicity="*" />
+          <End Type="Model.FollowCompany" Role="FollowCompany" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Tag">
+            <Principal Role="Company">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CompanyTag">
-              <PropertyRef Name="tagId" />
+            <Dependent Role="FollowCompany">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Image_ToTable">
+          <End Type="Model.Company" Role="Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.CompanyImage" Role="CompanyImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompanyImage">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Review_ToTable">
+          <End Type="Model.Company" Role="Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Review" Role="Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="companyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5017,6 +5151,7 @@
           <EntitySetMapping Name="Questions">
             <EntityTypeMapping TypeName="Model.Question">
               <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="category" ColumnName="category" />
                 <ScalarProperty Name="views" ColumnName="views" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="title" ColumnName="title" />
@@ -5127,32 +5262,6 @@
                 <ScalarProperty Name="time" ColumnName="time" />
                 <ScalarProperty Name="savedBy" ColumnName="savedBy" />
                 <ScalarProperty Name="adId" ColumnName="adId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Companies">
-            <EntityTypeMapping TypeName="Model.Company">
-              <MappingFragment StoreEntitySet="Company">
-                <ScalarProperty Name="exectLocation" ColumnName="exectLocation" />
-                <ScalarProperty Name="popularPlaceId" ColumnName="popularPlaceId" />
-                <ScalarProperty Name="cityId" ColumnName="cityId" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="time" ColumnName="time" />
-                <ScalarProperty Name="createdBy" ColumnName="createdBy" />
-                <ScalarProperty Name="category" ColumnName="category" />
-                <ScalarProperty Name="logoextension" ColumnName="logoextension" />
-                <ScalarProperty Name="owner" ColumnName="owner" />
-                <ScalarProperty Name="websitelink" ColumnName="websitelink" />
-                <ScalarProperty Name="twlink" ColumnName="twlink" />
-                <ScalarProperty Name="fblink" ColumnName="fblink" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="contactNo2" ColumnName="contactNo2" />
-                <ScalarProperty Name="contactNo1" ColumnName="contactNo1" />
-                <ScalarProperty Name="since" ColumnName="since" />
-                <ScalarProperty Name="longabout" ColumnName="longabout" />
-                <ScalarProperty Name="shortabout" ColumnName="shortabout" />
-                <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -5299,6 +5408,45 @@
                 <ScalarProperty Name="tagId" ColumnName="tagId" />
                 <ScalarProperty Name="companyId" ColumnName="companyId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="Model.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="exectLocation" ColumnName="exectLocation" />
+                <ScalarProperty Name="popularPlaceId" ColumnName="popularPlaceId" />
+                <ScalarProperty Name="cityId" ColumnName="cityId" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="logoextension" ColumnName="logoextension" />
+                <ScalarProperty Name="owner" ColumnName="owner" />
+                <ScalarProperty Name="websitelink" ColumnName="websitelink" />
+                <ScalarProperty Name="twlink" ColumnName="twlink" />
+                <ScalarProperty Name="fblink" ColumnName="fblink" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="contactNo2" ColumnName="contactNo2" />
+                <ScalarProperty Name="contactNo1" ColumnName="contactNo1" />
+                <ScalarProperty Name="since" ColumnName="since" />
+                <ScalarProperty Name="longabout" ColumnName="longabout" />
+                <ScalarProperty Name="shortabout" ColumnName="shortabout" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompanyAds">
+            <EntityTypeMapping TypeName="Model.CompanyAd">
+              <MappingFragment StoreEntitySet="CompanyAd">
+                <ScalarProperty Name="ratedBy" ColumnName="ratedBy" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="adId" ColumnName="adId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

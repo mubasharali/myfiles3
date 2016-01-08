@@ -32,7 +32,6 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.CommentReplies = new HashSet<CommentReply>();
             this.CommentReplyVotes = new HashSet<CommentReplyVote>();
             this.CommentVotes = new HashSet<CommentVote>();
-            this.Companies = new HashSet<Company>();
             this.CompanyAnswers = new HashSet<CompanyAnswer>();
             this.CompanyAnswerReplies = new HashSet<CompanyAnswerReply>();
             this.CompanyQuestions = new HashSet<CompanyQuestion>();
@@ -60,6 +59,8 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.Tags = new HashSet<Tag>();
             this.Tags1 = new HashSet<Tag>();
             this.AspNetRoles = new HashSet<AspNetRole>();
+            this.Companies = new HashSet<Company>();
+            this.CompanyAds = new HashSet<CompanyAd>();
         }
     
         public string Id { get; set; }
@@ -103,7 +104,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<CommentReply> CommentReplies { get; set; }
         public virtual ICollection<CommentReplyVote> CommentReplyVotes { get; set; }
         public virtual ICollection<CommentVote> CommentVotes { get; set; }
-        public virtual ICollection<Company> Companies { get; set; }
         public virtual ICollection<CompanyAnswer> CompanyAnswers { get; set; }
         public virtual ICollection<CompanyAnswerReply> CompanyAnswerReplies { get; set; }
         public virtual ICollection<CompanyQuestion> CompanyQuestions { get; set; }
@@ -131,5 +131,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<Tag> Tags1 { get; set; }
         public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
+        public virtual ICollection<Company> Companies { get; set; }
+        public virtual ICollection<CompanyAd> CompanyAds { get; set; }
     }
 }

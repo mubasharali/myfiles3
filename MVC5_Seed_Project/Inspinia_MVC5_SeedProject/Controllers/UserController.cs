@@ -196,131 +196,132 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 loginUserId = User.Identity.GetUserId();
             }
-            var user = (from u in db.AspNetUsers
-                        where u.Id.Equals(id)
-                        select new
-                        {
-                            UserName = u.UserName,
-                            Email = u.Email,
-                            Id = u.Id,
-                            dateOfBirth = u.dateOfBirth,
-                            gender = u.gender,
-                            hideEmail = u.hideEmail,
-                            hidePhoneNumber = u.hidePhoneNumber,
-                            hideDateOfBirth = u.hideDateOfBirth,
-                            phoneNumber = u.PhoneNumber,
-                            about = u.about,
-                            dpExtension = u.dpExtension,
-                            lastSeen = Membership.UserIsOnlineTimeWindow,
-                            reputation = u.reputation,
-                            since = u.since,
-                            city = u.city,
-                            isFriend = u.Friends.Any(x => x.friendId.Equals(loginUserId) || x.userId.Equals(loginUserId)),
-                            loginUserId = loginUserId,
-                            followingTags = from tag in u.FollowTags
+                var user = (from u in db.AspNetUsers
+                            where u.Id.Equals(id)
+                            select new
+                            {
+                                UserName = u.UserName,
+                                Email = u.Email,
+                                Id = u.Id,
+                                dateOfBirth = u.dateOfBirth,
+                                gender = u.gender,
+                                hideEmail = u.hideEmail,
+                                hidePhoneNumber = u.hidePhoneNumber,
+                                hideDateOfBirth = u.hideDateOfBirth,
+                                phoneNumber = u.PhoneNumber,
+                                about = u.about,
+                                dpExtension = u.dpExtension,
+                                lastSeen = Membership.UserIsOnlineTimeWindow,
+                                reputation = u.reputation,
+                                since = u.since,
+                                city = u.city,
+                                isFriend = u.Friends.Any(x => x.friendId.Equals(loginUserId) || x.userId.Equals(loginUserId)),
+                                loginUserId = loginUserId,
+                                followingTags = from tag in u.FollowTags
+                                                select new
+                                                {
+                                                    id = tag.Tag.Id,
+                                                    name = tag.Tag.name,
+                                                },
+                                activeads = from ad in u.Ads
                                             select new
                                             {
-                                                id = tag.Tag.Id,
-                                                name = tag.Tag.name,
-                                            },
-                            activeads = from ad in u.Ads
-                                        select new
-                                        {
-                                            title = ad.title,
-                                            postedById = ad.AspNetUser.Id,
-                                            postedByName = ad.AspNetUser.Email,
-                                            description = ad.description,
-                                            id = ad.Id,
-                                            time = ad.time,
-                                            islogin = loginUserId,
-                                            isNegotiable = ad.isnegotiable,
-                                            price = ad.price,
-                                            reportedCount = ad.Reporteds.Count,
-                                            isReported = ad.Reporteds.Any(x => x.reportedBy == loginUserId),
-                                            //views = ad.AdViews.Count,
-                                            views = ad.views,
-                                            condition = ad.condition,
+                                                title = ad.title,
+                                                postedById = ad.AspNetUser.Id,
+                                                postedByName = ad.AspNetUser.Email,
+                                                description = ad.description,
+                                                id = ad.Id,
+                                                time = ad.time,
+                                                islogin = loginUserId,
+                                                isNegotiable = ad.isnegotiable,
+                                                price = ad.price,
+                                                reportedCount = ad.Reporteds.Count,
+                                                isReported = ad.Reporteds.Any(x => x.reportedBy == loginUserId),
+                                                //views = ad.AdViews.Count,
+                                                views = ad.views,
+                                                condition = ad.condition,
 
-                                            color = ad.LaptopAd.color,
-                                            brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
-                                            model = ad.LaptopAd.LaptopModel.model,
-                                            adTags = from tag in ad.AdTags.ToList()
-                                                     select new
-                                                     {
-                                                         id = tag.tagId,
-                                                         name = tag.Tag.name,
-                                                     },
-                                            bid = from biding in ad.Bids.ToList()
-                                                  select new
-                                                  {
-                                                      price = biding.price,
-                                                  },
-                                            adImages = from image in ad.AdImages.ToList()
-                                                       select new
-                                                       {
-                                                           imageExtension = image.imageExtension,
-                                                       },
-                                            location = new
-                                            {
-                                                cityName = ad.AdsLocation.City.cityName,
-                                                cityId = ad.AdsLocation.cityId,
-                                                popularPlaceId = ad.AdsLocation.popularPlaceId,
-                                                popularPlace = ad.AdsLocation.popularPlace.name,
-                                            },
-                                        },
-                            savedads = from ad in u.SaveAds
-                                       select new
-                                       {
-                                           title = ad.Ad.title,
-                                           postedById = ad.Ad.AspNetUser.Id,
-                                           postedByName = ad.Ad.AspNetUser.Email,
-                                           description = ad.Ad.description,
-                                           id = ad.Ad.Id,
-                                           time = ad.Ad.time,
-                                           islogin = loginUserId,
-                                           isNegotiable = ad.Ad.isnegotiable,
-                                           price = ad.Ad.price,
-                                           reportedCount = ad.Ad.Reporteds.Count,
-                                           isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == loginUserId),
-                                           //views = ad.AdViews.Count,
-                                           views = ad.Ad.views,
-                                           condition = ad.Ad.condition,
-
-                                           color = ad.Ad.LaptopAd.color,
-                                           brand = ad.Ad.LaptopAd.LaptopModel.LaptopBrand.brand,
-                                           model = ad.Ad.LaptopAd.LaptopModel.model,
-                                           adTags = from tag in ad.Ad.AdTags.ToList()
-                                                    select new
-                                                    {
-                                                        id = tag.tagId,
-                                                        name = tag.Tag.name,
-                                                    },
-                                           bid = from biding in ad.Ad.Bids.ToList()
-                                                 select new
-                                                 {
-                                                     price = biding.price,
-                                                 },
-                                           adImages = from image in ad.Ad.AdImages.ToList()
+                                                color = ad.LaptopAd.color,
+                                                brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                                                model = ad.LaptopAd.LaptopModel.model,
+                                                adTags = from tag in ad.AdTags.ToList()
+                                                         select new
+                                                         {
+                                                             id = tag.tagId,
+                                                             name = tag.Tag.name,
+                                                         },
+                                                bid = from biding in ad.Bids.ToList()
                                                       select new
                                                       {
-                                                          imageExtension = image.imageExtension,
+                                                          price = biding.price,
                                                       },
-                                           location = new
+                                                adImages = from image in ad.AdImages.ToList()
+                                                           select new
+                                                           {
+                                                               imageExtension = image.imageExtension,
+                                                           },
+                                                location = new
+                                                {
+                                                    cityName = ad.AdsLocation.City.cityName,
+                                                    cityId = ad.AdsLocation.cityId,
+                                                    popularPlaceId = ad.AdsLocation.popularPlaceId,
+                                                    popularPlace = ad.AdsLocation.popularPlace.name,
+                                                },
+                                            },
+                                savedads = from ad in u.SaveAds
+                                           select new
                                            {
-                                               cityName = ad.Ad.AdsLocation.City.cityName,
-                                               cityId = ad.Ad.AdsLocation.cityId,
-                                               popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
-                                               popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                               title = ad.Ad.title,
+                                               postedById = ad.Ad.AspNetUser.Id,
+                                               postedByName = ad.Ad.AspNetUser.Email,
+                                               description = ad.Ad.description,
+                                               id = ad.Ad.Id,
+                                               time = ad.Ad.time,
+                                               islogin = loginUserId,
+                                               isNegotiable = ad.Ad.isnegotiable,
+                                               price = ad.Ad.price,
+                                               reportedCount = ad.Ad.Reporteds.Count,
+                                               isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == loginUserId),
+                                               //views = ad.AdViews.Count,
+                                               views = ad.Ad.views,
+                                               condition = ad.Ad.condition,
+
+                                               color = ad.Ad.LaptopAd.color,
+                                               brand = ad.Ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                                               model = ad.Ad.LaptopAd.LaptopModel.model,
+                                               adTags = from tag in ad.Ad.AdTags.ToList()
+                                                        select new
+                                                        {
+                                                            id = tag.tagId,
+                                                            name = tag.Tag.name,
+                                                        },
+                                               bid = from biding in ad.Ad.Bids.ToList()
+                                                     select new
+                                                     {
+                                                         price = biding.price,
+                                                     },
+                                               adImages = from image in ad.Ad.AdImages.ToList()
+                                                          select new
+                                                          {
+                                                              imageExtension = image.imageExtension,
+                                                          },
+                                               location = new
+                                               {
+                                                   cityName = ad.Ad.AdsLocation.City.cityName,
+                                                   cityId = ad.Ad.AdsLocation.cityId,
+                                                   popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                                   popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                               },
                                            },
-                                       },
-                            //adnotifications= from ad in db.Ads
-                            //                 where ad.AdTags.Any(x=>x.tagId.Equals())
-                        }).FirstOrDefault();
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(user);
+                                //adnotifications= from ad in db.Ads
+                                //                 where ad.AdTags.Any(x=>x.tagId.Equals())
+                            }).FirstOrDefault();
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return Ok(user);
         }
         //public async Task<IHttpActionResult> IsUserOnline(string id)
         //{

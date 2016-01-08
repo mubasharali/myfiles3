@@ -83,9 +83,6 @@
         <AssociationConnector Association="Model.FK_popularPlace_ToTable" />
         <EntityTypeShape EntityType="Model.SaveAd" Width="1.5" PointX="61.5" PointY="47" />
         <AssociationConnector Association="Model.FK_SaveAd_ToTable" />
-        <EntityTypeShape EntityType="Model.Company" Width="1.5" PointX="43.375" PointY="86.5" />
-        <AssociationConnector Association="Model.FK_Company_ToTable_1" />
-        <AssociationConnector Association="Model.FK_Company_ToTable_2" />
         <EntityTypeShape EntityType="Model.CompanyAnswerReply" Width="1.5" PointX="51" PointY="95.375" />
         <EntityTypeShape EntityType="Model.CompanyImage" Width="1.5" PointX="41" PointY="96.5" />
         <EntityTypeShape EntityType="Model.CompanyOffice" Width="1.5" PointX="40.25" PointY="80.875" />
@@ -95,11 +92,6 @@
         <EntityTypeShape EntityType="Model.ReviewReply" Width="1.5" PointX="49.125" PointY="82.75" />
         <EntityTypeShape EntityType="Model.ReviewVote" Width="1.5" PointX="50" PointY="85.625" />
         <AssociationConnector Association="Model.FK_CompanyOffice_ToTable_1" />
-        <AssociationConnector Association="Model.FK_CompanyOffice_ToTable" />
-        <AssociationConnector Association="Model.FK_CompanyQuestion_ToTable" />
-        <AssociationConnector Association="Model.FK_FollowCompany_ToTable" />
-        <AssociationConnector Association="Model.FK_Image_ToTable" />
-        <AssociationConnector Association="Model.FK_Review_ToTable" />
         <AssociationConnector Association="Model.FK_CompanyOffice_ToTable_2" />
         <AssociationConnector Association="Model.FK_CompanyReviewReply_ToTable" />
         <AssociationConnector Association="Model.FK_ReviewVote_ToTable" />
@@ -123,7 +115,6 @@
         <AssociationConnector Association="Model.FK_CommentReply_ToTable_1" />
         <AssociationConnector Association="Model.FK_CommentReplyVote_ToTable_1" />
         <AssociationConnector Association="Model.FK_CommentVote_ToTable_1" />
-        <AssociationConnector Association="Model.FK_Company_ToTable" />
         <AssociationConnector Association="Model.FK_CompanyAnswer_ToTable_1" />
         <AssociationConnector Association="Model.FK_CompanyAnswerReply_ToTable_1" />
         <AssociationConnector Association="Model.FK_CompanyQuestion_ToTable_1" />
@@ -152,8 +143,21 @@
         <AssociationConnector Association="Model.FK_Tag_ToTable_1" />
         <AssociationConnector Association="Model.AspNetUserRoles" />
         <EntityTypeShape EntityType="Model.CompanyTag" Width="1.5" PointX="45.625" PointY="79.25" />
-        <AssociationConnector Association="Model.FK_CompanyTag_ToTable" />
         <AssociationConnector Association="Model.FK_CompanyTag_ToTable_1" />
+        <EntityTypeShape EntityType="Model.Company" Width="1.5" PointX="52.875" PointY="79.875" />
+        <EntityTypeShape EntityType="Model.CompanyAd" Width="1.5" PointX="57.25" PointY="77.625" />
+        <AssociationConnector Association="Model.FK_CompanyAd_ToTable" />
+        <AssociationConnector Association="Model.FK_Company_ToTable" />
+        <AssociationConnector Association="Model.FK_CompanyAd_ToTable_2" />
+        <AssociationConnector Association="Model.FK_Company_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Company_ToTable_2" />
+        <AssociationConnector Association="Model.FK_CompanyAd_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyOffice_ToTable" />
+        <AssociationConnector Association="Model.FK_CompanyQuestion_ToTable" />
+        <AssociationConnector Association="Model.FK_CompanyTag_ToTable" />
+        <AssociationConnector Association="Model.FK_FollowCompany_ToTable" />
+        <AssociationConnector Association="Model.FK_Image_ToTable" />
+        <AssociationConnector Association="Model.FK_Review_ToTable" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

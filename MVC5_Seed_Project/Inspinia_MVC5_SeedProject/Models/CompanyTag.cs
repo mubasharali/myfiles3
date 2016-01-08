@@ -18,7 +18,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public int companyId { get; set; }
         public int tagId { get; set; }
     
-        public virtual Company Company { get; set; }
         public virtual Tag Tag { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

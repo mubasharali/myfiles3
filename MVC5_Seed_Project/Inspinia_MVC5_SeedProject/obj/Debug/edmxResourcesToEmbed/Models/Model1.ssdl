@@ -274,6 +274,18 @@
     <Property Name="cityId" Type="int" />
     <Property Name="popularPlaceId" Type="int" />
     <Property Name="exectLocation" Type="nvarchar" MaxLength="100" />
+    <Property Name="rating" Type="char" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="CompanyAd">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="int" Nullable="false" />
+    <Property Name="companyId" Type="int" Nullable="false" />
+    <Property Name="rating" Type="char" MaxLength="1" />
+    <Property Name="description" Type="nvarchar" MaxLength="500" />
+    <Property Name="time" Type="datetime" />
+    <Property Name="ratedBy" Type="nvarchar" MaxLength="128" />
   </EntityType>
   <EntityType Name="CompanyAnswer">
     <Key>
@@ -450,7 +462,8 @@
     <Property Name="time" Type="datetime" Nullable="false" />
     <Property Name="title" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="description" Type="varchar" MaxLength="1000" Nullable="false" />
-    <Property Name="views" Type="int" />
+    <Property Name="views" Type="int" Nullable="false" />
+    <Property Name="category" Type="nvarchar" MaxLength="30" Nullable="false" />
   </EntityType>
   <EntityType Name="QuestionReply">
     <Key>
@@ -650,7 +663,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Answer_ToTable">
-    <End Role="Question" Type="Self.Question" Multiplicity="1" />
+    <End Role="Question" Type="Self.Question" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Question">
@@ -662,9 +677,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Answer_ToTable_1">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUsers">
@@ -702,7 +715,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_AnswerReplyVote_ToTable">
-    <End Role="AnswerReply" Type="Self.AnswerReply" Multiplicity="1" />
+    <End Role="AnswerReply" Type="Self.AnswerReply" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="AnswerReplyVote" Type="Self.AnswerReplyVote" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AnswerReply">
@@ -714,9 +729,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_AnswerReplyVote_ToTable_1">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="AnswerReplyVote" Type="Self.AnswerReplyVote" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUsers">
@@ -1010,6 +1023,44 @@
       </Principal>
       <Dependent Role="Company">
         <PropertyRef Name="popularPlaceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompanyAd_ToTable">
+    <End Role="Ad" Type="Self.Ad" Multiplicity="1" />
+    <End Role="CompanyAd" Type="Self.CompanyAd" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompanyAd">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompanyAd_ToTable_1">
+    <End Role="Company" Type="Self.Company" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CompanyAd" Type="Self.CompanyAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompanyAd">
+        <PropertyRef Name="companyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompanyAd_ToTable_2">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+    <End Role="CompanyAd" Type="Self.CompanyAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompanyAd">
+        <PropertyRef Name="ratedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1540,7 +1591,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_QuestionReply_ToTable">
-    <End Role="Question" Type="Self.Question" Multiplicity="1" />
+    <End Role="Question" Type="Self.Question" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="QuestionReply" Type="Self.QuestionReply" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Question">
@@ -1552,9 +1605,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_QuestionReply_ToTable_1">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="QuestionReply" Type="Self.QuestionReply" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUsers">
@@ -1620,7 +1671,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_QuestionVote_ToTable">
-    <End Role="Question" Type="Self.Question" Multiplicity="1" />
+    <End Role="Question" Type="Self.Question" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="QuestionVote" Type="Self.QuestionVote" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Question">
@@ -1632,9 +1685,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_QuestionVote_ToTable_1">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="QuestionVote" Type="Self.QuestionVote" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUsers">
@@ -1841,6 +1892,7 @@
     <EntitySet Name="CommentReplyVote" EntityType="Self.CommentReplyVote" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CommentVote" EntityType="Self.CommentVote" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CompanyAd" EntityType="Self.CompanyAd" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CompanyAnswer" EntityType="Self.CompanyAnswer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CompanyAnswerReply" EntityType="Self.CompanyAnswerReply" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CompanyImage" EntityType="Self.CompanyImage" Schema="dbo" store:Type="Tables" />
@@ -2006,6 +2058,18 @@
     <AssociationSet Name="FK_Company_ToTable_2" Association="Self.FK_Company_ToTable_2">
       <End Role="popularPlace" EntitySet="popularPlace" />
       <End Role="Company" EntitySet="Company" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompanyAd_ToTable" Association="Self.FK_CompanyAd_ToTable">
+      <End Role="Ad" EntitySet="Ad" />
+      <End Role="CompanyAd" EntitySet="CompanyAd" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompanyAd_ToTable_1" Association="Self.FK_CompanyAd_ToTable_1">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="CompanyAd" EntitySet="CompanyAd" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompanyAd_ToTable_2" Association="Self.FK_CompanyAd_ToTable_2">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="CompanyAd" EntitySet="CompanyAd" />
     </AssociationSet>
     <AssociationSet Name="FK_CompanyAnswer_ToTable" Association="Self.FK_CompanyAnswer_ToTable">
       <End Role="CompanyQuestion" EntitySet="CompanyQuestion" />
