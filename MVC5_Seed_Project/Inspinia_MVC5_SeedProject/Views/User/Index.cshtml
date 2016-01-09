@@ -183,12 +183,12 @@
                 <div data-bind="foreach:activeads">
                     <div class="row">
                         <div class="ibox">
-                            <div class="ibox-content product-box">
+                            <div class="ibox-content product-box  fh-250">
                                 <div class="media">
                                     <div class="pull-left hidden-xs">
                                         <div class="product-imitation">
                                             <div class="carouselContainer">
-                                                <span  id="gallery" data-gallery=""
+                                                <span id="gallery" data-gallery=""
                                                       data-bind="slick: images,
                 slickOptions: { initialSlide:0},
                 slickIndex: imageIndex">
@@ -232,8 +232,8 @@
                                             <div class="small m-t-xs" data-bind="foreach:showTags">
                                                 <a target="_blank" data-bind="attr:{href:'/Tag/' + name}"> <span class="btn btn-xs btn-white" data-bind="text:name"> </span></a>
                                             </div><br />
-                                            <div data-bind="text:description"></div><br />
-                                            <div class="pull-right" ><i class="fa fa-clock-o"></i> <span data-bind="text:time"></span></div>
+                                            <div class=" fh-50" data-bind="truncatedText: description, maxTextLength: 150"></div><br />
+                                            <div class="pull-right"><i class="fa fa-clock-o"></i> <span data-bind="text:time"></span></div>
                                             <div class="" data-bind="with:adLocation">
                                                 <span data-bind="with:cityName">@*<i class="fa fa-ballon"></i>*@ <b>From:</b></span>
                                                 <span data-bind="if:popularPlace">
@@ -241,7 +241,7 @@
                                                 </span>
                                                 <span data-bind="text:cityName"></span>
                                             </div>
-                                            
+
                                             <div class="m-t text-righ">
 
                                                 <a data-bind="attr:{href:link}" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
@@ -453,6 +453,7 @@
 @Scripts.Render("~/plugins/imagecropper")
 @Scripts.Render("~/scripts/selectize")
 @Scripts.Render("~/plugins/slick")
+@Scripts.Render("~/plugins/truncate")
 <script src="~/Scripts/jquery.timeago.js"></script>
 <script src="~/Scripts/knockout-3.3.0.js"></script>
 <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
@@ -802,6 +803,18 @@
             self.loadProfile();
             return self;
         }
+        ko.bindingHandlers.truncatedText = {
+            update: function (element, valueAccessor, allBindingsAccessor) {
+                var originalText = ko.utils.unwrapObservable(valueAccessor()),
+                    // 10 is a default maximum length
+                    length = ko.utils.unwrapObservable(allBindingsAccessor().maxTextLength) || 20,
+                    truncatedText = originalText.length > length ? originalText.substring(0, length) + " ..." : originalText;
+                // updating text binding handler to show truncatedText
+                ko.bindingHandlers.text.update(element, function () {
+                    return truncatedText;
+                });
+            }
+        };
         function getTimeAgo(varDate) {
             if (varDate) {
                 return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
@@ -812,7 +825,7 @@
         }
         $(function () {
             
-            
+           
 
 
             $('#setProfilePicBtn').prop('disabled', true);

@@ -595,7 +595,6 @@
     <EntitySetMapping Name="Companies">
       <EntityTypeMapping TypeName="Model.Company">
         <MappingFragment StoreEntitySet="Company">
-          <ScalarProperty Name="rating" ColumnName="rating" />
           <ScalarProperty Name="exectLocation" ColumnName="exectLocation" />
           <ScalarProperty Name="popularPlaceId" ColumnName="popularPlaceId" />
           <ScalarProperty Name="cityId" ColumnName="cityId" />

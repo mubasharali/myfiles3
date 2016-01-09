@@ -123,6 +123,33 @@
                             <div class="row">
                                 <div class="col-sm-9">
                                     <div class="row">
+                                        <h2>Rating</h2>
+                                        <div data-bind="click:addReviewBtn,visible:!isAddingReview()">Add review</div>
+                                        <div data-bind="visible:isAddingReview()">
+                                            <div class="ibox">
+                                                <div class="ibox-title">Add review</div>
+                                                <div class="ibox-content">
+                                                    <div class="row">
+                                                        <div class="form-control">
+                                                            <div class="col-md-3">Rate:</div>
+                                                            <div class="col-md-9">ajdslkfa</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-control">
+                                                            <div class="col-md-3">Description</div>
+                                                            <div class="col-md-9">
+                                                                <textarea class="msgTextArea form-control" placeholder="Add review Details.." data-bind="jqAutoresize: {},value:reviewDescription"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button data-bind="click:submitReviewBtn">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div data-bind="foreach:showReviews">
+                                            <div data-bind="text:reviewDescription"></div>
+                                        </div>
                                         <h2>Location</h2>
                                         <h3>HeadOffice</h3>
                                         <div data-bind="visible:!isMainBranchEditing()">
@@ -373,7 +400,7 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="codeRunner">
+            @*<div class="codeRunner">
                 <table>
                     <thead><tr><th>Option</th><th>Importance</th></tr></thead>
                     <tbody data-bind="foreach: answers">
@@ -384,7 +411,7 @@
                     </tbody>
                 </table>
 
-            </div> 
+            </div>*@ 
         </div>
 
     </div>
@@ -562,20 +589,51 @@
         //        console.log(self.points());
         //    })
         //}
+        function Review(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.rating = data.rating;
+            self.reviewDescription = data.reviewDescription;
+            self.reviewedBy = data.reviewedBy;
+            self.reviewedByName = data.reviewedByName;
+            self.time = data.time;
+        }
         function CompanyPage(data) {
             var self = this;
             //slick
             self.images = ko.observableArray(imageUrls);
             self.options = {};
             self.imageIndex = ko.observable(1);
-
+            self.showReviews = ko.observableArray();
             data = data || {};
 
-            //self.text = data.text;
-            self.points = ko.observable(data.rating || 0);
-            self.points.subscribe(function () {
-                console.log(self.points());
-            })
+            self.reviewDescription = ko.observable();
+            if (data.reviews) {
+                var branch = $.map(data.reviews, function (item) { return new Review(item); });
+                self.showReviews(branch);
+            }
+            self.isAddingReview = ko.observable(false);
+            self.addReviewBtn = function () {
+                self.isAddingReview(true);
+            }
+            self.submitReviewBtn = function (data) {
+                    $.ajax({
+                        url: '/api/Company/AddReview/',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(data),
+                        success: function (data) {
+                            self.isAddingReview(false);
+                            self.showReviews.push(data);
+                        },
+                        error: function () {
+                            toastr.error("failed to add Review.Please refresh page and try again", "Error!");
+                        }
+                    });
+            }
             self.showTags = ko.observableArray();
             if (data.tags) {
                 $.each((data.tags), function (i, item) { self.showTags.push(item) });

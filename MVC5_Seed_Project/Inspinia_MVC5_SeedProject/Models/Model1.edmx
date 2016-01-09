@@ -4626,7 +4626,6 @@
           <Property Name="cityId" Type="Int32" />
           <Property Name="popularPlaceId" Type="Int32" />
           <Property Name="exectLocation" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="rating" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Company_ToTable" FromRole="Company" ToRole="AspNetUser" />
           <NavigationProperty Name="City" Relationship="Model.FK_Company_ToTable_1" FromRole="Company" ToRole="City" />
           <NavigationProperty Name="popularPlace" Relationship="Model.FK_Company_ToTable_2" FromRole="Company" ToRole="popularPlace" />
@@ -5414,7 +5413,6 @@
           <EntitySetMapping Name="Companies">
             <EntityTypeMapping TypeName="Model.Company">
               <MappingFragment StoreEntitySet="Company">
-                <ScalarProperty Name="rating" ColumnName="rating" />
                 <ScalarProperty Name="exectLocation" ColumnName="exectLocation" />
                 <ScalarProperty Name="popularPlaceId" ColumnName="popularPlaceId" />
                 <ScalarProperty Name="cityId" ColumnName="cityId" />

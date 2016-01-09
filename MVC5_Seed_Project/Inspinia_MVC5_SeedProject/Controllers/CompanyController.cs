@@ -38,6 +38,41 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
             return Ok(company);
         }
+        public async Task<IHttpActionResult> AddReview(Review review)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                review.reviewedBy = User.Identity.GetUserId();
+                db.Reviews.Add(review);
+                await db.SaveChangesAsync();
+                return Ok("Done");
+            }
+            return BadRequest();
+        }
+        public async Task<IHttpActionResult> UpdateReview(Review review)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                db.Entry(review).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return Ok("Done");
+            }
+            return BadRequest();
+        }
+        public async Task<IHttpActionResult> DeleteReview(Review review)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                db.Reviews.Remove(review);
+                await db.SaveChangesAsync();
+                return Ok("Done");
+            }
+            return BadRequest();
+        }
         public async Task<IHttpActionResult> GetPage(int id)
         {
             var loginUserId = User.Identity.GetUserId();
@@ -46,6 +81,17 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                       where company.Id.Equals(id)
                       select new
                       {
+                          rating = from review in company.Reviews
+                                   //where review.reviewedBy.Equals(loginUserId)
+                                   select new
+                                   {
+                                       id = review.Id,
+                                       rating = review.rating,
+                                       reviewDescription = review.description,
+                                       time = review.time,
+                                       reviewedBy = review.reviewedBy,
+                                       reviewedByName = review.AspNetUser.Email,
+                                   },
                           loginUserId = loginUserId,
                           loginUserProfileExtension = loginUserProfileExtension,
                           id = company.Id,

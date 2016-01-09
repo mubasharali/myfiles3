@@ -45,7 +45,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public Nullable<int> cityId { get; set; }
         public Nullable<int> popularPlaceId { get; set; }
         public string exectLocation { get; set; }
-        public string rating { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual City City { get; set; }
