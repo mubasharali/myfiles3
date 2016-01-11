@@ -17,11 +17,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
     {
         private Entities db = new Entities();
 
-        // GET api/Vehicle
-        public IQueryable<Ad> GetAds()
-        {
-            return db.Ads;
-        }
+        
+       
         [HttpPost]
         public async Task<IHttpActionResult> GetCarTree()
         {
