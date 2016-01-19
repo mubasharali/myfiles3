@@ -1,11 +1,13 @@
 /*
  *
  *   INSPINIA - Responsive Admin Theme
- *   version 2.2
+ *   version 2.4
  *
  */
 
+
 $(document).ready(function () {
+
 
     // Add body-small class if window less than 768px
     //if ($(this).width() < 769) {
@@ -13,20 +15,21 @@ $(document).ready(function () {
     //} else {
     //    $('body').removeClass('body-small')
     //}
-    if ($(this).width() < 769) {
-        $('body').addClass('body-small')
-        if ($('body').hasClass('mini-navbar')) {
-            $('body').removeClass('mini-navbar');
+
+    // Minimalize menu when screen is less than 768px
+    $(window).bind("resize", function () {
+        if ($(document).width() < 769) {
+            $('body').addClass('body-small')
+        } else {
+            $('body').removeClass('body-small')
         }
-    } else {
-        $('body').removeClass('body-small')
-    }
+    });
 
     // MetsiMenu
     $('#side-menu').metisMenu();
 
     // Collapse ibox function
-    $('.collapse-link').click( function() {
+    $('.collapse-link').click(function () {
         var ibox = $(this).closest('div.ibox');
         var button = $(this).find('i');
         var content = ibox.find('div.ibox-content');
@@ -40,7 +43,7 @@ $(document).ready(function () {
     });
 
     // Close ibox function
-    $('.close-link').click( function() {
+    $('.close-link').click(function () {
         var content = $(this).closest('div.ibox');
         content.remove();
     });
@@ -58,13 +61,19 @@ $(document).ready(function () {
     });
 
     // Close menu in canvas mode
-    $('.close-canvas-menu').click( function() {
+    $('.close-canvas-menu').click(function () {
         $("body").toggleClass("mini-navbar");
         SmoothlyMenu();
     });
 
+    // Run menu of canvas
+    $('body.canvas-menu .sidebar-collapse').slimScroll({
+        height: '100%',
+        railOpacity: 0.9
+    });
+
     // Open close right sidebar
-    $('.right-sidebar-toggle').click(function(){
+    $('.right-sidebar-toggle').click(function () {
         $('#right-sidebar').toggleClass('sidebar-open');
     });
 
@@ -76,7 +85,7 @@ $(document).ready(function () {
     });
 
     // Open close small chat
-    $('.open-small-chat').click(function(){
+    $('.open-small-chat').click(function () {
         $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
         $('.small-chat-box').toggleClass('active');
     });
@@ -88,7 +97,7 @@ $(document).ready(function () {
     });
 
     // Small todo handler
-    $('.check-link').click( function(){
+    $('.check-link').click(function () {
         var button = $(this).find('i');
         var label = $(this).next('span');
         button.toggleClass('fa-check-square').toggleClass('fa-square-o');
@@ -121,7 +130,7 @@ $(document).ready(function () {
         var navbarHeigh = $('nav.navbar-default').height();
         var wrapperHeigh = $('#page-wrapper').height();
 
-        if(navbarHeigh > wrapperHeigh){
+        if (navbarHeigh > wrapperHeigh) {
             $('#page-wrapper').css("min-height", navbarHeigh + "px");
         }
 
@@ -134,6 +143,7 @@ $(document).ready(function () {
         }
 
     }
+
     fix_height();
 
     // Fixed Sidebar
@@ -144,19 +154,19 @@ $(document).ready(function () {
                 railOpacity: 0.9
             });
         }
-    })
+    });
 
     // Move right sidebar top after scroll
-    $(window).scroll(function(){
-        if ($(window).scrollTop() > 0 && !$('body').hasClass('fixed-nav') ) {
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 0 && !$('body').hasClass('fixed-nav')) {
             $('#right-sidebar').addClass('sidebar-top');
         } else {
             $('#right-sidebar').removeClass('sidebar-top');
         }
     });
 
-    $(document).bind("load resize scroll", function() {
-        if(!$("body").hasClass('body-small')) {
+    $(window).bind("load resize scroll", function () {
+        if (!$("body").hasClass('body-small')) {
             fix_height();
         }
     });
@@ -182,7 +192,7 @@ $(window).bind("resize", function () {
 
 // Local Storage functions
 // Set proper body class and plugins based on user configuration
-$(document).ready(function() {
+$(document).ready(function () {
     if (localStorageSupport) {
 
         var collapse = localStorage.getItem("collapse_menu");
@@ -202,12 +212,12 @@ $(document).ready(function() {
         }
 
         if (collapse == 'on') {
-            if(body.hasClass('fixed-sidebar')) {
-                if(!body.hasClass('body-small')) {
+            if (body.hasClass('fixed-sidebar')) {
+                if (!body.hasClass('body-small')) {
                     body.addClass('mini-navbar');
                 }
             } else {
-                if(!body.hasClass('body-small')) {
+                if (!body.hasClass('body-small')) {
                     body.addClass('mini-navbar');
                 }
 
@@ -235,15 +245,15 @@ function localStorageSupport() {
 }
 
 // For demo purpose - animation css script
-function animationHover(element, animation){
+function animationHover(element, animation) {
     element = $(element);
     element.hover(
-        function() {
+        function () {
             element.addClass('animated ' + animation);
         },
-        function(){
+        function () {
             //wait for animation to finish before removing classes
-            window.setTimeout( function(){
+            window.setTimeout(function () {
                 element.removeClass('animated ' + animation);
             }, 2000);
         });
@@ -256,14 +266,14 @@ function SmoothlyMenu() {
         // For smoothly turn on menu
         setTimeout(
             function () {
-                $('#side-menu').fadeIn(500);
-            }, 100);
+                $('#side-menu').fadeIn(400);
+            }, 200);
     } else if ($('body').hasClass('fixed-sidebar')) {
         $('#side-menu').hide();
         setTimeout(
             function () {
-                $('#side-menu').fadeIn(500);
-            }, 300);
+                $('#side-menu').fadeIn(400);
+            }, 100);
     } else {
         // Remove all inline style from jquery fadeIn function to reset menu state
         $('#side-menu').removeAttr('style');

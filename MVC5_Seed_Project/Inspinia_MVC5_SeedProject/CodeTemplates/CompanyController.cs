@@ -138,6 +138,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                             }
                         }
                     }
+                    catch (Exception e)
+                    {
+                        string ss = e.ToString();
+                    }
                     return RedirectToAction("Details", new {id = company.Id });
                 }
                 

@@ -144,11 +144,11 @@
         <AssociationConnector Association="Model.AspNetUserRoles" />
         <EntityTypeShape EntityType="Model.CompanyTag" Width="1.5" PointX="45.625" PointY="79.25" />
         <AssociationConnector Association="Model.FK_CompanyTag_ToTable_1" />
-        <EntityTypeShape EntityType="Model.Company" Width="1.5" PointX="52.875" PointY="79.875" />
         <EntityTypeShape EntityType="Model.CompanyAd" Width="1.5" PointX="57.25" PointY="77.625" />
         <AssociationConnector Association="Model.FK_CompanyAd_ToTable" />
-        <AssociationConnector Association="Model.FK_Company_ToTable" />
         <AssociationConnector Association="Model.FK_CompanyAd_ToTable_2" />
+        <EntityTypeShape EntityType="Model.Company" Width="1.5" PointX="42.125" PointY="73.125" />
+        <AssociationConnector Association="Model.FK_Company_ToTable" />
         <AssociationConnector Association="Model.FK_Company_ToTable_1" />
         <AssociationConnector Association="Model.FK_Company_ToTable_2" />
         <AssociationConnector Association="Model.FK_CompanyAd_ToTable_1" />
@@ -158,7 +158,8 @@
         <AssociationConnector Association="Model.FK_FollowCompany_ToTable" />
         <AssociationConnector Association="Model.FK_Image_ToTable" />
         <AssociationConnector Association="Model.FK_Review_ToTable" />
-      </Diagram>
+        <AssociationConnector Association="Model.FK_ReviewVote_ToTable_1" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

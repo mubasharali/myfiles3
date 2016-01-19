@@ -528,6 +528,7 @@
     <EntitySetMapping Name="ReviewVotes">
       <EntityTypeMapping TypeName="Model.ReviewVote">
         <MappingFragment StoreEntitySet="ReviewVote">
+          <ScalarProperty Name="votedBy" ColumnName="votedBy" />
           <ScalarProperty Name="isup" ColumnName="isup" />
           <ScalarProperty Name="reviewId" ColumnName="reviewId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
@@ -592,6 +593,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="CompanyAds">
+      <EntityTypeMapping TypeName="Model.CompanyAd">
+        <MappingFragment StoreEntitySet="CompanyAd">
+          <ScalarProperty Name="ratedBy" ColumnName="ratedBy" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="companyId" ColumnName="companyId" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Companies">
       <EntityTypeMapping TypeName="Model.Company">
         <MappingFragment StoreEntitySet="Company">
@@ -615,18 +628,6 @@
           <ScalarProperty Name="shortabout" ColumnName="shortabout" />
           <ScalarProperty Name="title" ColumnName="title" />
           <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="CompanyAds">
-      <EntityTypeMapping TypeName="Model.CompanyAd">
-        <MappingFragment StoreEntitySet="CompanyAd">
-          <ScalarProperty Name="ratedBy" ColumnName="ratedBy" />
-          <ScalarProperty Name="time" ColumnName="time" />
-          <ScalarProperty Name="description" ColumnName="description" />
-          <ScalarProperty Name="rating" ColumnName="rating" />
-          <ScalarProperty Name="companyId" ColumnName="companyId" />
-          <ScalarProperty Name="adId" ColumnName="adId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

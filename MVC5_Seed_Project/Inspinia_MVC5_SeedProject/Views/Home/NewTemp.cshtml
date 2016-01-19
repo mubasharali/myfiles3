@@ -49,13 +49,23 @@
     }
 </style>
 
+
+<select id="example">
+    <option data-html="good" value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+</select>
+
+
 <div class="codeRunner">
     <table>
         <thead><tr><th>Option</th><th>Importance</th></tr></thead>
         <tbody data-bind="foreach: answers">
             <tr>
                 <td data-bind="text:text"></td>
-                <td data-bind="starRating: points"></td>
+                <td data-bind="starRating: points" ></td>
             </tr>
         </tbody>
     </table>
@@ -70,7 +80,16 @@
         </div>
     </div>
 </div>
+
+@section Styles{
+
+    
+<link href="~/Content/plugins/barrating/bars-movie.css" rel="stylesheet" />
+<link href="~/Content/plugins/barrating/bars-horizontal.css" rel="stylesheet" />
+<link href="~/Content/plugins/barrating/fontawesome-stars.css" rel="stylesheet" />
+}
 @section Scripts{
+<script src="~/Scripts/plugins/barrating/jquery.barrating.min.js"></script>
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
@@ -83,7 +102,12 @@
 <script>
     // ----------------------------------------------------------------------------
     // Reusable bindings - ideally kept in a separate file
-
+    $(function () {
+        $('#example').barrating({
+            theme: 'bars-movie',
+            //readonly: true
+        });
+    });
     ko.bindingHandlers.fadeVisible = {
         init: function (element, valueAccessor) {
             // Start visible/invisible according to initial value

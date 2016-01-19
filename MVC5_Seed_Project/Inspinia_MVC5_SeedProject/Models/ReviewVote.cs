@@ -17,7 +17,9 @@ namespace Inspinia_MVC5_SeedProject.Models
         public int Id { get; set; }
         public int reviewId { get; set; }
         public bool isup { get; set; }
+        public string votedBy { get; set; }
     
         public virtual Review Review { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

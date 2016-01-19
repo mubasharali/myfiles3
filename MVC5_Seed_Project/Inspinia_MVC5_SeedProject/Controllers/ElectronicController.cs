@@ -12,6 +12,7 @@ using System.Web.Http.Description;
 using Microsoft.AspNet.Identity;
 using System.Web;
 using System.Web.Security;
+using System.Data.Entity.Validation;
 using Inspinia_MVC5_SeedProject.Models;
 using System.IO;
 namespace Inspinia_MVC5_SeedProject.Controllers
@@ -181,15 +182,25 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 }
                 mob.addedBy = User.Identity.GetUserId();
                 mob.time = DateTime.UtcNow;
+                mob.status = "a";
                 db.Entry(mob).State = EntityState.Modified;
 
                 try
                 {
                     await db.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbEntityValidationException e)
                 {
-                    throw;
+                    string s = e.ToString();
+                    List<string> errorMessages = new List<string>();
+                    foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
+                    {
+                        string entityName = validationResult.Entry.Entity.GetType().Name;
+                        foreach (DbValidationError error in validationResult.ValidationErrors)
+                        {
+                            errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                        }
+                    }
                 }
                 return StatusCode(HttpStatusCode.NoContent);
             }
@@ -821,15 +832,15 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 var ide = await db.AspNetUsers.FindAsync(islogin);
                 loginUserProfileExtension = ide.dpExtension;
                 
-                try
-                {
-                    isAdmin = Roles.IsUserInRole("Admin");
-                    //isAdmin = Roles.GetRolesForUser().Contains("Admin");
-                }
-                catch (Exception e)
-                {
-                    string ss = e.ToString();
-                }
+                //try
+                //{
+                //    isAdmin = Roles.IsUserInRole("Admin");
+                //    //isAdmin = Roles.GetRolesForUser().Contains("Admin");
+                //}
+                //catch (Exception e)
+                //{
+                //    string ss = e.ToString();
+                //}
             }
             var ret = (from ad in db.Ads
                        where ad.Id == id

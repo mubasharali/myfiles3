@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="__MigrationHistory">
     <Key>
       <PropertyRef Name="MigrationId" />
@@ -274,7 +274,6 @@
     <Property Name="cityId" Type="int" />
     <Property Name="popularPlaceId" Type="int" />
     <Property Name="exectLocation" Type="nvarchar" MaxLength="100" />
-    <Property Name="rating" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="CompanyAd">
     <Key>
@@ -555,6 +554,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="reviewId" Type="int" Nullable="false" />
     <Property Name="isup" Type="bit" Nullable="false" />
+    <Property Name="votedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
   </EntityType>
   <EntityType Name="SaveAd">
     <Key>
@@ -1816,6 +1816,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_ReviewVote_ToTable_1">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="ReviewVote" Type="Self.ReviewVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ReviewVote">
+        <PropertyRef Name="votedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_SaveAd_ToTable">
     <End Role="Ad" Type="Self.Ad" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -2297,6 +2309,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_ReviewVote_ToTable" Association="Self.FK_ReviewVote_ToTable">
       <End Role="Review" EntitySet="Review" />
+      <End Role="ReviewVote" EntitySet="ReviewVote" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReviewVote_ToTable_1" Association="Self.FK_ReviewVote_ToTable_1">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="ReviewVote" EntitySet="ReviewVote" />
     </AssociationSet>
     <AssociationSet Name="FK_SaveAd_ToTable" Association="Self.FK_SaveAd_ToTable">

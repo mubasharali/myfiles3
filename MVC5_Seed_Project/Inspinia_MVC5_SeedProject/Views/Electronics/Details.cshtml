@@ -790,6 +790,7 @@
             self.showAds = ko.observableArray();
             self.error = ko.observable();
             self.loadad = function () {
+                //loading spinner..
                 var adId = myAdId;
                 url_address = '/api/Electronic/GetAd/' + adId;
                 $.ajax({

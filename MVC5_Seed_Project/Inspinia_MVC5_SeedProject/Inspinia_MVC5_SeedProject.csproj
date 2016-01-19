@@ -480,6 +480,15 @@
     <Content Include="Content\patterns\otis_redding.png" />
     <Content Include="Content\patterns\shattered.png" />
     <Content Include="Content\patterns\triangular.png" />
+    <Content Include="Content\plugins\barrating\bars-1to10.css" />
+    <Content Include="Content\plugins\barrating\bars-horizontal.css" />
+    <Content Include="Content\plugins\barrating\bars-movie.css" />
+    <Content Include="Content\plugins\barrating\bars-pill.css" />
+    <Content Include="Content\plugins\barrating\bars-reversed.css" />
+    <Content Include="Content\plugins\barrating\bars-square.css" />
+    <Content Include="Content\plugins\barrating\bootstrap-stars.css" />
+    <Content Include="Content\plugins\barrating\css-stars.css" />
+    <Content Include="Content\plugins\barrating\fontawesome-stars.css" />
     <Content Include="Content\plugins\blueimp\css\blueimp-gallery-indicator.css" />
     <Content Include="Content\plugins\blueimp\css\blueimp-gallery-video.css" />
     <Content Include="Content\plugins\blueimp\css\blueimp-gallery.css" />
@@ -566,6 +575,7 @@
     <Content Include="Scripts\app\inspinia.js" />
     <Content Include="Scripts\app\LaptopTree.js" />
     <Content Include="Scripts\app\MobileTree.js" />
+    <Content Include="Scripts\app\rating-knockout-binding.js" />
     <Content Include="Scripts\app\Selectize-Knockout-binding.js" />
     <Content Include="Scripts\app\slick-knockout-binding.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -762,6 +772,7 @@
     <Content Include="Scripts\plugins\jquery-ui\jquery-ui.js" />
     <Content Include="Scripts\plugins\jquery-ui\jquery-ui.min.css" />
     <Content Include="Scripts\plugins\jquery-ui\jquery-ui.min.js" />
+    <Content Include="Scripts\plugins\barrating\jquery.barrating.min.js" />
     <Content Include="Scripts\plugins\jsTree\jstree.min.js" />
     <Content Include="Scripts\plugins\ladda\ladda.jquery.min.js" />
     <Content Include="Scripts\plugins\ladda\ladda.min.js" />

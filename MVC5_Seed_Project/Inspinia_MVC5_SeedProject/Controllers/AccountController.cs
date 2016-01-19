@@ -124,16 +124,16 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         public async Task<JsonResult> RegisterUser(string email, string password = "aa")
         {
 
-            var roleManager = new RoleManager<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            //var roleManager = new RoleManager<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
 
 
-            if (!roleManager.RoleExists("Admin"))
-            {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Admin";
-                roleManager.Create(role);
+            //if (!roleManager.RoleExists("Admin"))
+            //{
+            //    var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+            //    role.Name = "Admin";
+            //    roleManager.Create(role);
 
-            }
+            //}
 
 
             var ab = email.Split('@');
@@ -149,7 +149,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 var currentUser = UserManager.FindByName(user.UserName);
 
-                var roleresult = UserManager.AddToRole(currentUser.Id, "Admin");
+                //var roleresult = UserManager.AddToRole(currentUser.Id, "Admin");
 
                 try { 
                 await SignInAsync(user, isPersistent: true);
@@ -168,6 +168,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     data.IsPasswordSaved = true;
                 }
+                db.Entry(data).State = System.Data.Entity.EntityState.Modified;
                 await db.SaveChangesAsync();
                 return Json("Done", JsonRequestBehavior.AllowGet);
             }

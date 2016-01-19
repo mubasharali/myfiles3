@@ -43,9 +43,21 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 review.reviewedBy = User.Identity.GetUserId();
+                review.time = DateTime.UtcNow;
                 db.Reviews.Add(review);
                 await db.SaveChangesAsync();
-                return Ok("Done");
+                var ret =await (from rev in db.Reviews
+                          where rev.Id.Equals(review.Id)
+                          select new
+                          {
+                              id = rev.Id,
+                              reviewDescription = rev.description,
+                              reviewedBy = rev.reviewedBy,
+                              reviewedByName = rev.AspNetUser.Email,
+                              time = rev.time,
+                              rating = rev.rating,
+                          }).FirstOrDefaultAsync();
+                return Ok(ret);
             }
             return BadRequest();
         }
@@ -63,11 +75,121 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return BadRequest();
         }
-        public async Task<IHttpActionResult> DeleteReview(Review review)
+        [HttpPost]
+        public async Task<IHttpActionResult> DeleteReview(int id)
         {
             if (User.Identity.IsAuthenticated)
             {
-                db.Reviews.Remove(review);
+                var review =await db.Reviews.FirstOrDefaultAsync(x => x.Id.Equals(id));
+               
+                try {
+                    db.Reviews.Remove(review);
+                    await db.SaveChangesAsync();
+                }
+                catch(Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Ok("Done");
+            }
+            return BadRequest();
+        }
+        public async Task<IHttpActionResult> LikeReview(int id, bool isup)
+        {
+            var userId = User.Identity.GetUserId();
+            if (userId != null)
+            {
+                Review comment = await db.Reviews.FindAsync(id);
+                var commentVoteByUser = await db.ReviewVotes.FirstOrDefaultAsync(x => x.reviewId == id && x.votedBy == userId);
+                if (comment == null)
+                {
+                    return NotFound();
+                }
+                var vote = commentVoteByUser;
+                if (vote != null)
+                {
+                    if (vote.isup && isup)
+                    {
+                        return BadRequest("You have already voteup");
+                    }
+                    else if (vote.isup && !isup)
+                    {
+                        vote.isup = false;
+                    }
+                    else if (!vote.isup && !isup)
+                    {
+                        return BadRequest("You have already votedown");
+                    }
+                    else if (!vote.isup && isup)
+                    {
+                        vote.isup = true;
+                    }
+                }
+                else
+                {
+                    ReviewVote repvote = new  ReviewVote();
+                    repvote.isup = isup;
+                    repvote.votedBy = userId;
+                    repvote.reviewId = id;
+                    db.ReviewVotes.Add(repvote);
+                }
+                await db.SaveChangesAsync();
+
+                var q = (from x in comment.ReviewVotes.Where(x => x.reviewId == comment.Id)
+                         let voteUp = comment.ReviewVotes.Count(m => m.isup)
+                         let voteDown = comment.ReviewVotes.Count(m => m.isup == false)
+                         select new { voteUpCount = voteUp, voteDownCount = voteDown }).FirstOrDefault();
+
+                return Ok(q);
+            }
+            else
+            {
+                return BadRequest("You are not login");
+            }
+        }
+        public async Task<IHttpActionResult> AddReviewReply(ReviewReply review)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                review.postedBy = User.Identity.GetUserId();
+                review.time = DateTime.UtcNow;
+                db.ReviewReplies.Add(review);
+                await db.SaveChangesAsync();
+                var ret =await (from rep in db.ReviewReplies
+                          where rep.Id.Equals(review.Id)
+                          select new
+                          {
+                              id = rep.Id,
+                              time = rep.time,
+                              description = rep.description,
+                              postedBy = rep.postedBy,
+                              postedByName = rep.AspNetUser.Email,
+                          }).FirstOrDefaultAsync();
+                return Ok(ret);
+            }
+            return BadRequest();
+        }
+        public async Task<IHttpActionResult> UpdateReviewReply(ReviewReply review)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                db.Entry(review).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return Ok("Done");
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> DeleteReviewReply(int id)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var ret =await db.ReviewReplies.FindAsync(id);
+                db.ReviewReplies.Remove(ret);
                 await db.SaveChangesAsync();
                 return Ok("Done");
             }
@@ -76,12 +198,17 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         public async Task<IHttpActionResult> GetPage(int id)
         {
             var loginUserId = User.Identity.GetUserId();
-            var loginUserProfileExtension = db.AspNetUsers.Find(loginUserId).dpExtension;
+            var loginUserProfileExtension = "";
+            if (loginUserId != null)
+            {
+                loginUserProfileExtension = db.AspNetUsers.Find(loginUserId).dpExtension; 
+            }
+            
             var ret = from company in db.Companies
                       where company.Id.Equals(id)
                       select new
                       {
-                          rating = from review in company.Reviews
+                          reviews = from review in company.Reviews
                                    //where review.reviewedBy.Equals(loginUserId)
                                    select new
                                    {
@@ -91,6 +218,19 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                        time = review.time,
                                        reviewedBy = review.reviewedBy,
                                        reviewedByName = review.AspNetUser.Email,
+                                       voteUpCount = review.ReviewVotes.Count(x=>x.isup),
+                                       voteDownCount = review.ReviewVotes.Count(x=>x.isup == false),
+                                       isUp = review.ReviewVotes.Any(x=>x.isup && x.votedBy.Equals(loginUserId)),
+                                       isDown = review.ReviewVotes.Any(x => x.isup == false && x.votedBy.Equals(loginUserId)),
+                                       reviewReplies = from reply in review.ReviewReplies
+                                                       select new
+                                                       {
+                                                           id = reply.Id,
+                                                           description = reply.description,
+                                                           time = reply.time,
+                                                           postedBy = reply.postedBy,
+                                                           postedByName = reply.AspNetUser.Email,
+                                                       },
                                    },
                           loginUserId = loginUserId,
                           loginUserProfileExtension = loginUserProfileExtension,
@@ -333,12 +473,78 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
             return Ok("Done");
         }
-        public async Task<IHttpActionResult> UpdatePage(Company comment)
+        public async Task<object> UpdateTags(string s, int companyId)
         {
-            if (!ModelState.IsValid)
+           var com =await db.Companies.Include("CompanyTags").FirstOrDefaultAsync(x => x.Id.Equals(companyId));
+            var temp = com.CompanyTags.ToList();
+            foreach (var cc in temp)
             {
-                return BadRequest();
+                db.CompanyTags.Remove(cc);
             }
+            
+            await db.SaveChangesAsync();
+            string[] values = s.Split(',');
+            Tag[] tags = new Tag[values.Length];
+            CompanyTag[] qt = new CompanyTag[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = values[i].Trim();
+                string ss = values[i];
+                if (ss != "")
+                {
+                    var data = await db.Tags.FirstOrDefaultAsync(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
+
+                    tags[i] = new Tag();
+                    if (data != null)
+                    {
+                        tags[i].Id = data.Id;
+                    }
+                    else
+                    {
+                        tags[i].name = values[i];
+                        tags[i].time = DateTime.UtcNow;
+                        tags[i].createdBy = User.Identity.GetUserId();
+                        db.Tags.Add(tags[i]);
+                    }
+                }
+                else
+                {
+                    tags[i] = null;
+                }
+            }
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                string sb = e.ToString();
+            }
+            for (int i = 0; i < values.Length; i++)
+            {
+                if (tags[i] != null)
+                {
+                    qt[i] = new CompanyTag();
+                    qt[i].companyId = companyId;
+                    qt[i].tagId = tags[i].Id;
+                    db.CompanyTags.Add(qt[i]);
+                }
+            }
+            await db.SaveChangesAsync();
+            var ret = from taa in qt
+                      select new
+                      {
+                          name = taa.Tag.name,
+                      };
+            return ret;
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdatePage(Company comment,string tags)
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest();
+            //}
             db.Entry(comment).State = EntityState.Modified;
             try
             {
@@ -362,7 +568,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 string s = e.ToString();
             }
-            return StatusCode(HttpStatusCode.NoContent);
+           var returnTags = await UpdateTags(tags, comment.Id);
+            return Ok(returnTags);
         }
         public class BranchLocation1
         {

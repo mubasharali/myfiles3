@@ -78,7 +78,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<CompanyAnswer> CompanyAnswers { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<CompanyTag> CompanyTags { get; set; }
-        public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<CompanyAd> CompanyAds { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
     }
 }

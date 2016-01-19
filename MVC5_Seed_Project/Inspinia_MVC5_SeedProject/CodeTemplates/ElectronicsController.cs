@@ -64,7 +64,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 {
                     //string tempId = Request["tempId"];
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    MyAd(ad, "Save");
+                    MyAd(ad, "Save","Mobiles");
                     MobileAd mobileAd= new MobileAd();
                     mobileAd.sims =Request["sims"];
                     mobileAd.color = Request["color"];
@@ -111,7 +111,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 if (Request.IsAuthenticated)
                 {
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    MyAd(ad, "Save");
+                    MyAd(ad, "Save","Mobiles","MobileAccessories");
                     MobileAd mobileAd = new MobileAd();
                     mobileAd.color = Request["color"];
 
@@ -152,7 +152,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 if (Request.IsAuthenticated)
                 {
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    MyAd(ad, "Save");
+                    MyAd(ad, "Save","Laptops");
                     LaptopAd mobileAd = new LaptopAd();
                     mobileAd.color = Request["color"];
 
@@ -532,7 +532,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             Ad ad= new Ad();
             return View(ad);
         }
-        public void MyAd(Ad ad,string SaveOrUpdate,string subcategory = null)
+        public void MyAd(Ad ad,string SaveOrUpdate,string cateogry = null,string subcategory = null)
         {
             var type = Request["type"];
             var isbiding = Request["bidingAllowed"];
@@ -585,7 +585,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             if (SaveOrUpdate == "Save")
             {
-                ad.category = "Electronics";
+                ad.category = cateogry;
                 ad.subcategory = subcategory;
                 ad.time = DateTime.UtcNow;
             }
@@ -606,7 +606,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 if (Request.IsAuthenticated)
                 {
-                    MyAd(ad,"Save","HomeAppliances");
+                    MyAd(ad,"Save","Electronics","HomeAppliances");
 
                     AspNetUser asp = db.AspNetUsers.FirstOrDefault(x => x.Id == ad.postedBy);
 
@@ -638,7 +638,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
 
                         db.Entry(ad).State = EntityState.Modified;
                         //tags
-                        SaveTags(Request["tags"], ad);
+                        SaveTags(Request["tags"], ad,"update");
                         //location
 
                         MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Update");
@@ -812,6 +812,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     var iddd = User.Identity.GetUserId();
                     if (Request["postedBy"] == User.Identity.GetUserId())
                     {
+                      //  var myPreviousAd = db.Ads.Find(ad.Id).AdTags;
                         MyAd(ad, "Update");
 
                         MobileAd mobileAd = new MobileAd();
@@ -838,6 +839,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                             mob.brand = company;
                             mob.addedBy = User.Identity.GetUserId();
                             mob.time = DateTime.UtcNow;
+                            mob.status = "p";
                             db.Mobiles.Add(mob);
                             db.SaveChanges();
 
@@ -845,9 +847,11 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                             mod.model = model;
                             mod.brandId = mob.Id;
                             mod.time = DateTime.UtcNow;
+                            mod.status = "p";
                             mod.addedBy = User.Identity.GetUserId();
                             db.MobileModels.Add(mod);
                             db.SaveChanges();
+                            ad.status = "p";
                         }
                         else
                         {
@@ -867,14 +871,16 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                                 mod.brandId = brandId.Id;
                                 mod.model = model;
                                 mod.time = DateTime.UtcNow;
+                                mod.status = "p";
                                 mod.addedBy = User.Identity.GetUserId();
                                 db.MobileModels.Add(mod);
                                 db.SaveChanges();
+                                ad.status = "p";
                             }
                         }
 
                         //tags
-                        SaveTags(Request["tags"], ad);
+                        SaveTags(Request["tags"], ad,"update");
 
                         var mobileModel = db.MobileModels.FirstOrDefault(x => x.Mobile.brand == company && x.model == model);
                         mobileAd.mobileId = mobileModel.Id;
@@ -904,9 +910,23 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return View("Edit", ad);
         }
-        public void SaveTags(string s,Ad ad)
+        public void SaveTags(string s,Ad ad,string addOrUpdate = "add")
         {
             //string s = Request["tags"];
+
+            if(addOrUpdate == "update")
+            {
+                var adtags = db.AdTags.Where(x => x.adId.Equals(ad.Id)).ToList();
+         //       var adtags = ad.AdTags.ToList();
+               // var adtags = db.Ads.Include("AdTags").FirstOrDefault(x => x.Id.Equals(ad.Id));
+               // var temp = adtags.AdTags.ToList();
+                foreach (var cc in adtags)
+                {
+                    db.AdTags.Remove(cc);
+                }
+                 db.SaveChanges();
+            }
+
             string[] values = s.Split(',');
             Tag[] tags = new Tag[values.Length];
             AdTag[] qt = new AdTag[values.Length];
@@ -1022,7 +1042,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         }
 
                         //tags
-                        SaveTags(Request["tags"], ad);
+                        SaveTags(Request["tags"], ad,"update");
 
                         var mobileModel = db.LaptopModels.FirstOrDefault(x => x.LaptopBrand.brand == company && x.model == model);
                         mobileAd.laptopId = mobileModel.Id;

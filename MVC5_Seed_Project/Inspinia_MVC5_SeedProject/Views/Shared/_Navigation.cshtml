@@ -40,9 +40,9 @@
                         <a class="btn" data-bind="click:loginBtn" >Login</a>
                     </div>
                 }
-                <div class="logo-element">
+                @*<div class="logo-element">
                     ABC
-                </div>
+                </div>*@
             </li>
             <li class="@Html.IsSelected(controller: "MobilesTablets")">
                 <a href="@Url.Action("Index", "MobilesTablets")"><i class="fa fa-mobile fa-2x"></i> <span class="nav-label">Mobiles, Tablets</span> </a>
@@ -72,6 +72,7 @@
                     <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")"><i class="fa fa-truck"></i>Commerical Vehicles</a></li>
                     <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")"><i class="fa fa-money"></i>Vehicles For Rent</a></li>
                     <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")"><i class="fa fa-ship"></i>Other Vehicles</a></li>
+                    <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")"><i class="fa fa-ship"></i>Spare parts</a></li>
                 </ul>
             </li>
             <li class="@Html.IsSelected(controller: "Animals")">

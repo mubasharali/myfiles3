@@ -59,8 +59,9 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.Tags = new HashSet<Tag>();
             this.Tags1 = new HashSet<Tag>();
             this.AspNetRoles = new HashSet<AspNetRole>();
-            this.Companies = new HashSet<Company>();
             this.CompanyAds = new HashSet<CompanyAd>();
+            this.Companies = new HashSet<Company>();
+            this.ReviewVotes = new HashSet<ReviewVote>();
         }
     
         public string Id { get; set; }
@@ -131,7 +132,8 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<Tag> Tags1 { get; set; }
         public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
-        public virtual ICollection<Company> Companies { get; set; }
         public virtual ICollection<CompanyAd> CompanyAds { get; set; }
+        public virtual ICollection<Company> Companies { get; set; }
+        public virtual ICollection<ReviewVote> ReviewVotes { get; set; }
     }
 }

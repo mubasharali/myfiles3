@@ -34,7 +34,7 @@
     .starRating span {
         width: 24px;
         height: 24px;
-        background-image: url(../Images/others/stars.png);
+        background-image: url(/Images/others/stars.png);
         display: inline-block;
         cursor: pointer;
         background-position: -24px 0;
@@ -43,7 +43,30 @@
         .starRating span.chosen {
             background-position: 0 0;
         }
+        .starRatingDisabled span {
+        width: 24px;
+        height: 24px;
+        background-image: url(/Images/others/stars.png);
+        display: inline-block;
+        cursor: pointer;
+        background-position: -24px 0;
+    }
 
+        .starRatingDisabled span.chosen {
+            background-position: 0 0;
+        }
+       /*.disableRating .starRatingDisabled span {
+        width: 24px;
+        height: 24px;
+        background-image: url(/Images/others/stars.png);
+        display: inline-block;
+        cursor: pointer;
+        background-position: -24px 0;
+    }
+
+      .disableRating  .starRatingDisabled span.chosen {
+            background-position: 0 0;
+        }*/
     .starRating:hover span {
         background-position: -24px 0;
     }
@@ -52,11 +75,11 @@
             background-position: 0 0;
         }
 
-    input:not([type]), input[type=text], input[type=password], select {
+    /*input:not([type]), input[type=text], input[type=password], select {
         background-color: #FFFFCC;
         border: 1px solid gray;
         padding: 2px;
-    }
+    }*/
 </style>
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -93,7 +116,7 @@
                                         Company Name:<input type="text" placeholder="Company Name" class="form-control" data-bind="value:title" required />
                                         one line description:<input type="text" class="form-control" placeholder="One line description of company" data-bind="value:shortAbout" required />
                                         tags:
-        <input id="select-tag" name="tags" class="repositories" placeholder="Pick tags..." />
+        <input id="select-tag" data-bind="value:inputTags" class="repositories" placeholder="Pick tags..." />
                                         <button class="btn btn-primary" data-bind="click:updatePage">Update</button>
                                     </div>
                                     <div>
@@ -107,7 +130,6 @@
                                 </div>
                             </div>
                             <div class="row">
-                                afgasdf
                                 <div data-bind="text:longAbout,visible:!isLongAboutEditing()">
                                     jkkljl
                                     <span data-bind="visible:loginUserId == createdBy">
@@ -124,37 +146,95 @@
                                 <div class="col-sm-9">
                                     <div class="row">
                                         <h2>Rating</h2>
-                                        <div data-bind="click:addReviewBtn,visible:!isAddingReview()">Add review</div>
+                                        <div class="btn btn-xs btn-white" data-bind="click:addReviewBtn,visible:!isAddingReview()">Add review</div>
                                         <div data-bind="visible:isAddingReview()">
-                                            <div class="ibox">
-                                                <div class="ibox-title">Add review</div>
-                                                <div class="ibox-content">
-                                                    <div class="row">
-                                                        <div class="form-control">
-                                                            <div class="col-md-3">Rate:</div>
-                                                            <div class="col-md-9">ajdslkfa</div>
-                                                        </div>
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <div class="col-md-2">Rate:</div>
+                                                    <div class="col-md-10"><div data-bind="starRating:newRating"></div></div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <div class="control-label col-md-2">Description</div>
+                                                    <div class="col-md-10">
+                                                        <textarea class="msgTextArea form-control" placeholder="Add review Details.." data-bind="jqAutoresize: {},value:reviewDescription"></textarea>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="form-control">
-                                                            <div class="col-md-3">Description</div>
-                                                            <div class="col-md-9">
-                                                                <textarea class="msgTextArea form-control" placeholder="Add review Details.." data-bind="jqAutoresize: {},value:reviewDescription"></textarea>
+                                                </div>
+                                            </div><br />
+                                            <button data-style="expand-left" class="ladda-button  btn btn-danger col-sm-offset-2" data-bind="click:submitReviewBtn">Submit</button>
+                                            <br />
+                                        </div>
+                                        <div data-bind="foreach:showReviews">
+                                            <div data-bind="visible:!isReviewEditing()"><hr />
+                                                <div data-bind="visible:reviewedBy == $parent.loginUserId"><span data-bind="click:$parent.deleteReview" class="btn btn-xs btn-white pull-right">Delete</span> <span data-bind="click:editReviewBtn" class="btn btn-xs btn-white pull-right">Edit</span> </div>
+                                                <div class="disableRating" data-bind="starRating:rating"></div>
+                                                <div data-bind="text:reviewDescription"></div>
+                                                <div style="margin-left:0" class="vote-info">
+                                                    <a data-bind="click:function(){return voteReview(id,$parent.loginUserId,true)}">
+                                                        <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-thumbs-up"> </i>
+                                                        <span data-bind="text:voteUpCount"></span>
+                                                    </a>
+                                                    <a data-bind="click:function(){return voteReview(id,$parent.loginUserId,false)}">
+                                                        <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-thumbs-down"> </i>
+                                                        <span data-bind="text:voteDownCount"></span>
+                                                    </a>
+                                                    <span class="btn btn-xs btn-white" data-bind="click:reviewReplyBtn">Reply</span>
+                                                    <i class="fa fa-user"></i> <a data-bind="attr:{href:'/User/Index/'+reviewedBy},text:reviewedByName"></a>
+                                                    <i class="fa fa-clock-o"></i> <span data-bind="text:friendlyTime"></span>
+
+                                                </div>
+                                                <div data-bind="visible:isAddingReviewReply()">
+                                                    <div style="margin-left:45px" class="vote">
+                                                        <textarea class="msgTextArea form-control" placeholder="Reply.." data-bind="valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter($parent.loginUserId,description.length,data,event)}},value:description"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div data-bind="foreach:showReviewReplies">
+                                                    <div data-bind="visible:!isReviewReplyEditing()">
+                                                        <div class="vote">
+                                                            <p class="vote-title" style="font-size:small;font-weight:300" data-bind="text:description"></p>
+                                                            <div data-bind="visible:postedBy == $parents[1].loginUserId"><span data-bind="click:$parent.deleteReviewReply" class="btn btn-xs btn-white pull-right">Delete</span> <span data-bind="click:editReviewReplyBtn" class="btn btn-xs btn-white pull-right">Edit</span> </div>
+
+                                                            <div class="vote-info">
+
+                                                                <i class="fa fa-user"></i> <a data-bind="attr:{href:'/User/Index/'+postedBy},text:postedByName"></a>
+                                                                <i class="fa fa-clock-o"></i> <span data-bind="text:friendlyTime"></span>
+
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button data-bind="click:submitReviewBtn">Submit</button>
+                                                    <div data-bind="visible:isReviewReplyEditing()">
+                                                        <div style="margin-left:45px" class="vote">
+                                                            <textarea class="msgTextArea form-control" placeholder="Reply.." data-bind="valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter1(description.length,data,$parent.id,event)}},value:description"></textarea>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div data-bind="foreach:showReviews">
-                                            <div data-bind="text:reviewDescription"></div>
+                                                <div data-bind="visible:isReviewEditing()">
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <div class="col-md-2">Rate:</div>
+                                                            <div class="col-md-10"><div data-bind="starRating:rating"></div></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <div class="control-label col-md-2">Description</div>
+                                                            <div class="col-md-10">
+                                                                <textarea class="msgTextArea form-control" placeholder="Add review Details.." data-bind="jqAutoresize: {},value:reviewDescription"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div><br />
+                                                    <button data-style="expand-left" class="ladda-button  btn btn-danger col-sm-offset-2" data-bind="click: function(){ return updateReview($data,$parent.id)} ">Update</button>
+                                                </div>
+                                           
                                         </div>
                                         <h2>Location</h2>
                                         <h3>HeadOffice</h3>
                                         <div data-bind="visible:!isMainBranchEditing()">
                                             <span data-bind="visible:loginUserId == createdBy">
-                                                <a data-bind="click: function(){return editLocation(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                                <a data-bind="click: function(){return editLocation(id)},visible:cityName()" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                                <a data-bind="click: function(){return editLocation(id)},visible:!cityName()" class="btn btn-white btn-xs "> Add Head office location</a>
                                             </span>
                                             <span data-bind="if:exectLocation">
                                                 <span data-bind="text:exectLocation"></span>,
@@ -213,7 +293,7 @@
                                                         <input type="text" class="form-control" data-bind="value:contactNo1" />
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div><br />
                                             <div class="row">
                                                 <div class="form-group">
                                                     <label class="control-label col-md-2">Contact No 2</label>
@@ -221,7 +301,7 @@
                                                         <input type="text" class="form-control" data-bind="value:contactNo2" />
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div><br />
                                             <div class="row">
                                                 <div class="form-group">
                                                     <label class="control-label col-md-2">Company is established since</label>
@@ -230,7 +310,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button data-bind="click:updateMainBranchLocation">Submit</button>
+                                            <button class="btn btn-danger col-md-offset-2" data-bind="click:updateMainBranchLocation">Submit</button>
                                         </div>
                                         @*<p data-bind="text:longAbout"></p>
                 facebook link, tw , website*@
@@ -299,8 +379,9 @@
                                                         <input type="date" class="form-control" data-bind="value:Bsince" name="since" />
                                                     </div>
                                                 </div>
-                                                <button data-bind="click:saveNewBranch">Submit</button>
+                                                
                                             </div>
+                                            <button class="btn btn-danger col-md-offset-2" data-bind="click:saveNewBranch">Submit</button>
                                         </div>
                                         <div data-bind="foreach:showBranches">
                                             <div data-bind="visible:!isBranchEditing()">
@@ -332,7 +413,7 @@
                                                     <div class="form-group">
                                                         <label class="control-label col-md-2">City</label>
                                                         <div class="col-md-10">
-                                                            <select  class="demo-default select-city2" data-bind="options: availableCities,
+                                                            <select class="demo-default select-city2" data-bind="options: availableCities,
                        value: selectedCity,
                        optionsCaption: 'Choose City...'"></select>
 
@@ -356,7 +437,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label col-md-2">Exect location</label>
                                                             <div class="col-md-10">
-                                                                <input type="text" class="form-control" data-bind="value:$parent.exectLocation" /> 
+                                                                <input type="text" class="form-control" data-bind="value:$parent.exectLocation" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -369,7 +450,7 @@
                                                             <input type="text" class="form-control" data-bind="value:contactNo1" />
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div><br />
                                                 <div class="row">
                                                     <div class="form-group">
                                                         <label class="control-label col-md-2">Contact No 2</label>
@@ -380,13 +461,16 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="form-group">
-                                                        <label class="control-label col-md-2">Branch is established since</label></div>
-                                                        <div class="col-md-10">
-                                                            <input type="date" class="form-control" data-bind="value:since" />
-                                                        </div>
+                                                        <label class="control-label col-md-2">Branch is established since</label>
                                                     </div>
-                                                <button data-bind="click:function(){return updateBranch($data,$parent.id)}">Submit</button>
+                                                    <div class="col-md-10">
+                                                        <input type="date" class="form-control" data-bind="value:since" />
+                                                    </div>
                                                 </div>
+                                                
+                                                    <button class="btn btn-danger col-md-offset-2" data-bind="click:function(){return updateBranch($data,$parent.id)}">Submit</button>
+                                               
+                                            </div>
                                                 
                                             </div>
                                         </div>
@@ -429,6 +513,7 @@
     @Styles.Render("~/plugins/sweetAlertStyles")
 @Styles.Render("~/scripts/selectizeStyles")
 @Styles.Render("~/bundles/tagStyles")
+@Styles.Render("~/plugins/laddaStyles")
 }
 
 
@@ -443,12 +528,14 @@
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/plugins/sweetAlert")
 @Scripts.Render("~/scripts/selectize")
+@Scripts.Render("~/plugins/ladda")
     <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="~/signalr/hubs"></script>
     <script src="~/Scripts/UserLogin.js"></script>
     <script src="~/Scripts/app/chat.js"></script>
     <script src="~/Scripts/_Comments.js"></script>
     <script>
+        
         var myCompanyId = $("#companyId").val();
         
         function Branch(data) {
@@ -581,23 +668,175 @@
             self.info = data.info || "";
             self.followers = data.followers || 0;
         };
-        //function Rating(text) {
-        //    var self = this;
-        //    self.text = text;
-        //    self.points = ko.observable(0);
-        //    self.points.subscribe(function () {
-        //        console.log(self.points());
-        //    })
-        //}
+        function ReviewReply(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.description =ko.observable( data.description);
+            self.time = data.time;
+            self.friendlyTime = getTimeAgo( data.time);
+            self.postedBy = data.postedBy;
+            self.postedByName = data.postedByName;
+            self.isReviewReplyEditing = ko.observable(false);
+            self.editReviewReplyBtn = function () {
+                self.isReviewReplyEditing(true);
+            }
+            self.checkEnter1 = function ( length, d,reviewId, e) {
+                if (length < 500) {
+                    if (e.keyCode == 13) {
+                        self.updateReviewReply(d,reviewId);
+                    }
+                }
+                else {
+                    self.description(self.description().slice(0, -1));
+                    toastr.info("You have reached the limit");
+                }
+            }
+            self.updateReviewReply = function (data, reviewId) {
+                data.reviewId = reviewId;
+                $.ajax({
+                    url: '/api/Company/UpdateReviewReply/',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(data),
+                    success: function (data1) {
+                        self.isReviewReplyEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("failed to update.Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+        }
         function Review(data) {
             var self = this;
             data = data || {};
             self.id = data.id;
-            self.rating = data.rating;
-            self.reviewDescription = data.reviewDescription;
+            self.rating = ko.observable(data.rating);
+            self.reviewDescription = ko.observable(data.reviewDescription);
             self.reviewedBy = data.reviewedBy;
             self.reviewedByName = data.reviewedByName;
             self.time = data.time;
+            self.isReviewEditing = ko.observable(false);
+            self.friendlyTime = getTimeAgo(data.time);
+            self.editReviewBtn = function () {
+                self.isReviewEditing(true);
+            }
+            self.showReviewReplies = ko.observableArray();
+            if (data.reviewReplies) {
+                var branch = $.map(data.reviewReplies, function (item) { return new ReviewReply(item); });
+                self.showReviewReplies(branch);
+            }
+            self.deleteReviewReply = function (data) {
+                $.ajax({
+                    url: '/api/Company/DeleteReviewReply?id=' + data.id ,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data1) {
+                        self.showReviewReplies.remove(data);
+                    },
+                    error: function () {
+                        toastr.error("failed to delete Reply.Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+            self.description = ko.observable();
+            self.isAddingReviewReply = ko.observable(false);
+            self.reviewReplyBtn = function () {
+                self.description("");
+                self.isAddingReviewReply(!self.isAddingReviewReply());
+            }
+            self.checkEnter = function (loginUserId, length, d, e) {
+                if (length < 500) {
+                    if (e.keyCode == 13) {
+                        self.addReviewReply(d);
+                    }
+                }
+                else {
+                    self.description(self.description().slice(0, -1));
+                    toastr.info("You have reached the limit");
+                }
+            }
+            
+            self.addReviewReply = function (data) {
+                data.reviewId = data.id;
+                $.ajax({
+                    url: '/api/Company/AddReviewReply/',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(data),
+                    success: function (data1) {
+                        self.isAddingReviewReply(false);
+                        self.showReviewReplies.push(new ReviewReply(data1));
+                    },
+                    error: function () {
+                        toastr.error("failed to post Reply.Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+            self.voteUpCount = ko.observable(data.voteUpCount || 0);
+            self.voteDownCount = ko.observable(data.voteDownCount || 0);
+            self.isUp = ko.observable(data.isUp || false);
+            self.isDown = ko.observable( data.isDown || false);
+            self.voteReview = function (id, loginUserId, isUp) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Company/LikeReview?id=' + id + '&isup=' + isUp,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.voteUpCount(data.voteUpCount);
+                            self.voteDownCount(data.voteDownCount);
+                            if (isUp) {
+                                self.isUp(true);
+                                self.isDown(false);
+                            } else {
+                                self.isUp(false);
+                                self.isDown(true);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    });
+                }
+                else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+
+
+            self.updateReview = function (data, companyId) {
+                data.companyId = companyId;
+                var loading = $('.ladda-button').ladda();
+                loading.ladda('start');
+                data.description = data.reviewDescription();
+                $.ajax({
+                    url: '/api/Company/UpdateReview/',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(data),
+                    success: function (data1) {
+                        loading.ladda('stop');
+                        self.isReviewEditing(false);
+                    },
+                    error: function () {
+                        loading.ladda('stop');
+                        toastr.error("failed to add Review.Please refresh page and try again", "Error!");
+                    }
+                });
+            }
         }
         function CompanyPage(data) {
             var self = this;
@@ -607,32 +846,82 @@
             self.imageIndex = ko.observable(1);
             self.showReviews = ko.observableArray();
             data = data || {};
-
+            self.inputTags = ko.observable();
             self.reviewDescription = ko.observable();
+            self.newRating = ko.observable();
+            
             if (data.reviews) {
                 var branch = $.map(data.reviews, function (item) { return new Review(item); });
                 self.showReviews(branch);
             }
             self.isAddingReview = ko.observable(false);
             self.addReviewBtn = function () {
+
+                var isalreadybid = false;
+                $.each((self.showReviews()), function (i, item) {
+                    if (item.reviewedBy == self.loginUserId) {
+                        isalreadybid = true;
+                    }
+                });
+                if (isalreadybid) {
+                    toastr.info("You cannot post multiple reviews. Just edit your previous review", "Wait!");
+                    return;
+                }
+
+
                 self.isAddingReview(true);
             }
-            self.submitReviewBtn = function (data) {
+
+            self.deleteReview = function (data) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this review!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
                     $.ajax({
-                        url: '/api/Company/AddReview/',
+                        url: '/api/Company/DeleteReview?id=' + data.id,
                         dataType: "json",
                         contentType: "application/json",
                         cache: false,
                         type: 'POST',
-                        data: ko.toJSON(data),
-                        success: function (data) {
-                            self.isAddingReview(false);
-                            self.showReviews.push(data);
+                       // data: ko.toJSON(data.id),
+                        success: function (data1) {
+                            self.showReviews.remove(data);
+                            swal("Deleted!", "Your Review has been deleted.", "success");
                         },
                         error: function () {
-                            toastr.error("failed to add Review.Please refresh page and try again", "Error!");
+                            swal("Error", "please refresh page and try again", "error");
                         }
                     });
+                });
+            }
+            self.submitReviewBtn = function (data) {
+                var loading = $('.ladda-button').ladda();
+                loading.ladda('start');
+                data.companyId = self.id;
+                data.rating = self.newRating();
+                data.description = data.reviewDescription();
+                $.ajax({
+                    url: '/api/Company/AddReview/',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(data),
+                    success: function (data1) {
+                        loading.ladda('stop');
+                        self.isAddingReview(false);
+                        self.showReviews.push(new Review(data1));
+                    },
+                    error: function () {
+                        loading.ladda('stop');
+                        toastr.error("failed to add Review.Please refresh page and try again", "Error!");
+                    }
+                });
             }
             self.showTags = ko.observableArray();
             if (data.tags) {
@@ -910,13 +1199,15 @@
             
             self.updatePage = function (page) {
                 $.ajax({
-                    url: '/api/Company/UpdatePage/',
+                    url: '/api/Company/UpdatePage?tags=' + self.inputTags(),
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
                     type: 'POST',
                     data: ko.toJSON(page),
                     success: function (data) {
+                        self.showTags.removeAll();
+                        $.each((data), function (i, item) { self.showTags.push(item.name) });
                         self.isPageEditing(false);
                         self.isLongAboutEditing(false);
                     },
@@ -926,6 +1217,20 @@
                 });
             }
             self.updateMainBranchLocation = function (page) {
+                if (!self.selectedcityName()) {
+                    toastr.info("Please provide city", "Wait");
+                    return;
+                }
+                if (!self.selectedpopularPlace()) {
+                    toastr.info("Please enter a famous place near this branch");
+                    return;
+                }
+                if (!self.contactNo1()) {
+                    if (!self.contactNo2()) {
+                        toastr.info("Please provide atleast one contact number");
+                        return;
+                    }
+                }
                 $.ajax({
                     url: '/api/Company/HeadOfficeLocation?city=' + self.selectedcityName() + '&popularPlace=' + self.selectedpopularPlace() + '&exectLocation=' + self.exectLocation(),
                     dataType: "json",
@@ -970,7 +1275,7 @@
                     valueField: 'name',
                     labelField: 'name',
                     searchField: 'name',
-                    options: [],
+                   // options: [],
                     maxItems: 6,
                     create: true,
                     render: {
@@ -1002,6 +1307,21 @@
                         });
                     }
                 });
+                var selectize_tags = $("#select-tag")[0].selectize;
+                $.each((self.showTags()), function (i, item) {
+                    selectize_tags.addOption({
+                        text: item,
+                        value: item,
+                        name: item,
+                    });
+                    selectize_tags.addItem(item);
+                });
+                //selectize_tags.addOption({
+                //    text: 'Technology',
+                //    value: 'technology',
+                //    name: 'technology',
+                //});
+                //selectize_tags.addItem('technology')
             }
             self.deletePage = function (id) {
                 swal({
@@ -1176,50 +1496,37 @@
             var answers = ['a', 'b'];
             this.answers = $.map(answers, function (text) { return new Answer(text) });
         }
-        ko.bindingHandlers.fadeVisible = {
-            init: function (element, valueAccessor) {
-                // Start visible/invisible according to initial value
-                var shouldDisplay = valueAccessor();
-                $(element).toggle(shouldDisplay);
-            },
-            update: function (element, valueAccessor) {
-                // On update, fade in/out
-                var shouldDisplay = valueAccessor();
-                shouldDisplay ? $(element).fadeIn() : $(element).fadeOut();
-            }
-        };
-
-        ko.bindingHandlers.jqButton = {
-            init: function (element) {
-                $(element).button(); // Turns the element into a jQuery UI button
-            },
-            update: function (element, valueAccessor) {
-                var currentValue = valueAccessor();
-                // Here we just update the "disabled" state, but you could update other properties too
-                $(element).button("option", "disabled", currentValue.enable === false);
-            }
-        };
+        
+       
 
         ko.bindingHandlers.starRating = {
             init: function (element, valueAccessor) {
-                $(element).addClass("starRating");
-                for (var i = 0; i < 5; i++)
-                    $("<span>").appendTo(element);
-
+               
+                
                 // Handle mouse events on the stars
-                $("span", element).each(function (index) {
-                    $(this).hover(
-                        function () { $(this).prevAll().add(this).addClass("hoverChosen") },
-                        function () { $(this).prevAll().add(this).removeClass("hoverChosen") }
-                    ).click(function () {
-                        var observable = valueAccessor();  // Get the associated observable
-                        observable(index + 1);               // Write the new rating to it
+                if ($(element).hasClass("disableRating")) {
+                    $(element).addClass("starRatingDisabled");
+                    for (var i = 0; i < 5; i++)
+                        $("<span>").appendTo(element);
+                } else {
+                    $(element).addClass("starRating");
+                    for (var i = 0; i < 5; i++)
+                        $("<span>").appendTo(element);
+                    $("span", element).each(function (index) {
+                        $(this).hover(
+                            function () { $(this).prevAll().add(this).addClass("hoverChosen") },
+                            function () { $(this).prevAll().add(this).removeClass("hoverChosen") }
+                        ).click(function () {
+                            var observable = valueAccessor();  // Get the associated observable
+                            observable(index + 1);               // Write the new rating to it
+                        });
                     });
-                });
+                }
             },
             update: function (element, valueAccessor) {
                 // Give the first x stars the "chosen" class, where x <= rating
-                var observable = valueAccessor();
+                 var observable = valueAccessor();
+              //  var observable = ko.observable(2);
                 $("span", element).each(function (index) {
                     $(this).toggleClass("chosen", index < observable());
                 });

@@ -398,19 +398,19 @@
       <End Role="Tag" EntitySet="Tags" />
       <End Role="CompanyTag" EntitySet="CompanyTags" />
     </AssociationSet>
-    <EntitySet Name="Companies" EntityType="Model.Company" />
     <EntitySet Name="CompanyAds" EntityType="Model.CompanyAd" />
     <AssociationSet Name="FK_CompanyAd_ToTable" Association="Model.FK_CompanyAd_ToTable">
       <End Role="Ad" EntitySet="Ads" />
       <End Role="CompanyAd" EntitySet="CompanyAds" />
     </AssociationSet>
-    <AssociationSet Name="FK_Company_ToTable" Association="Model.FK_Company_ToTable">
-      <End Role="AspNetUser" EntitySet="AspNetUsers" />
-      <End Role="Company" EntitySet="Companies" />
-    </AssociationSet>
     <AssociationSet Name="FK_CompanyAd_ToTable_2" Association="Model.FK_CompanyAd_ToTable_2">
       <End Role="AspNetUser" EntitySet="AspNetUsers" />
       <End Role="CompanyAd" EntitySet="CompanyAds" />
+    </AssociationSet>
+    <EntitySet Name="Companies" EntityType="Model.Company" />
+    <AssociationSet Name="FK_Company_ToTable" Association="Model.FK_Company_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Company" EntitySet="Companies" />
     </AssociationSet>
     <AssociationSet Name="FK_Company_ToTable_1" Association="Model.FK_Company_ToTable_1">
       <End Role="City" EntitySet="Cities" />
@@ -447,6 +447,10 @@
     <AssociationSet Name="FK_Review_ToTable" Association="Model.FK_Review_ToTable">
       <End Role="Company" EntitySet="Companies" />
       <End Role="Review" EntitySet="Reviews" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReviewVote_ToTable_1" Association="Model.FK_ReviewVote_ToTable_1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="ReviewVote" EntitySet="ReviewVotes" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
@@ -1557,6 +1561,8 @@
     <Property Name="reviewId" Type="Int32" Nullable="false" />
     <Property Name="isup" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Review" Relationship="Model.FK_ReviewVote_ToTable" FromRole="ReviewVote" ToRole="Review" />
+    <Property Name="votedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_ReviewVote_ToTable_1" FromRole="ReviewVote" ToRole="AspNetUser" />
   </EntityType>
   <Association Name="FK_CompanyOffice_ToTable_1">
     <End Type="Model.City" Role="City" Multiplicity="0..1" />
@@ -1722,8 +1728,9 @@
     <NavigationProperty Name="Tags" Relationship="Model.FK_Tag_ToTable" FromRole="AspNetUser" ToRole="Tag" />
     <NavigationProperty Name="Tags1" Relationship="Model.FK_Tag_ToTable_1" FromRole="AspNetUser" ToRole="Tag" />
     <NavigationProperty Name="AspNetRoles" Relationship="Model.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
-    <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable" FromRole="AspNetUser" ToRole="Company" />
     <NavigationProperty Name="CompanyAds" Relationship="Model.FK_CompanyAd_ToTable_2" FromRole="AspNetUser" ToRole="CompanyAd" />
+    <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable" FromRole="AspNetUser" ToRole="Company" />
+    <NavigationProperty Name="ReviewVotes" Relationship="Model.FK_ReviewVote_ToTable_1" FromRole="AspNetUser" ToRole="ReviewVote" />
   </EntityType>
   <Association Name="FK_Ad_ToTable">
     <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -2277,6 +2284,44 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="CompanyAd">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <Property Name="companyId" Type="Int32" Nullable="false" />
+    <Property Name="rating" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Precision="3" />
+    <Property Name="ratedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_CompanyAd_ToTable" FromRole="CompanyAd" ToRole="Ad" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CompanyAd_ToTable_2" FromRole="CompanyAd" ToRole="AspNetUser" />
+    <NavigationProperty Name="Company" Relationship="Model.FK_CompanyAd_ToTable_1" FromRole="CompanyAd" ToRole="Company" />
+  </EntityType>
+  <Association Name="FK_CompanyAd_ToTable">
+    <End Type="Model.Ad" Role="Ad" Multiplicity="1" />
+    <End Type="Model.CompanyAd" Role="CompanyAd" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompanyAd">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompanyAd_ToTable_2">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+    <End Type="Model.CompanyAd" Role="CompanyAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompanyAd">
+        <PropertyRef Name="ratedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityType Name="Company">
     <Key>
       <PropertyRef Name="Id" />
@@ -2312,32 +2357,6 @@
     <NavigationProperty Name="CompanyImages" Relationship="Model.FK_Image_ToTable" FromRole="Company" ToRole="CompanyImage" />
     <NavigationProperty Name="Reviews" Relationship="Model.FK_Review_ToTable" FromRole="Company" ToRole="Review" />
   </EntityType>
-  <EntityType Name="CompanyAd">
-    <Key>
-      <PropertyRef Name="adId" />
-    </Key>
-    <Property Name="adId" Type="Int32" Nullable="false" />
-    <Property Name="companyId" Type="Int32" Nullable="false" />
-    <Property Name="rating" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-    <Property Name="time" Type="DateTime" Precision="3" />
-    <Property Name="ratedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_CompanyAd_ToTable" FromRole="CompanyAd" ToRole="Ad" />
-    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CompanyAd_ToTable_2" FromRole="CompanyAd" ToRole="AspNetUser" />
-    <NavigationProperty Name="Company" Relationship="Model.FK_CompanyAd_ToTable_1" FromRole="CompanyAd" ToRole="Company" />
-  </EntityType>
-  <Association Name="FK_CompanyAd_ToTable">
-    <End Type="Model.Ad" Role="Ad" Multiplicity="1" />
-    <End Type="Model.CompanyAd" Role="CompanyAd" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="Ad">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CompanyAd">
-        <PropertyRef Name="adId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Company_ToTable">
     <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -2349,18 +2368,6 @@
       </Principal>
       <Dependent Role="Company">
         <PropertyRef Name="createdBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CompanyAd_ToTable_2">
-    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
-    <End Type="Model.CompanyAd" Role="CompanyAd" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CompanyAd">
-        <PropertyRef Name="ratedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2485,6 +2492,18 @@
       </Principal>
       <Dependent Role="Review">
         <PropertyRef Name="companyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReviewVote_ToTable_1">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.ReviewVote" Role="ReviewVote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ReviewVote">
+        <PropertyRef Name="votedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

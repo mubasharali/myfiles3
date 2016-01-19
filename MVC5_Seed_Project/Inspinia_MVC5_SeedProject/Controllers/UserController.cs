@@ -196,6 +196,56 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 loginUserId = User.Identity.GetUserId();
             }
+            var adnotifications = from followtag in db.FollowTags
+                                  where followtag.followedBy.Equals(id)
+                                  from adtag in db.AdTags
+                                  where followtag.tagId.Equals(adtag.tagId)
+                                  from ad in db.Ads
+                                  where ad.Id.Equals(adtag.adId)
+                                  select new
+                                  {
+                                      title = ad.title,
+                                      postedById = ad.AspNetUser.Id,
+                                      postedByName = ad.AspNetUser.Email,
+                                      description = ad.description,
+                                      id = ad.Id,
+                                      time = ad.time,
+                                      islogin = loginUserId,
+                                      isNegotiable = ad.isnegotiable,
+                                      price = ad.price,
+                                      reportedCount = ad.Reporteds.Count,
+                                      isReported = ad.Reporteds.Any(x => x.reportedBy == loginUserId),
+                                      //views = ad.AdViews.Count,
+                                      views = ad.views,
+                                      condition = ad.condition,
+
+                                      color = ad.LaptopAd.color,
+                                      brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                                      model = ad.LaptopAd.LaptopModel.model,
+                                      adTags = from tag in ad.AdTags.ToList()
+                                               select new
+                                               {
+                                                   id = tag.tagId,
+                                                   name = tag.Tag.name,
+                                               },
+                                      bid = from biding in ad.Bids.ToList()
+                                            select new
+                                            {
+                                                price = biding.price,
+                                            },
+                                      adImages = from image in ad.AdImages.ToList()
+                                                 select new
+                                                 {
+                                                     imageExtension = image.imageExtension,
+                                                 },
+                                      location = new
+                                      {
+                                          cityName = ad.AdsLocation.City.cityName,
+                                          cityId = ad.AdsLocation.cityId,
+                                          popularPlaceId = ad.AdsLocation.popularPlaceId,
+                                          popularPlace = ad.AdsLocation.popularPlace.name,
+                                      },
+                                  };
                 var user = (from u in db.AspNetUsers
                             where u.Id.Equals(id)
                             select new
@@ -313,8 +363,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                    popularPlace = ad.Ad.AdsLocation.popularPlace.name,
                                                },
                                            },
-                                //adnotifications= from ad in db.Ads
-                                //                 where ad.AdTags.Any(x=>x.tagId.Equals())
+
+                                notificationads = adnotifications,
                             }).FirstOrDefault();
 
                 if (user == null)

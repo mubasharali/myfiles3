@@ -7,7 +7,7 @@
             uploadMultiple: true,
             parallelUploads: 100,
             maxFiles: 30,
-            addRemoveLinks: true,
+            addRemoveLinks: false,
             acceptedFiles: ".jpeg,.jpg,.png,.gif",
             init: function () {
                 var myDropzone = this;

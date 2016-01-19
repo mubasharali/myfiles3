@@ -124,7 +124,8 @@
                 });
                 
             }
-            self.updateBrand = function (brand,selectedOption) {
+            self.updateBrand = function (brand, selectedOption) {
+                brand.addedBy = brand.addedById;
                 if (selectedOption == "Mobiles") {
                     $.ajax({
                         url: '/api/Electronic/UpdateMobileBrand',
