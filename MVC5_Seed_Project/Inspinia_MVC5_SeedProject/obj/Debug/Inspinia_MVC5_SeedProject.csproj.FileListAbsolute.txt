@@ -409,6 +409,6 @@ C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedPro
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\ru\System.Spatial.resources.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\zh-Hans\System.Spatial.resources.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\zh-Hant\System.Spatial.resources.dll
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.csprojResolveAssemblyReference.cache
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.pdb
-C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.csprojResolveAssemblyReference.cache
