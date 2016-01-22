@@ -13,12 +13,26 @@ function Company(data) {
         self.showModels(models);
     }
 }
+var brand = ko.observable("");
+var model = ko.observable("");
+var title = ko.observable($("#search").val());
+var tags = ko.observable("");
+var minPrice = ko.observable(0);
+var maxPrice = ko.observable(50000);
+minPrice.subscribe(function () {
+    RefreshSearch();
+});
+maxPrice.subscribe(function () {
+    RefreshSearch();
+});
+tags.subscribe(function () {
+    RefreshSearch();
+})
 
 function TreeViewModel() {
     var self = this;
     self.showAds = ko.observableArray();
-    self.brand = ko.observable("");
-    self.model = ko.observable("");
+    
 
     self.showCompanies = ko.observableArray();
     self.loadTree = function () {
@@ -42,16 +56,16 @@ function TreeViewModel() {
                     },
                     "plugins": ["search"]
                 }).on('changed.jstree', function (e, data) {
-                    self.brand( data.instance.get_node(data.node.parent).text);
-                    self.model(data.instance.get_node(data.selected[0]).text);
-                    console.log(self.brand());
-                    console.log(self.model());
-                    if (self.brand() == undefined) {
-                        self.brand(self.model());
-                        self.model("");
+                    brand( data.instance.get_node(data.node.parent).text);
+                    model(data.instance.get_node(data.selected[0]).text);
+                   // console.log(self.brand());
+                   // console.log(self.model());
+                    if (brand() == undefined) {
+                        brand(model());
+                        model("");
                     }
-                    console.log(self.brand());
-                    console.log(self.model());
+                    //console.log(self.brand());
+                   // console.log(self.model());
                     self.loadad();
                 })
   // create the instance
@@ -73,7 +87,7 @@ function TreeViewModel() {
     self.loadTree();
     
     self.loadad = function () {
-        url_address = '/api/Electronic/SearchMobileAds?brand=' + self.brand() + '&model=' + self.model() + '&tags= ';
+        url_address = '/api/Electronic/SearchMobileAds?brand=' + brand() + '&model=' + model() + '&tags= ' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice();
         $.ajax({
             url: url_address,
             dataType: "json",
@@ -93,27 +107,50 @@ function TreeViewModel() {
     //Search();
 }
 
+
 function Search() {
     var self = this;
-    self.title = $("#search").val();
-    self.tags = ko.observable();
-    self.price = ko.observable();
+   // self.title = $("#search").val();
+   // self.tags = ko.observable();
+   // self.minPrice = ko.observable(0);
+   // self.maxPrice = ko.observable(50000);
     
     
-    self.tags.subscribe(function () {
-        $.ajax({
-            url: '/api/Electronic/SearchMobileAds?brand=' + self.brand() + '&model=' + self.model() + '&tags=' + self.tags(),
-            dataType: "json",
-            contentType: "application/json",
-            cache: false,
-            type: 'POST',
-            success: function (data) {
-                var mappedads = $.map(data, function (item) { return new ad(item); });
-                self.showAds(mappedads);
-            },
-            error: function () {
-                toastr.error("failed to search. Please refresh page and try again", "Error!");
-            }
-        });
-    })
 }
+function RefreshSearch() {
+    $.ajax({
+        url: '/api/Electronic/SearchMobileAds?brand=' + brand() + '&model=' + model() + '&tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice(),
+        dataType: "json",
+        contentType: "application/json",
+        cache: false,
+        type: 'POST',
+        success: function (data) {
+            var mappedads = $.map(data, function (item) { return new ad(item); });
+            self.showAds(mappedads);
+        },
+        error: function () {
+            toastr.error("failed to search. Please refresh page and try again", "Error!");
+        }
+    });
+}
+var saveResult = function (data) {
+    minPrice ( data.fromNumber );
+    maxPrice  (data.toNumber);
+};
+$("#ionrange_1").ionRangeSlider({
+    min: 0,
+    max: 50000,
+    type: 'double',
+    prefix: "Rs",
+    maxPostfix: "+",
+    prettify: false,
+    hasGrid: true,
+    from: minPrice,
+    to: maxPrice,
+    //onStart: function (data) {
+    //    saveResult(data);
+    //    //writeResult();
+    //},
+   // onChange: saveResult,
+    onFinish: saveResult
+});

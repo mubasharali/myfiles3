@@ -408,23 +408,86 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return Ok(models);
         }
 
-        public async Task<IHttpActionResult> SearchMobileAds(string brand, string model,string tags)
+        public async Task<IHttpActionResult> SearchMobileAds(string brand, string model,string tags,string title, int minPrice, int maxPrice)
         {
             string islogin = "";
             if (User.Identity.IsAuthenticated)
             {
                 islogin = User.Identity.GetUserId();
             }
+            if(tags.Equals("undefined"))
+            {
+                tags = null;
+            }
+            string[] tagsArray = null;
             if (tags != null)
             {
-                string[] tagsArray = tags.Split(',');
+                 tagsArray = tags.Split(',');
             }
-            if (brand == null)
+            var temp = from ad in db.MobileAds
+                       where (  (model == null || ad.MobileModel.model.Equals(model) ) &&  ( brand == null || ad.MobileModel.Mobile.brand.Equals(brand) )  && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) )
+                       from tag in ad.Ad.AdTags
+                       from tagname in tagsArray
+                       where tag.Tag.name.Equals(tagname)
+                       select new
+                       {
+                           title = ad.Ad.title,
+                           postedById = ad.Ad.AspNetUser.Id,
+                           postedByName = ad.Ad.AspNetUser.Email,
+                           description = ad.Ad.description,
+                           id = ad.Ad.Id,
+                           time = ad.Ad.time,
+                           islogin = islogin,
+                           isNegotiable = ad.Ad.isnegotiable,
+                           price = ad.Ad.price,
+                           reportedCount = ad.Ad.Reporteds.Count,
+                           isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                           // views = ad.Ad.AdViews.Count,
+                           views = ad.Ad.views,
+                           condition = ad.Ad.condition,
+                           savedCount = ad.Ad.SaveAds.Count,
+                           color = ad.color,
+                           sims = ad.sims,
+                           brand = ad.MobileModel.Mobile.brand,
+                           model = ad.MobileModel.model,
+                           adTags = from tag in ad.Ad.AdTags.ToList()
+                                    select new
+                                    {
+                                        id = tag.Id,
+                                        name = tag.Tag.name,
+                                        //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                        //info = tag.Tag.info,
+                                    },
+                           bid = from biding in ad.Ad.Bids.ToList()
+                                 select new
+                                 {
+                                     price = biding.price,
+                                 },
+                           adImages = from image in ad.Ad.AdImages.ToList()
+                                      select new
+                                      {
+                                          imageExtension = image.imageExtension,
+                                      },
+                           location = new
+                           {
+                               cityName = ad.Ad.AdsLocation.City.cityName,
+                               cityId = ad.Ad.AdsLocation.cityId,
+                               popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                               popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                               exectLocation = ad.Ad.AdsLocation.exectLocation,
+                           },
+
+                       };
+            return Ok(temp);
+            if (brand != null && model != null && tags != null/* && title != null*/)
             {
                 var ret = from ad in db.MobileAds
-                          where ad.Ad.AdTags.Any(x=>x.Tag.name.Equals(tags))
+                         // where ad.Ad.AdTags.Any(x => x.Tag.name.Equals(tags))
+                         where ad.MobileModel.model.Equals(model) && ad.MobileModel.Mobile.brand.Equals(brand) && ad.Ad.price >= minPrice && ad.Ad.price <= maxPrice
+                         
                           where ad.Ad.status.Equals("a")
-                          select new{
+                          select new
+                          {
                               title = ad.Ad.title,
                               postedById = ad.Ad.AspNetUser.Id,
                               postedByName = ad.Ad.AspNetUser.Email,
@@ -436,8 +499,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               price = ad.Ad.price,
                               reportedCount = ad.Ad.Reporteds.Count,
                               isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
-                             // views = ad.Ad.AdViews.Count,
-                             views = ad.Ad.views,
+                              // views = ad.Ad.AdViews.Count,
+                              views = ad.Ad.views,
                               condition = ad.Ad.condition,
                               savedCount = ad.Ad.SaveAds.Count,
                               color = ad.color,
@@ -473,6 +536,65 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
                           };
                 return Ok(ret);
+            }
+            if (brand == null)
+          {
+                var temp1 = from ad in db.MobileAds
+                           from tag in ad.Ad.AdTags
+                           from tagname in tagsArray
+                           where tag.Tag.name.Equals(tagname)
+                           select new
+                           {
+                               title = ad.Ad.title,
+                               postedById = ad.Ad.AspNetUser.Id,
+                               postedByName = ad.Ad.AspNetUser.Email,
+                               description = ad.Ad.description,
+                               id = ad.Ad.Id,
+                               time = ad.Ad.time,
+                               islogin = islogin,
+                               isNegotiable = ad.Ad.isnegotiable,
+                               price = ad.Ad.price,
+                               reportedCount = ad.Ad.Reporteds.Count,
+                               isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                               // views = ad.Ad.AdViews.Count,
+                               views = ad.Ad.views,
+                               condition = ad.Ad.condition,
+                               savedCount = ad.Ad.SaveAds.Count,
+                               color = ad.color,
+                               sims = ad.sims,
+                               brand = ad.MobileModel.Mobile.brand,
+                               model = ad.MobileModel.model,
+                               adTags = from tag in ad.Ad.AdTags.ToList()
+                                        select new
+                                        {
+                                            id = tag.Id,
+                                            name = tag.Tag.name,
+                                            //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                            //info = tag.Tag.info,
+                                        },
+                               bid = from biding in ad.Ad.Bids.ToList()
+                                     select new
+                                     {
+                                         price = biding.price,
+                                     },
+                               adImages = from image in ad.Ad.AdImages.ToList()
+                                          select new
+                                          {
+                                              imageExtension = image.imageExtension,
+                                          },
+                               location = new
+                               {
+                                   cityName = ad.Ad.AdsLocation.City.cityName,
+                                   cityId = ad.Ad.AdsLocation.cityId,
+                                   popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                   popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                   exectLocation = ad.Ad.AdsLocation.exectLocation,
+                               },
+
+                           };
+                return Ok(temp1);
+
+                
             }
             if (model == null)
             {

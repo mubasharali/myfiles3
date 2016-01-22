@@ -44,7 +44,7 @@
         height: 420px;
     }
 </style>
-<div id="search">@ViewBag.search</div>
+<div id="search">@ViewBag.search s</div>
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-4 col-md-3 col-lg-2">
@@ -101,7 +101,7 @@
                                     </span>
                                 </span>
                                 <small class="text-muted">Mobile</small>
-                                <a href="#" class="product-name" data-bind="text:title,attr:{href:link}"> Product</a>
+                                <a href="#" class="product-name" data-bind="text:title,attr:{href:link}"> </a>
 
 
 
@@ -313,15 +313,7 @@
                 $(element).autosize();
             }
         };
-        $("#ionrange_1").ionRangeSlider({
-            min: 0,
-            max: 50000,
-            type: 'double',
-            prefix: "Rs",
-            maxPostfix: "+",
-            prettify: false,
-            hasGrid: true
-        });
+        
         
         $(function () {
             toastr.options = {

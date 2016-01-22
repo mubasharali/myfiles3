@@ -356,7 +356,7 @@
                         self.isEditing(false);
                     },
                     error: function () {
-                        toastr.error("failed to update comment", "Error!");
+                        toastr.error("failed to update Bid. Please refresh page and try again", "Error!");
                     }
                 });
             }
@@ -562,6 +562,7 @@
                                 $(".sortable-list").sortable({
                                     connectWith: ".connectList"
                                 }).disableSelection();
+                                self.placeBid(false);
                             },
                             error: function () {
                                 toastr.error("failed to Post Bid. Please refresh page and try again", "Error!");

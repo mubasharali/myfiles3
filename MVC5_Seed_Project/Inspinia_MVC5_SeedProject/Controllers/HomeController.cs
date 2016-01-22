@@ -40,6 +40,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             
         //    return View();
         //}
+        public ActionResult Abc()
+        {
+            return View();
+        }
         public ActionResult NewTemp()
         {
             return View();
