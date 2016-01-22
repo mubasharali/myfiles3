@@ -921,13 +921,13 @@
     <Content Include="Views\Company\Edit.cshtml" />
     <Content Include="Views\Company\Index.cshtml" />
     <Content Include="Views\Company\Ask.cshtml" />
-    <Content Include="Views\Shared\_CreateAlert.cshtml" />
     <Content Include="Views\Business\Create.cshtml" />
     <Content Include="Views\Business\Delete.cshtml" />
     <Content Include="Views\Business\Details.cshtml" />
     <Content Include="Views\Business\Edit.cshtml" />
     <Content Include="Views\Business\Index.cshtml" />
     <Content Include="Views\Home\NewTemp.cshtml" />
+    <Content Include="Views\Shared\_CreateAlert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
