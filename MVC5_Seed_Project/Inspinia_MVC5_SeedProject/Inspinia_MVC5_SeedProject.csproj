@@ -566,7 +566,6 @@
     <Content Include="Scripts\app\inspinia.js" />
     <Content Include="Scripts\app\LaptopTree.js" />
     <Content Include="Scripts\app\MobileTree.js" />
-    <Content Include="Scripts\app\rating-knockout-binding.js" />
     <Content Include="Scripts\app\Selectize-Knockout-binding.js" />
     <Content Include="Scripts\app\slick-knockout-binding.js" />
     <Content Include="Scripts\bootstrap.js" />
