@@ -450,11 +450,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            sims = ad.sims,
                            brand = ad.MobileModel.Mobile.brand,
                            model = ad.MobileModel.model,
-                           adTags = from tag in ad.Ad.AdTags.ToList()
+                           adTags = from tag1 in ad.Ad.AdTags.ToList()
                                     select new
                                     {
-                                        id = tag.Id,
-                                        name = tag.Tag.name,
+                                        id = tag1.Id,
+                                        name = tag1.Tag.name,
                                         //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                         //info = tag.Tag.info,
                                     },
@@ -564,11 +564,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                sims = ad.sims,
                                brand = ad.MobileModel.Mobile.brand,
                                model = ad.MobileModel.model,
-                               adTags = from tag in ad.Ad.AdTags.ToList()
+                               adTags = from tag1 in ad.Ad.AdTags.ToList()
                                         select new
                                         {
-                                            id = tag.Id,
-                                            name = tag.Tag.name,
+                                            id = tag1.Id,
+                                            name = tag1.Tag.name,
                                             //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                             //info = tag.Tag.info,
                                         },
