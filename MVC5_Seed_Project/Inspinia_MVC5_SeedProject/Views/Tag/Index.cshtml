@@ -20,67 +20,75 @@
         <div class="col-md-9">
             <div class="row">
                 <div class="ibox">
-                    <div data-bind="with:showTag()">
-                        <div class="ibox-title">
-                            <h2>
-                                <span data-bind="text:name">@Model.name</span> <span style="font-size: 12px; color: #b4b6b8">
-                                    <a style="font-size: 12px; color: #b4b6b8">
-                                        <i data-bind="style:{color: isFollowed()? 'red' : 'gray'}" class="fa fa-rss"></i> <a data-bind="click: function(){ return follow(id)},text:followText"></a>
-                                        (<span data-bind="text:followers"></span> followers )
-                                        <h6 class="pull-right">
-                                            <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
-                                        </h6>
-                                    </a>
-                                </span>
-                            </h2>
+                    <div data-bind="visible:!showTag()">
+                        <div class="loading">
+                            <div class="sk-spinner sk-spinner-wandering-cubes">
+                                <div class="sk-cube1"></div>
+                                <div class="sk-cube2"></div>
+                            </div>
                         </div>
-                        <div class="ibox-content">
-                            <div data-bind="visible:!isEditing()">
-                                <div class="row">
-                                    <div class="col-sm-8">
-                                        <dl>
+                    </div>
+                        <div data-bind="with:showTag">
+                            <div class="ibox-title">
+                                <h2>
+                                    <span data-bind="text:name">@Model.name</span> <span style="font-size: 12px; color: #b4b6b8">
+                                        <a style="font-size: 12px; color: #b4b6b8">
+                                            <i data-bind="style:{color: isFollowed()? 'red' : 'gray'}" class="fa fa-rss"></i> <a data-bind="click: function(){ return follow(id)},text:followText"></a>
+                                            (<span data-bind="text:followers"></span> followers )
+                                            <h6 class="pull-right">
+                                                <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
+                                            </h6>
+                                        </a>
+                                    </span>
+                                </h2>
+                            </div>
+                            <div class="ibox-content">
+                                <div data-bind="visible:!isEditing()">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <dl>
 
 
-                                            <dt>Info: <button class="btn btn-white btn-xs" data-bind="click:editTag">Improve tag</button> </dt>
-                                            <dd data-bind="text:info"> </dd>
-                                        </dl>
-                                    </div>
-                                    <div class="col-sm-4 hidden-xs">
-                                        <dt>Created by:</dt>
-                                        <dd><a data-bind="attr:{href:createdByLink}"><span data-bind="text:createdByName"></span></a></dd>
-                                        <dt>Created:</dt>
-                                        <dd data-bind="text:time"></dd>
-                                        <dt>Latest Updated by:</dt>
-                                        <dd><a data-bind="attr:{href:updatedByLink}"><span data-bind="text:updatedByName"></span></a></dd>
-                                        <dt>Latest Updated:</dt>
-                                        <dd data-bind="text:updatedTime"></dd>
+                                                <dt>Info: <button class="btn btn-white btn-xs" data-bind="click:editTag">Improve tag</button> </dt>
+                                                <dd data-bind="text:info"> </dd>
+                                            </dl>
+                                        </div>
+                                        <div class="col-sm-4 hidden-xs">
+                                            <dt>Created by:</dt>
+                                            <dd><a data-bind="attr:{href:createdByLink}"><span data-bind="text:createdByName"></span></a></dd>
+                                            <dt>Created:</dt>
+                                            <dd data-bind="text:time"></dd>
+                                            <dt>Latest Updated by:</dt>
+                                            <dd><a data-bind="attr:{href:updatedByLink}"><span data-bind="text:updatedByName"></span></a></dd>
+                                            <dt>Latest Updated:</dt>
+                                            <dd data-bind="text:updatedTime"></dd>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div data-bind="visible:isEditing()">
-                                <h5>Improve Info</h5>
-                                <textarea class="msgTextArea form-control" placeholder="Improve tag.." data-bind="value:info, jqAutoresize: {}"></textarea>
-                                @*<span data-bind="visible:info().length > 800 && info().length < 1000">
-                                You can Enter only <span data-bind="text:999 - info().length"></span> more characters.
-                            </span>*@
-                                <button class="btn btn-xs btn-success pull-right" data-bind="click:updateTag">Update</button>
-                            </div>
-                            <div class="row m-t-sm">
-                                <div class="col-lg-12">
-                                    <div class="panel blank-panel">
-                                        <div class="panel-heading">
-                                            <div class="panel-options">
-                                                <ul class="nav nav-tabs">
-                                                    <li class="active"><a href="#tab-ads" data-toggle="tab">Ads (<span data-bind="text:showAds().length"></span>)</a></li>
-                                                    <li class=""><a href="#tab-questions" data-toggle="tab">Questions (<span data-bind="text:showQuestions().length"></span>)</a></li>
-                                                </ul>
+                                <div data-bind="visible:isEditing()">
+                                    <h5>Improve Info</h5>
+                                    <textarea class="msgTextArea form-control" placeholder="Improve tag.." data-bind="value:info, jqAutoresize: {}"></textarea>
+                                    @*<span data-bind="visible:info().length > 800 && info().length < 1000">
+                            You can Enter only <span data-bind="text:999 - info().length"></span> more characters.
+                        </span>*@
+                                    <button class="btn btn-xs btn-success pull-right" data-bind="click:updateTag">Update</button>
+                                </div>
+                                <div class="row m-t-sm">
+                                    <div class="col-lg-12">
+                                        <div class="panel blank-panel">
+                                            <div class="panel-heading">
+                                                <div class="panel-options">
+                                                    <ul class="nav nav-tabs">
+                                                        <li class="active"><a href="#tab-ads" data-toggle="tab">Ads (<span data-bind="text:showAds().length"></span>)</a></li>
+                                                        <li class=""><a href="#tab-questions" data-toggle="tab">Questions (<span data-bind="text:showQuestions().length"></span>)</a></li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="panel-body">
+                                            <div class="panel-body">
 
-                                            <div class="tab-content">
-                                                <div class="tab-pane active" id="tab-ads">
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active" id="tab-ads">
                                                         <div data-bind="foreach:showAds">
                                                             <div class="row">
                                                                 <div class="ibox">
@@ -153,57 +161,68 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                       
+
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="tab-pane" id="tab-questions">
+                                                    <div class="tab-pane" id="tab-questions">
 
-                                                    <div data-bind="foreach:showQuestions">
-                                                        <div class="vote-item">
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <div class="vote-actions">
-                                                                        <a data-bind="attr:{href:link}">
-                                                                            <i class="fa fa-chevron-up"> </i>
-                                                                        </a>
-                                                                        <div data-bind="text:voteCount"></div>
-                                                                        <a data-bind="attr:{href:link}">
-                                                                            <i class="fa fa-chevron-down"> </i>
-                                                                        </a>
-                                                                    </div>
-                                                                    <a data-bind="attr:{href:link},text:title" style="font-weight:400" class="vote-title">
-                                                                    </a>
-                                                                    <div>
-                                                                        <div data-bind="foreach:showTags" style="padding: 0;float:none">
-                                                                            <a target="_blank" class="btn btn-white btn-xs" style="font-size:11px" data-bind="attr:{href:'/tag/' + name},text:name"> </a>
+                                                        <div data-bind="foreach:showQuestions">
+                                                            <div class="vote-item">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="vote-actions">
+                                                                            <a data-bind="attr:{href:link}">
+                                                                                <i class="fa fa-chevron-up"> </i>
+                                                                            </a>
+                                                                            <div data-bind="text:voteCount"></div>
+                                                                            <a data-bind="attr:{href:link}">
+                                                                                <i class="fa fa-chevron-down"> </i>
+                                                                            </a>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="vote-info">
-                                                                        <i class="fa fa-comments-o"></i> <a data-bind="attr:{href:link}">Answers (<span data-bind="text:answersCount"></span>)</a>
-                                                                        <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
-                                                                        <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
+                                                                        <a data-bind="attr:{href:link},text:title" style="font-weight:400" class="vote-title">
+                                                                        </a>
+                                                                        <div>
+                                                                            <div data-bind="foreach:showTags" style="padding: 0;float:none">
+                                                                                <a target="_blank" class="btn btn-white btn-xs" style="font-size:11px" data-bind="attr:{href:'/tag/' + name},text:name"> </a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="vote-info">
+                                                                            <i class="fa fa-comments-o"></i> <a data-bind="attr:{href:link}">Answers (<span data-bind="text:answersCount"></span>)</a>
+                                                                            <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                                            <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             </div>
 
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
  </div>
 <style>
+    .loading {
+    height: 200px;
+    width: 400px;
+    //background: black;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -200px;
+}
     .carouselContainer {
         overflow: hidden;
         //height:350px;
@@ -536,13 +555,10 @@
             self.searchTag.subscribe(function () {
                 window.location.href = "/Tag/" + self.searchTag();
             });
-            self.showTag = ko.observableArray();
+            self.showTag = ko.observable();
             self.loadTag = function () {
                 var adId = $("#tagId").val();
                 url_address = '/api/Tag/GetTag/' + adId;
-                //if (self.searchTag()) {
-                //    url_address = '/api/Tag/GetTag?name=' + self.searchTag();
-                //}
                 $.ajax({
                     url: url_address,
                     dataType: "json",
