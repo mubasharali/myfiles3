@@ -2329,7 +2329,7 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="shortabout" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-    <Property Name="longabout" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="longabout" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
     <Property Name="since" Type="DateTime" Precision="0" />
     <Property Name="contactNo1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="contactNo2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />

@@ -257,7 +257,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="title" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="shortabout" Type="nvarchar" MaxLength="60" />
-    <Property Name="longabout" Type="nchar" MaxLength="10" />
+    <Property Name="longabout" Type="nvarchar" MaxLength="1000" />
     <Property Name="since" Type="date" />
     <Property Name="contactNo1" Type="nvarchar" MaxLength="20" />
     <Property Name="contactNo2" Type="nvarchar" MaxLength="20" />

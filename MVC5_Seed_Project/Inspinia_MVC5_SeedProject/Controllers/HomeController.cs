@@ -7,7 +7,7 @@ using MvcSiteMapProvider.Web.Mvc;
 using Inspinia_MVC5_SeedProject.Models;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
-  //  [InitializeSimpleMembership]
+   // [InitializeSimpleMembership]
     public class HomeController : Controller
     {
         public Entities db = new Entities();

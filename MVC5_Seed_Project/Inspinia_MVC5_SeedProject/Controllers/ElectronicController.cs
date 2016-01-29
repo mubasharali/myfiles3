@@ -953,7 +953,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 islogin = User.Identity.GetUserId();
                 var ide = await db.AspNetUsers.FindAsync(islogin);
                 loginUserProfileExtension = ide.dpExtension;
-                
+
                 //try
                 //{
                 //    isAdmin = Roles.IsUserInRole("Admin");

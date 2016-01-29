@@ -412,3 +412,8 @@ C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedPro
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.csprojResolveAssemblyReference.cache
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.pdb
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\WebMatrix.Data.dll
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\WebMatrix.WebData.dll
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\WebMatrix.Data.xml
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\WebMatrix.WebData.xml
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Microsoft.Web.Helpers.dll

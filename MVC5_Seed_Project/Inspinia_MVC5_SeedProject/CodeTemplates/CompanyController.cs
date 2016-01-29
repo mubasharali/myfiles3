@@ -22,7 +22,24 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             var companies = db.Companies.Include(c => c.AspNetUser).Include(c => c.City).Include(c => c.popularPlace);
             return View(companies.ToList());
         }
-
+        public ActionResult uploadLogo()
+        {
+            int id = int.Parse( Request["id"]);
+            HttpPostedFileBase file = Request.Files["fileInput"];
+            string extension = System.IO.Path.GetExtension(file.FileName);
+            string companyFolder = "~/Images/Company/" + id;
+            if (! System.IO.Directory.Exists(Server.MapPath(companyFolder)))
+            {
+                System.IO.Directory.CreateDirectory(Server.MapPath(companyFolder));
+            }
+            //filename = "temp" + DateTime.UtcNow.Ticks + extension;
+            file.SaveAs(Server.MapPath(companyFolder + "/logo" + extension ));
+            var data = db.Companies.Find(id);
+            data.logoextension = extension;
+            db.Entry(data).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = id });
+        }
         // GET: /Company/Details/5
         public ActionResult Details(int? id)
         {

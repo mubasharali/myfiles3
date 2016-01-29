@@ -182,6 +182,16 @@ namespace Inspinia_MVC5_SeedProject
             // Dotdotdot buttons
             bundles.Add(new ScriptBundle("~/plugins/truncate").Include(
                       "~/Scripts/plugins/dotdotdot/jquery.dotdotdot.min.js"));
+
+            // summernote styles
+            bundles.Add(new StyleBundle("~/plugins/summernoteStyles").Include(
+                      "~/Content/plugins/summernote/summernote.css",
+                      "~/Content/plugins/summernote/summernote-bs3.css"));
+
+            // summernote 
+            bundles.Add(new ScriptBundle("~/plugins/summernote").Include(
+                      "~/Scripts/plugins/summernote/summernote.min.js"));
+
         }
     }
 }

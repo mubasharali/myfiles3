@@ -538,6 +538,41 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                       };
             return ret;
         }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateLongAbout(Company comment)
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest();
+            //}
+            db.Entry(comment).State = EntityState.Modified;
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+
+            catch (DbEntityValidationException e)
+            {
+                string s = e.ToString();
+                List<string> errorMessages = new List<string>();
+                foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
+                {
+                    string entityName = validationResult.Entry.Entity.GetType().Name;
+                    foreach (DbValidationError error in validationResult.ValidationErrors)
+                    {
+                        errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString();
+            }
+            return Ok("Done");
+        }
+
+
         [HttpPost]
         public async Task<IHttpActionResult> UpdatePage(Company comment,string tags)
         {

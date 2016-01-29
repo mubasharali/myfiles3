@@ -55,18 +55,6 @@
         .starRatingDisabled span.chosen {
             background-position: 0 0;
         }
-       /*.disableRating .starRatingDisabled span {
-        width: 24px;
-        height: 24px;
-        background-image: url(/Images/others/stars.png);
-        display: inline-block;
-        cursor: pointer;
-        background-position: -24px 0;
-    }
-
-      .disableRating  .starRatingDisabled span.chosen {
-            background-position: 0 0;
-        }*/
     .starRating:hover span {
         background-position: -24px 0;
     }
@@ -74,12 +62,6 @@
         .starRating:hover span.hoverChosen {
             background-position: 0 0;
         }
-
-    /*input:not([type]), input[type=text], input[type=password], select {
-        background-color: #FFFFCC;
-        border: 1px solid gray;
-        padding: 2px;
-    }*/
 </style>
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -90,6 +72,14 @@
             <div data-bind="visible:error()" class="alert alert-success">
                 <strong>Error! </strong><span data-bind="text:error"></span>
             </div>
+            <div data-bind="visible:!showPage()">
+                <div class="loading">
+                    <div class="sk-spinner sk-spinner-wandering-cubes">
+                        <div class="sk-cube1"></div>
+                        <div class="sk-cube2"></div>
+                    </div>
+                </div>
+            </div>
             <div data-bind="foreach: showPage">
                 <div data-bind="visible:statusError" class="alert alert-success">
                     <strong>Pending admin approval! </strong><span data-bind="text:statusError"></span>
@@ -98,18 +88,25 @@
                     <div class="ibox product-detail">
                         <div class="ibox-content">
                             <div class="row">
-                                    <div data-bind="visible:!isPageEditing()" class="pull-left" style="margin-right:12px">
-                                        <img src="~/Images/profile.jpg" />
+                                    <div data-bind="visible:!isPageEditing()" class="pull-left profile-image" style="margin-right:12px">
+                                        <img class="m-b-md" data-bind="visible:!logoExtension,attr:{src:'/Images/Company/default_logo.png'}" />
+                                        <img class="m-b-md" data-bind="visible:logoExtension,attr:{src:'/Images/Company/' + id + '/logo' + logoExtension}"  />
+                                        <button data-bind="visible:loginUserId == createdBy" class="btn btn-white btn-xs" type="button" style="margin-top:-5px;" onclick="chooseFile();">upload logo</button>
                                     </div>
+                                <form action="/Company/uploadLogo"  method="post"  enctype="multipart/form-data"  style="height:0px;overflow:hidden">
+                                    <input type="file" id="fileInput" name="fileInput" onchange="newImage()" />
+                                    <input type="hidden" name="id" data-bind="value:id" />
+                                    <input type="submit" />
+                                </form>
+                                
                                     <div data-bind="visible:!isPageEditing()">
                                         <span data-bind="visible:loginUserId == createdBy">
                                             <a data-bind="click: function(){return deletePage(id)}" class="btn btn-white btn-xs pull-right "> Delete</a><a data-bind="click: function(){return editPage(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
                                         </span>
                                         <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
                                         <p data-bind="text:shortAbout"></p>
-                                        <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
-                                            <li><a target="_blank" data-bind="attr:{href:'/Tag/' + $data}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:$data"></span> </a></li>
-                                        </ul>
+                                        <span class="disableRating" data-bind="starRating:rating"></span> (<span data-bind="text:showReviews().length"></span>)
+                                        
                                     </div>
                                     <div data-bind="visible:isPageEditing()">
                                         Company Name:<input type="text" placeholder="Company Name" class="form-control" data-bind="value:title" required />
@@ -135,7 +132,28 @@
                                             <div id="Overview" class="tab-pane active">
                                                 <div class="panel-body">
                                                     <div class="row">
-
+                                                        <h3>Tags:</h3>
+                                                        <ul @*class="tag-list"*@ data-bind="foreach:showTags" style="padding: 0">
+                                                            <li class="btn btn-white btn-xs"><a target="_blank" data-bind="attr:{href:'/Tag/' + $data}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:$data"></span> </a></li>
+                                                        </ul>
+                                                        <h2>About</h2>
+                                                        <span data-bind="visible:loginUserId == createdBy">
+                                                            <a data-bind="click:editLongAboutBtn" class="btn btn-white btn-xs "> Edit</a>
+                                                        </span>
+                                                        <div data-bind="visible:!isLongAboutEditing(),text:longAbout"></div>
+                                                        <div data-bind="visible:isLongAboutEditing()">
+                                                            Details:<textarea class="msgTextArea form-control" placeholder="Add company Details.." data-bind="jqAutoresize: {},value:longAbout"></textarea>
+                                                            <button class="btn btn-primary" data-bind="click:updateLongAbout">Update</button>
+                                                        </div>
+                                                        @*<div class="row">
+                                                            <div data-bind="text:longAbout,visible:!isLongAboutEditing()">
+                                                                <span data-bind="visible:loginUserId == createdBy">
+                                                                    <a data-bind="click: editLongAboutBtn" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                                                </span>
+                                                                <span data-bind="visible:!longAbout">Add detials about your company</span>
+                                                            </div>
+                                                            
+                                                        </div>*@
                                                         <h2>Location</h2>
                                                         <h3>HeadOffice</h3>
                                                         <div data-bind="visible:!isMainBranchEditing()">
@@ -150,14 +168,14 @@
                                                                 <span data-bind="text:popularPlace"></span>,
                                                             </span>
                                                             <span data-bind="text:cityName"></span>
-                                                            <h4>Contact Info</h4>
+                                                            <h4 data-bind="if:cityName">Contact Info</h4>
                                                             <div data-bind="if:contactNo1">
                                                                 <span data-bind="text:contactNo1"></span>
                                                             </div>
                                                             <div data-bind="if:contactNo2">
                                                                 <span data-bind="text:contactNo2"></span>
                                                             </div>
-                                                            <h5>Established since <span data-bind="text:friendlySince"></span></h5>
+                                                            <h5 data-bind="if:friendlySince">Established since <span data-bind="text:friendlySince"></span></h5>
                                                         </div>
                                                         <div data-bind="visible:isMainBranchEditing()">
                                                             <div class="row">
@@ -226,7 +244,7 @@
                                                             <a data-bind="click: function(){return addNewBranch()}" class="btn btn-white btn-xs pull-right"> Add new Branch</a>
                                                         </span>
                                                         <hr />
-                                                        <h3>Comany Network</h3>
+                                                        <h3 data-bind="visible:showBranches().length>0">Comany Network</h3>
                                                         <div data-bind="visible:isAddingNewBranch()">
                                                             <h4>Location</h4>
                                                             <div class="row">
@@ -294,9 +312,10 @@
                                                             <div data-bind="visible:!isBranchEditing()">
                                                                 <hr />
                                                                 <span data-bind="visible:$parent.loginUserId == $parent.createdBy">
-                                                                    <a data-bind="click: function(){return editBranch($index)}" class="btn btn-white btn-xs pull-right"> Edit</a>
                                                                     <a data-bind="click:  $parent.deleteBranch" class="btn btn-white btn-xs pull-right"> Delete</a>
+                                                                    <a data-bind="click: function(){return editBranch($index)}" class="btn btn-white btn-xs pull-right"> Edit</a>
                                                                 </span>
+
                                                                 <h4>Location</h4>
                                                                 <span data-bind="if:exectLocation">
                                                                     <span data-bind="text:exectLocation"></span>,
@@ -312,7 +331,7 @@
                                                                 <div data-bind="if:contactNo2">
                                                                     <span data-bind="text:contactNo2"></span>
                                                                 </div>
-                                                                <h5>Established since <span data-bind="text:friendlySince"></span></h5>
+                                                                <h5 data-bind="if:friendlySince">Established since <span data-bind="text:friendlySince"></span></h5>
                                                             </div>
                                                             <div data-bind="visible:isBranchEditing()">
                                                                 <h4>Location</h4>
@@ -477,19 +496,7 @@
 
                                     </div>
                             </div>
-                            <div class="row">
-                                <div data-bind="text:longAbout,visible:!isLongAboutEditing()">
-                                    jkkljl
-                                    <span data-bind="visible:loginUserId == createdBy">
-                                        <a data-bind="click: editLongAboutBtn" class="btn btn-white btn-xs pull-right"> Edit</a>
-                                    </span>
-                                    <span data-bind="visible:longAbout().length==0">Add detials about your company</span>
-                                </div>
-                                <div data-bind="visible:isLongAboutEditing()">
-                                    Details:<textarea class="msgTextArea form-control" placeholder="Add company Details.." data-bind="jqAutoresize: {},value:longAbout"></textarea>
-                                    <button class="btn btn-primary" data-bind="click:updatePage">Update</button>
-                                </div>
-                            </div>
+                            
                             <div class="row">
                                 <div class="col-sm-9">
                                     
@@ -525,6 +532,8 @@
 @Styles.Render("~/scripts/selectizeStyles")
 @Styles.Render("~/bundles/tagStyles")
 @Styles.Render("~/plugins/laddaStyles")
+@*@Styles.Render("~/plugins/summernoteStyles")*@
+<link href="~/Content/myStyles.css" rel="stylesheet" />
 }
 
 
@@ -540,6 +549,7 @@
     @Scripts.Render("~/plugins/sweetAlert")
 @Scripts.Render("~/scripts/selectize")
 @Scripts.Render("~/plugins/ladda")
+@Scripts.Render("~/plugins/summernote")
     <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="~/signalr/hubs"></script>
     <script src="~/Scripts/UserLogin.js"></script>
@@ -861,10 +871,15 @@
             self.inputTags = ko.observable();
             self.reviewDescription = ko.observable();
             self.newRating = ko.observable();
-            
+            self.rating = ko.observable(0);
             if (data.reviews) {
+                var average = 0;
                 var branch = $.map(data.reviews, function (item) { return new Review(item); });
                 self.showReviews(branch);
+                $.each((self.showReviews()) ,function (index, value) {
+                    average = average + value.rating();
+                });
+                self.rating( average / self.showReviews().length );
             }
             self.isAddingReview = ko.observable(false);
             self.addReviewBtn = function () {
@@ -1208,7 +1223,23 @@
                 self.loadCities();
                 self.isMainBranchEditing(true);
             }
-            
+            self.updateLongAbout = function (page) {
+                $.ajax({
+                    url: '/api/Company/UpdateLongAbout',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(page),
+                    success: function (data) {
+                        
+                        self.isLongAboutEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("failed to update Info", "Error!");
+                    }
+                });
+            }
             self.updatePage = function (page) {
                 $.ajax({
                     url: '/api/Company/UpdatePage?tags=' + self.inputTags(),
@@ -1495,19 +1526,19 @@
                 return '';
             }
         }
-        function Answer(text) {
-            var self = this;
-            self.text = text;
-            self.points = ko.observable(0);
-            self.points.subscribe(function () {
-                console.log(self.points());
-            })
-        }
+        //function Answer(text) {
+        //    var self = this;
+        //    self.text = text;
+        //    self.points = ko.observable(0);
+        //    self.points.subscribe(function () {
+        //        console.log(self.points());
+        //    })
+        //}
 
-        function SurveyViewModel() {
-            var answers = ['a', 'b'];
-            this.answers = $.map(answers, function (text) { return new Answer(text) });
-        }
+        //function SurveyViewModel() {
+        //    var answers = ['a', 'b'];
+        //    this.answers = $.map(answers, function (text) { return new Answer(text) });
+        //}
         
        
 
@@ -1673,9 +1704,14 @@
 
             return { init: init, update: update };
         })();
-
+        function chooseFile() {
+            $("#fileInput").click();
+        }
+        function newImage() {
+            $("#fileInput").closest("form").submit();
+        }
         $(function () {
-
+            //$('.summernote').summernote();
             toastr.options = {
                 closeButton: true,
                 progressBar: true,
