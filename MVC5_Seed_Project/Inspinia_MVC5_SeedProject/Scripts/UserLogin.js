@@ -67,7 +67,6 @@ function AccountViewModel() {
         });
     }
     self.submitEmail = function () {
-        console.log(isValidEmailAddress(self.email()));
         if(isValidEmailAddress(self.email())){
             $.ajax({
                 url: '/api/User/CheckEmail?email=' + self.email(),
@@ -120,7 +119,6 @@ function AccountViewModel() {
         self.error("");
         if (self.password() === self.confirmPassword()) {
             if (typeof self.password() != "undefined") {
-                console.log(self.password());
                 $.ajax({
                     url: '/Account/RegisterUser?email=' + self.email() + '&password=' + self.password(),
                     dataType: "json",
