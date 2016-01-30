@@ -17,5 +17,8 @@ class WebApiConfig
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+        var json = configuration.Formatters.JsonFormatter;
+        json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
+        configuration.Formatters.Remove(configuration.Formatters.XmlFormatter);
     }
 }
