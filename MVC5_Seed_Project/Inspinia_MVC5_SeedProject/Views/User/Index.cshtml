@@ -30,6 +30,14 @@
 </div>*@
 
 <div class="wrapper wrapper-content animated fadeInRight" id="profile" >
+    <div data-bind="visible:!showProfile()">
+        <div class="loading">
+            <div class="sk-spinner sk-spinner-wandering-cubes">
+                <div class="sk-cube1"></div>
+                <div class="sk-cube2"></div>
+            </div>
+        </div>
+    </div>
     <div data-bind="with:showProfile">
         <div class="row m-b-lg m-t-lg">
             <div class="col-sm-5">
@@ -514,6 +522,7 @@
 @Styles.Render("~/scripts/selectizeStyles")
 @Styles.Render("~/plugins/slickStyles")
 @Styles.Render("~/plugins/slickThemeStyles")
+<link href="~/Content/myStyles.css" rel="stylesheet" />
 }
 
 @Html.Partial("/Views/Shared/_Chat.cshtml")
