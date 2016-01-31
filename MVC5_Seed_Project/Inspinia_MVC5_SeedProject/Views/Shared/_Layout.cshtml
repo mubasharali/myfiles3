@@ -16,7 +16,8 @@
     @RenderSection("Styles", required: false)
     @Styles.Render("~/Content/css")
     @Styles.Render("~/font-awesome/css")
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    @Styles.Render("~/scripts/selectizeStyles")
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">*@
 </head>
 <body class="fixed-sidebar fixed-nav mini-navbar">
 
@@ -40,7 +41,7 @@
 
             <!-- Footer -->
             @Html.Partial("_Footer")
-
+            @Html.Partial("~/Views/Search/_SearchLocation.cshtml")
         </div>
         <!-- End page wrapper-->
         <!-- Right Sidebar -->
@@ -54,6 +55,10 @@
     @Scripts.Render("~/plugins/pace")
     @Scripts.Render("~/plugins/slimScroll")
     @Scripts.Render("~/bundles/inspinia")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/scripts/selectize")
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <script src="~/Scripts/app/_SearchLocation.js"></script>
         @RenderSection("scripts", required: false)
     
 </body>

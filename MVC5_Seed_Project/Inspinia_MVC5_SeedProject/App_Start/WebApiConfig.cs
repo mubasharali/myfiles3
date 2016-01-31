@@ -1,10 +1,10 @@
 ﻿using System.Web.Http;
-
+using System.Net.Http.Formatting;
 class WebApiConfig
 {
     public static void Register(HttpConfiguration configuration)
     {
-        configuration.MapHttpAttributeRoutes();
+       // configuration.MapHttpAttributeRoutes();
 
         configuration.Routes.MapHttpRoute(
             name: "WithActionApi",
@@ -17,8 +17,11 @@ class WebApiConfig
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-        var json = configuration.Formatters.JsonFormatter;
-        json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
-        configuration.Formatters.Remove(configuration.Formatters.XmlFormatter);
+        configuration.Formatters.Clear();
+        configuration.Formatters.Add(new JsonMediaTypeFormatter());
+        configuration.MapHttpAttributeRoutes();
+        //var json = configuration.Formatters.JsonFormatter;
+        //json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
+        //configuration.Formatters.Remove(configuration.Formatters.XmlFormatter);
     }
 }

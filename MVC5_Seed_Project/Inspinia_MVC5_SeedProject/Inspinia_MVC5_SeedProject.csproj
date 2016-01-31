@@ -44,12 +44,12 @@
       <HintPath>..\packages\ChatJS.2.0.22\lib\net45\ChatJs.Lib.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -238,6 +238,7 @@
     <Compile Include="CodeTemplates\LaptopsComputersController.cs" />
     <Compile Include="CodeTemplates\MobilesTabletsController.cs" />
     <Compile Include="CodeTemplates\RealEstateController.cs" />
+    <Compile Include="CodeTemplates\ServicesController.cs" />
     <Compile Include="CodeTemplates\SharedController.cs" />
     <Compile Include="CodeTemplates\TagController.cs" />
     <Compile Include="CodeTemplates\UserController.cs" />
@@ -581,6 +582,7 @@
     <Content Include="Scripts\app\MobileTree.js" />
     <Content Include="Scripts\app\Selectize-Knockout-binding.js" />
     <Content Include="Scripts\app\slick-knockout-binding.js" />
+    <Content Include="Scripts\app\_SearchLocation.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\bootstrap-theme.css.map" />
@@ -666,6 +668,7 @@
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery.autosize.js" />
     <Content Include="Scripts\jquery.autosize.min.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="Scripts\jquery.timeago.js" />
@@ -941,6 +944,12 @@
     <Content Include="Views\Business\Index.cshtml" />
     <Content Include="Views\Home\NewTemp.cshtml" />
     <Content Include="Views\Shared\_CreateAlert.cshtml" />
+    <Content Include="Views\Search\_SearchLocation.cshtml" />
+    <Content Include="Views\Services\Create.cshtml" />
+    <Content Include="Views\Services\Delete.cshtml" />
+    <Content Include="Views\Services\Details.cshtml" />
+    <Content Include="Views\Services\Edit.cshtml" />
+    <Content Include="Views\Services\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

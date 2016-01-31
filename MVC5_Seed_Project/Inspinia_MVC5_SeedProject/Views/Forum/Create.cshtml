@@ -187,16 +187,27 @@
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
     <link href="~/Scripts/plugins/selectize/selectize.css" rel="stylesheet" />
 }
-
+@Html.Partial("/Views/Shared/_Chat.cshtml")
+@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 @section Scripts {
 
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/plugins/validate")
     @Scripts.Render("~/plugins/toastr")
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/UserLogin.js"></script>
+<script src="~/Scripts/app/chat.js"></script>
     <script src="~/Scripts/plugins/selectize/selectize.min.js"></script>
     <script type="text/javascript">
-
+        function viewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+        }
         $(document).ready(function () {
+            ko.applyBindings(new viewModel());
+            $.connection.hub.start().done();
             //$('#select-category').selectize({
             //    inputMaxlength: 29,
             //    options: ['Electronics'],

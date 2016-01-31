@@ -313,7 +313,7 @@
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
-    @Scripts.Render("~/plugins/knockout")
+    
     @Scripts.Render("~/plugins/slick")
     @*@Scripts.Render("~/plugins/jsTree")
     @Scripts.Render("~/bundles/categoryTree")*@
@@ -782,7 +782,7 @@
         }
         function viewModel() {
             var self = this;
-           // treeModel();
+            SearchingLocation();
             AccountViewModel();
             ChatViewModel();
             Report();
