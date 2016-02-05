@@ -1,24 +1,9 @@
 ﻿@model Inspinia_MVC5_SeedProject.Models.Ad
 
 @{
-    Layout = "/Views/Shared/_Layout_Without_Signalr.cshtml";
-    ViewBag.Title = "Create";
+   
+    ViewBag.Title = "Edit Laptop Ad";
 }
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-sm-4">
-        <h2>Edit</h2>
-        <ol class="breadcrumb">
-            <li>
-                @Html.ActionLink("List", "Index")
-            </li>
-            <li class="active">
-                <strong>Create</strong>
-            </li>
-        </ol>
-    </div>
-</div>
-
-
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-md-6">
@@ -27,10 +12,16 @@
                     <h5>Edit Ad</h5>
                 </div>
                 <div class="ibox-content">
-
+                    <form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" action="@Url.Action("FileUploadHandler", "Electronics")" method="post" enctype="multipart/form-data">
+                        <h2>Add Images</h2>
+                        <div id="dropzonePreview" class="dz-default dz-message">
+                        </div>
+                    </form>
+                    <br />
                     @using (Html.BeginForm("UpdateLaptopAd", "Electronics", FormMethod.Post, new { id = "form" }))
                     {
                         @Html.AntiForgeryToken()
+                        <input type="hidden" name="files" id="fileNames" />
 
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true)
@@ -71,7 +62,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Update" class="btn btn-primary" />
+                                    <input type="submit"  data-bind="click:submitClicked"  value="Update" class="btn btn-primary" />
                                     <a href="/Electronics/Details/@Model.Id" class="btn btn-white">Cancel</a>
                                 </div>
                             </div>
@@ -88,99 +79,12 @@
 
 
 @section Styles {
-    <style type="text/css">
-        .selectize-control.repositories .selectize-dropdown > div {
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .selectize-control.repositories .selectize-dropdown .by {
-            font-size: 11px;
-            opacity: 0.8;
-        }
-
-            .selectize-control.repositories .selectize-dropdown .by::before {
-                content: 'by ';
-            }
-
-        .selectize-control.repositories .selectize-dropdown .name {
-            font-weight: bold;
-            margin-right: 5px;
-        }
-
-        .selectize-control.repositories .selectize-dropdown .title {
-            display: block;
-        }
-
-        .selectize-control.repositories .selectize-dropdown .description {
-            font-size: 12px;
-            display: block;
-            color: #a0a0a0;
-            white-space: nowrap;
-            width: 100%;
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
-
-        .selectize-control.repositories .selectize-dropdown .meta {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            font-size: 10px;
-        }
-
-            .selectize-control.repositories .selectize-dropdown .meta li {
-                margin: 0;
-                padding: 0;
-                display: inline;
-                margin-right: 10px;
-            }
-
-                .selectize-control.repositories .selectize-dropdown .meta li span {
-                    font-weight: bold;
-                }
-
-        .selectize-control.repositories::before {
-            -moz-transition: opacity 0.2s;
-            -webkit-transition: opacity 0.2s;
-            transition: opacity 0.2s;
-            content: ' ';
-            z-index: 2;
-            position: absolute;
-            display: block;
-            top: 12px;
-            right: 34px;
-            width: 16px;
-            height: 16px;
-            background: url(/Images/spinner.gif);
-            background-size: 16px 16px;
-            opacity: 0;
-        }
-
-        .selectize-control.repositories.loading::before {
-            opacity: 0.4;
-        }
-
-        .icon {
-            width: 16px;
-            height: 16px;
-            display: inline-block;
-            vertical-align: middle;
-            background-size: 16px 16px;
-            margin: 0 3px 0 0;
-        }
-
-            .icon.fork {
-                background-image: url(images/repo-fork.png);
-            }
-
-            .icon.source {
-                background-image: url(images/repo-source.png);
-            }
-    </style>
+    
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
-    @Styles.Render("~/scripts/selectizeStyles")
+@Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
+@Styles.Render("~/bundles/tagStyles")
 }
 
 @section Scripts {
@@ -189,13 +93,21 @@
     @Scripts.Render("~/plugins/validate")
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/iCheck")
-    @Scripts.Render("~/scripts/selectize")
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/autosize")
+@Scripts.Render("~/plugins/dropZone")
     <script type="text/javascript">
 
         function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
             var self = this;
+            self.submitClicked = function () {
+                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                window.btn_clicked = true;
+                $("#form").submit();
+            }
             self.conditionChecked = ko.observable(false);
             self.typeValue = ko.observable("sell");
             self.selectedVal = ko.observable();
@@ -210,8 +122,6 @@
                 }
             });
 
-            self.availableSims = ["1", "2", "3", "4", "5"];
-            self.selectedSim = ko.observable();
             self.availableColors = ["White", "Black", "Yellow", "Red", "Blue", "Orange", "Purple", "Violet", "Green"];
             self.selectedColor = ko.observable();
             self.availableBrands = ko.observableArray();
@@ -248,12 +158,31 @@
                         self.exectLocation = data[0].location.exectLocation;
                         self.selectedCity(data[0].location.cityName);
                         self.selectedCityOriginal = data[0].location.cityName;
-                        if (data[0].laptopad.condition == 'u') {
+                        if (data[0].type == true) {
+                            $("#sell").iCheck('check');
+                        } else if (data[0].type == false) {
+                            $("#buy").iCheck('check');
+                        }
+                        if (data[0].isNegotiable == 'b') {
+                            self.selectedVal("fixedPrice");
+                            $("#allowBiding").iCheck('check');
+                        } else if (data[0].isNegotiable == 'n') {
+                            $("#fixedPrice").iCheck('check');
+                        } else if (data[0].isNegotiable == 'y') {
+                            $("#fixedPrice").iCheck('check');
+                            $("#isNegotiable").iCheck('check');
+                        }
+                        if (data[0].condition == 'u') {
+                            $('#used').iCheck('check');
                             self.conditionChecked("used");
-                        } else if (data[0].laptopad.condition == 'b') {
+
+                        } else if (data[0].condition == 'b') {
+                            $('#unboxed').iCheck('check');
+                            self.conditionChecked("unboxed");
+                        } else if (data[0].condition == 'n') {
+                            $('#new').iCheck('check');
                             self.conditionChecked("new");
-                        } else if (data[0].laptopad.condition == 'n') {
-                            self.conditionChecked("unBoxed");
+
                         }
                         self.mobileId = data[0].laptopad.id;
                         self.selectedModel(data[0].laptopad.model);
@@ -288,9 +217,8 @@
                             valueField: 'name',
                             labelField: 'name',
                             searchField: 'name',
-                            options: self.selectedTags, //not working
+                            maxItems: 6,
                             create: true,
-                            maxItems: 4,
                             render: {
                                 option: function (item, escape) {
                                     return '<div>' +
@@ -319,6 +247,15 @@
                                     }
                                 });
                             }
+                        });
+                        var selectize_tags = $("#select-tag")[0].selectize;
+                        $.each((self.selectedTags), function (i, item) {
+                            selectize_tags.addOption({
+                                text: item,
+                                value: item,
+                                name: item,
+                            });
+                            selectize_tags.addItem(item);
                         });
                         if (self.selectedBrandOriginal == self.selectedBrand()) {
                             self.selectedModel(self.selectedModelOriginal);
@@ -447,7 +384,7 @@
             self.loadBrands();
 
             self.loadAd();
-
+            
         }
         ko.bindingHandlers.jqAutoresize = {
             init: function (element, valueAccessor, aBA, vm) {
@@ -469,6 +406,85 @@
                 });
             }
         };
+
+
+        var adId = $("#adId").val();
+        function Images(data, i) {
+            var self = this;
+            data = data || {};
+            self.name = adId + "_" + i + data.extension;
+            self.size = data.size;
+        }
+        var images = [];
+        var myDropzone1;
+        var loadImages = function () {
+            $.ajax({
+                url: '/api/Electronic/getAdImages?id=' + adId,
+                dataType: "json",
+                contentType: "application/json",
+                cache: false,
+                type: 'GET',
+                success: function (data) {
+                    var i = 1;
+                    var mappedads = $.map(data, function (item) { return new Images(item, i++); });
+                    images = mappedads;
+
+                    if (images) {
+                        for (i = 0; i < images.length; i++) {
+                            // images[i].name = $.trim(images[i].name);
+                            myDropzone1.options.addedfile.call(myDropzone1, images[i]);
+                            myDropzone1.options.thumbnail.call(myDropzone1, images[i], "/Images/Ads/" + images[i].name);
+                        }
+                    }
+                },
+                error: function (jqXHR, status, thrownError) {
+                    toastr.error("failed to load images.Please refresh page", "Error");
+                }
+            });
+        }
+
+        loadImages();
+        var fileList = [];
+        ko.bindingHandlers.dropzone = {
+            init: function (element, valueAccessor) {
+                var value = ko.unwrap(valueAccessor());
+
+                var options = {
+                    maxFileSize: 15,
+                    uploadMultiple: true,
+                    parallelUploads: 100,
+                    maxFiles: 30,
+                    addRemoveLinks: false,
+                    acceptedFiles: ".jpeg,.jpg,.png,.gif",
+                    init: function () {
+                        var myDropzone = this;
+                        myDropzone1 = this;
+                        this.on("success", function (file, serverFileName) {
+                            fileList = [];
+                            i = 1;
+                            var abc = $.map(serverFileName, function (item) { return (item); });
+                            $.each(abc, function (index, value) {
+                                fileList[i] = { "fileName": value, "fileId": i++ };
+                            })
+                        });
+                        if (images) {
+                            for (i = 0; i < images.length; i++) {
+                                myDropzone.emit("addedfile", images[i]);
+                                myDropzone.emit("thumbnail", images[i], "/Images/Ads/");
+                                myDropzone.emit("complete", images[i]);
+                            }
+                        }
+                    }
+                };
+
+                $.extend(options, value);
+
+                $(element).addClass('dropzone');
+                new Dropzone(element, options);
+            }
+        };
+
+
 
         $(document).ready(function () {
             ko.applyBindings(new ViewModel);

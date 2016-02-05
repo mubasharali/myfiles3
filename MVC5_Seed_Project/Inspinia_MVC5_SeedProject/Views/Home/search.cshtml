@@ -134,6 +134,7 @@
     @Styles.Render("~/Content/plugins/jsTree")
 @Styles.Render("~/bundles/tagStyles")
 @Styles.Render("~/scripts/selectizeStyles")
+@Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
 }
 
 @section Scripts{
@@ -144,6 +145,7 @@
     @Scripts.Render("~/plugins/slick")
     @Scripts.Render("~/plugins/jsTree")
 @Scripts.Render("~/scripts/selectize")
+@Scripts.Render("~/plugins/ionRange")
     <script src="~/Scripts/app/MobileTree.js"></script>
     <script src="~/Scripts/jquery.signalR-2.2.0.js"> </script>
     <script src="~/signalr/hubs"></script>
@@ -270,6 +272,7 @@
             tags = ko.observableArray();
         }
         function viewModel() {
+            SearchingLocation();
             Search();
             var self = this;
             self.brand = ko.observable("");

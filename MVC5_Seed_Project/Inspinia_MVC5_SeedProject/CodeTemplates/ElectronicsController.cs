@@ -45,104 +45,12 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         //    var ads = db.Ads.Include(a => a.AspNetUser);
         //    return View(ads);
         //}
-        public ActionResult Laptops()
+        public ActionResult ComputersLaptops()
         {
-            return View();
+            return View("Laptops");
         }
-        public ActionResult Mobiles()
-        {
-            //db.Ads.Where(x => x.Id.Equals(x.MobileAds.Where(x.));
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,category,postedBy,title,description,time")] Ad ad)
-        {
-            if (ModelState.IsValid)
-            {
-                if (Request.IsAuthenticated)
-                {
-                    //string tempId = Request["tempId"];
-                    FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    MyAd(ad, "Save","Mobiles");
-                    MobileAd mobileAd= new MobileAd();
-                    mobileAd.sims =Request["sims"];
-                    mobileAd.color = Request["color"];
-
-                    mobileAd.mobileId = SaveMobileBrandModel(ad);
-                   // asp.Ads.Add(ad);
-                    db.Ads.Add(ad);
-                    //images
-                   
-                    //tags
-                    SaveTags(Request["tags"], ad);
-                   // FileUploadHandler(ad);
-                    mobileAd.Id = ad.Id;
-                    db.MobileAds.Add(mobileAd);
-                    //ad.MobileAd.a(mobileAd);
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        string sbs = e.ToString();
-                    }
-                    // ReplaceAdImages(ad.Id,tempId,fileNames);
-                    ReplaceAdImages(ad, fileNames);
-                    //location
-                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Save");
-                    return RedirectToAction("Details", new { id = ad.Id });
-                }
-                TempData["error"] = "You must be logged in to post ad";
-                return View("Create", ad);
-            }
-            TempData["error"] = "Only enter those information about which you are asked";
-            return View("Create", ad);
-            //ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", ad.postedBy);
-            //return View(ad);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateMobileAccessoriesAd([Bind(Include = "Id,category,postedBy,title,description,time")] Ad ad)
-        {
-            if (ModelState.IsValid)
-            {
-                if (Request.IsAuthenticated)
-                {
-                    FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    MyAd(ad, "Save","Mobiles","MobileAccessories");
-                    MobileAd mobileAd = new MobileAd();
-                    mobileAd.color = Request["color"];
-
-                    AspNetUser asp = db.AspNetUsers.FirstOrDefault(x => x.Id == ad.postedBy);
-                    mobileAd.mobileId = SaveMobileBrandModel(ad);
-
-                    asp.Ads.Add(ad);
-                    db.Ads.Add(ad);
-                    //tags
-                    SaveTags(Request["tags"], ad);
-
-                    mobileAd.Id = ad.Id;
-                    db.MobileAds.Add(mobileAd);
-                    //ad.MobileAd.a(mobileAd);
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        string sbs = e.ToString();
-                    }
-                    ReplaceAdImages(ad, fileNames);
-                    //location
-                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Save");
-                    return RedirectToAction("Details", new { id = ad.Id, title = ad.title });
-                }
-                return View("Create", ad);
-            }
-            return View("Create", ad);
-        }
+       
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateLaptopAd([Bind(Include = "Id,category,postedBy,title,description,time")] Ad ad)
@@ -152,7 +60,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 if (Request.IsAuthenticated)
                 {
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    MyAd(ad, "Save","Laptops");
+                    MyAd(ref ad, "Save","Laptops");
                     LaptopAd mobileAd = new LaptopAd();
                     mobileAd.color = Request["color"];
 
@@ -165,7 +73,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     mobileAd.laptopId = SaveLaptopBrandModel(ad);
                     db.Ads.Add(ad);
                     //tags
-                    SaveTags(Request["tags"], ad);
+                    SaveTags(Request["tags"],ref ad);
                     mobileAd.Id = ad.Id;
                     // ad.LaptopAd.Add(mobileAd);
                     db.LaptopAds.Add(mobileAd);
@@ -177,9 +85,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     {
                         string ss = e.ToString();
                     }
-                    ReplaceAdImages(ad, fileNames);
+                    ReplaceAdImages( ref ad, fileNames);
                     //location
-                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Save");
+                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
                     return RedirectToAction("Details", new { id = ad.Id });
                     //return RedirectToAction("Index", new { category = "mobiles", subcategory = laptopdata.LaptopBrand.brand, lowcategory = laptopdata.model, id = ad.Id, title = ad.title });
                 }
@@ -188,103 +96,48 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return View("Create", ad);
         }
 
-        //public ActionResult Temp1()
-        //{
-        //    var name = Request["myName"];
-        //   // FileName[] fileName = JsonConvert.DeserializeObject<FileName[]>( Request["files"]);
-        //    FileName[] fileName = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-            
-        //    return Json(new { Message = "Error in saving file" });
-        //}
-        //public ActionResult Temp(Ad ad)
-        //{
-        //    var nam = Request["myName"];
-        //    int count = 1;
-        //    var imaa = ad.AdImages.ToList();
-        //    foreach (var img in imaa)
-        //    {
-        //        System.IO.File.Delete(Server.MapPath(@"~\Images\Ads\" + ad.Id + "_" + count++ + img.imageExtension));
-        //        db.AdImages.Remove(img);
-        //    }
-        //    count = 1;
-        //    string[] fileNames = null;
-        //    bool canpass = true;
-        //    for (int i = 0; i < Request.Files.Count; i++)
-        //    {
-        //        if (canpass)
-        //        {
-        //            fileNames = new string[Request.Files.Count];
-        //             canpass = false;
-        //        }
-        //        try
-        //        {
-        //            HttpPostedFileBase file = Request.Files[i];
-        //            string extension = System.IO.Path.GetExtension(file.FileName);
-        //            //file.SaveAs(Server.MapPath("~/Images/Ads/" + ad.Id + "_" + count++ + extension));
-        //            //AdImage image = new AdImage();
-        //            //image.imageExtension = extension;
-        //            //image.adId = ad.Id;
-        //            //db.AdImages.Add(image);
-        //            //db.SaveChanges();
-        //            file.SaveAs(Server.MapPath("~/Images/Ads/" + "33" + "_" + count + extension));
-        //            fileNames[i] = "33_" + count++;
-        //            //return Json(new {Message = "33_" + count + extension});
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return Json(new { Message = "Error in saving file" });
-        //        }
-                
-        //    }
-        //    return Json(fileNames);
-        //   // return Json(new object{Message = "33_"+ })
-        //  //  return Json(new { Message = "File not saved" });
-        //}
-        //[HttpPost]
-        //public ActionResult AdImages(string adId)
-        //{
-        //    for (int i = 0; i < Request.Files.Count; i++)
-        //    {
-        //        try
-        //        {
-        //            HttpPostedFileBase file = Request.Files[i];
-        //            string extension = System.IO.Path.GetExtension(file.FileName);
-        //            file.SaveAs(Server.MapPath("~/Images/Ads/temp" + User.Identity.GetUserId() + adId + file.FileName ));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return Json(new { Message = "Error in saving file" });
-        //        }
-        //    }
-        //    return Json(new { Message = "File saved" });
-        //}
-        public void ReplaceAdImages(Ad ad, FileName[] filenames)
+        
+        public void ReplaceAdImages(ref Ad ad, FileName[] filenames)
         {
             string newFileName = "";
             int count = 1;
-            var imaa = ad.AdImages.ToList();
-            foreach (var img in imaa)
-            {
-                System.IO.File.Delete(Server.MapPath(@"~\Images\Ads\" + ad.Id + "_" + count++ + img.imageExtension));
-                db.AdImages.Remove(img);
-            }
-            count = 1;
+            var id = ad.Id;
+            var imaa = db.AdImages.Where(x => x.adId.Equals(id)).Count();
+            //var imaa = db.Ads.Find(id).AdImages.Count;
+            //foreach (var img in imaa)
+            //{
+            //    System.IO.File.Delete(Server.MapPath(@"~\Images\Ads\" + ad.Id + "_" + count++ + img.imageExtension));
+            //    db.AdImages.Remove(img);
+            //}
+            count = imaa + 1;
             for (int i = 1; i < filenames.Length; i++)
             {
-                string filename = Server.MapPath("~/Images/Ads/" +  filenames[i].fileName );
+                string filename = System.Web.HttpContext.Current.Server.MapPath("~/Images/Ads/" +  filenames[i].fileName );
                 string extension = System.IO.Path.GetExtension(filenames[i].fileName);
                 newFileName = ad.Id.ToString() + "_" + count + extension;
                 if (System.IO.File.Exists(filename))
                 {
-                    System.IO.File.Move(filename, Server.MapPath("~/Images/Ads/" + newFileName ));
-                    AdImage image = new AdImage();
-                    image.imageExtension = extension;
-                    image.adId = ad.Id;
-                    db.AdImages.Add(image);
-                    count++;
+                    if ( ! (System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath("~/Images/Ads/" + newFileName)) ))
+                    {
+                        System.IO.File.Move(filename, System.Web.HttpContext.Current.Server.MapPath("~/Images/Ads/" + newFileName));
+                        System.IO.File.Delete(filename);
+                        AdImage image = new AdImage();
+                        image.imageExtension = extension;
+                        image.adId = ad.Id;
+                        db.AdImages.Add(image);
+                        db.SaveChanges();
+                        count++;
+                    }
                 }
             }
-            db.SaveChanges();
+            
+            //try {
+            //    db.SaveChanges();
+            //}
+            //catch(Exception e)
+            //{
+            //    string s = e.ToString();
+            //}
         }
         
         [HttpPost]
@@ -317,22 +170,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return Json(fileNames);
         }
-        public ActionResult CreateMobileAccessoriesAd()
-        {
-            if (Request.IsAuthenticated)
-            {
-                Ad ad = new Ad();
-                return View(ad);
-            }
-            return View("/Home");
-        }
-        public ActionResult EditMobileAccessoriesAd(int id)
-        {
-            Ad ad = db.Ads.Find(id);
 
-            return View(ad);
-        }
-        public int SaveMobileBrandModel(Ad ad)
+
+        public int SaveLaptopBrandModel(Ad ad)
         {
             ad.status = "a";
             var company = Request["brand"];
@@ -345,7 +185,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             if (true) //company != null
             {
 
-                var allBrands = (db.Mobiles.Select(x => x.brand)).AsEnumerable(); //getBrands
+                var allBrands = (db.LaptopBrands.Select(x => x.brand)).AsEnumerable(); //getBrands
                 bool isNewBrand = true;
                 foreach (var brand in allBrands)
                 {
@@ -356,9 +196,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 }
                 if (isNewBrand)
                 {
-                    Mobile mob = new Mobile();
+                    LaptopBrand mob = new LaptopBrand();
                     mob.brand = company;
-                    mob.addedBy = User.Identity.GetUserId();
+                    mob.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
                     mob.time = DateTime.UtcNow;
                     if (company == null || company == "")
                     {
@@ -368,10 +208,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     {
                         mob.status = "p";
                     }
-                    db.Mobiles.Add(mob);
+                    db.LaptopBrands.Add(mob);
                     db.SaveChanges();
 
-                    MobileModel mod = new MobileModel();
+                    LaptopModel mod = new LaptopModel();
                     mod.model = model;
                     mod.brandId = mob.Id;
                     mod.time = DateTime.UtcNow;
@@ -382,15 +222,15 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     else
                     {
                         mod.status = "p";
-                    }                    
-                    mod.addedBy = User.Identity.GetUserId();
-                    db.MobileModels.Add(mod);
+                    }
+                    mod.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                    db.LaptopModels.Add(mod);
                     db.SaveChanges();
                     ad.status = "p";
                 }
                 else
                 {
-                    var allModels = db.MobileModels.Where(x => x.Mobile.brand == company).Select(x => x.model);
+                    var allModels = db.LaptopModels.Where(x => x.LaptopBrand.brand == company).Select(x => x.model);
                     bool isNewModel = true;
                     foreach (var myModel in allModels)
                     {
@@ -402,8 +242,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     if (isNewModel)
                     {
                         ad.status = "p";
-                        var brandId = db.Mobiles.FirstOrDefault(x => x.brand.Equals(company));
-                        MobileModel mod = new MobileModel();
+                        var brandId = db.LaptopBrands.FirstOrDefault(x => x.brand.Equals(company));
+                        LaptopModel mod = new LaptopModel();
                         mod.brandId = brandId.Id;
                         mod.model = model;
                         if (model == null || model == "")
@@ -414,9 +254,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         {
                             mod.status = "p";
                         }
-                        mod.addedBy = User.Identity.GetUserId();
+                        mod.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
                         mod.time = DateTime.UtcNow;
-                        db.MobileModels.Add(mod);
+                        db.LaptopModels.Add(mod);
                         try
                         {
                             db.SaveChanges();
@@ -427,99 +267,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         }
                     }
                 }
-                var mobileModel = db.MobileModels.FirstOrDefault(x => x.Mobile.brand == company && x.model == model);
-                return mobileModel.Id;
+                var laptopModel = db.LaptopModels.FirstOrDefault(x => x.LaptopBrand.brand == company && x.model == model);
+                return laptopModel.Id;
             }
-        }
-        public int SaveLaptopBrandModel(Ad ad)
-        {
-            ad.status = "a";
-            var company = Request["brand"];
-            var model = Request["model"];
-            if (company != null && company != "")
-            {
-                company = company.Trim();
-                model = model.Trim();
-            }
-            //var allBrands = (db.Mobiles.Select(x => x.brand)).AsEnumerable(); //getBrands
-            //bool isNewBrand = true;
-            //foreach (var brand in allBrands)
-            //{
-            //    if (brand == company)
-            //    {
-            //        isNewBrand = false;
-            //    }
-            //}
-            bool isOldBrand = db.LaptopBrands.Any(x => x.brand.Equals(company));
-            if (!isOldBrand)
-            {
-                LaptopBrand mob = new LaptopBrand();
-                mob.brand = company;
-                mob.addedBy = User.Identity.GetUserId();
-                mob.time = DateTime.UtcNow;
-                if (company == null || company == "")
-                {
-                    mob.status = "a";
-                }
-                else
-                {
-                    mob.status = "p";
-                }
-                db.LaptopBrands.Add(mob);
-                db.SaveChanges();
-
-                LaptopModel mod = new LaptopModel();
-                mod.model = model;
-                mod.brandId = mob.Id;
-                mod.time = DateTime.UtcNow;
-                if (model == null || model == "")
-                {
-                    mod.status = "a";
-                }
-                else
-                {
-                    mod.status = "p";
-                }
-                mod.addedBy = User.Identity.GetUserId();
-                db.LaptopModels.Add(mod);
-                db.SaveChanges();
-                ad.status = "p";
-            }
-            else
-            {
-                //var allModels = db.MobileModels.Where(x => x.Mobile.brand == company).Select(x => x.model);
-                //bool isNewModel = true;
-                //foreach (var myModel in allModels)
-                //{
-                //    if (myModel == model)
-                //    {
-                //        isNewModel = false;
-                //    }
-                //}
-                bool isOldModel = db.LaptopModels.Any(x => x.model.Equals(model));
-                if (!isOldModel)
-                {
-                    ad.status = "p";
-                    var brandId = db.LaptopBrands.FirstOrDefault(x => x.brand.Equals(company));
-                    LaptopModel mod = new LaptopModel();
-                    mod.brandId = brandId.Id;
-                    mod.model = model;
-                    if (model == null || model == "")
-                    {
-                        mod.status = "a";
-                    }
-                    else
-                    {
-                        mod.status = "p";
-                    }
-                    mod.addedBy = User.Identity.GetUserId();
-                    mod.time = DateTime.UtcNow;
-                    db.LaptopModels.Add(mod);
-                    db.SaveChanges();
-                }
-            }
-            var laptopModel = db.LaptopModels.FirstOrDefault(x => x.LaptopBrand.brand == company && x.model == model);
-            return laptopModel.Id;
         }
         
         
@@ -532,12 +282,12 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             Ad ad= new Ad();
             return View(ad);
         }
-        public void MyAd(Ad ad,string SaveOrUpdate,string cateogry = null,string subcategory = null)
+        public void MyAd(ref Ad ad,string SaveOrUpdate,string cateogry = null,string subcategory = null)
         {
-            var type = Request["type"];
-            var isbiding = Request["bidingAllowed"];
-            var condition = Request["condition"];
-            var pp = Request["price"];
+            var type = System.Web.HttpContext.Current.Request["type"];
+            var isbiding = System.Web.HttpContext.Current.Request["bidingAllowed"];
+            var condition = System.Web.HttpContext.Current.Request["condition"];
+            var pp = System.Web.HttpContext.Current.Request["price"];
             string[] prices = pp.Split(',');
             if (type == "sell")
             {
@@ -551,7 +301,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             if (isbiding == "fixedPrice")
             {
                 pp = prices[0];
-                var nn = Request["isNegotiable"];
+                var nn = System.Web.HttpContext.Current.Request["isNegotiable"];
                 if (nn == "on")
                 {
                     ad.isnegotiable = "y";
@@ -591,13 +341,15 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             else if (SaveOrUpdate == "Update")
             {
-                ad.time =DateTime.Parse( Request["time"]);
-                ad.category = Request["category"];
-                ad.subcategory = Request["subcategory"];
+                ad.time =DateTime.Parse(System.Web.HttpContext.Current.Request["time"]);
+                ad.category = System.Web.HttpContext.Current.Request["category"];
+                ad.subcategory = System.Web.HttpContext.Current.Request["subcategory"];
             }
             ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
-            ad.postedBy = User.Identity.GetUserId();
+            ad.postedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateHomeAppliancesAd([Bind(Include = "Id,category,postedBy,title,description,time")] Ad ad)
@@ -606,51 +358,25 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 if (Request.IsAuthenticated)
                 {
-                    MyAd(ad,"Save","Electronics","HomeAppliances");
+                    MyAd(ref ad,"Save","Electronics","HomeAppliances");
 
                     AspNetUser asp = db.AspNetUsers.FirstOrDefault(x => x.Id == ad.postedBy);
 
                     db.Ads.Add(ad);
                     //tags
-                    SaveTags(Request["tags"], ad);
+                    SaveTags(Request["tags"],ref ad);
                     //location
-                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Save");
+                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
                     return RedirectToAction("Details", new {  id = ad.Id});
                 }
-                return View("CreateHomeAppliancesAd", ad);
+                return View("CreateHomeAppliancesAd",ad);
             }
             return View("CreateHomeAppliancesAd", ad);
             //ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", ad.postedBy);
             //return View(ad);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UpdateAd([Bind(Include = "Id,category,postedBy,title,description,time")] Ad ad)
-        {
-            if (ModelState.IsValid)
-            {
-                if (Request.IsAuthenticated)
-                {
-                    if (Request["postedBy"] == User.Identity.GetUserId())
-                    {
-                        MyAd(ad, "Update");
-                        AspNetUser asp = db.AspNetUsers.FirstOrDefault(x => x.Id == ad.postedBy);
-
-                        db.Entry(ad).State = EntityState.Modified;
-                        //tags
-                        SaveTags(Request["tags"], ad,"update");
-                        //location
-
-                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Update");
-                        return RedirectToAction("Details", new { id = ad.Id });
-                    }
-                    
-                }
-                return View("EditAd", ad);
-            }
-            return View("EditAd", ad);
-        }
-        public void MyAdLocation(string city, string popularPlace, string exectLocation,Ad ad,string SaveOrUpdate)
+        
+        public void MyAdLocation(string city, string popularPlace, string exectLocation,ref Ad ad,string SaveOrUpdate)
         {
             AdsLocation loc = new AdsLocation();
             if (city != null)
@@ -705,7 +431,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 loc.Id = ad.Id;
                 if (SaveOrUpdate == "Save")
                 {
-                    db.AdsLocations.Add(loc);
+                    ad.AdsLocation = loc;
+                   // db.AdsLocations.Add(loc);
                 }
                 else if (SaveOrUpdate == "Update")
                 {
@@ -714,15 +441,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 db.SaveChanges();
             }
         }
-        public ActionResult EditAd(int id)
-        {
-            Ad ad = db.Ads.Find(id);
-            if (ad == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ad);
-        }
+        
         public ActionResult Index(string category, string subcategory, string lowcategory, int? id)
         {
             
@@ -776,19 +495,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
         //[HttpPost]
-        public ActionResult Edit(int id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Ad ad = db.Ads.Find(id);
-            if (ad == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ad);
-        }
+        
         public ActionResult EditLaptopAd(int id)
         {
             if (id == null)
@@ -802,131 +509,19 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return View(ad);
         }
-        public ActionResult Update([Bind(Include = "Id,category,postedBy,title,description,time")] Ad ad)
+        
+        public void SaveTags(string s,ref Ad ad,string addOrUpdate = "add")
         {
-            if (ModelState.IsValid)
-            {
-                if (Request.IsAuthenticated)
-                {
-                    var ab = Request["postedBy"];
-                    var iddd = User.Identity.GetUserId();
-                    if (Request["postedBy"] == User.Identity.GetUserId())
-                    {
-                      //  var myPreviousAd = db.Ads.Find(ad.Id).AdTags;
-                        MyAd(ad, "Update");
-
-                        MobileAd mobileAd = new MobileAd();
-
-                        mobileAd.sims = Request["sims"];
-                        mobileAd.color = Request["color"];
-
-                        var company = Request["brand"];
-                        var model = Request["model"];
-                        AspNetUser asp = db.AspNetUsers.FirstOrDefault(x => x.Id == ad.postedBy);
-
-                        var allBrands = (db.Mobiles.Select(x => x.brand)).AsEnumerable(); //getBrands
-                        bool isNewBrand = true;
-                        foreach (var brand in allBrands)
-                        {
-                            if (brand == company)
-                            {
-                                isNewBrand = false;
-                            }
-                        }
-                        if (isNewBrand)
-                        {
-                            Mobile mob = new Mobile();
-                            mob.brand = company;
-                            mob.addedBy = User.Identity.GetUserId();
-                            mob.time = DateTime.UtcNow;
-                            mob.status = "p";
-                            db.Mobiles.Add(mob);
-                            db.SaveChanges();
-
-                            MobileModel mod = new MobileModel();
-                            mod.model = model;
-                            mod.brandId = mob.Id;
-                            mod.time = DateTime.UtcNow;
-                            mod.status = "p";
-                            mod.addedBy = User.Identity.GetUserId();
-                            db.MobileModels.Add(mod);
-                            db.SaveChanges();
-                            ad.status = "p";
-                        }
-                        else
-                        {
-                            var allModels = db.MobileModels.Where(x => x.Mobile.brand == company).Select(x => x.model);
-                            bool isNewModel = true;
-                            foreach (var myModel in allModels)
-                            {
-                                if (myModel == model)
-                                {
-                                    isNewModel = false;
-                                }
-                            }
-                            if (isNewModel)
-                            {
-                                var brandId = db.Mobiles.FirstOrDefault(x => x.brand.Equals(company));
-                                MobileModel mod = new MobileModel();
-                                mod.brandId = brandId.Id;
-                                mod.model = model;
-                                mod.time = DateTime.UtcNow;
-                                mod.status = "p";
-                                mod.addedBy = User.Identity.GetUserId();
-                                db.MobileModels.Add(mod);
-                                db.SaveChanges();
-                                ad.status = "p";
-                            }
-                        }
-
-                        //tags
-                        SaveTags(Request["tags"], ad,"update");
-
-                        var mobileModel = db.MobileModels.FirstOrDefault(x => x.Mobile.brand == company && x.model == model);
-                        mobileAd.mobileId = mobileModel.Id;
-                        //asp.Ads.Add(ad);
-
-                        db.Entry(ad).State = EntityState.Modified;
-                        db.SaveChanges();
-                        //db.Ads.Add(ad);
-                        mobileAd.Id = ad.Id;
-                        db.Entry(mobileAd).State = EntityState.Modified;
-                        //ad.MobileAds.Add(mobileAd);
-                        try
-                        {
-                            db.SaveChanges();
-                        }
-                        catch (Exception e)
-                        {
-                            string sss = e.ToString();
-                        }
-                        //location
-                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Update");
-                        return RedirectToAction("Details", new { id = ad.Id });
-                       // return RedirectToAction("Index", new { category = "mobiles", subcategory = mobileModel.Mobile.brand, lowcategory = mobileModel.model, id = ad.Id, title = ad.title });
-                    }
-                }
-                return View("Edit", ad);
-            }
-            return View("Edit", ad);
-        }
-        public void SaveTags(string s,Ad ad,string addOrUpdate = "add")
-        {
-            //string s = Request["tags"];
-
             if(addOrUpdate == "update")
             {
-                var adtags = db.AdTags.Where(x => x.adId.Equals(ad.Id)).ToList();
-         //       var adtags = ad.AdTags.ToList();
-               // var adtags = db.Ads.Include("AdTags").FirstOrDefault(x => x.Id.Equals(ad.Id));
-               // var temp = adtags.AdTags.ToList();
+                var adid = ad.Id;
+                var adtags = db.AdTags.Where(x => x.adId.Equals(adid)).ToList();
                 foreach (var cc in adtags)
                 {
                     db.AdTags.Remove(cc);
                 }
                  db.SaveChanges();
             }
-
             string[] values = s.Split(',');
             Tag[] tags = new Tag[values.Length];
             AdTag[] qt = new AdTag[values.Length];
@@ -947,7 +542,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     {
                         tags[i].name = values[i];
                         tags[i].time = DateTime.UtcNow;
-                        tags[i].createdBy = User.Identity.GetUserId();
+                        tags[i].createdBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
                         db.Tags.Add(tags[i]);
                     }
                 }
@@ -974,6 +569,14 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     db.AdTags.Add(qt[i]);
                 }
             }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                string sb = e.ToString();
+            }
         }
         public ActionResult UpdateLaptopAd([Bind(Include = "Id,category,postedBy,title,description,time")] Ad ad)
         {
@@ -983,71 +586,21 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 {
                     if (Request["postedBy"] == User.Identity.GetUserId())
                     {
-                        MyAd(ad, "Update");
+                        FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                        MyAd(ref ad, "Update");
                         LaptopAd mobileAd = new LaptopAd();
 
                         mobileAd.color = Request["color"];
                         var company = Request["brand"];
                         var model = Request["model"];
-                        AspNetUser asp = db.AspNetUsers.FirstOrDefault(x => x.Id == ad.postedBy);
 
-                        var allBrands = (db.LaptopBrands.Select(x => x.brand)).AsEnumerable(); //getBrands
-                        bool isNewBrand = true;
-                        foreach (var brand in allBrands)
-                        {
-                            if (brand == company)
-                            {
-                                isNewBrand = false;
-                            }
-                        }
-                        if (isNewBrand)
-                        {
-                            LaptopBrand mob = new LaptopBrand();
-                            mob.brand = company;
-                            mob.addedBy = User.Identity.GetUserId();
-                            mob.time = DateTime.UtcNow;
-                            db.LaptopBrands.Add(mob);
-                            db.SaveChanges();
-
-                            LaptopModel mod = new LaptopModel();
-                            mod.model = model;
-                            mod.brandId = mob.Id;
-                            mod.time = DateTime.UtcNow;
-                            mod.addedBy = User.Identity.GetUserId();
-                            db.LaptopModels.Add(mod);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            var allModels = db.LaptopModels.Where(x => x.LaptopBrand.brand == company).Select(x => x.model);
-                            bool isNewModel = true;
-                            foreach (var myModel in allModels)
-                            {
-                                if (myModel == model)
-                                {
-                                    isNewModel = false;
-                                }
-                            }
-                            if (isNewModel)
-                            {
-                                var brandId = db.LaptopBrands.First(x => x.brand.Equals(company));
-                                LaptopModel mod = new LaptopModel();
-                                mod.brandId = brandId.Id;
-                                mod.model = model;
-                                mod.time = DateTime.UtcNow;
-                                mod.addedBy = User.Identity.GetUserId();
-                                db.LaptopModels.Add(mod);
-                                db.SaveChanges();
-                            }
-                        }
-
+                        SaveLaptopBrandModel(ad);
                         //tags
-                        SaveTags(Request["tags"], ad,"update");
+                        SaveTags(Request["tags"],ref ad,"update");
 
                         var mobileModel = db.LaptopModels.FirstOrDefault(x => x.LaptopBrand.brand == company && x.model == model);
                         mobileAd.laptopId = mobileModel.Id;
-                        //asp.Ads.Add(ad);
-
+                       
                         db.Entry(ad).State = EntityState.Modified;
                         db.SaveChanges();
                         //db.Ads.Add(ad);
@@ -1063,8 +616,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                             string sss = e.ToString();
                         }
                         //location
-                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Update");
-                        return RedirectToAction("Index", new { category = "mobiles", subcategory = mobileModel.LaptopBrand.brand, lowcategory = mobileModel.model, id = ad.Id, title = ad.title });
+                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Update");
+                        ReplaceAdImages(ref ad, fileNames);
+                        return RedirectToAction("Details", new { id = ad.Id });
                     }
                 }
                 return View("Create", ad);
@@ -1086,29 +640,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             ViewBag.adId = id;
             return View();
         }
-        public Random a = new Random();
-        public List<int> randomList = new List<int>();
-        int MyNumber = 0;
-        private int NewNumber()
-        {
-            MyNumber = a.Next(0, 10);
-            while (randomList.Contains(MyNumber))
-            {
-                MyNumber = a.Next(0, 10);
-            }
-            randomList.Add(MyNumber);
-            return MyNumber;
-        }
+        
         // GET: /Electronics/Create
-        public ActionResult Create()
-        {
-            if (Request.IsAuthenticated)
-            {
-                Ad ad = new Ad();
-                return View(ad);
-            }
-            return RedirectToAction("Home","Index");
-        }
+        
         public ActionResult CreateLaptopAd()
         {
             Ad ad = new Ad();

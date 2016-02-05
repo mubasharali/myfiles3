@@ -574,6 +574,7 @@
     <Content Include="Images\others\stars.png" />
     <Content Include="Images\spinner.gif" />
     <Content Include="Images\Users\default.jpg" />
+    <Content Include="Scripts\app\adImage-EditAd.js" />
     <Content Include="Scripts\app\chat.js" />
     <Content Include="Scripts\app\CreateAlert.js" />
     <Content Include="Scripts\app\dropzone-knockout-binding.js" />
@@ -582,7 +583,9 @@
     <Content Include="Scripts\app\MobileTree.js" />
     <Content Include="Scripts\app\Selectize-Knockout-binding.js" />
     <Content Include="Scripts\app\slick-knockout-binding.js" />
+    <Content Include="Scripts\app\_AdListView.js" />
     <Content Include="Scripts\app\_SearchLocation.js" />
+    <Content Include="Scripts\app\_Truncate-knockout-binding.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\bootstrap-theme.css.map" />
@@ -834,10 +837,10 @@
     <Content Include="Views\Shared\DisplayTemplates\CanonicalHelperModel.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Electronics\Create.cshtml" />
+    <Content Include="Views\MobilesTablets\Create.cshtml" />
     <Content Include="Views\Electronics\Delete.cshtml" />
     <Content Include="Views\Electronics\Details.cshtml" />
-    <Content Include="Views\Electronics\Edit.cshtml" />
+    <Content Include="Views\MobilesTablets\Edit.cshtml" />
     <Content Include="Views\Electronics\Index.cshtml" />
     <Content Include="Views\Electronics\Search.cshtml" />
     <Content Include="Views\Electronics\showcomments.cshtml" />
@@ -910,13 +913,9 @@
     <Content Include="Views\Shared\_UserLogin.cshtml" />
     <Content Include="Views\Shared\_Chat.cshtml" />
     <Content Include="Views\Shared\_Layout_Without_Signalr.cshtml" />
-    <Content Include="Views\Electronics\CreateMobileAccessoriesAd.cshtml" />
-    <Content Include="Views\Electronics\EditMobileAccessoriesAd.cshtml" />
+    <Content Include="Views\MobilesTablets\CreateMobileAccessoriesAd.cshtml" />
+    <Content Include="Views\MobilesTablets\EditMobileAccessoriesAd.cshtml" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
-    <Content Include="Views\MobilesTablets\Create.cshtml" />
-    <Content Include="Views\MobilesTablets\Delete.cshtml" />
-    <Content Include="Views\MobilesTablets\Details.cshtml" />
-    <Content Include="Views\MobilesTablets\Edit.cshtml" />
     <Content Include="Views\MobilesTablets\Index.cshtml" />
     <Content Include="Views\Home\temp4.cshtml" />
     <Content Include="Views\LaptopsComputers\Create.cshtml" />
@@ -950,6 +949,8 @@
     <Content Include="Views\Services\Edit.cshtml" />
     <Content Include="Views\Services\Index.cshtml" />
     <Content Include="Views\Search\_SearchLocation.cshtml" />
+    <Content Include="Views\Shared\_AdListView.cshtml" />
+    <Content Include="Views\Shared\_LoadingBoxes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

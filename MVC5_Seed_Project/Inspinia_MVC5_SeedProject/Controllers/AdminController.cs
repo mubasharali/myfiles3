@@ -34,7 +34,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 loginUserProfileExtension = ide.dpExtension;
             }
             var ret = ((from ad in db.Ads
-                       
+                       where ad.status != "a" || ad.Reporteds.Count > 0
                        orderby ad.time descending
                        select new
                        {

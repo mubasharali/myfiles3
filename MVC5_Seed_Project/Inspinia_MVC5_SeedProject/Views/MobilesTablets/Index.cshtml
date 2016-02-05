@@ -16,7 +16,7 @@
     </div>
 </div>*@
 
-<style>
+@*<style>
     .carouselContainer {
         overflow: hidden;
         //height:350px;
@@ -43,12 +43,12 @@
     .showAds .ibox {
         height: 420px;
     }
-</style>
-<div id="search">@ViewBag.search s</div>
+</style>*@
+<div id="search">@ViewBag.search</div>
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
-        <div class="col-sm-4 col-md-3 col-lg-2">
-            <div class="row">
+        <div class="col-sm-4 col-md-3 col-lg-3">
+            <div class="">
                 @Html.Partial("/Views/Electronics/_TreeMobile.cshtml")
                 <div class="ibox-title"><h5> search by tags</h5></div>
                 <div class="ibox-content"><input id="select-tag" data-bind="value:tags" class="repositories" placeholder="Pick tags..." /></div>
@@ -57,9 +57,26 @@
                 @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
             </div>
         </div>
-        <div class="col-sm-8 col-md-9 col-lg-10">
-            <div class="row showAds" data-bind="foreach:showAds">
-                <div class="col-md-4 col-sm-6 col-lg-3">
+        <div class="col-sm-9 col-lg-7">
+            <div data-bind="visible:isLoading()">
+                @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+            </div>
+            <div data-bind="visible:!isLoading()">
+                <span data-bind="text:showAds().length"> </span> results found<br />
+                <b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || brand() || model() || tags() )"> all </span> <b> <span data-bind="visible:mobileAccessories()"> Mobile Accessories </span> <span data-bind="visible:!mobileAccessories()">Mobiles</span> </b><span data-bind="visible:brand || model"> of </span> <b> <span data-bind="text:brand"></span> <span data-bind="text:model"> </b>
+                <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
+
+                <span data-bind="visible:minPrice()!= 0 && maxPrice()!= 50000">
+                    with price from <b> <span data-bind="text:minPrice"></span> </b> to <b> <span data-bind="text:maxPrice"></span></b>
+                </span>
+                <span data-bind="visible:! (minPrice()!= 0 && maxPrice()!= 50000)">
+                    <span data-bind="visible:minPrice() != 0"> with min price <b> <span data-bind="text:minPrice"></span> </b> </span>
+                    <span data-bind="visible:maxPrice()!= 50000">with max price <b> <span data-bind="text:maxPrice"></span> </b> </span>
+                </span>
+                <span data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>
+                <div @*class="row showAds"*@ data-bind="foreach:showAds">
+                    @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                    @*<div class="col-md-4 col-sm-6 col-lg-3">
                     <div class="ibox">
                         <div class="ibox-content product-box">
 
@@ -115,6 +132,7 @@
                             </div>
                         </div>
                     </div>
+                </div>*@
                 </div>
             </div>
         </div>
@@ -129,7 +147,6 @@
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/jsTree")
 @Styles.Render("~/bundles/tagStyles")
-@Styles.Render("~/scripts/selectizeStyles")
 @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
 }
 
@@ -140,120 +157,120 @@
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/slick")
     @Scripts.Render("~/plugins/jsTree")
-@Scripts.Render("~/scripts/selectize")
 @Scripts.Render("~/plugins/ionRange")
+@Scripts.Render("~/plugins/truncate")
     <script src="~/Scripts/app/MobileTree.js"></script>
-    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
-    <script src="~/signalr/hubs"></script>
-    <script src="~/Scripts/app/chat.js"></script>
-    <script src="~/Scripts/UserLogin.js"></script>
+    
 <script src="~/Scripts/app/slick-knockout-binding.js"></script>
 <script src="~/Scripts/app/CreateAlert.js"></script>
+<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
     <script>
         
-        function Tag(data) {
-            var self = this;
-            data = data || {};
-            self.id = data.id;
-            self.name = data.name;
-        }
-        function Bid(data) {
-            var self = this;
-            data = data || {};
-            self.price = data.price;
-        }
-        var imageUrls = [];
-        function adImages(data, adId, imagesCount) {
-            return "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;
-        }
-        function ad(data) {
-            var self = this;
+        //function Tag(data) {
+        //    var self = this;
+        //    data = data || {};
+        //    self.id = data.id;
+        //    self.name = data.name;
+        //}
+        //function Bid(data) {
+        //    var self = this;
+        //    data = data || {};
+        //    self.price = data.price;
+        //}
+        //var imageUrls = [];
+        //function adImages(data, adId, imagesCount) {
+        //    return "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;
+        //}
+        //function ad(data) {
+        //    var self = this;
 
-            self.images = ko.observable();
-            self.options = {};
-            self.imageIndex = ko.observable(1);
+        //    self.images = ko.observable();
+        //    self.options = {};
+        //    self.imageIndex = ko.observable(1);
 
-            data = data || {};
-            self.title = data.title;
-            self.description = ko.observable(data.description);
-            self.postedByName = data.postedByName;
-            self.postedById = data.postedById;
-            self.id = data.id;
-            self.time = getTimeAgo(data.time);
-            self.loginUserId = data.islogin || "";
-            self.showMobileAd = ko.observableArray();
-            self.isReported = ko.observable(data.isReported);
-            self.reportedCount = ko.observable(data.reportedCount);
-            self.showImages = ko.observable();
-            self.views = data.views;
-            self.price = data.price || "";
-            self.link = "/MobilesTablets/Details/" + data.id;
-            var loginUserId1 = getLoginUserId(self.loginUserId); //to access self.loginUserId outside this function
-            //biding
-            self.highestBid = ko.observable();
-            self.showBidings = ko.observableArray();
-            self.isBidingAllowed = false;
-            self.placeBid = ko.observable(false);
-            self.bidAmount = ko.observable();
+        //    data = data || {};
+        //    self.title = data.title;
+        //    self.description = ko.observable(data.description);
+        //    self.postedByName = data.postedByName;
+        //    self.postedById = data.postedById;
+        //    self.id = data.id;
+        //    self.time = getTimeAgo(data.time);
+        //    self.loginUserId = data.islogin || "";
+        //    self.showMobileAd = ko.observableArray();
+        //    self.isReported = ko.observable(data.isReported);
+        //    self.reportedCount = ko.observable(data.reportedCount);
+        //    self.showImages = ko.observable();
+        //    self.views = data.views;
+        //    self.price = data.price || "";
+        //    self.link = "/MobilesTablets/Details/" + data.id;
+        //    var loginUserId1 = getLoginUserId(self.loginUserId); //to access self.loginUserId outside this function
+        //    //biding
+        //    self.highestBid = ko.observable();
+        //    self.showBidings = ko.observableArray();
+        //    self.isBidingAllowed = false;
+        //    self.placeBid = ko.observable(false);
+        //    self.bidAmount = ko.observable();
 
-            self.showTags = ko.observableArray();
+        //    self.showTags = ko.observableArray();
 
-            self.sellerProfile = function () {
-                window.location.href = "/User/Index/" + self.postedById;
-            }
+        //    self.sellerProfile = function () {
+        //        window.location.href = "/User/Index/" + self.postedById;
+        //    }
 
-            if (data.isNegotiable == "b") {
-                self.isBidingAllowed = true;
-            } else if (data.isNegotiable == "y") {
-                self.isNegotiable = 'Negotiable';
-            } else if (data.isNegotiable == "n") {
-                self.isNegotiable = '<strike>Negotiable</strike>';
-            }
-            if (self.price == "") {
-                self.isNegotiable = "";
-            }
-            if (data.bid != null) {
-                var biding = $.map(data.bid, function (item) { return new Bid(item); });
-                self.highestBid(Math.max.apply(Math, data.bid.map(function (o) { return o.price; })));
-                //self.showBidings(biding);
-            }
-            if (data.adTags != null) {
-                var tags = $.map(data.adTags, function (item) { return new Tag(item); });
-                self.showTags(tags);
-            }
-            if (data.adImages) {
-                var imagesCount = 1;
-                var img = $.map(data.adImages, function (item, ia) { return adImages(item, data.id, imagesCount++); });
-                self.showImages(img);
-                self.images(img);
-            }
-            self.report = function (id, loginUserId) {
-                if (loginUserId) {
-                    $.ajax({
-                        url: '/api/Electronic/reportAd?id=' + id,
-                        dataType: "json",
-                        contentType: "application/json",
-                        cache: false,
-                        type: 'POST',
-                        success: function (data) {
-                            self.isReported(true);
-                            self.reportedCount(data);
-                        },
-                        error: function (xhr, status, error) {
-                            var err = eval("(" + xhr.responseText + ")");
-                            toastr.info(err.Message);
-                        }
-                    })
-                } else {
-                    toastr.info("You must be login to report this ad", "Na na!");
-                }
-            }
-        }
+        //    if (data.isNegotiable == "b") {
+        //        self.isBidingAllowed = true;
+        //    } else if (data.isNegotiable == "y") {
+        //        self.isNegotiable = 'Negotiable';
+        //    } else if (data.isNegotiable == "n") {
+        //        self.isNegotiable = '<strike>Negotiable</strike>';
+        //    }
+        //    if (self.price == "") {
+        //        self.isNegotiable = "";
+        //    }
+        //    if (data.bid != null) {
+        //        var biding = $.map(data.bid, function (item) { return new Bid(item); });
+        //        self.highestBid(Math.max.apply(Math, data.bid.map(function (o) { return o.price; })));
+        //        //self.showBidings(biding);
+        //    }
+        //    if (data.adTags != null) {
+        //        var tags = $.map(data.adTags, function (item) { return new Tag(item); });
+        //        self.showTags(tags);
+        //    }
+        //    if (data.adImages) {
+        //        var imagesCount = 1;
+        //        var img = $.map(data.adImages, function (item, ia) { return adImages(item, data.id, imagesCount++); });
+        //        self.showImages(img);
+        //        self.images(img);
+        //    }
+        //    self.report = function (id, loginUserId) {
+        //        if (loginUserId) {
+        //            $.ajax({
+        //                url: '/api/Electronic/reportAd?id=' + id,
+        //                dataType: "json",
+        //                contentType: "application/json",
+        //                cache: false,
+        //                type: 'POST',
+        //                success: function (data) {
+        //                    self.isReported(true);
+        //                    self.reportedCount(data);
+        //                },
+        //                error: function (xhr, status, error) {
+        //                    var err = eval("(" + xhr.responseText + ")");
+        //                    toastr.info(err.Message);
+        //                }
+        //            })
+        //        } else {
+        //            toastr.info("You must be login to report this ad", "Na na!");
+        //        }
+        //    }
+        //}
 
         function viewModel() {
+            
             SearchingLocation();
             TreeViewModel();
-            Search();
+           
             AccountViewModel();
             ChatViewModel();
             CreateAlert();
@@ -324,7 +341,7 @@
                 onclick: null
             };
             ko.applyBindings(new viewModel);
-            $.connection.hub.start().done();
+            
         });
 
     </script>

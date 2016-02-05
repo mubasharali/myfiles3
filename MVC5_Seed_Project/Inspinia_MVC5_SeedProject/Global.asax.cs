@@ -26,40 +26,38 @@ namespace Inspinia_MVC5_SeedProject
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+
+            LazyInitializer.EnsureInitialized(ref _initializer, ref _isInitialized, ref _initializerLock);
+
             //GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             //GlobalConfiguration.Configuration.Formatters.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
         }
         protected void Application_BeginRequest()
-        
+
         {
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
             Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
             Response.Cache.SetNoStore();
         }
-        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-        public sealed class InitializeSimpleMembershipAttribute : ActionFilterAttribute
+        private static SimpleMembershipInitializer _initializer;
+        private static object _initializerLock = new object();
+        private static bool _isInitialized;
+        private class SimpleMembershipInitializer
         {
-            private static SimpleMembershipInitializer _initializer;
-            private static object _initializerLock = new object();
-            private static bool _isInitialized;
-
-            public override void OnActionExecuting(ActionExecutingContext filterContext)
+            public SimpleMembershipInitializer()
             {
-                LazyInitializer.EnsureInitialized(ref _initializer, ref _isInitialized, ref _initializerLock);
-            }
+               // Database.SetInitializer<UsersContext>(null);
 
-            private class SimpleMembershipInitializer
-            {
-                public SimpleMembershipInitializer()
+                try
                 {
-                    try
-                    {
-                        WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "Id", "UserName", autoCreateTables: true);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new InvalidOperationException("Something is wrong", ex);
-                    }
+                    
+
+                    WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException("The ASP.NET Simple Membership database could not be initialized. For more information, please see http://go.microsoft.com/fwlink/?LinkId=256588", ex);
                 }
             }
         }

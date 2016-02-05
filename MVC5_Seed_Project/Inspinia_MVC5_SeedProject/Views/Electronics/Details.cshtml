@@ -61,7 +61,7 @@
                                                 
                                                 <div id="gallery" data-gallery=""
                                                      data-bind="slick: images,
-                slickOptions: {dots:true, initialSlide:0},
+                slickOptions: {dots:true, initialSlide:0,autoplay:true,autoplaySpeed: 1000,infinite: false,speed: 1000,fade: true,},
                 slickIndex: imageIndex">
                                                 </div>
                                                 <div data-bind="visible:images().length == 0">Display your banner ad here</div>
@@ -645,11 +645,14 @@
                 }
             }
             self.editAd = function (id) {
-                if (data.laptopad.brand != null) {
-                    window.location.href = "/Electronics/EditLaptopAd/" + id;
+                 if (data.subCategory == "MobileAccessories") {
+                    window.location.href = "/MobilesTablets/EditMobileAccessoriesAd/" + id;
                 }
-                else if (data.mobilead.brand != null) {
-                    window.location.href = "/Electronics/Edit/" + id;
+                else if (data.category == "Mobiles") {
+                    window.location.href = "/MobilesTablets/Edit/" + id;
+                }
+                else if (data.category == "Laptops") {
+                    window.location.href = "/Electronics/EditLaptopAd/" + id;
                 }
                 else  {
                     window.location.href = "/Electronics/EditAd/" + id;

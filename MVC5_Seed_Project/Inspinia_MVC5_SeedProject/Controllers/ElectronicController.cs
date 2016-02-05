@@ -408,142 +408,28 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return Ok(models);
         }
 
-        public async Task<IHttpActionResult> SearchMobileAds(string brand, string model,string tags,string title, int minPrice, int maxPrice)
+        public async Task<IHttpActionResult> SearchMobileAds(string brand, string model,string tags,string title, int minPrice, int maxPrice,string city, string pp,bool isAccessories)
         {
             string islogin = "";
             if (User.Identity.IsAuthenticated)
             {
                 islogin = User.Identity.GetUserId();
             }
-            if(tags.Equals("undefined"))
+            
+            //if(city == null)
+            //{
+            //    pp = null;
+            //}
+            //if(tags.Equals("undefined"))
+            //{
+            //    tags = null;
+            //}
+            if(tags == null)
             {
-                tags = null;
-            }
-            string[] tagsArray = null;
-            if (tags != null)
-            {
-                 tagsArray = tags.Split(',');
-            }
-            var temp = from ad in db.MobileAds
-                       where (  (model == null || ad.MobileModel.model.Equals(model) ) &&  ( brand == null || ad.MobileModel.Mobile.brand.Equals(brand) )  && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) )
-                       from tag in ad.Ad.AdTags
-                       from tagname in tagsArray
-                       where tag.Tag.name.Equals(tagname)
-                       select new
-                       {
-                           title = ad.Ad.title,
-                           postedById = ad.Ad.AspNetUser.Id,
-                           postedByName = ad.Ad.AspNetUser.Email,
-                           description = ad.Ad.description,
-                           id = ad.Ad.Id,
-                           time = ad.Ad.time,
-                           islogin = islogin,
-                           isNegotiable = ad.Ad.isnegotiable,
-                           price = ad.Ad.price,
-                           reportedCount = ad.Ad.Reporteds.Count,
-                           isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
-                           // views = ad.Ad.AdViews.Count,
-                           views = ad.Ad.views,
-                           condition = ad.Ad.condition,
-                           savedCount = ad.Ad.SaveAds.Count,
-                           color = ad.color,
-                           sims = ad.sims,
-                           brand = ad.MobileModel.Mobile.brand,
-                           model = ad.MobileModel.model,
-                           adTags = from tag1 in ad.Ad.AdTags.ToList()
-                                    select new
-                                    {
-                                        id = tag1.Id,
-                                        name = tag1.Tag.name,
-                                        //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
-                                        //info = tag.Tag.info,
-                                    },
-                           bid = from biding in ad.Ad.Bids.ToList()
-                                 select new
-                                 {
-                                     price = biding.price,
-                                 },
-                           adImages = from image in ad.Ad.AdImages.ToList()
-                                      select new
-                                      {
-                                          imageExtension = image.imageExtension,
-                                      },
-                           location = new
-                           {
-                               cityName = ad.Ad.AdsLocation.City.cityName,
-                               cityId = ad.Ad.AdsLocation.cityId,
-                               popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
-                               popularPlace = ad.Ad.AdsLocation.popularPlace.name,
-                               exectLocation = ad.Ad.AdsLocation.exectLocation,
-                           },
-
-                       };
-            return Ok(temp);
-            if (brand != null && model != null && tags != null/* && title != null*/)
-            {
-                var ret = from ad in db.MobileAds
-                         // where ad.Ad.AdTags.Any(x => x.Tag.name.Equals(tags))
-                         where ad.MobileModel.model.Equals(model) && ad.MobileModel.Mobile.brand.Equals(brand) && ad.Ad.price >= minPrice && ad.Ad.price <= maxPrice
-                         
-                          where ad.Ad.status.Equals("a")
-                          select new
-                          {
-                              title = ad.Ad.title,
-                              postedById = ad.Ad.AspNetUser.Id,
-                              postedByName = ad.Ad.AspNetUser.Email,
-                              description = ad.Ad.description,
-                              id = ad.Ad.Id,
-                              time = ad.Ad.time,
-                              islogin = islogin,
-                              isNegotiable = ad.Ad.isnegotiable,
-                              price = ad.Ad.price,
-                              reportedCount = ad.Ad.Reporteds.Count,
-                              isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
-                              // views = ad.Ad.AdViews.Count,
-                              views = ad.Ad.views,
-                              condition = ad.Ad.condition,
-                              savedCount = ad.Ad.SaveAds.Count,
-                              color = ad.color,
-                              sims = ad.sims,
-                              brand = ad.MobileModel.Mobile.brand,
-                              model = ad.MobileModel.model,
-                              adTags = from tag in ad.Ad.AdTags.ToList()
-                                       select new
-                                       {
-                                           id = tag.Id,
-                                           name = tag.Tag.name,
-                                           //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
-                                           //info = tag.Tag.info,
-                                       },
-                              bid = from biding in ad.Ad.Bids.ToList()
-                                    select new
-                                    {
-                                        price = biding.price,
-                                    },
-                              adImages = from image in ad.Ad.AdImages.ToList()
-                                         select new
-                                         {
-                                             imageExtension = image.imageExtension,
-                                         },
-                              location = new
-                              {
-                                  cityName = ad.Ad.AdsLocation.City.cityName,
-                                  cityId = ad.Ad.AdsLocation.cityId,
-                                  popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
-                                  popularPlace = ad.Ad.AdsLocation.popularPlace.name,
-                                  exectLocation = ad.Ad.AdsLocation.exectLocation,
-                              },
-
-                          };
-                return Ok(ret);
-            }
-            if (brand == null)
-          {
                 var temp1 = from ad in db.MobileAds
-                           from tag in ad.Ad.AdTags
-                           from tagname in tagsArray
-                           where tag.Tag.name.Equals(tagname)
-                           select new
+                           where ( ( ( isAccessories && ad.Ad.subcategory.Equals("MobileAccessories") ) || (!isAccessories && ( ad.Ad.subcategory == null || ad.Ad.subcategory == "" ) ) ) && ad.Ad.status.Equals("a") && (model == null || ad.MobileModel.model.Equals(model)) && (brand == null || ad.MobileModel.Mobile.brand.Equals(brand)) && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp)) ) )
+                            orderby ad.Ad.time descending
+                            select new
                            {
                                title = ad.Ad.title,
                                postedById = ad.Ad.AspNetUser.Id,
@@ -593,116 +479,67 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
                            };
                 return Ok(temp1);
-
-                
             }
-            if (model == null)
+            string[] tagsArray = null;
+            if (tags != null)
             {
-                var re = from ad in db.Ads
-                         where ad.MobileAd.MobileModel.Mobile.brand.Equals(brand)
-                         where ad.status.Equals("a")
-                         select new
-                         {
-                             title = ad.title,
-                             postedById = ad.AspNetUser.Id,
-                             postedByName = ad.AspNetUser.Email,
-                             description = ad.description,
-                             id = ad.Id,
-                             time = ad.time,
-                             islogin = islogin,
-                             isNegotiable = ad.isnegotiable,
-                             price = ad.price,
-                             reportedCount = ad.Reporteds.Count,
-                             isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
-                             //views = ad.AdViews.Count,
-                             views = ad.views,
-                             condition = ad.condition,
-
-                             color = ad.MobileAd.color,
-                             sims = ad.MobileAd.sims,
-                             brand = ad.MobileAd.MobileModel.Mobile.brand,
-                             model = ad.MobileAd.MobileModel.model,
-                             adTags = from tag in ad.AdTags.ToList()
-                                      select new
-                                      {
-                                          id = tag.Id,
-                                          name = tag.Tag.name,
-                                          //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
-                                          //info = tag.Tag.info,
-                                      },
-                             bid = from biding in ad.Bids.ToList()
-                                   select new
-                                   {
-                                       price = biding.price,
-                                   },
-                             adImages = from image in ad.AdImages.ToList()
+                 tagsArray = tags.Split(',');
+            }
+           
+           
+                var temp = from ad in db.MobileAds
+                           where (((isAccessories && ad.Ad.subcategory.Equals("MobileAccessories")) || (!isAccessories && (ad.Ad.subcategory == null || ad.Ad.subcategory == ""))) && ad.Ad.status.Equals("a") && (model == null || ad.MobileModel.model.Equals(model)) && (brand == null || ad.MobileModel.Mobile.brand.Equals(brand)) && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (!tagsArray.Except(ad.Ad.AdTags.Select(x => x.Tag.name)).Any()) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))))
+                           orderby ad.Ad.time descending
+                           select new
+                           {
+                               title = ad.Ad.title,
+                               postedById = ad.Ad.AspNetUser.Id,
+                               postedByName = ad.Ad.AspNetUser.Email,
+                               description = ad.Ad.description,
+                               id = ad.Ad.Id,
+                               time = ad.Ad.time,
+                               islogin = islogin,
+                               isNegotiable = ad.Ad.isnegotiable,
+                               price = ad.Ad.price,
+                               reportedCount = ad.Ad.Reporteds.Count,
+                               isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                               // views = ad.Ad.AdViews.Count,
+                               views = ad.Ad.views,
+                               condition = ad.Ad.condition,
+                               savedCount = ad.Ad.SaveAds.Count,
+                               color = ad.color,
+                               sims = ad.sims,
+                               brand = ad.MobileModel.Mobile.brand,
+                               model = ad.MobileModel.model,
+                               adTags = from tag1 in ad.Ad.AdTags.ToList()
                                         select new
                                         {
-                                            imageExtension = image.imageExtension,
+                                            id = tag1.Id,
+                                            name = tag1.Tag.name,
+                                            //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                            //info = tag.Tag.info,
                                         },
-                             location = new
-                             {
-                                 cityName = ad.AdsLocation.City.cityName,
-                                 cityId = ad.AdsLocation.cityId,
-                                 popularPlaceId = ad.AdsLocation.popularPlaceId,
-                                 popularPlace = ad.AdsLocation.popularPlace.name,
-                                 exectLocation = ad.AdsLocation.exectLocation,
-                             },
-                         };
-                return Ok(re);
-            }
-            var res = from ad in db.Ads
-                      where ad.MobileAd.MobileModel.Mobile.brand.Equals(brand) && ad.MobileAd.MobileModel.model.Equals(model)
-                      where ad.status.Equals("a")
-                      select new
-                      {
-                          title = ad.title,
-                          postedById = ad.AspNetUser.Id,
-                          postedByName = ad.AspNetUser.Email,
-                          description = ad.description,
-                          id = ad.Id,
-                          time = ad.time,
-                          islogin = islogin,
-                          isNegotiable = ad.isnegotiable,
-                          price = ad.price,
-                          reportedCount = ad.Reporteds.Count,
-                          isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
-                         // views = ad.AdViews.Count,
-                         views = ad.views,
-                          condition = ad.condition,
-
-                          color = ad.MobileAd.color,
-                          sims = ad.MobileAd.sims,
-                          brand = ad.MobileAd.MobileModel.Mobile.brand,
-                          model = ad.MobileAd.MobileModel.model,
-                          adTags = from tag in ad.AdTags.ToList()
-                                   select new
-                                   {
-                                       id = tag.Id,
-                                       name = tag.Tag.name,
-                                       //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
-                                       //info = tag.Tag.info,
-                                   },
-                          bid = from biding in ad.Bids.ToList()
-                                select new
-                                {
-                                    price = biding.price,
-                                },
-                          adImages = from image in ad.AdImages.ToList()
+                               bid = from biding in ad.Ad.Bids.ToList()
                                      select new
                                      {
-                                         imageExtension = image.imageExtension,
+                                         price = biding.price,
                                      },
-                          location = new
-                          {
-                              cityName = ad.AdsLocation.City.cityName,
-                              cityId = ad.AdsLocation.cityId,
-                              popularPlaceId = ad.AdsLocation.popularPlaceId,
-                              popularPlace = ad.AdsLocation.popularPlace.name,
-                              exectLocation = ad.AdsLocation.exectLocation,
-                          },
-                      };
-            return Ok(res);
+                               adImages = from image in ad.Ad.AdImages.ToList()
+                                          select new
+                                          {
+                                              imageExtension = image.imageExtension,
+                                          },
+                               location = new
+                               {
+                                   cityName = ad.Ad.AdsLocation.City.cityName,
+                                   cityId = ad.Ad.AdsLocation.cityId,
+                                   popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                   popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                   exectLocation = ad.Ad.AdsLocation.exectLocation,
+                               },
+
+                           };
+                 return Ok(temp);
         }
        
         public async Task<IHttpActionResult> SearchLaptopAds(string brand, string model,string tags)
@@ -948,21 +785,21 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 if (System.Web.Security.Roles.Enabled) {
-                    string adfnadf = "Ok";
+                    //string adfnadf = "Ok";
                 }
                 islogin = User.Identity.GetUserId();
                 var ide = await db.AspNetUsers.FindAsync(islogin);
                 loginUserProfileExtension = ide.dpExtension;
 
-                //try
-                //{
-                //    isAdmin = Roles.IsUserInRole("Admin");
-                //    //isAdmin = Roles.GetRolesForUser().Contains("Admin");
-                //}
-                //catch (Exception e)
-                //{
-                //    string ss = e.ToString();
-                //}
+                try
+                {
+                    isAdmin = Roles.IsUserInRole("Admin");
+                    //isAdmin = Roles.GetRolesForUser().Contains("Admin");
+                }
+                catch (Exception e)
+                {
+                    string ss = e.ToString();
+                }
             }
             var ret = (from ad in db.Ads
                        where ad.Id == id
@@ -989,6 +826,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            type = ad.type,
                            isSaved = ad.SaveAds.Any(x => x.savedBy == islogin),
                            savedCount = ad.SaveAds.Count,
+                           category = ad.category,
+                           subCategory = ad.subcategory,
                            mobilead = new
                            {
                                color = ad.MobileAd.color,

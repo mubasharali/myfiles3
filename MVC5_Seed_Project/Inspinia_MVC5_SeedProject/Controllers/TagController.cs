@@ -51,6 +51,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                  reportedCount = tag.ReportedTags.Count,
                                  ads = from ad in tag.AdTags
                                        where ad.tagId.Equals(id)
+                                       orderby ad.Ad.time descending
                                        select new
                                        {
                                            title = ad.Ad.title,
@@ -96,6 +97,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                        },
                                  questions = from question in tag.QuestionTags
                                              where question.tagId.Equals(id)
+                                             orderby question.Question.time descending
                                              select new
                                              {
                                                  title = question.Question.title,

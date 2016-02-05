@@ -1,27 +1,10 @@
 ﻿@model Inspinia_MVC5_SeedProject.Models.Ad
 
 @{
-    Layout = "/Views/Shared/_Layout_Without_Signalr.cshtml";
-    ViewBag.Title = "Create";
+    //Layout = "/Views/Shared/_Layout_Without_Signalr.cshtml";
+    ViewBag.Title = "Create Laptop / Computer Ad";
 }
-@*<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-sm-4">
-        <h2>Create</h2>
-        <ol class="breadcrumb">
-            <li>
-                @Html.ActionLink("List", "Index")
-            </li>
-            <li class="active">
-                <strong>Create</strong>
-            </li>
-        </ol>
-    </div>
-    <div class="col-sm-8">
-        <div class="title-action">
-            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
-        </div>
-    </div>
-</div>*@
+
 
 <div>@Model.title</div>
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -29,7 +12,7 @@
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Create Ad</h5>
+                    <h5>Create Laptop / Computer Ad</h5>
                 </div>
                 <div class="ibox-content">
                     <form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" action="@Url.Action("FileUploadHandler", "Electronics")" method="post" enctype="multipart/form-data">
@@ -128,7 +111,10 @@
 <script src="~/Scripts/app/dropzone-knockout-binding.js"> </script>
     <script type="text/javascript">
 
-    function ViewModel() {
+        function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
         var self = this;
         self.submitClicked = function () {
             console.log(fileList);

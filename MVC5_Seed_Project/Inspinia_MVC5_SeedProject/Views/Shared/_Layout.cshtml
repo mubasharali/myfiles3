@@ -17,6 +17,7 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/font-awesome/css")
     @Styles.Render("~/scripts/selectizeStyles")
+    <link href="~/Content/myStyles.css" rel="stylesheet" /> 
     @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">*@
 </head>
 <body class="fixed-sidebar fixed-nav mini-navbar">
@@ -59,7 +60,15 @@
     @Scripts.Render("~/scripts/selectize")
     <script src="~/Scripts/jquery.cookie.js"></script>
     <script src="~/Scripts/app/_SearchLocation.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/app/chat.js"></script>
+    <script src="~/Scripts/UserLogin.js"></script>
         @RenderSection("scripts", required: false)
-    
+    <script>
+        $(function () {
+            $.connection.hub.start().done();
+        })
+    </script>
 </body>
 </html>

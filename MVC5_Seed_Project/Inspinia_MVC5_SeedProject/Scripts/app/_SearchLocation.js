@@ -3,14 +3,16 @@ function SearchingLocation() {
     var self = this;
     console.log($.cookie("searchCity"));
     console.log($.cookie("searchPP"));
-    self.searchingCity = ko.observable();
-    self.searchingPP = ko.observable();
-    self.searchingCities = ko.observableArray();
-    self.searchingPPs = ko.observableArray();
+    searchingCity = ko.observable();
+    searchingPP = ko.observable();
+    searchingCities = ko.observableArray();
+    searchingPPs = ko.observableArray();
     self.searchLocationBtn = function () {
         $("#setLocation").modal('hide');
     }
-
+    //searchingCity.subscribe(function () {
+        
+    //})
     self.loadCities = function () {
         $.ajax({
             url: '/api/Location/GetCities',
@@ -19,9 +21,9 @@ function SearchingLocation() {
             cache: false,
             type: 'GET',
             success: function (data) {
-                $.each((data), function (i, item) { self.searchingCities.push(item) });
-                self.searchingCity($.cookie("searchCity"));
-                $('#select-city').selectize({
+                $.each((data), function (i, item) { searchingCities.push(item) });
+                searchingCity($.cookie("searchCity"));
+                $('#searching-city').selectize({
                     sortField: {
                         field: 'text',
                         direction: 'asc'
@@ -34,17 +36,17 @@ function SearchingLocation() {
         });
     }
     self.loadPopularPlaces = function () {
-        self.searchingPPs.removeAll();
+        searchingPPs.removeAll();
         $.ajax({
-            url: '/api/Location/GetPopularPlaces?city=' + self.searchingCity(),
+            url: '/api/Location/GetPopularPlaces?city=' + searchingCity(),
             dataType: "json",
             contentType: "application/json",
             cache: false,
             type: 'GET',
             success: function (data) {
-                $.each((data), function (i, item) { self.searchingPPs.push(item) });
-                self.searchingPP($.cookie("searchPP"));
-                $('#select-popularPlace').selectize({
+                $.each((data), function (i, item) { searchingPPs.push(item) });
+                searchingPP($.cookie("searchPP"));
+                $('#searching-popularPlace').selectize({
 
                     sortField: {
                         field: 'text',
@@ -58,15 +60,14 @@ function SearchingLocation() {
         });
     }
     self.loadCities();
-    var sub = self.searchingCity.subscribe(function (value) {
-        if (!self.searchingCity()) {
-            self.searchingPP("");
+    var sub = searchingCity.subscribe(function (value) {
+        if (!searchingCity()) {
+            searchingPP("");
         }
-        $.cookie("searchCity", self.searchingCity(), {path: '/',domain: 'localhost'});
-        
+        $.cookie("searchCity", searchingCity(), {path: '/',domain: 'localhost'});
         self.loadPopularPlaces();
     })
-    self.searchingPP.subscribe(function (value) {
-        $.cookie("searchPP", self.searchingPP(), { path: '/',domain: 'localhost' });
+    searchingPP.subscribe(function (value) {
+        $.cookie("searchPP", searchingPP(), { path: '/',domain: 'localhost' });
     })
 }
