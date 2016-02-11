@@ -631,15 +631,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="JobSkills">
-      <EntityTypeMapping TypeName="Model.JobSkill">
-        <MappingFragment StoreEntitySet="JobSkill">
-          <ScalarProperty Name="tagId" ColumnName="tagId" />
-          <ScalarProperty Name="adId" ColumnName="adId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="JobAds">
       <EntityTypeMapping TypeName="Model.JobAd">
         <MappingFragment StoreEntitySet="JobAd">
@@ -650,6 +641,15 @@
           <ScalarProperty Name="qualification" ColumnName="qualification" />
           <ScalarProperty Name="seats" ColumnName="seats" />
           <ScalarProperty Name="adId" ColumnName="adId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JobSkills">
+      <EntityTypeMapping TypeName="Model.JobSkill">
+        <MappingFragment StoreEntitySet="JobSkill">
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

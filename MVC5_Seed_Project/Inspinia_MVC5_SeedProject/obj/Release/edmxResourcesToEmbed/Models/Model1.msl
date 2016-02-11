@@ -1,0 +1,507 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="C__MigrationHistory">
+      <EntityTypeMapping TypeName="Model.C__MigrationHistory">
+        <MappingFragment StoreEntitySet="__MigrationHistory">
+          <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+          <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ads">
+      <EntityTypeMapping TypeName="Model.Ad">
+        <MappingFragment StoreEntitySet="Ad">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="condition" ColumnName="condition" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="subcategory" ColumnName="subcategory" />
+          <ScalarProperty Name="isnegotiable" ColumnName="isnegotiable" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="postedBy" ColumnName="postedBy" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdImages">
+      <EntityTypeMapping TypeName="Model.AdImage">
+        <MappingFragment StoreEntitySet="AdImage">
+          <ScalarProperty Name="imageExtension" ColumnName="imageExtension" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdsLocations">
+      <EntityTypeMapping TypeName="Model.AdsLocation">
+        <MappingFragment StoreEntitySet="AdsLocation">
+          <ScalarProperty Name="popularPlaceId" ColumnName="popularPlaceId" />
+          <ScalarProperty Name="exectLocation" ColumnName="exectLocation" />
+          <ScalarProperty Name="cityId" ColumnName="cityId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdTags">
+      <EntityTypeMapping TypeName="Model.AdTag">
+        <MappingFragment StoreEntitySet="AdTag">
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdViews">
+      <EntityTypeMapping TypeName="Model.AdView">
+        <MappingFragment StoreEntitySet="AdView">
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="viewedBy" ColumnName="viewedBy" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Answers">
+      <EntityTypeMapping TypeName="Model.Answer">
+        <MappingFragment StoreEntitySet="Answer">
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="postedBy" ColumnName="postedBy" />
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AnswerReplies">
+      <EntityTypeMapping TypeName="Model.AnswerReply">
+        <MappingFragment StoreEntitySet="AnswerReply">
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="postedBy" ColumnName="postedBy" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="answerId" ColumnName="answerId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AnswerReplyVotes">
+      <EntityTypeMapping TypeName="Model.AnswerReplyVote">
+        <MappingFragment StoreEntitySet="AnswerReplyVote">
+          <ScalarProperty Name="votedBy" ColumnName="votedBy" />
+          <ScalarProperty Name="isUp" ColumnName="isUp" />
+          <ScalarProperty Name="answerReplyId" ColumnName="answerReplyId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AnswerVotes">
+      <EntityTypeMapping TypeName="Model.AnswerVote">
+        <MappingFragment StoreEntitySet="AnswerVote">
+          <ScalarProperty Name="votedBy" ColumnName="votedBy" />
+          <ScalarProperty Name="isUp" ColumnName="isUp" />
+          <ScalarProperty Name="answerId" ColumnName="answerId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetRoles">
+      <EntityTypeMapping TypeName="Model.AspNetRole">
+        <MappingFragment StoreEntitySet="AspNetRoles">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserClaims">
+      <EntityTypeMapping TypeName="Model.AspNetUserClaim">
+        <MappingFragment StoreEntitySet="AspNetUserClaims">
+          <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+          <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserLogins">
+      <EntityTypeMapping TypeName="Model.AspNetUserLogin">
+        <MappingFragment StoreEntitySet="AspNetUserLogins">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+          <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="Model.AspNetUser">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="IsPasswordSaved" ColumnName="IsPasswordSaved" />
+          <ScalarProperty Name="hideFriends" ColumnName="hideFriends" />
+          <ScalarProperty Name="hideDateOfBirth" ColumnName="hideDateOfBirth" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="longAbout" ColumnName="longAbout" />
+          <ScalarProperty Name="shortAbout" ColumnName="shortAbout" />
+          <ScalarProperty Name="dateOfBirth" ColumnName="dateOfBirth" />
+          <ScalarProperty Name="gender" ColumnName="gender" />
+          <ScalarProperty Name="dpExtension" ColumnName="dpExtension" />
+          <ScalarProperty Name="hidePhoneNumber" ColumnName="hidePhoneNumber" />
+          <ScalarProperty Name="hideEmail" ColumnName="hideEmail" />
+          <ScalarProperty Name="reputation" ColumnName="reputation" />
+          <ScalarProperty Name="since" ColumnName="since" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Bids">
+      <EntityTypeMapping TypeName="Model.Bid">
+        <MappingFragment StoreEntitySet="Bid">
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="postedBy" ColumnName="postedBy" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CarAds">
+      <EntityTypeMapping TypeName="Model.CarAd">
+        <MappingFragment StoreEntitySet="CarAd">
+          <ScalarProperty Name="condition" ColumnName="condition" />
+          <ScalarProperty Name="carId" ColumnName="carId" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="fuelType" ColumnName="fuelType" />
+          <ScalarProperty Name="color" ColumnName="color" />
+          <ScalarProperty Name="kmDriven" ColumnName="kmDriven" />
+          <ScalarProperty Name="year" ColumnName="year" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CarBrands">
+      <EntityTypeMapping TypeName="Model.CarBrand">
+        <MappingFragment StoreEntitySet="CarBrand">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CarModels">
+      <EntityTypeMapping TypeName="Model.CarModel">
+        <MappingFragment StoreEntitySet="CarModel">
+          <ScalarProperty Name="model" ColumnName="model" />
+          <ScalarProperty Name="brand" ColumnName="brand" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Chats">
+      <EntityTypeMapping TypeName="Model.Chat">
+        <MappingFragment StoreEntitySet="Chat">
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="message" ColumnName="message" />
+          <ScalarProperty Name="sentTo" ColumnName="sentTo" />
+          <ScalarProperty Name="sentFrom" ColumnName="sentFrom" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Comments">
+      <EntityTypeMapping TypeName="Model.Comment">
+        <MappingFragment StoreEntitySet="Comment">
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="postedBy" ColumnName="postedBy" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommentReplies">
+      <EntityTypeMapping TypeName="Model.CommentReply">
+        <MappingFragment StoreEntitySet="CommentReply">
+          <ScalarProperty Name="postedBy" ColumnName="postedBy" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="commentId" ColumnName="commentId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommentReplyVotes">
+      <EntityTypeMapping TypeName="Model.CommentReplyVote">
+        <MappingFragment StoreEntitySet="CommentReplyVote">
+          <ScalarProperty Name="votedBy" ColumnName="votedBy" />
+          <ScalarProperty Name="isup" ColumnName="isup" />
+          <ScalarProperty Name="commentReplyId" ColumnName="commentReplyId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommentVotes">
+      <EntityTypeMapping TypeName="Model.CommentVote">
+        <MappingFragment StoreEntitySet="CommentVote">
+          <ScalarProperty Name="votedBy" ColumnName="votedBy" />
+          <ScalarProperty Name="isup" ColumnName="isup" />
+          <ScalarProperty Name="commentId" ColumnName="commentId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FollowQuestions">
+      <EntityTypeMapping TypeName="Model.FollowQuestion">
+        <MappingFragment StoreEntitySet="FollowQuestion">
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="followedBy" ColumnName="followedBy" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FollowTags">
+      <EntityTypeMapping TypeName="Model.FollowTag">
+        <MappingFragment StoreEntitySet="FollowTag">
+          <ScalarProperty Name="followedBy" ColumnName="followedBy" />
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Friends">
+      <EntityTypeMapping TypeName="Model.Friend">
+        <MappingFragment StoreEntitySet="Friend">
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="friendId" ColumnName="friendId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LaptopAds">
+      <EntityTypeMapping TypeName="Model.LaptopAd">
+        <MappingFragment StoreEntitySet="LaptopAds">
+          <ScalarProperty Name="color" ColumnName="color" />
+          <ScalarProperty Name="laptopId" ColumnName="laptopId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LaptopBrands">
+      <EntityTypeMapping TypeName="Model.LaptopBrand">
+        <MappingFragment StoreEntitySet="LaptopBrand">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="brand" ColumnName="brand" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LaptopModels">
+      <EntityTypeMapping TypeName="Model.LaptopModel">
+        <MappingFragment StoreEntitySet="LaptopModel">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="model" ColumnName="model" />
+          <ScalarProperty Name="brandId" ColumnName="brandId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Mobiles">
+      <EntityTypeMapping TypeName="Model.Mobile">
+        <MappingFragment StoreEntitySet="Mobile">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="brand" ColumnName="brand" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MobileAds">
+      <EntityTypeMapping TypeName="Model.MobileAd">
+        <MappingFragment StoreEntitySet="MobileAds">
+          <ScalarProperty Name="sims" ColumnName="sims" />
+          <ScalarProperty Name="color" ColumnName="color" />
+          <ScalarProperty Name="mobileId" ColumnName="mobileId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MobileModels">
+      <EntityTypeMapping TypeName="Model.MobileModel">
+        <MappingFragment StoreEntitySet="MobileModel">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="model" ColumnName="model" />
+          <ScalarProperty Name="brandId" ColumnName="brandId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="popularPlaces">
+      <EntityTypeMapping TypeName="Model.popularPlace">
+        <MappingFragment StoreEntitySet="popularPlace">
+          <ScalarProperty Name="updatedOn" ColumnName="updatedOn" />
+          <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+          <ScalarProperty Name="addedOn" ColumnName="addedOn" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="latitude" ColumnName="latitude" />
+          <ScalarProperty Name="longitude" ColumnName="longitude" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="cityId" ColumnName="cityId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Questions">
+      <EntityTypeMapping TypeName="Model.Question">
+        <MappingFragment StoreEntitySet="Question">
+          <ScalarProperty Name="lowCategory" ColumnName="lowCategory" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="postedBy" ColumnName="postedBy" />
+          <ScalarProperty Name="subCategory" ColumnName="subCategory" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuestionReplies">
+      <EntityTypeMapping TypeName="Model.QuestionReply">
+        <MappingFragment StoreEntitySet="QuestionReply">
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="postedBy" ColumnName="postedBy" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuestionReplyVotes">
+      <EntityTypeMapping TypeName="Model.QuestionReplyVote">
+        <MappingFragment StoreEntitySet="QuestionReplyVote">
+          <ScalarProperty Name="votedBy" ColumnName="votedBy" />
+          <ScalarProperty Name="isUp" ColumnName="isUp" />
+          <ScalarProperty Name="questionReplyId" ColumnName="questionReplyId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuestionTags">
+      <EntityTypeMapping TypeName="Model.QuestionTag">
+        <MappingFragment StoreEntitySet="QuestionTag">
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuestionViews">
+      <EntityTypeMapping TypeName="Model.QuestionView">
+        <MappingFragment StoreEntitySet="QuestionView">
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="viewedBy" ColumnName="viewedBy" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuestionVotes">
+      <EntityTypeMapping TypeName="Model.QuestionVote">
+        <MappingFragment StoreEntitySet="QuestionVote">
+          <ScalarProperty Name="votedBy" ColumnName="votedBy" />
+          <ScalarProperty Name="isUp" ColumnName="isUp" />
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Reporteds">
+      <EntityTypeMapping TypeName="Model.Reported">
+        <MappingFragment StoreEntitySet="Reported">
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="details" ColumnName="details" />
+          <ScalarProperty Name="reportedBy" ColumnName="reportedBy" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReportedQuestions">
+      <EntityTypeMapping TypeName="Model.ReportedQuestion">
+        <MappingFragment StoreEntitySet="ReportedQuestion">
+          <ScalarProperty Name="reportedBy" ColumnName="reportedBy" />
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReportedTags">
+      <EntityTypeMapping TypeName="Model.ReportedTag">
+        <MappingFragment StoreEntitySet="ReportedTag">
+          <ScalarProperty Name="reportedBy" ColumnName="reportedBy" />
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tags">
+      <EntityTypeMapping TypeName="Model.Tag">
+        <MappingFragment StoreEntitySet="Tag">
+          <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+          <ScalarProperty Name="updatedTime" ColumnName="updatedTime" />
+          <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="info" ColumnName="info" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AspNetUserRoles" TypeName="Model.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+      <EndProperty Name="AspNetUser">
+        <ScalarProperty Name="Id" ColumnName="UserId" />
+      </EndProperty>
+      <EndProperty Name="AspNetRole">
+        <ScalarProperty Name="Id" ColumnName="RoleId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <EntitySetMapping Name="Cities">
+      <EntityTypeMapping TypeName="Model.City">
+        <MappingFragment StoreEntitySet="City">
+          <ScalarProperty Name="cityName" ColumnName="cityName" />
+          <ScalarProperty Name="updatedOn" ColumnName="updatedOn" />
+          <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+          <ScalarProperty Name="addedOn" ColumnName="addedOn" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SaveAds">
+      <EntityTypeMapping TypeName="Model.SaveAd">
+        <MappingFragment StoreEntitySet="SaveAd">
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="savedBy" ColumnName="savedBy" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

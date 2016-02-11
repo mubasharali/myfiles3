@@ -159,11 +159,11 @@
         <AssociationConnector Association="Model.FK_Image_ToTable" />
         <AssociationConnector Association="Model.FK_Review_ToTable" />
         <AssociationConnector Association="Model.FK_ReviewVote_ToTable_1" />
+        <EntityTypeShape EntityType="Model.JobAd" Width="1.5" PointX="70.5" PointY="48.5" />
         <EntityTypeShape EntityType="Model.JobSkill" Width="1.5" PointX="70.5" PointY="61" />
+        <AssociationConnector Association="Model.FK_JobAd_ToTable" />
         <AssociationConnector Association="Model.FK_JobSkill_ToTable" />
         <AssociationConnector Association="Model.FK_JobSkill_ToTable_1" />
-        <EntityTypeShape EntityType="Model.JobAd" Width="1.5" PointX="70.5" PointY="48.5" />
-        <AssociationConnector Association="Model.FK_JobAd_ToTable" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
