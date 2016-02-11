@@ -379,6 +379,26 @@
     <Property Name="friendId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
   </EntityType>
+  <EntityType Name="JobAd">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="int" Nullable="false" />
+    <Property Name="seats" Type="int" />
+    <Property Name="qualification" Type="nvarchar" MaxLength="500" />
+    <Property Name="exprience" Type="char" MaxLength="1" />
+    <Property Name="careerLevel" Type="nvarchar" MaxLength="50" />
+    <Property Name="lastDateToApply" Type="date" />
+    <Property Name="salaryType" Type="char" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="JobSkill">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="adId" Type="int" Nullable="false" />
+    <Property Name="tagId" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="LaptopAds">
     <Key>
       <PropertyRef Name="Id" />
@@ -392,7 +412,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="brand" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="brand" Type="nvarchar" MaxLength="30" />
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
     <Property Name="status" Type="char" MaxLength="1" />
@@ -403,7 +423,7 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="brandId" Type="int" Nullable="false" />
-    <Property Name="model" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="model" Type="varchar" MaxLength="30" />
     <Property Name="time" Type="datetime" Nullable="false" />
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="status" Type="char" MaxLength="1" />
@@ -1406,6 +1426,48 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_JobAd_ToTable">
+    <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JobAd" Type="Self.JobAd" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="JobAd">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JobSkill_ToTable">
+    <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JobSkill" Type="Self.JobSkill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="JobSkill">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JobSkill_ToTable_1">
+    <End Role="Tag" Type="Self.Tag" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JobSkill" Type="Self.JobSkill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tag">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="JobSkill">
+        <PropertyRef Name="tagId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_LaptopAds_ToTable">
     <End Role="Ad" Type="Self.Ad" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -1915,6 +1977,8 @@
     <EntitySet Name="FollowQuestion" EntityType="Self.FollowQuestion" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FollowTag" EntityType="Self.FollowTag" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Friend" EntityType="Self.Friend" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JobAd" EntityType="Self.JobAd" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JobSkill" EntityType="Self.JobSkill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopAds" EntityType="Self.LaptopAds" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopBrand" EntityType="Self.LaptopBrand" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopModel" EntityType="Self.LaptopModel" Schema="dbo" store:Type="Tables" />
@@ -2186,6 +2250,18 @@
     <AssociationSet Name="FK_Image_ToTable" Association="Self.FK_Image_ToTable">
       <End Role="Company" EntitySet="Company" />
       <End Role="CompanyImage" EntitySet="CompanyImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JobAd_ToTable" Association="Self.FK_JobAd_ToTable">
+      <End Role="Ad" EntitySet="Ad" />
+      <End Role="JobAd" EntitySet="JobAd" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JobSkill_ToTable" Association="Self.FK_JobSkill_ToTable">
+      <End Role="Ad" EntitySet="Ad" />
+      <End Role="JobSkill" EntitySet="JobSkill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JobSkill_ToTable_1" Association="Self.FK_JobSkill_ToTable_1">
+      <End Role="Tag" EntitySet="Tag" />
+      <End Role="JobSkill" EntitySet="JobSkill" />
     </AssociationSet>
     <AssociationSet Name="FK_LaptopAds_ToTable" Association="Self.FK_LaptopAds_ToTable">
       <End Role="Ad" EntitySet="Ad" />

@@ -53,6 +53,13 @@ function SearchingLocation() {
                         direction: 'asc'
                     },
                 });
+
+                //--------------------
+               
+                
+               
+
+                //-----------------
             },
             error: function (jqXHR, status, thrownError) {
                 toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");

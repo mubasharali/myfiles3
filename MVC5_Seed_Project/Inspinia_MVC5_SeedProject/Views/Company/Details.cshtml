@@ -126,7 +126,9 @@
                                     <div class="tabs-container">
                                         <ul class="nav nav-tabs">
                                             <li class="active"><a data-toggle="tab" href="#Overview">Overview</a></li>
-                                            <li class=""><a data-toggle="tab" href="#reviews">Reviews</a></li>
+                                            <li class=""><a data-toggle="tab" href="#reviews">Reviews (<span data-bind="text:showReviews().length"></span>)</a></li>
+                                            <li class=""><a data-toggle="tab" href="#ActiveAds">Active Ads (<span data-bind="text:activeAds().length"></span>) </a></li>
+
                                         </ul>
                                         <div class="tab-content">
                                             <div id="Overview" class="tab-pane active">
@@ -491,6 +493,12 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div id="ActiveAds" class="tab-pane">
+                                                
+                                                <div class="panel-body" data-bind="foreach:activeAds">
+                                                    @Html.Partial("/Views/Shared/_AdListView1.cshtml")
+                                                </div>
+                                            </div>
                                         </div>
 
 
@@ -526,35 +534,30 @@
 @section Styles {
     @Styles.Render("~/plugins/slickStyles")
     @Styles.Render("~/plugins/slickThemeStyles")
-    @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/jsTree")
     @Styles.Render("~/plugins/sweetAlertStyles")
-@Styles.Render("~/scripts/selectizeStyles")
 @Styles.Render("~/bundles/tagStyles")
 @Styles.Render("~/plugins/laddaStyles")
+@Styles.Render("~/plugins/toastrStyles")
 @*@Styles.Render("~/plugins/summernoteStyles")*@
 <link href="~/Content/myStyles.css" rel="stylesheet" />
 }
 
 
 @section Scripts{
-    @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
-    @Scripts.Render("~/plugins/knockout")
-    @Scripts.Render("~/plugins/slick")
     @Scripts.Render("~/plugins/jsTree")
     @Scripts.Render("~/bundles/categoryTree")
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/plugins/sweetAlert")
-@Scripts.Render("~/scripts/selectize")
 @Scripts.Render("~/plugins/ladda")
 @Scripts.Render("~/plugins/summernote")
-    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
-    <script src="~/signalr/hubs"></script>
-    <script src="~/Scripts/UserLogin.js"></script>
-    <script src="~/Scripts/app/chat.js"></script>
-    <script src="~/Scripts/_Comments.js"></script>
+@Scripts.Render("~/plugins/slick")
+@Scripts.Render("~/plugins/truncate")
+<script src="~/Scripts/app/slick-knockout-binding.js"></script>
+<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
     <script>
         
         var myCompanyId = $("#companyId").val();
@@ -583,7 +586,6 @@
 
             self.isBranchEditing = ko.observable(false);
             self.editBranch = function (index) {
-                console.log(index());
                 self.loadCities(index());
                 self.isBranchEditing(true);
             }
@@ -674,13 +676,13 @@
                 });
             }
         }
-        var imageUrls = [];
-        function adImages(data, adId, imagesCount) {
-            var self = this;
-            data = data || {};
-            self.link = "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;// also loop after _
-            imageUrls.push(self.link);
-        }
+        //var imageUrls = [];
+        //function adImages(data, adId, imagesCount) {
+        //    var self = this;
+        //    data = data || {};
+        //    self.link = "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;// also loop after _
+        //    imageUrls.push(self.link);
+        //}
         function Tag(data) {
             var self = this;
             data = data || {};
@@ -771,17 +773,21 @@
             }
             self.replyDescription = ko.observable();
             self.checkEnter = function (loginUserId, length, d, e) {
-                if (length < 500) {
-                    if (e.keyCode == 13) {
-                        self.addReviewReply(d);
+                if (loginUserId) {
+                    if (length < 500) {
+                        if (e.keyCode == 13) {
+                            self.addReviewReply(d);
+                        }
+                    }
+                    else {
+                        self.replyDescription(self.replyDescription().slice(0, -1));
+                        toastr.info("You have reached the limit");
                     }
                 }
                 else {
-                    self.replyDescription(self.replyDescription().slice(0, -1));
-                    toastr.info("You have reached the limit");
+                    loginBtn();
                 }
             }
-            
             self.addReviewReply = function (data) {
                 data.reviewId = data.id;
                 data.description = data.replyDescription();
@@ -832,7 +838,7 @@
                     });
                 }
                 else {
-                    $("#inputEmail").modal('show');
+                    loginBtn();
                 }
             }
 
@@ -862,16 +868,21 @@
         }
         function CompanyPage(data) {
             var self = this;
+            self.activeAds = ko.observableArray();
             //slick
-            self.images = ko.observableArray(imageUrls);
+            //self.images = ko.observableArray(imageUrls);
             self.options = {};
-            self.imageIndex = ko.observable(1);
+            //self.imageIndex = ko.observable(1);
             self.showReviews = ko.observableArray();
             data = data || {};
             self.inputTags = ko.observable();
             self.reviewDescription = ko.observable();
             self.newRating = ko.observable();
             self.rating = ko.observable(0);
+            if (data.activeAds) {
+                var branch = $.map(data.activeAds, function (item) { return new Ad(item); });
+                self.activeAds(branch);
+            }
             if (data.reviews) {
                 var average = 0;
                 var branch = $.map(data.reviews, function (item) { return new Review(item); });
@@ -883,7 +894,10 @@
             }
             self.isAddingReview = ko.observable(false);
             self.addReviewBtn = function () {
-
+                if (!self.loginUserId) {
+                    loginBtn();
+                    return;
+                }
                 var isalreadybid = false;
                 $.each((self.showReviews()), function (i, item) {
                     if (item.reviewedBy == self.loginUserId) {
@@ -1046,7 +1060,7 @@
             self.isReported = ko.observable(data.isReported);
             self.isSaved = ko.observable(data.isSaved);
             self.reportedCount = ko.observable(data.reportedCount);
-            self.showImages = ko.observable();
+           // self.showImages = ko.observable();
             self.views = data.views;
             self.savedCount = ko.observable(data.savedCount);
             self.statusError = "";
@@ -1214,11 +1228,11 @@
 
             
             
-            if (data.adImages) {
-                var imagesCount = 1;
-                var img = $.map(data.adImages, function (item, ia) { return new adImages(item, data.id, imagesCount++); });
-                self.showImages(img);
-            }
+            //if (data.adImages) {
+            //    var imagesCount = 1;
+            //    var img = $.map(data.adImages, function (item, ia) { return new adImages(item, data.id, imagesCount++); });
+            //    self.showImages(img);
+            //}
             self.editLocation = function () {
                 self.loadCities();
                 self.isMainBranchEditing(true);
@@ -1250,7 +1264,9 @@
                     data: ko.toJSON(page),
                     success: function (data) {
                         self.showTags.removeAll();
-                        $.each((data), function (i, item) { self.showTags.push(item.name) });
+                        if (data != -1) {
+                            $.each((data), function (i, item) { self.showTags.push(item.name) });
+                        }
                         self.isPageEditing(false);
                         self.isLongAboutEditing(false);
                     },
@@ -1483,7 +1499,7 @@
                         }
                     })
                 } else {
-                    toastr.info("You must be login to report this ad", "Na na!");
+                    loginBtn();
                 }
             }
         }
@@ -1608,103 +1624,103 @@
                 });
             }
         };
-        ko.bindingHandlers.slick = (function () {
-            var createImageDiv = function (imgUrl) {
+        //ko.bindingHandlers.slick = (function () {
+        //    var createImageDiv = function (imgUrl) {
 
-                $a = $('<a>');
-                $a.attr('href', imgUrl);
-                //$a.attr('data-gallery', '#blueimp-gallery');
-                $a.attr('target', '_blank');
-                $div = $('<div>');
-                $image = $('<img>');
-                $image.attr('src', imgUrl);
-                // $div.append($image);
-                $a.append($image);
-                $div.append($a);
-                return $div;
-            };
+        //        $a = $('<a>');
+        //        $a.attr('href', imgUrl);
+        //        //$a.attr('data-gallery', '#blueimp-gallery');
+        //        $a.attr('target', '_blank');
+        //        $div = $('<div>');
+        //        $image = $('<img>');
+        //        $image.attr('src', imgUrl);
+        //        // $div.append($image);
+        //        $a.append($image);
+        //        $div.append($a);
+        //        return $div;
+        //    };
 
-            // Initializes the carousel
-            var init = function (element, valueAccessor, allBindingsAccessor) {
-                // Clears the div
-                $(element).empty();
-                // Creates the inner divs with images
-                var images = ko.unwrap(valueAccessor());
-                if (images) {
-                    images.forEach(function (imgUrl) {
-                        $(element).append(createImageDiv(imgUrl));
-                    });
-                }
+        //    // Initializes the carousel
+        //    var init = function (element, valueAccessor, allBindingsAccessor) {
+        //        // Clears the div
+        //        $(element).empty();
+        //        // Creates the inner divs with images
+        //        var images = ko.unwrap(valueAccessor());
+        //        if (images) {
+        //            images.forEach(function (imgUrl) {
+        //                $(element).append(createImageDiv(imgUrl));
+        //            });
+        //        }
 
-                // try to recover slickOptions
-                var options = allBindingsAccessor().slickOptions || {};
+        //        // try to recover slickOptions
+        //        var options = allBindingsAccessor().slickOptions || {};
 
-                // Initialize slick on the div, with provided options
-                $(element).slick(options);
+        //        // Initialize slick on the div, with provided options
+        //        $(element).slick(options);
 
-                //handle disposal, if KO removes the element
-                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-                    $(element).slick('unslick');
-                });
+        //        //handle disposal, if KO removes the element
+        //        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+        //            $(element).slick('unslick');
+        //        });
 
-                // check if there is slickIndex
-                var slickIndex = allBindingsAccessor().slickIndex;
-                if (slickIndex) {
-                    $(element).slick('slickGoTo', ko.unwrap(slickIndex));
-                }
-                // If it's obervable, subscribe to its changes
-                if (ko.isObservable(slickIndex)) {
-                    slickIndex.subscribe(function (idx) {
-                        $(element).slick('slickGoTo', idx);
-                    });
-                }
-                // It if's writable observable, update when slick current index changes
-                if (ko.isWritableObservable(slickIndex)) {
-                    $(element).on('afterChange', function (evt, slick, pos) {
-                        slickIndex(pos);
-                    })
-                }
+        //        // check if there is slickIndex
+        //        var slickIndex = allBindingsAccessor().slickIndex;
+        //        if (slickIndex) {
+        //            $(element).slick('slickGoTo', ko.unwrap(slickIndex));
+        //        }
+        //        // If it's obervable, subscribe to its changes
+        //        if (ko.isObservable(slickIndex)) {
+        //            slickIndex.subscribe(function (idx) {
+        //                $(element).slick('slickGoTo', idx);
+        //            });
+        //        }
+        //        // It if's writable observable, update when slick current index changes
+        //        if (ko.isWritableObservable(slickIndex)) {
+        //            $(element).on('afterChange', function (evt, slick, pos) {
+        //                slickIndex(pos);
+        //            })
+        //        }
 
-                // Check if the array of images is an observable array
-                var imagesArray = valueAccessor();
-                // If it's observable array, subscribe to changes
-                if (ko.isObservable(imagesArray) && 'destroyAll' in imagesArray) {
-                    imagesArray.subscribe(function (changes) {
-                        console.log(changes);
-                        if (changes) {
-                            changes.forEach(function (change) {
-                                if (change.status == 'added') {
-                                    // Add new img div at index
-                                    var imgDiv = createImageDiv(change.value)[0];
-                                    var index = change.index;
-                                    var slideCount = $(element).slick('getSlick').slideCount;
-                                    // if the index is out of range (which can happen
-                                    // with push, and splice), include at the end
-                                    var addBefore = true;
-                                    if (index >= slideCount) {
-                                        index = slideCount - 1;
-                                        addBefore = false;
-                                    }
-                                    $(element).slick('slickAdd', imgDiv, index, addBefore);
-                                } else if (change.status == 'deleted') {
-                                    // delete img div at index
-                                    $(element).slick('slickRemove', change.index);
-                                }
-                            });
-                        }
-                    }, null, 'arrayChange');
-                } // if observable array
-            }
+        //        // Check if the array of images is an observable array
+        //        var imagesArray = valueAccessor();
+        //        // If it's observable array, subscribe to changes
+        //        if (ko.isObservable(imagesArray) && 'destroyAll' in imagesArray) {
+        //            imagesArray.subscribe(function (changes) {
+        //                console.log(changes);
+        //                if (changes) {
+        //                    changes.forEach(function (change) {
+        //                        if (change.status == 'added') {
+        //                            // Add new img div at index
+        //                            var imgDiv = createImageDiv(change.value)[0];
+        //                            var index = change.index;
+        //                            var slideCount = $(element).slick('getSlick').slideCount;
+        //                            // if the index is out of range (which can happen
+        //                            // with push, and splice), include at the end
+        //                            var addBefore = true;
+        //                            if (index >= slideCount) {
+        //                                index = slideCount - 1;
+        //                                addBefore = false;
+        //                            }
+        //                            $(element).slick('slickAdd', imgDiv, index, addBefore);
+        //                        } else if (change.status == 'deleted') {
+        //                            // delete img div at index
+        //                            $(element).slick('slickRemove', change.index);
+        //                        }
+        //                    });
+        //                }
+        //            }, null, 'arrayChange');
+        //        } // if observable array
+        //    }
 
-            //update the control when the view model changes
-            var update = function (element, valueAccessor) {
-                var images = ko.unwrap(valueAccessor());
-                // Do something to update the content
-                console.log('update');
-            }
+        //    //update the control when the view model changes
+        //    var update = function (element, valueAccessor) {
+        //        var images = ko.unwrap(valueAccessor());
+        //        // Do something to update the content
+        //        console.log('update');
+        //    }
 
-            return { init: init, update: update };
-        })();
+        //    return { init: init, update: update };
+        //})();
         function chooseFile() {
             $("#fileInput").click();
         }

@@ -1,7 +1,6 @@
 ﻿@model Inspinia_MVC5_SeedProject.Models.Company
 
 @{
-    Layout = "/Views/Shared/_Layout_Without_Signalr.cshtml";
     ViewBag.Title = "Create Business Page";
 }
 
@@ -22,6 +21,15 @@
                         <input type="hidden" name="files" id="fileNames" />
                         <div class="form-horizontal">
                             <br />
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Choose category <span class="req">*</span></label>
+                                <div class="col-md-10">
+                                    <select id="select-category" required class="demo-default" name="category" data-bind="options: availableCategories,
+                       value: selectedCategory,
+                       optionsCaption: 'which category best describe your business'"></select>
+                                    @*<p class="help-block">Choose category in whi</p>*@
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2">Title <span class="req">*</span></label>
                                 <div class="col-md-10">
@@ -76,7 +84,6 @@
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
-    @Styles.Render("~/scripts/selectizeStyles")
     @Styles.Render("~/bundles/myStyles")
     @Styles.Render("~/bundles/tagStyles")
     @Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
@@ -88,14 +95,20 @@
     @Scripts.Render("~/plugins/validate")
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/iCheck")
-    @Scripts.Render("~/scripts/selectize")
-    @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/autosize")
     @Scripts.Render("~/plugins/dropZone")
     <script type="text/javascript">
         var fileList = new Array;
         function ViewModel() {
             var self = this;
+
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+
+            self.selectedCategory = ko.observable();
+            self.availableCategories = ["Mobiles", "Electronics", "Jobs", "Vehicles", "Real estate"];
+
             self.submitClicked = function () {
                 console.log(fileList);
                 $("input[id*='fileNames']").val(JSON.stringify(fileList));
@@ -312,6 +325,15 @@
                     };
                 })();
             });
+            $('#select-category').selectize({
+               // create: true,
+               // plugins: ['inputMaxlength'],
+              //  inputMaxlength: 29,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+            });
             $('#select-tag').selectize({
                 valueField: 'name',
                 labelField: 'name',
@@ -329,7 +351,7 @@
                             '<span class="description">' + escape(item.info) + '</span>' +
                             '<ul class="meta">' +
                                 '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
-                                '<li class="forks"><span>' + escape(item.questions) + '</span> questions asked</li>' +
+                                '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
                             '</ul>' +
                         '</div>';
                     }

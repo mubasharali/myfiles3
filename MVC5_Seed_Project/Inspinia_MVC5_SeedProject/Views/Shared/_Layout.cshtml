@@ -7,16 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>
-        MyWebLogo | @if (ViewBag.Title != null)
+         @if (ViewBag.Title != null)
         { @ViewBag.Title }
         else
         { <text>Classified in mobiles, laptops, vehicles, RealEstate, Jobs, Services, Electronics, Animals, Study, Entertainment, Matrimonal, Home Appliances, Business  </text> }
+    | MyWebLogo
     </title>
 
     @RenderSection("Styles", required: false)
     @Styles.Render("~/Content/css")
     @Styles.Render("~/font-awesome/css")
     @Styles.Render("~/scripts/selectizeStyles")
+  
     <link href="~/Content/myStyles.css" rel="stylesheet" /> 
     @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">*@
 </head>
@@ -58,6 +60,7 @@
     @Scripts.Render("~/bundles/inspinia")
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/scripts/selectize")
+    @Scripts.Render("~/plugins/toastr")
     <script src="~/Scripts/jquery.cookie.js"></script>
     <script src="~/Scripts/app/_SearchLocation.js"></script>
     <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>

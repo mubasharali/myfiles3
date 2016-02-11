@@ -109,7 +109,20 @@
                         </p>
                     </div>
                 </div>
-
+                <div class="ibox hidden-xs" data-bind="visible:loginUserId == id && showCompanies().length > 0">
+                    <div class="ibox-title"><h5>My Companies</h5></div>
+                    <div class="ibox-content">
+                        <div data-bind="foreach:showCompanies">
+                            <a data-bind="attr:{href:'/CompanyPage/' + id + '/' + name}"  class="btn btn-white set_es"><img  style="width:26px"  data-bind="attr:{src:logoLink }"  /> <span data-bind="text:name" ></span></a>
+                            @*<div class="media">
+                                <a data-bind="attr:{href:'/CompanyPage/' + id + '/' + name}" >
+                                    <div class="pull-left"> <img style="width:26px" data-bind="attr:{src:logoLink }" /> </div> 
+                                    <div class="media-body" data-bind="text:name"> </div>
+                                </a>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
                 @*<div class="ibox hidden-xs">
                     <div class="ibox-content">
                         <h3>Followers and friends</h3>
@@ -245,38 +258,48 @@
 
 @section Styles {
 
-    @Styles.Render("~/plugins/toastrStyles")
 @Styles.Render("~/plugins/imagecropperStyles")
 @Styles.Render("~/bundles/tagStyles")
-@Styles.Render("~/scripts/selectizeStyles")
 @Styles.Render("~/plugins/slickStyles")
 @Styles.Render("~/plugins/slickThemeStyles")
-
+@Styles.Render("~/plugins/toastrStyles")
 }
 
 @Html.Partial("/Views/Shared/_Chat.cshtml")
 @Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 
 @section Scripts{
-    @Scripts.Render("~/plugins/toastr")
+    
 @Scripts.Render("~/plugins/imagecropper")
-@Scripts.Render("~/scripts/selectize")
 @Scripts.Render("~/plugins/slick")
 @Scripts.Render("~/plugins/truncate")
 <script src="~/Scripts/jquery.timeago.js"></script>
-<script src="~/Scripts/knockout-3.3.0.js"></script>
-<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
-<script src="~/signalr/hubs"></script>
-<script src="~/Scripts/app/chat.js"></script>
-<script src="~/Scripts/UserLogin.js"></script>
 <script src="~/Scripts/app/slick-knockout-binding.js"></script>
 <script src="~/Scripts/app/_AdListView.js"></script>
 <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
     <script>
-       
+        function Company(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.logoLink = "/Images/Company/default_logo.png";
+            if (data.logoExtension) {
+                self.logoLink = "/Images/Company/" + self.id + "/logo" + data.logoExtension;
+            }
+            self.companyClicked = function () {
+                window.location.href = "/CompanyPage/" + self.id + "/" + self.name;
+            }
+        }
         function profile(data) {
             var self = this;
             data = data || {};
+
+            self.showCompanies = ko.observableArray();
+            if (data.companies) {
+                var tagsdata = $.map(data.companies, function (item) { return new Company(item); });
+                self.showCompanies(tagsdata);
+            }
 
             self.tagsToFollow = ko.observable("");
             self.followSummary = ko.observable();
@@ -307,6 +330,9 @@
 
             self.id = data.Id;
             self.followingTags = ko.observableArray();
+
+            
+
             if (data.followingTags) {
                 var tagsdata = $.map(data.followingTags, function (item) { return new Tag(item); });
                 self.followingTags(tagsdata);

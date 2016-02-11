@@ -125,3 +125,25 @@
         </div>
     </div>
 </div>
+<div data-bind="visible:showCompanies().length > 0">
+    <hr />
+    <h2>Choose</h2><br />
+    <div class="form-group">
+        <label class="control-label col-md-2">Post ad using</label>
+        <div class="col-md-10">
+            <div data-bind="foreach:showCompanies">
+                <div class="radio">
+                    <label>
+                        <input class="radio i-checks" id="Netsol Technologies Limited" type="radio" data-bind="iCheck: { checked: $parent.postAdUsing },value:$data,attr:{id:$data}" name="postAdUsing" required /> <span data-bind="text:$data"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="radio">
+                <label>
+                    <input class="radio i-checks" type="radio" id="on" data-bind="iCheck: { checked: postAdUsing }" value="on" name="postAdUsing" required /> Using My Individual Account
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

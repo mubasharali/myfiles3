@@ -415,19 +415,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 islogin = User.Identity.GetUserId();
             }
-            
-            //if(city == null)
-            //{
-            //    pp = null;
-            //}
-            //if(tags.Equals("undefined"))
-            //{
-            //    tags = null;
-            //}
             if(tags == null)
             {
                 var temp1 = from ad in db.MobileAds
-                           where ( ( ( isAccessories && ad.Ad.subcategory.Equals("MobileAccessories") ) || (!isAccessories && ( ad.Ad.subcategory == null || ad.Ad.subcategory == "" ) ) ) && ad.Ad.status.Equals("a") && (model == null || ad.MobileModel.model.Equals(model)) && (brand == null || ad.MobileModel.Mobile.brand.Equals(brand)) && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp)) ) )
+                           where ( ( ( isAccessories && ad.Ad.category.Equals("MobileAccessories") ) || (!isAccessories && ad.Ad.category == "Mobiles"  ) ) && ad.Ad.status.Equals("a") && (model == null || ad.MobileModel.model.Equals(model)) && (brand == null || ad.MobileModel.Mobile.brand.Equals(brand)) && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp)) ) )
                             orderby ad.Ad.time descending
                             select new
                            {
@@ -488,7 +479,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
            
            
                 var temp = from ad in db.MobileAds
-                           where (((isAccessories && ad.Ad.subcategory.Equals("MobileAccessories")) || (!isAccessories && (ad.Ad.subcategory == null || ad.Ad.subcategory == ""))) && ad.Ad.status.Equals("a") && (model == null || ad.MobileModel.model.Equals(model)) && (brand == null || ad.MobileModel.Mobile.brand.Equals(brand)) && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (!tagsArray.Except(ad.Ad.AdTags.Select(x => x.Tag.name)).Any()) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))))
+                           where (((isAccessories && ad.Ad.category.Equals("MobileAccessories")) || (!isAccessories && ad.Ad.category == "Mobiles" )) && ad.Ad.status.Equals("a") && (model == null || ad.MobileModel.model.Equals(model)) && (brand == null || ad.MobileModel.Mobile.brand.Equals(brand)) && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (!tagsArray.Except(ad.Ad.AdTags.Select(x => x.Tag.name)).Any()) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))))
                            orderby ad.Ad.time descending
                            select new
                            {
@@ -542,169 +533,127 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                  return Ok(temp);
         }
        
-        public async Task<IHttpActionResult> SearchLaptopAds(string brand, string model,string tags)
+        public async Task<IHttpActionResult> SearchLaptopAds(string brand, string model, string tags, string title, int minPrice, int maxPrice, string city, string pp, bool isAccessories)
         {
             string islogin = "";
             if (User.Identity.IsAuthenticated)
             {
                 islogin = User.Identity.GetUserId();
             }
-            if (brand == null)
+            if (tags == null)
             {
-                var ret = from ad in db.LaptopAds
-                          where ad.Ad.status.Equals("a")
-                          select new
-                          {
-                              title = ad.Ad.title,
-                              postedById = ad.Ad.AspNetUser.Id,
-                              postedByName = ad.Ad.AspNetUser.Email,
-                              description = ad.Ad.description,
-                              id = ad.Ad.Id,
-                              time = ad.Ad.time,
-                              islogin = islogin,
-                              isNegotiable = ad.Ad.isnegotiable,
-                              price = ad.Ad.price,
-                              reportedCount = ad.Ad.Reporteds.Count,
-                              isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
-                              //views = ad.Ad.AdViews.Count,
-                              views = ad.Ad.views,
-                              condition = ad.Ad.condition,
-                              savedCount = ad.Ad.SaveAds.Count,
-                              color = ad.color,
-                              brand = ad.LaptopModel.LaptopBrand.brand,
-                              model = ad.LaptopModel.model,
-                              adTags = from tag in ad.Ad.AdTags.ToList()
-                                       select new
-                                       {
-                                           id = tag.Id,
-                                           name = tag.Tag.name,
-                                           //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
-                                           //info = tag.Tag.info,
-                                       },
-                              bid = from biding in ad.Ad.Bids.ToList()
-                                    select new
-                                    {
-                                        price = biding.price,
-                                    },
-                              adImages = from image in ad.Ad.AdImages.ToList()
+                var temp1 = from ad in db.LaptopAds
+                            where (((isAccessories && ad.Ad.category.Equals("LaptopAccessories")) || (!isAccessories && ad.Ad.category == "Laptops")) && ad.Ad.status.Equals("a") && (model == null || ad.LaptopModel.model.Equals(model)) && (brand == null || ad.LaptopModel.LaptopBrand.brand.Equals(brand)) && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))))
+                            orderby ad.Ad.time descending
+                            select new
+                            {
+                                title = ad.Ad.title,
+                                postedById = ad.Ad.AspNetUser.Id,
+                                postedByName = ad.Ad.AspNetUser.Email,
+                                description = ad.Ad.description,
+                                id = ad.Ad.Id,
+                                time = ad.Ad.time,
+                                islogin = islogin,
+                                isNegotiable = ad.Ad.isnegotiable,
+                                price = ad.Ad.price,
+                                reportedCount = ad.Ad.Reporteds.Count,
+                                isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                                // views = ad.Ad.AdViews.Count,
+                                views = ad.Ad.views,
+                                condition = ad.Ad.condition,
+                                savedCount = ad.Ad.SaveAds.Count,
+                                color = ad.color,
+                                brand = ad.LaptopModel.LaptopBrand.brand,
+                                model = ad.LaptopModel.model,
+                                adTags = from tag1 in ad.Ad.AdTags.ToList()
                                          select new
                                          {
-                                             imageExtension = image.imageExtension,
+                                             id = tag1.Id,
+                                             name = tag1.Tag.name,
+                                             //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                             //info = tag.Tag.info,
                                          },
-                              location = new
-                              {
-                                  cityName = ad.Ad.AdsLocation.City.cityName,
-                                  cityId = ad.Ad.AdsLocation.cityId,
-                                  popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
-                                  popularPlace = ad.Ad.AdsLocation.popularPlace.name,
-                                  exectLocation = ad.Ad.AdsLocation.exectLocation,
-                              },
-                          };
-                return Ok(ret);
-            }
-            if (model == null)
-            {
-                var re = from ad in db.Ads
-                         where ad.LaptopAd.LaptopModel.LaptopBrand.brand.Equals(brand)
-                         where ad.status.Equals("a")
-                         select new
-                         {
-                             title = ad.title,
-                             postedById = ad.AspNetUser.Id,
-                             postedByName = ad.AspNetUser.Email,
-                             description = ad.description,
-                             id = ad.Id,
-                             time = ad.time,
-                             islogin = islogin,
-                             isNegotiable = ad.isnegotiable,
-                             price = ad.price,
-                             reportedCount = ad.Reporteds.Count,
-                             isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
-                             //views = ad.AdViews.Count,
-                             views = ad.views,
-                             condition = ad.condition,
-
-                             color = ad.LaptopAd.color,
-                             brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
-                             model = ad.LaptopAd.LaptopModel.model,
-                             adTags = from tag in ad.AdTags.ToList()
+                                bid = from biding in ad.Ad.Bids.ToList()
                                       select new
                                       {
-                                          id = tag.Id,
-                                          name = tag.Tag.name,
+                                          price = biding.price,
                                       },
-                             bid = from biding in ad.Bids.ToList()
-                                   select new
-                                   {
-                                       price = biding.price,
-                                   },
-                             adImages = from image in ad.AdImages.ToList()
-                                        select new
-                                        {
-                                            imageExtension = image.imageExtension,
-                                        },
-                             location = new
-                             {
-                                 cityName = ad.AdsLocation.City.cityName,
-                                 cityId = ad.AdsLocation.cityId,
-                                 popularPlaceId = ad.AdsLocation.popularPlaceId,
-                                 popularPlace = ad.AdsLocation.popularPlace.name,
-                                 exectLocation = ad.AdsLocation.exectLocation,
-                             },
-                         };
-                return Ok(re);
-            }
-            var res = from ad in db.Ads
-                      where ad.LaptopAd.LaptopModel.LaptopBrand.brand.Equals(brand) && ad.LaptopAd.LaptopModel.model.Equals(model)
-                      where ad.status.Equals("a")
-                      select new
-                      {
-                          title = ad.title,
-                          postedById = ad.AspNetUser.Id,
-                          postedByName = ad.AspNetUser.Email,
-                          description = ad.description,
-                          id = ad.Id,
-                          time = ad.time,
-                          islogin = islogin,
-                          isNegotiable = ad.isnegotiable,
-                          price = ad.price,
-                          reportedCount = ad.Reporteds.Count,
-                          isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
-                          //views = ad.AdViews.Count,
-                          views = ad.views,
-                          condition = ad.condition,
-
-                          color = ad.LaptopAd.color,
-                          brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
-                          model = ad.LaptopAd.LaptopModel.model,
-                          adTags = from tag in ad.AdTags.ToList()
-                                   select new
-                                   {
-                                       id = tag.Id,
-                                       name = tag.Tag.name,
-                                       //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
-                                       //info = tag.Tag.info,
-                                   },
-                          bid = from biding in ad.Bids.ToList()
-                                select new
+                                adImages = from image in ad.Ad.AdImages.ToList()
+                                           select new
+                                           {
+                                               imageExtension = image.imageExtension,
+                                           },
+                                location = new
                                 {
-                                    price = biding.price,
+                                    cityName = ad.Ad.AdsLocation.City.cityName,
+                                    cityId = ad.Ad.AdsLocation.cityId,
+                                    popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                    popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                    exectLocation = ad.Ad.AdsLocation.exectLocation,
                                 },
-                          adImages = from image in ad.AdImages.ToList()
-                                     select new
-                                     {
-                                         imageExtension = image.imageExtension,
-                                     },
-                          location = new
-                          {
-                              cityName = ad.AdsLocation.City.cityName,
-                              cityId = ad.AdsLocation.cityId,
-                              popularPlaceId = ad.AdsLocation.popularPlaceId,
-                              popularPlace = ad.AdsLocation.popularPlace.name,
-                              exectLocation = ad.AdsLocation.exectLocation,
-                          },
-                      };
-            return Ok(res);
+
+                            };
+                return Ok(temp1);
+            }
+            string[] tagsArray = null;
+            if (tags != null)
+            {
+                tagsArray = tags.Split(',');
+            }
+
+
+            var temp = from ad in db.LaptopAds
+                       where (((isAccessories && ad.Ad.category.Equals("LaptopAccessories")) || (!isAccessories && (ad.Ad.category == "Laptops"))) && ad.Ad.status.Equals("a") && (model == null || ad.LaptopModel.model.Equals(model)) && (brand == null || ad.LaptopModel.LaptopBrand.brand.Equals(brand)) && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (!tagsArray.Except(ad.Ad.AdTags.Select(x => x.Tag.name)).Any()) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))))
+                       orderby ad.Ad.time descending
+                       select new
+                       {
+                           title = ad.Ad.title,
+                           postedById = ad.Ad.AspNetUser.Id,
+                           postedByName = ad.Ad.AspNetUser.Email,
+                           description = ad.Ad.description,
+                           id = ad.Ad.Id,
+                           time = ad.Ad.time,
+                           islogin = islogin,
+                           isNegotiable = ad.Ad.isnegotiable,
+                           price = ad.Ad.price,
+                           reportedCount = ad.Ad.Reporteds.Count,
+                           isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                           // views = ad.Ad.AdViews.Count,
+                           views = ad.Ad.views,
+                           condition = ad.Ad.condition,
+                           savedCount = ad.Ad.SaveAds.Count,
+                           color = ad.color,
+                           brand = ad.LaptopModel.LaptopBrand.brand,
+                           model = ad.LaptopModel.model,
+                           adTags = from tag1 in ad.Ad.AdTags.ToList()
+                                    select new
+                                    {
+                                        id = tag1.Id,
+                                        name = tag1.Tag.name,
+                                        //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                        //info = tag.Tag.info,
+                                    },
+                           bid = from biding in ad.Ad.Bids.ToList()
+                                 select new
+                                 {
+                                     price = biding.price,
+                                 },
+                           adImages = from image in ad.Ad.AdImages.ToList()
+                                      select new
+                                      {
+                                          imageExtension = image.imageExtension,
+                                      },
+                           location = new
+                           {
+                               cityName = ad.Ad.AdsLocation.City.cityName,
+                               cityId = ad.Ad.AdsLocation.cityId,
+                               popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                               popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                               exectLocation = ad.Ad.AdsLocation.exectLocation,
+                           },
+
+                       };
+            return Ok(temp);
         }
         public async Task<IHttpActionResult> GetMobileTrends()
         {
@@ -793,7 +742,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
                 try
                 {
-                    isAdmin = Roles.IsUserInRole("Admin");
+                  //  var user = new ApplicationUser() { UserName = ide.Email };
+                 //   isAdmin = Roles.IsUserInRole("Admin");
                     //isAdmin = Roles.GetRolesForUser().Contains("Admin");
                 }
                 catch (Exception e)
@@ -801,11 +751,30 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     string ss = e.ToString();
                 }
             }
-            var ret = (from ad in db.Ads
+            int companyId ;
+            string companyName;
+            try
+            {
+                companyId = db.Ads.Find(id).CompanyAd.companyId;
+            }
+            catch(Exception e)
+            {
+                companyId = 0;
+            }
+            try
+            {
+                companyName = db.Ads.Find(id).CompanyAd.Company.title;
+            }
+            catch (Exception e)
+            {
+                companyName = null;
+            }
+            var ret =await (from ad in db.Ads
                        where ad.Id == id
-                       orderby ad.time
                        select new
                        {
+                           companyId = companyId,
+                           companyName = companyName,
                            isAdmin = isAdmin,
                            title = ad.title,
                            postedById = ad.AspNetUser.Id,
@@ -840,6 +809,21 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                color = ad.LaptopAd.color,
                                brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
                                model = ad.LaptopAd.LaptopModel.model,
+                           },
+                           jobAd = new
+                           {
+                               seats = ad.JobAd.seats,
+                               qualification = ad.JobAd.qualification,
+                               exprience = ad.JobAd.exprience,
+                               careerLevel = ad.JobAd.careerLevel,
+                               lastDateToApply = ad.JobAd.lastDateToApply,
+                               salaryType = ad.JobAd.salaryType,
+                               skills = from skill in ad.JobSkills
+                                        select new
+                                        {
+                                            id = skill.Id,
+                                            name = skill.Tag.name,
+                                        },
                            },
                            location = new
                            {
@@ -939,7 +923,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                             isDown = commentreply.CommentReplyVotes.Any(x => x.votedBy == islogin && x.isup == false)
                                                         }
                                      }
-                       }).AsEnumerable();
+                       }).FirstOrDefaultAsync();
             return Ok(ret);
         }
         

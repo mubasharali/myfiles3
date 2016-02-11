@@ -1,27 +1,10 @@
 ﻿@model Inspinia_MVC5_SeedProject.Models.Ad
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Job Ad";
 }
 
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-sm-4">
-        <h2>Edit</h2>
-        <ol class="breadcrumb">
-            <li>
-                @Html.ActionLink("List", "Index")
-            </li>
-            <li class="active">
-                <strong>Edit</strong>
-            </li>
-        </ol>
-    </div>
-    <div class="col-sm-8">
-        <div class="title-action">
-			@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary"})
-        </div>
-    </div>
-</div>
+
 
 
 
@@ -30,83 +13,210 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Edit Ad</h5>
+                    <h5>Edit Job Ad</h5>
                 </div>
                 <div class="ibox-content">
 
 				@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
+    @Html.ValidationSummary(true)
+                    <div class="">
+                        @Html.ValidationSummary(true)
+                        <div class="">
+                            <p class="text-navy">Fields with <span class="req">*</span> are mendatory</p>
 
-        @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.Id)
+                            <div class="form-group">
+                                <label>Job Category</label>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.category, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.category)
-                @Html.ValidationMessageFor(model => model.category)
-            </div>
-        </div>
+                                <select name="category" class="form-control"  form="post">
+                                    <option value="It Jobs">
+                                        It Jobs
+                                    </option>
+                                    <option value="Business Administration">
+                                        Business Administration
+                                    </option>
+                                    <option value="Sales and marketing">
+                                        Sales and marketing
+                                    </option>
+                                    <option value="Management Jobs">
+                                        Management Jobs
+                                    </option>
+                                    <option value="other jobs">
+                                        other jobs
+                                    </option>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.postedBy, "postedBy", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("postedBy", String.Empty)
-                @Html.ValidationMessageFor(model => model.postedBy)
-            </div>
-        </div>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Total seats </label>
+                                <input type="number" name="seats" class="form-control">
+                            </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.title, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.title)
-                @Html.ValidationMessageFor(model => model.title)
-            </div>
-        </div>
+                            <div class="form-group">
+                                <label>Qualification </label>
+                                <input type="text" name="qualification" class="form-control">
+                            </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.description, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.description)
-                @Html.ValidationMessageFor(model => model.description)
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.time, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.time)
-                @Html.ValidationMessageFor(model => model.time)
-            </div>
-        </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Experience</label>
+                                        <div class="">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.price, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.price)
-                @Html.ValidationMessageFor(model => model.price)
-            </div>
-        </div>
+                                            <div class="">
+                                                <select name="exprience" class="form-control" form="post">
+                                                    <option value="">
+                                                        Choose
+                                                    </option>
+                                                    <option value="n">
+                                                        Not required
+                                                    </option>
+                                                    <option value="f">
+                                                        Fresh graduate
+                                                    </option>
+                                                    <option value="1">
+                                                        1 year
+                                                    </option>
+                                                    <option value="2">
+                                                        2 year
+                                                    </option>
+                                                    <option value="3">
+                                                        3 year
+                                                    </option>
+                                                    <option value="4r">
+                                                        4 year
+                                                    </option>
+                                                    <option value="5">
+                                                        5 year
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div><label>Gender</label></div>
+                                        <select name="gender" class="form-control" form="post">
+                                            <option value="d">
+                                                Does not matter
+                                            </option>
+                                            <option value="m">
+                                                Male
+                                            </option>
+                                            <option value="f">
+                                                Female
+                                            </option>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.isnegotiable, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.isnegotiable)
-                @Html.ValidationMessageFor(model => model.isnegotiable)
-            </div>
-        </div>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-primary" />
-				@Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white"})
-            </div>
-        </div>
-    </div>
-}
+
+                            <div class="form-group">
+                                <label>Skills required</label>
+                                <input id="select-skills" name="skills" class="repositories" placeholder="Pick skills..." />
+                            </div>
+                            <div>
+                                <label>Career Level</label>
+                            </div>
+                            <div class="form-group">
+                                <select name="careerLevel" class="form-control" form="post">
+                                    <option value="">
+                                        Choose
+                                    </option>
+                                    <option>Entry Level</option>
+                                    <option>Student/Internship</option>
+                                    <option>Mid Career</option>
+                                    <option>Management</option>
+                                    <option>Executive/Director</option>
+                                    <option>Senior Executive(President,CEO)</option>
+                                    <option>Unspecified</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Apply before  </label>
+                                <input type="date" name="lastDateToApply" class="form-control">
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div><label>Job type</label></div>
+
+                                        <select name="subcategory" class="form-control" form="post">
+                                            <option value="">Choose</option>
+                                            <option>Full time</option>
+                                            <option>Permanent</option>
+                                            <option>Contract</option>
+                                            <option>Internship</option>
+                                            <option>Part time</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div><label>Shift timing</label></div>
+
+                                        <select name="shift" class="form-control" form="post">
+                                            <option value="m">Morning shift</option>
+                                            <option value="e">Evening shift</option>
+                                            <option value="n">Not confirmed</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>salary </label>
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="input-group">
+                                            <input type="number" name="salary" class="form-control">
+                                            <span class="input-group-addon">Rs</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+
+                                        <select name="salaryType" class="form-control" form="post">
+                                            <option value="m">
+                                                per month
+                                            </option>
+                                            <option value="h">
+                                                per hour
+                                            </option>
+                                            <option value="d">
+                                                per day
+                                            </option>
+                                            <option value="y">
+                                                per year
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            @Html.Partial("~/Views/Shared/_CreateAd_Jobs.cshtml")
+
+                            <br /><br /><br /><br />
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <button type="submit" data-bind="click:submitClicked" class="btn btn-primary">Submit</button>
+                                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
 
 
                 </div>

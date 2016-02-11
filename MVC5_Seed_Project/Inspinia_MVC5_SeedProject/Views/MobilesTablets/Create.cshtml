@@ -12,6 +12,7 @@
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <a class="btn btn-info btn-xs pull-right " href="../CreateAd">Post ad in another category</a>
                     <h5>Create Mobile Ad</h5>
                 </div>
                 <div class="ibox-content">
@@ -32,8 +33,7 @@
                                 <div class="col-md-10">
                                     <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
                        value: selectedBrand,
-                       optionsCaption: 'Choose brand...'"></select>
-
+                       optionsCaption: 'Choose brand...'"> </select>
                                 </div>
                             </div>
                             <div data-bind="with:selectedBrand">
@@ -81,6 +81,7 @@
                                 </div>
                             </div>
                             @Html.Partial("~/Views/Shared/_CreateAd.cshtml")
+                            
                             <br />
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
@@ -108,7 +109,6 @@
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
-    @Styles.Render("~/scripts/selectizeStyles")
     @Styles.Render("~/bundles/myStyles")
     @Styles.Render("~/bundles/tagStyles")
 @Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
@@ -118,13 +118,11 @@
 
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/plugins/validate")
-    @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/iCheck")
-    @Scripts.Render("~/scripts/selectize")
-    @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/autosize")
 @Scripts.Render("~/plugins/dropZone")
 <script src="~/Scripts/app/dropzone-knockout-binding.js"> </script>
+<script src="~/Scripts/app/_CreateAd.js"></script>
     <script type="text/javascript">
         var fileList = new Array;
         function ViewModel() {
@@ -138,6 +136,9 @@
                 window.btn_clicked = true;
                 $("#form").submit();
             }
+
+            UserCompanies_CreateAd(self);
+            
             self.conditionChecked = ko.observable(false);
             self.typeValue = ko.observable();
             self.selectedVal = ko.observable();

@@ -169,18 +169,14 @@
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/jsTree")
 @Styles.Render("~/bundles/tagStyles")
-@Styles.Render("~/scripts/selectizeStyles")
 @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
 }
 
 @section Scripts{
-    @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
-    @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/slick")
     @Scripts.Render("~/plugins/jsTree")
-@Scripts.Render("~/scripts/selectize")
 @Scripts.Render("~/plugins/ionRange")
     <script src="~/Scripts/app/LaptopTree.js"></script>
     <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
@@ -374,13 +370,7 @@
             $('.product-images').slick({
                 dots: true
             });
-            // ko.applyBindings(new viewModel, (document.getElementById('ads')));
-
-            // ko.applyBindings(new treeModel, document.getElementById('navigation'));
             ko.applyBindings(new viewModel);
-            $.connection.hub.start().done(function () {
-
-            });
         });
 
     </script>

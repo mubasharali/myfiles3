@@ -12,6 +12,7 @@
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <a class="btn btn-info btn-xs pull-right " href="../CreateAd">Post ad in another category</a>
                     <h5>Create Laptop / Computer Ad</h5>
                 </div>
                 <div class="ibox-content">
@@ -71,7 +72,7 @@
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" data-bind="click:submitClicked" value="Create" class="btn btn-primary" />
-                                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
+                                    @Html.ActionLink("Cancel", "ComputersLaptops", null, new { @class = "btn btn-white" })
                                 </div>
                             </div>
                             @*<input type="text" id="input-tags" value="" data-selectize-value="[awesome]" />*@
@@ -92,7 +93,6 @@
     @Styles.Render("~/plugins/toastrStyles")
     @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
-    @Styles.Render("~/scripts/selectizeStyles")
 @Styles.Render("~/bundles/tagStyles")
 @Styles.Render("~/bundles/myStyles")
 @Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
@@ -104,18 +104,18 @@
     @Scripts.Render("~/plugins/validate")
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/iCheck")
-    @Scripts.Render("~/scripts/selectize")
-    @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/autosize")
 @Scripts.Render("~/plugins/dropZone")
 <script src="~/Scripts/app/dropzone-knockout-binding.js"> </script>
+<script src="~/Scripts/app/_CreateAd.js"></script>
     <script type="text/javascript">
 
         function ViewModel() {
             SearchingLocation();
             AccountViewModel();
             ChatViewModel();
-        var self = this;
+            var self = this;
+            UserCompanies_CreateAd(self);
         self.submitClicked = function () {
             console.log(fileList);
             $("input[id*='fileNames']").val(JSON.stringify(fileList));
@@ -281,7 +281,15 @@
 
     $(document).ready(function () {
         ko.applyBindings(new ViewModel);
-
+        window.onbeforeunload = function (e) {
+            if (!window.btn_clicked) {
+                e = e || window.event;
+                if (e) {
+                    e.returnValue = 'Sure?';
+                }
+                return 'Sure?';
+            }
+        };
         Selectize.define('inputMaxlength', function (options) {
             var self = this;
             this.setup = (function () {

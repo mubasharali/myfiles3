@@ -37,7 +37,6 @@ function TreeViewModel() {
     var self = this;
     self.showAds = ko.observableArray();
     self.isLoading = ko.observable(false);
-    console.log(searchingCity());
     searchingCity.subscribe(function () {
         RefreshSearch();
     })
@@ -92,28 +91,6 @@ function TreeViewModel() {
     }
     self.loadTree();
     
-    //self.loadad = function () {
-    //    self.isLoading(true);
-    //    url_address = '/api/Electronic/SearchMobileAds?brand=' + brand() + '&model=' + model() + '&tags= ' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&isAccessories=' + false;
-    //    $.ajax({
-    //        url: url_address,
-    //        dataType: "json",
-    //        contentType: "application/json",
-    //        cache: false,
-    //        type: 'POST',
-    //        success: function (data) {
-    //            var mappedads = $.map(data, function (item) { return new Ad(item); });
-    //            self.showAds(mappedads);
-    //            self.isLoading(false);
-    //        },
-    //        error: function () {
-    //            self.isLoading(false);
-    //            toastr.error("Unable to load data. Please try again", "Error");
-    //        }
-    //    });
-    //}
-    //self.loadad();
-    //Search();
 }
 
 
@@ -136,6 +113,7 @@ function RefreshSearch() {
         }
     });
 }
+
 var saveResult = function (data) {
     minPrice ( data.fromNumber );
     maxPrice  (data.toNumber);

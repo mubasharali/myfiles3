@@ -21,6 +21,7 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.QuestionTags = new HashSet<QuestionTag>();
             this.ReportedTags = new HashSet<ReportedTag>();
             this.CompanyTags = new HashSet<CompanyTag>();
+            this.JobSkills = new HashSet<JobSkill>();
         }
     
         public int Id { get; set; }
@@ -39,5 +40,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual AspNetUser AspNetUser1 { get; set; }
         public virtual ICollection<CompanyTag> CompanyTags { get; set; }
+        public virtual ICollection<JobSkill> JobSkills { get; set; }
     }
 }

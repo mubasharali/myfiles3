@@ -384,6 +384,26 @@
           <Property Name="friendId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="time" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="JobAd">
+          <Key>
+            <PropertyRef Name="adId" />
+          </Key>
+          <Property Name="adId" Type="int" Nullable="false" />
+          <Property Name="seats" Type="int" />
+          <Property Name="qualification" Type="nvarchar" MaxLength="500" />
+          <Property Name="exprience" Type="char" MaxLength="1" />
+          <Property Name="careerLevel" Type="nvarchar" MaxLength="50" />
+          <Property Name="lastDateToApply" Type="date" />
+          <Property Name="salaryType" Type="char" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="JobSkill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="adId" Type="int" Nullable="false" />
+          <Property Name="tagId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="LaptopAds">
           <Key>
             <PropertyRef Name="Id" />
@@ -397,7 +417,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="brand" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="brand" Type="nvarchar" MaxLength="30" />
           <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="time" Type="datetime" Nullable="false" />
           <Property Name="status" Type="char" MaxLength="1" />
@@ -408,7 +428,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="brandId" Type="int" Nullable="false" />
-          <Property Name="model" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="model" Type="varchar" MaxLength="30" />
           <Property Name="time" Type="datetime" Nullable="false" />
           <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="status" Type="char" MaxLength="1" />
@@ -1411,6 +1431,48 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_JobAd_ToTable">
+          <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="JobAd" Type="Self.JobAd" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobAd">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobSkill_ToTable">
+          <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="JobSkill" Type="Self.JobSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobSkill">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobSkill_ToTable_1">
+          <End Role="Tag" Type="Self.Tag" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="JobSkill" Type="Self.JobSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobSkill">
+              <PropertyRef Name="tagId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_LaptopAds_ToTable">
           <End Role="Ad" Type="Self.Ad" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1920,6 +1982,8 @@
           <EntitySet Name="FollowQuestion" EntityType="Self.FollowQuestion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FollowTag" EntityType="Self.FollowTag" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Friend" EntityType="Self.Friend" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobAd" EntityType="Self.JobAd" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobSkill" EntityType="Self.JobSkill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LaptopAds" EntityType="Self.LaptopAds" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LaptopBrand" EntityType="Self.LaptopBrand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LaptopModel" EntityType="Self.LaptopModel" Schema="dbo" store:Type="Tables" />
@@ -2191,6 +2255,18 @@
           <AssociationSet Name="FK_Image_ToTable" Association="Self.FK_Image_ToTable">
             <End Role="Company" EntitySet="Company" />
             <End Role="CompanyImage" EntitySet="CompanyImage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobAd_ToTable" Association="Self.FK_JobAd_ToTable">
+            <End Role="Ad" EntitySet="Ad" />
+            <End Role="JobAd" EntitySet="JobAd" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobSkill_ToTable" Association="Self.FK_JobSkill_ToTable">
+            <End Role="Ad" EntitySet="Ad" />
+            <End Role="JobSkill" EntitySet="JobSkill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobSkill_ToTable_1" Association="Self.FK_JobSkill_ToTable_1">
+            <End Role="Tag" EntitySet="Tag" />
+            <End Role="JobSkill" EntitySet="JobSkill" />
           </AssociationSet>
           <AssociationSet Name="FK_LaptopAds_ToTable" Association="Self.FK_LaptopAds_ToTable">
             <End Role="Ad" EntitySet="Ad" />
@@ -2793,6 +2869,20 @@
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="ReviewVote" EntitySet="ReviewVotes" />
           </AssociationSet>
+          <EntitySet Name="JobSkills" EntityType="Model.JobSkill" />
+          <AssociationSet Name="FK_JobSkill_ToTable" Association="Model.FK_JobSkill_ToTable">
+            <End Role="Ad" EntitySet="Ads" />
+            <End Role="JobSkill" EntitySet="JobSkills" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobSkill_ToTable_1" Association="Model.FK_JobSkill_ToTable_1">
+            <End Role="Tag" EntitySet="Tags" />
+            <End Role="JobSkill" EntitySet="JobSkills" />
+          </AssociationSet>
+          <EntitySet Name="JobAds" EntityType="Model.JobAd" />
+          <AssociationSet Name="FK_JobAd_ToTable" Association="Model.FK_JobAd_ToTable">
+            <End Role="Ad" EntitySet="Ads" />
+            <End Role="JobAd" EntitySet="JobAds" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -2833,6 +2923,8 @@
           <Property Name="views" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Ad_ToTable" FromRole="Ad" ToRole="AspNetUser" />
           <NavigationProperty Name="CompanyAd" Relationship="Model.FK_CompanyAd_ToTable" FromRole="Ad" ToRole="CompanyAd" />
+          <NavigationProperty Name="JobSkills" Relationship="Model.FK_JobSkill_ToTable" FromRole="Ad" ToRole="JobSkill" />
+          <NavigationProperty Name="JobAd" Relationship="Model.FK_JobAd_ToTable" FromRole="Ad" ToRole="JobAd" />
         </EntityType>
         <EntityType Name="AdImage">
           <Key>
@@ -3094,7 +3186,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="brand" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="LaptopModels" Relationship="Model.FK_LaptopModel_ToTable" FromRole="LaptopBrand" ToRole="LaptopModel" />
@@ -3107,7 +3199,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="brandId" Type="Int32" Nullable="false" />
-          <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="model" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="LaptopAds" Relationship="Model.FK_LaptopAds_ToTable_1" FromRole="LaptopModel" ToRole="LaptopAd" />
@@ -3287,6 +3379,7 @@
           <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_Tag_ToTable_1" FromRole="Tag" ToRole="AspNetUser" />
           <Property Name="updatedInfo" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="CompanyTags" Relationship="Model.FK_CompanyTag_ToTable_1" FromRole="Tag" ToRole="CompanyTag" />
+          <NavigationProperty Name="JobSkills" Relationship="Model.FK_JobSkill_ToTable_1" FromRole="Tag" ToRole="JobSkill" />
         </EntityType>
         <Association Name="FK_AdImage_ToTable">
           <End Type="Model.Ad" Role="Ad" Multiplicity="1">
@@ -4848,6 +4941,71 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="JobSkill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="adId" Type="Int32" Nullable="false" />
+          <Property Name="tagId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Ad" Relationship="Model.FK_JobSkill_ToTable" FromRole="JobSkill" ToRole="Ad" />
+          <NavigationProperty Name="Tag" Relationship="Model.FK_JobSkill_ToTable_1" FromRole="JobSkill" ToRole="Tag" />
+        </EntityType>
+        <Association Name="FK_JobSkill_ToTable">
+          <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.JobSkill" Role="JobSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobSkill">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobSkill_ToTable_1">
+          <End Type="Model.Tag" Role="Tag" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.JobSkill" Role="JobSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobSkill">
+              <PropertyRef Name="tagId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="JobAd">
+          <Key>
+            <PropertyRef Name="adId" />
+          </Key>
+          <Property Name="adId" Type="Int32" Nullable="false" />
+          <Property Name="seats" Type="Int32" />
+          <Property Name="qualification" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="exprience" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="careerLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="lastDateToApply" Type="DateTime" Precision="0" />
+          <Property Name="salaryType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Ad" Relationship="Model.FK_JobAd_ToTable" FromRole="JobAd" ToRole="Ad" />
+        </EntityType>
+        <Association Name="FK_JobAd_ToTable">
+          <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.JobAd" Role="JobAd" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobAd">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5481,6 +5639,28 @@
                 <ScalarProperty Name="shortabout" ColumnName="shortabout" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobSkills">
+            <EntityTypeMapping TypeName="Model.JobSkill">
+              <MappingFragment StoreEntitySet="JobSkill">
+                <ScalarProperty Name="tagId" ColumnName="tagId" />
+                <ScalarProperty Name="adId" ColumnName="adId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobAds">
+            <EntityTypeMapping TypeName="Model.JobAd">
+              <MappingFragment StoreEntitySet="JobAd">
+                <ScalarProperty Name="salaryType" ColumnName="salaryType" />
+                <ScalarProperty Name="lastDateToApply" ColumnName="lastDateToApply" />
+                <ScalarProperty Name="careerLevel" ColumnName="careerLevel" />
+                <ScalarProperty Name="exprience" ColumnName="exprience" />
+                <ScalarProperty Name="qualification" ColumnName="qualification" />
+                <ScalarProperty Name="seats" ColumnName="seats" />
+                <ScalarProperty Name="adId" ColumnName="adId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

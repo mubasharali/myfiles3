@@ -96,6 +96,7 @@
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/autosize")
 @Scripts.Render("~/plugins/dropZone")
+<script src="~/Scripts/app/_CreateAd.js"></script>
     <script type="text/javascript">
 
         function ViewModel() {
@@ -103,6 +104,7 @@
             AccountViewModel();
             ChatViewModel();
             var self = this;
+            UserCompanies_CreateAd(self);
             self.submitClicked = function () {
                 $("input[id*='fileNames']").val(JSON.stringify(fileList));
                 window.btn_clicked = true;
@@ -153,45 +155,63 @@
                     cache: false,
                     //type: 'POST',
                     success: function (data) {
-                        var tags = data[0].adTags;
+
+
+                        //for company
+                        if (data.companyName) {
+                            var comid = $("#" + data.companyName);
+                            comid.iCheck('check');
+                            self.postAdUsing(data.companyName);
+                            $('.i-check').iCheck({
+                                checkboxClass: 'icheckbox_square-green',
+                                radioClass: 'iradio_square-green',
+                            });
+                            // $("#Netsol Technologies Limited").iCheck('check');
+                        } else {
+                            $("#on").iCheck('check');
+                            self.postAdUsing("on");
+                        }
+
+
+                        var tags = data.adTags;
                         $.each((tags), function (i, item) { self.selectedTags.push(item.name) });
-                        self.exectLocation = data[0].location.exectLocation;
-                        self.selectedCity(data[0].location.cityName);
-                        self.selectedCityOriginal = data[0].location.cityName;
-                        if (data[0].type == true) {
+                        self.exectLocation = data.location.exectLocation;
+                        self.selectedCity(data.location.cityName);
+                        self.selectedCityOriginal = data.location.cityName;
+                        if (data.type == true) {
                             $("#sell").iCheck('check');
-                        } else if (data[0].type == false) {
+                        } else if (data.type == false) {
                             $("#buy").iCheck('check');
                         }
-                        if (data[0].isNegotiable == 'b') {
+                        if (data.isNegotiable == 'b') {
                             self.selectedVal("fixedPrice");
                             $("#allowBiding").iCheck('check');
-                        } else if (data[0].isNegotiable == 'n') {
+                        } else if (data.isNegotiable == 'n') {
                             $("#fixedPrice").iCheck('check');
-                        } else if (data[0].isNegotiable == 'y') {
+                        } else if (data.isNegotiable == 'y') {
                             $("#fixedPrice").iCheck('check');
                             $("#isNegotiable").iCheck('check');
                         }
-                        if (data[0].condition == 'u') {
+                        if (data.condition == 'u') {
                             $('#used').iCheck('check');
                             self.conditionChecked("used");
 
-                        } else if (data[0].condition == 'b') {
+                        } else if (data.condition == 'b') {
                             $('#unboxed').iCheck('check');
                             self.conditionChecked("unboxed");
-                        } else if (data[0].condition == 'n') {
+                        } else if (data.condition == 'n') {
                             $('#new').iCheck('check');
                             self.conditionChecked("new");
 
                         }
-                        self.mobileId = data[0].laptopad.id;
-                        self.selectedModel(data[0].laptopad.model);
+                        self.mobileId = data.laptopad.id;
+                        self.selectedModel(data.laptopad.model);
                         self.selectedModelOriginal = self.selectedModel();
-                        self.selectedColor(data[0].laptopad.color);
-                        self.selectedBrand(data[0].laptopad.brand);
+                        self.selectedColor(data.laptopad.color);
+                        self.selectedBrand(data.laptopad.brand);
                         self.selectedBrandOriginal = self.selectedBrand();
 
-                        self.selectedPopularPlaceOriginal = data[0].location.popularPlace;
+                        self.selectedPopularPlaceOriginal = data.location.popularPlace;
 
                         self.selectedCityOriginal = self.selectedCity();
 

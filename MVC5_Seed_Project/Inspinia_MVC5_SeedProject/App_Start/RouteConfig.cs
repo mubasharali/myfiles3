@@ -23,7 +23,7 @@ namespace Inspinia_MVC5_SeedProject
             //    name: "some",
             //    url: "ads/{controller}/{action}/{id}",
             //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional });
-            
+
             //routes.MapRoute(
             //    name: "custom",
             //    url: "{controller}/{category}/{subcategory}/{lowcategory}/{id}/{title}",
@@ -68,6 +68,11 @@ namespace Inspinia_MVC5_SeedProject
             //    defaults: new { controller = "Home", action = "Index" }
             //);
 
+            //routes.MapRoute(
+            //    name: "ForIgnoreTitle",
+            //    url: "{controller}/{action}/{id}/{title}",
+            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional, title = UrlParameter.Optional }
+            //);
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

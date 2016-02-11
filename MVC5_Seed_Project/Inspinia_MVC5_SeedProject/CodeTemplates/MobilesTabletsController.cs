@@ -21,20 +21,21 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         {
             return View();
         }
-        public ActionResult Details(int? id)
-        {
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            //Ad ad = db.Ads.Find(id);
-            //if (ad == null)
-            //{
-            //    return HttpNotFound();
-            //}
-            ViewBag.adId = id;
-            return View("../Electronics/Details");
-        }
+        //public ActionResult Details(int? id)
+        //{
+        //    //if (id == null)
+        //    //{
+        //    //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    //}
+        //    //Ad ad = db.Ads.Find(id);
+        //    //if (ad == null)
+        //    //{
+        //    //    return HttpNotFound();
+        //    //}
+        //    ViewBag.title = db.Ads.Find(id).title;
+        //    ViewBag.adId = id;
+        //    return View("../Electronics/Details");
+        //}
         public ActionResult Create()
         {
             if (Request.IsAuthenticated)
@@ -179,6 +180,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     electronicController.MyAd(ref ad, "Save", "Mobiles");
                     db.Ads.Add(ad);
                     db.SaveChanges();
+
+
+                    electronicController.PostAdByCompanyPage(ad.Id);
+
                     MobileAd mobileAd = new MobileAd();
                     mobileAd.sims = Request["sims"];
                     mobileAd.color = Request["color"];
@@ -214,7 +219,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     //location
                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
                     db.SaveChanges();
-                    return RedirectToAction("Details", new { id = ad.Id });
+                    return RedirectToAction("Details", "Electronics" , new { id = ad.Id , title = ad.title});
                 }
                 TempData["error"] = "You must be logged in to post ad";
                 return View("Create", ad);
@@ -233,14 +238,14 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 if (Request.IsAuthenticated)
                 {
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    electronicController.MyAd(ref ad, "Save", "Mobiles", "MobileAccessories");
+                    electronicController.MyAd(ref ad, "Save", "MobileAccessories");
                     db.Ads.Add(ad);
                     db.SaveChanges();
                     MobileAd mobileAd = new MobileAd();
                     mobileAd.color = Request["color"];
 
                     mobileAd.mobileId = SaveMobileBrandModel(ref ad);
-                    
+                    electronicController.PostAdByCompanyPage(ad.Id);
                     //tags
                     electronicController.SaveTags(Request["tags"],ref ad);
 
@@ -250,7 +255,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     //location
                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
                     db.SaveChanges();
-                    return RedirectToAction("Details", new { id = ad.Id, title = ad.title });
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ad.title });
                 }
                 return View("Create", ad);
             }
@@ -274,7 +279,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         mobileAd.sims = Request["sims"];
                         mobileAd.color = Request["color"];
 
-                        SaveMobileBrandModel(ref ad);
+                       mobileAd.mobileId = SaveMobileBrandModel(ref ad);
 
                         //tags
                         electronicController.SaveTags(Request["tags"], ref ad, "update");
@@ -286,6 +291,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
 
                         db.Entry(ad).State = EntityState.Modified;
                         db.SaveChanges();
+
+                        electronicController.PostAdByCompanyPage(ad.Id,true);
                         //db.Ads.Add(ad);
                         mobileAd.Id = ad.Id;
                         db.Entry(mobileAd).State = EntityState.Modified;
@@ -301,7 +308,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         //location
                         electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
                         electronicController.ReplaceAdImages(ref ad, fileNames);
-                        return RedirectToAction("Details", new { id = ad.Id });
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ad.title });
                         // return RedirectToAction("Index", new { category = "mobiles", subcategory = mobileModel.Mobile.brand, lowcategory = mobileModel.model, id = ad.Id, title = ad.title });
                     }
                 }
@@ -333,19 +340,30 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     {
                         FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
                         electronicController.MyAd(ref ad, "Update");
-                        
 
-                        SaveMobileBrandModel(ref ad);
+                        MobileAd mobileAd = new MobileAd();
+
+                        mobileAd.sims = Request["sims"];
+                        mobileAd.color = Request["color"];
+                        mobileAd.mobileId = SaveMobileBrandModel(ref ad);
 
                         db.Entry(ad).State = EntityState.Modified;
+                        db.SaveChanges();
                         //tags
-                       electronicController.SaveTags(Request["tags"], ref ad, "update");
+                        electronicController.SaveTags(Request["tags"], ref ad, "update");
                         //location
-
+                        electronicController.PostAdByCompanyPage(ad.Id, true);
                        electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
                         electronicController.ReplaceAdImages(ref ad, fileNames);
+
+                        
+                        
+                        //db.Ads.Add(ad);
+                        mobileAd.Id = ad.Id;
+                        db.Entry(mobileAd).State = EntityState.Modified;
+
                         db.SaveChanges();
-                        return RedirectToAction("Details", new { id = ad.Id });
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ad.title });
                     }
 
                 }

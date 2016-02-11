@@ -80,5 +80,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<CompanyTag> CompanyTags { get; set; }
         public virtual DbSet<CompanyAd> CompanyAds { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
+        public virtual DbSet<JobSkill> JobSkills { get; set; }
+        public virtual DbSet<JobAd> JobAds { get; set; }
     }
 }

@@ -47,7 +47,7 @@
 <div id="search">@ViewBag.search</div>
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
-        <div class="col-sm-4 col-md-3 col-lg-3">
+        <div class="col-sm-3 col-md-3 col-lg-3">
             <div class="">
                 @Html.Partial("/Views/Electronics/_TreeMobile.cshtml")
                 <div class="ibox-title"><h5> search by tags</h5></div>
@@ -57,11 +57,13 @@
                 @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
             </div>
         </div>
-        <div class="col-sm-9 col-lg-7">
+        <div class="col-sm-9 col-md-9 col-lg-7">
             <div data-bind="visible:isLoading()">
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
             <div data-bind="visible:!isLoading()">
+                <a data-bind="visible:!mobileAccessories()" href="../MobilesTablets/Create" class="pull-right btn btn-danger">Create Mobile Ad</a>
+                <a data-bind="visible:mobileAccessories()" href="../MobilesTablets/CreateMobileAccessoriesAd" class="pull-right btn btn-danger">Create Mobile Accessories Ad</a>
                 <span data-bind="text:showAds().length"> </span> results found<br />
                 <b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || brand() || model() || tags() )"> all </span> <b> <span data-bind="visible:mobileAccessories()"> Mobile Accessories </span> <span data-bind="visible:!mobileAccessories()">Mobiles</span> </b><span data-bind="visible:brand || model"> of </span> <b> <span data-bind="text:brand"></span> <span data-bind="text:model"> </b>
                 <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
@@ -136,7 +138,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3"></div>
+        @*<div class="col-lg-3"></div>*@
     </div>
 </div>
 @Html.Partial("/Views/Shared/_Chat.cshtml")
@@ -270,7 +272,7 @@
             
             SearchingLocation();
             TreeViewModel();
-           
+            RefreshSearch();
             AccountViewModel();
             ChatViewModel();
             CreateAlert();

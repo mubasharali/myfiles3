@@ -38,15 +38,21 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             data.logoextension = extension;
             db.Entry(data).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("Details", new { id = id });
+            return RedirectToAction("Details","Company", new { id = id ,title = data.title });
         }
-        // GET: /Company/Details/5
-        public ActionResult Details(int? id)
+
+        public ActionResult Create()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            Company company = new Company();
+            return View(company);
+        }
+        [Route("CompanyPage/{id}/{title?}")]
+        public ActionResult Details(int id , string title = null)
+        {
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
             Company company = db.Companies.Find(id);
             if (company == null)
             {
@@ -65,11 +71,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return View();
         }
         // GET: /Company/Create
-        public ActionResult Create()
-        {
-            Company company = new Company();
-            return View(company);
-        }
+        
         public void SaveTags(Company ad)
         {
             string s = Request["tags"];
@@ -135,7 +137,6 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     company.createdBy = User.Identity.GetUserId();
                     company.time = DateTime.UtcNow;
                     company.status = "a";
-                    company.category = "Services";
                     db.Companies.Add(company);
                     SaveTags(company);
                     try
@@ -159,7 +160,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     {
                         string ss = e.ToString();
                     }
-                    return RedirectToAction("Details", new {id = company.Id });
+                    return RedirectToAction("Details","Company", new {id = company.Id , title = company.title });
                 }
                 
             }
@@ -179,9 +180,6 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 return HttpNotFound();
             }
-            ViewBag.createdBy = new SelectList(db.AspNetUsers, "Id", "Email", company.createdBy);
-            ViewBag.cityId = new SelectList(db.Cities, "Id", "addedBy", company.cityId);
-            ViewBag.popularPlaceId = new SelectList(db.popularPlaces, "Id", "name", company.popularPlaceId);
             return View(company);
         }
 

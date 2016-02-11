@@ -25,7 +25,16 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return db.Companies;
         }
-
+        public async Task<IHttpActionResult> GetCompaniesOfLoginUser()
+        {
+            var loginUserId = User.Identity.GetUserId();
+            if (loginUserId == null)
+            {
+                return BadRequest();
+            }
+            var companies = db.Companies.Where(x => x.createdBy.Equals(loginUserId)).Select(x => x.title);
+            return Ok(companies);
+        }
         // GET api/Company/5
         [ResponseType(typeof(Company))]
         public async Task<IHttpActionResult> GetCompany(int id)
@@ -232,6 +241,51 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                            postedByName = reply.AspNetUser.Email,
                                                        },
                                    },
+                                   activeAds = from ad in company.CompanyAds
+                                               orderby ad.Ad.time descending
+                                               select new
+                                               {
+                                                   title = ad.Ad.title,
+                                                   postedById = ad.Ad.AspNetUser.Id,
+                                                   postedByName = ad.Ad.AspNetUser.Email,
+                                                   description = ad.Ad.description,
+                                                   id = ad.Ad.Id,
+                                                   time = ad.Ad.time,
+                                                   islogin = loginUserId,
+                                                   isNegotiable = ad.Ad.isnegotiable,
+                                                   price = ad.Ad.price,
+                                                   reportedCount = ad.Ad.Reporteds.Count,
+                                                   isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == loginUserId),
+                                                   views = ad.Ad.views,
+                                                   condition = ad.Ad.condition,
+
+                                                   color = ad.Ad.LaptopAd.color,
+                                                   brand = ad.Ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                                                   model = ad.Ad.LaptopAd.LaptopModel.model,
+                                                   adTags = from tag1 in ad.Ad.AdTags.ToList()
+                                                            select new
+                                                            {
+                                                                id = tag1.tagId,
+                                                                name = tag1.Tag.name,
+                                                            },
+                                                   bid = from biding in ad.Ad.Bids.ToList()
+                                                         select new
+                                                         {
+                                                             price = biding.price,
+                                                         },
+                                                   adImages = from image in ad.Ad.AdImages.ToList()
+                                                              select new
+                                                              {
+                                                                  imageExtension = image.imageExtension,
+                                                              },
+                                                   location = new
+                                                   {
+                                                       cityName = ad.Ad.AdsLocation.City.cityName,
+                                                       cityId = ad.Ad.AdsLocation.cityId,
+                                                       popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                                       popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                                   },
+                                               },
                           loginUserId = loginUserId,
                           loginUserProfileExtension = loginUserProfileExtension,
                           id = company.Id,
@@ -483,6 +537,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             
             await db.SaveChangesAsync();
+            if(s == null)
+            {
+                return -1;
+            }
             string[] values = s.Split(',');
             Tag[] tags = new Tag[values.Length];
             CompanyTag[] qt = new CompanyTag[values.Length];

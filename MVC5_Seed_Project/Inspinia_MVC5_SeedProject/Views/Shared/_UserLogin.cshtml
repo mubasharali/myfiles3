@@ -10,7 +10,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group"><label>Enter Email</label> <input type="email" data-bind="value:email,valueUpdate:'afterkeydown',event:{keyup:checkEnterEmail}" placeholder="Enter your email" class="form-control"></div>
-                    <p data-bind="text:error"></p>
+                    <p data-bind="text:loginError"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
@@ -32,7 +32,7 @@
                 <div class="modal-body">
                     <div class="form-group"><label>Enter Password</label> <input type="password" data-bind="value:password,valueUpdate:'afterkeydown',event:{keyup:checkEnterNewPassword}" placeholder="Enter Password" class="form-control"></div>
                     <div class="form-group"><label>Confirm Password</label> <input type="password" data-bind="value:confirmPassword,hasFocus:hasConfirmPasswordFocus,valueUpdate:'afterkeydown',event:{keyup:checkEnterConfirmPassword}" placeholder="Again Enter your Password" class="form-control"></div>
-                    <p data-bind="text:error"></p>
+                    <p data-bind="text:loginError"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-bind="click:registerOnEmail">Do it later</button>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group"><label>Your good name please</label> <input type="text" data-bind="value:UserName,valueUpdate:'afterkeydown',event:{keyup:checkEnterName}" placeholder="Enter your Name" class="form-control"></div>
-                    <p data-bind="text:error"></p>
+                    <p data-bind="text:loginError"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group"><label><span data-bind="visible:!isPasswordSaved()">Create </span> <span data-bind="visible:isPasswordSaved()">Enter </span>  password</label> <input type="password" data-bind="value:password,valueUpdate:'afterkeydown',event:{keyup:checkEnterPassword}" placeholder="Enter your Password" class="form-control"></div>
-                    <p data-bind="text:error"></p>
+                    <p data-bind="text:loginError"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>

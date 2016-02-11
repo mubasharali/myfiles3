@@ -202,6 +202,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                   where followtag.tagId.Equals(adtag.tagId)
                                   from ad in db.Ads
                                   where ad.Id.Equals(adtag.adId)
+                                  orderby ad.time descending
                                   select new
                                   {
                                       title = ad.title,
@@ -267,6 +268,13 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 city = u.city,
                                 isFriend = u.Friends.Any(x => x.friendId.Equals(loginUserId) || x.userId.Equals(loginUserId)),
                                 loginUserId = loginUserId,
+                                companies = from company in u.Companies
+                                            select new
+                                            {
+                                                id = company.Id,
+                                                name = company.title,
+                                                logoExtension = company.logoextension,
+                                            },
                                 followingTags = from tag in u.FollowTags
                                                 select new
                                                 {
@@ -274,6 +282,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                     name = tag.Tag.name,
                                                 },
                                 activeads = from ad in u.Ads
+                                            where ad.CompanyAd == null
+                                            orderby ad.time descending
                                             select new
                                             {
                                                 title = ad.title,
@@ -319,6 +329,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                 },
                                             },
                                 savedads = from ad in u.SaveAds
+                                           orderby ad.time descending
                                            select new
                                            {
                                                title = ad.Ad.title,

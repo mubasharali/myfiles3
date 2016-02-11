@@ -1,27 +1,10 @@
 ﻿@model Inspinia_MVC5_SeedProject.Models.Ad
 
 @{
-    Layout = "/Views/Shared/_Layout_Without_Signalr.cshtml";
-    ViewBag.Title = "Create";
+   
+    ViewBag.Title = "Create Home Appliances Ad";
 }
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-sm-4">
-        <h2>Create</h2>
-        <ol class="breadcrumb">
-            <li>
-                @Html.ActionLink("List", "Index")
-            </li>
-            <li class="active">
-                <strong>Create</strong>
-            </li>
-        </ol>
-    </div>
-    <div class="col-sm-8">
-        <div class="title-action">
-            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
-        </div>
-    </div>
-</div>
+
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -29,6 +12,7 @@
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <a class="btn btn-info btn-xs pull-right " href="../CreateAd">Post ad in another category</a>
                     <h5>Create Ad</h5>
                 </div>
                 <div class="ibox-content">

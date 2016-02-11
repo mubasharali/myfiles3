@@ -23,6 +23,7 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.Comments = new HashSet<Comment>();
             this.Reporteds = new HashSet<Reported>();
             this.SaveAds = new HashSet<SaveAd>();
+            this.JobSkills = new HashSet<JobSkill>();
         }
     
         public int Id { get; set; }
@@ -51,5 +52,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<SaveAd> SaveAds { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual CompanyAd CompanyAd { get; set; }
+        public virtual ICollection<JobSkill> JobSkills { get; set; }
+        public virtual JobAd JobAd { get; set; }
     }
 }
