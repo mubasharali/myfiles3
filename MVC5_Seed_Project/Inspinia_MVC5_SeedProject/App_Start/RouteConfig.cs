@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-
+using System.Text;
 namespace Inspinia_MVC5_SeedProject
 {
     public class RouteConfig
@@ -73,6 +73,13 @@ namespace Inspinia_MVC5_SeedProject
             //    url: "{controller}/{action}/{id}/{title}",
             //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional, title = UrlParameter.Optional }
             //);
+            //routes.MapRoute(
+            //    name: "ForIgnoreTitle",
+            //    url: "{controller}/{action}/{id}/{title}",
+            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional, title = UrlParameter.Optional }
+            //);
+            
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
@@ -80,6 +87,7 @@ namespace Inspinia_MVC5_SeedProject
             );
         }
     }
+    
     //public class SubdomainRoute : RouteBase
     //{
     //    public override RouteData GetRouteData(HttpContextBase httpContext)

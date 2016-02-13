@@ -818,6 +818,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                careerLevel = ad.JobAd.careerLevel,
                                lastDateToApply = ad.JobAd.lastDateToApply,
                                salaryType = ad.JobAd.salaryType,
+                               category = ad.JobAd.category1,
                                skills = from skill in ad.JobSkills
                                         select new
                                         {

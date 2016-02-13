@@ -24,19 +24,21 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return Ok(ret);
         }
 
-        public async Task<IHttpActionResult> SearchJobAds(string gender, string skills, string tags, string title, int minPrice, int maxPrice, string city, string pp, string salaryType, string category, string qualification, string exprience , string careerLevel, string jobType, DateTime? lastDateToApply, int? seats, string shift)
+        public async Task<IHttpActionResult> SearchJobAds(string gender, string skills, string tags, string title, int minPrice, int maxPrice, string city, string pp, string salaryType, string category, string qualification, string exprience , string careerLevel, string jobType, DateTime? lastDateToApply, int minSeats, int maxSeats, string shift)
         {
             string islogin = "";
             if (User.Identity.IsAuthenticated)
             {
                 islogin = User.Identity.GetUserId();
             }
-            if (tags == null)
+            if (tags == null && skills == null)
             {
                 var temp1 = from ad in db.JobAds
-                            where ((gender == null || gender == "undefined" || ad.Ad.isnegotiable == gender) && ad.Ad.status.Equals("a") && (salaryType == null || salaryType == "undefined" || ad.salaryType == salaryType) && (category == null || category == "undefined" || ad.Ad.category == category) && (title == null || title == "undefined" || ad.Ad.title == title) && (qualification == null || qualification == "undefined" || ad.qualification == qualification)
-                            && (exprience == null || exprience == "undefined" || ad.exprience == exprience) && (careerLevel == null || careerLevel == "undefined" || ad.careerLevel.Equals(careerLevel)) && (jobType == null || jobType == "undefined" || ad.Ad.subcategory.Equals(jobType)) && (seats == null || ad.seats == seats) && (shift == null || shift == "undefined" || ad.Ad.condition.Equals(shift))
-                            && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))))
+                            where ((gender == null || gender == "undefined" || ad.Ad.isnegotiable == gender) && ad.Ad.status.Equals("a") && (salaryType == null || salaryType == "undefined" || ad.salaryType == salaryType) && (category == null || category == "undefined" || ad.category1 == category) && (title == null || title == "undefined" || ad.Ad.title == title) && (qualification == null || qualification == "undefined" || ad.qualification == qualification)
+                            && (exprience == null || exprience == "undefined" || ad.exprience == exprience) && (careerLevel == null || careerLevel == "undefined" || ad.careerLevel.Equals(careerLevel)) && (jobType == null || jobType == "undefined" || ad.Ad.subcategory.Equals(jobType))  && (shift == null || shift == "undefined" || ad.Ad.condition.Equals(shift))
+                            && ( lastDateToApply == null  || ad.lastDateToApply == lastDateToApply) 
+                            && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 500000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) ) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))
+                             && (minSeats == 0 || ad.seats > minSeats) && (maxSeats == 1000 || ad.seats < maxSeats) )
                             orderby ad.Ad.time descending
                             select new
                             {
@@ -86,64 +88,186 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 return Ok(temp1);
             }
             string[] tagsArray = null;
+            string[] skillsArray= null;
+            if (skills != null && tags != null)
+            {
+                tagsArray = tags.Split(',');
+                skillsArray = skills.Split(',');
+                var temp = from ad in db.JobAds
+                           where ((gender == null || gender == "undefined" || ad.Ad.isnegotiable == gender) && ad.Ad.status.Equals("a") && (salaryType == null || salaryType == "undefined" || ad.salaryType == salaryType) && (category == null || category == "undefined" || ad.category1 == category) && (title == null || title == "undefined" || ad.Ad.title == title) && (qualification == null || qualification == "undefined" || ad.qualification == qualification)
+                                                       && (exprience == null || exprience == "undefined" || ad.exprience == exprience) && (careerLevel == null || careerLevel == "undefined" || ad.careerLevel.Equals(careerLevel)) && (jobType == null || jobType == "undefined" || ad.Ad.subcategory.Equals(jobType)) && (shift == null || shift == "undefined" || ad.Ad.condition.Equals(shift))
+                                                       && (lastDateToApply == null || ad.lastDateToApply == lastDateToApply)
+                                                       && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 500000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city)) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))
+                                                        && (minSeats == 0 || ad.seats > minSeats) && (maxSeats == 1000 || ad.seats < maxSeats)
+                                && (!skillsArray.Except(ad.Ad.JobSkills.Select(x => x.Tag.name)).Any()) && (!tagsArray.Except(ad.Ad.AdTags.Select(x => x.Tag.name)).Any()))
+                           orderby ad.Ad.time descending
+                           select new
+                           {
+                               title = ad.Ad.title,
+                               postedById = ad.Ad.AspNetUser.Id,
+                               postedByName = ad.Ad.AspNetUser.Email,
+                               description = ad.Ad.description,
+                               id = ad.Ad.Id,
+                               time = ad.Ad.time,
+                               islogin = islogin,
+                               isNegotiable = ad.Ad.isnegotiable,
+                               price = ad.Ad.price,
+                               reportedCount = ad.Ad.Reporteds.Count,
+                               isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                               // views = ad.Ad.AdViews.Count,
+                               views = ad.Ad.views,
+                               condition = ad.Ad.condition,
+                               savedCount = ad.Ad.SaveAds.Count,
+                               adTags = from tag1 in ad.Ad.AdTags.ToList()
+                                        select new
+                                        {
+                                            id = tag1.Id,
+                                            name = tag1.Tag.name,
+                                            //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                            //info = tag.Tag.info,
+                                        },
+                               bid = from biding in ad.Ad.Bids.ToList()
+                                     select new
+                                     {
+                                         price = biding.price,
+                                     },
+                               adImages = from image in ad.Ad.AdImages.ToList()
+                                          select new
+                                          {
+                                              imageExtension = image.imageExtension,
+                                          },
+                               location = new
+                               {
+                                   cityName = ad.Ad.AdsLocation.City.cityName,
+                                   cityId = ad.Ad.AdsLocation.cityId,
+                                   popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                   popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                   exectLocation = ad.Ad.AdsLocation.exectLocation,
+                               },
+
+                           };
+                return Ok(temp);
+            }
+
+            if (skills != null )
+            {
+                skillsArray = skills.Split(',');
+                var temp = from ad in db.JobAds
+                           where ((gender == null || gender == "undefined" || ad.Ad.isnegotiable == gender) && ad.Ad.status.Equals("a") && (salaryType == null || salaryType == "undefined" || ad.salaryType == salaryType) && (category == null || category == "undefined" || ad.category1 == category) && (title == null || title == "undefined" || ad.Ad.title == title) && (qualification == null || qualification == "undefined" || ad.qualification == qualification)
+                                                       && (exprience == null || exprience == "undefined" || ad.exprience == exprience) && (careerLevel == null || careerLevel == "undefined" || ad.careerLevel.Equals(careerLevel)) && (jobType == null || jobType == "undefined" || ad.Ad.subcategory.Equals(jobType)) && (shift == null || shift == "undefined" || ad.Ad.condition.Equals(shift))
+                                                       && (lastDateToApply == null || ad.lastDateToApply == lastDateToApply)
+                                                       && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 500000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city)) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))
+                                                        && (minSeats == 0 || ad.seats > minSeats) && (maxSeats == 1000 || ad.seats < maxSeats)
+                                && (!skillsArray.Except(ad.Ad.JobSkills.Select(x => x.Tag.name)).Any()))
+                           orderby ad.Ad.time descending
+                           select new
+                           {
+                               title = ad.Ad.title,
+                               postedById = ad.Ad.AspNetUser.Id,
+                               postedByName = ad.Ad.AspNetUser.Email,
+                               description = ad.Ad.description,
+                               id = ad.Ad.Id,
+                               time = ad.Ad.time,
+                               islogin = islogin,
+                               isNegotiable = ad.Ad.isnegotiable,
+                               price = ad.Ad.price,
+                               reportedCount = ad.Ad.Reporteds.Count,
+                               isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                               // views = ad.Ad.AdViews.Count,
+                               views = ad.Ad.views,
+                               condition = ad.Ad.condition,
+                               savedCount = ad.Ad.SaveAds.Count,
+                               adTags = from tag1 in ad.Ad.AdTags.ToList()
+                                        select new
+                                        {
+                                            id = tag1.Id,
+                                            name = tag1.Tag.name,
+                                            //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                            //info = tag.Tag.info,
+                                        },
+                               bid = from biding in ad.Ad.Bids.ToList()
+                                     select new
+                                     {
+                                         price = biding.price,
+                                     },
+                               adImages = from image in ad.Ad.AdImages.ToList()
+                                          select new
+                                          {
+                                              imageExtension = image.imageExtension,
+                                          },
+                               location = new
+                               {
+                                   cityName = ad.Ad.AdsLocation.City.cityName,
+                                   cityId = ad.Ad.AdsLocation.cityId,
+                                   popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                   popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                   exectLocation = ad.Ad.AdsLocation.exectLocation,
+                               },
+
+                           };
+                return Ok(temp);
+
+            }
             if (tags != null)
             {
                 tagsArray = tags.Split(',');
+                var temp = from ad in db.JobAds
+                           where ((gender == null || gender == "undefined" || ad.Ad.isnegotiable == gender) && ad.Ad.status.Equals("a") && (salaryType == null || salaryType == "undefined" || ad.salaryType == salaryType) && (category == null || category == "undefined" || ad.category1 == category) && (title == null || title == "undefined" || ad.Ad.title == title) && (qualification == null || qualification == "undefined" || ad.qualification == qualification)
+                                                       && (exprience == null || exprience == "undefined" || ad.exprience == exprience) && (careerLevel == null || careerLevel == "undefined" || ad.careerLevel.Equals(careerLevel)) && (jobType == null || jobType == "undefined" || ad.Ad.subcategory.Equals(jobType)) && (shift == null || shift == "undefined" || ad.Ad.condition.Equals(shift))
+                                                       && (lastDateToApply == null || ad.lastDateToApply == lastDateToApply)
+                                                       && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 500000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city)) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))
+                                                        && (minSeats == 0 || ad.seats > minSeats) && (maxSeats == 1000 || ad.seats < maxSeats)
+                                && (!tagsArray.Except(ad.Ad.AdTags.Select(x => x.Tag.name)).Any()))
+                           orderby ad.Ad.time descending
+                           select new
+                           {
+                               title = ad.Ad.title,
+                               postedById = ad.Ad.AspNetUser.Id,
+                               postedByName = ad.Ad.AspNetUser.Email,
+                               description = ad.Ad.description,
+                               id = ad.Ad.Id,
+                               time = ad.Ad.time,
+                               islogin = islogin,
+                               isNegotiable = ad.Ad.isnegotiable,
+                               price = ad.Ad.price,
+                               reportedCount = ad.Ad.Reporteds.Count,
+                               isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                               // views = ad.Ad.AdViews.Count,
+                               views = ad.Ad.views,
+                               condition = ad.Ad.condition,
+                               savedCount = ad.Ad.SaveAds.Count,
+                               adTags = from tag1 in ad.Ad.AdTags.ToList()
+                                        select new
+                                        {
+                                            id = tag1.Id,
+                                            name = tag1.Tag.name,
+                                            //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                            //info = tag.Tag.info,
+                                        },
+                               bid = from biding in ad.Ad.Bids.ToList()
+                                     select new
+                                     {
+                                         price = biding.price,
+                                     },
+                               adImages = from image in ad.Ad.AdImages.ToList()
+                                          select new
+                                          {
+                                              imageExtension = image.imageExtension,
+                                          },
+                               location = new
+                               {
+                                   cityName = ad.Ad.AdsLocation.City.cityName,
+                                   cityId = ad.Ad.AdsLocation.cityId,
+                                   popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                   popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                   exectLocation = ad.Ad.AdsLocation.exectLocation,
+                               },
+
+                           };
+                return Ok(temp);
             }
 
-
-            var temp = from ad in db.JobAds
-                       where ((gender == null || ad.Ad.isnegotiable == gender) && ad.Ad.status.Equals("a") && (salaryType == null || ad.salaryType == salaryType) && (category == null || ad.Ad.category == category) && (title == null || ad.Ad.title == title) && (qualification == null || ad.qualification == qualification)
-                            && (exprience == null || ad.exprience == exprience) && (careerLevel == null || ad.careerLevel.Equals(careerLevel)) && (jobType == null || ad.Ad.subcategory.Equals(jobType)) && (seats == 0 || ad.seats == seats) && (shift == null || ad.Ad.condition.Equals(shift))
-                            && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))))
-                            && (!tagsArray.Except(ad.Ad.AdTags.Select(x => x.Tag.name)).Any())
-                       orderby ad.Ad.time descending
-                       select new
-                       {
-                           title = ad.Ad.title,
-                           postedById = ad.Ad.AspNetUser.Id,
-                           postedByName = ad.Ad.AspNetUser.Email,
-                           description = ad.Ad.description,
-                           id = ad.Ad.Id,
-                           time = ad.Ad.time,
-                           islogin = islogin,
-                           isNegotiable = ad.Ad.isnegotiable,
-                           price = ad.Ad.price,
-                           reportedCount = ad.Ad.Reporteds.Count,
-                           isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
-                           // views = ad.Ad.AdViews.Count,
-                           views = ad.Ad.views,
-                           condition = ad.Ad.condition,
-                           savedCount = ad.Ad.SaveAds.Count,
-                           adTags = from tag1 in ad.Ad.AdTags.ToList()
-                                    select new
-                                    {
-                                        id = tag1.Id,
-                                        name = tag1.Tag.name,
-                                        //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
-                                        //info = tag.Tag.info,
-                                    },
-                           bid = from biding in ad.Ad.Bids.ToList()
-                                 select new
-                                 {
-                                     price = biding.price,
-                                 },
-                           adImages = from image in ad.Ad.AdImages.ToList()
-                                      select new
-                                      {
-                                          imageExtension = image.imageExtension,
-                                      },
-                           location = new
-                           {
-                               cityName = ad.Ad.AdsLocation.City.cityName,
-                               cityId = ad.Ad.AdsLocation.cityId,
-                               popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
-                               popularPlace = ad.Ad.AdsLocation.popularPlace.name,
-                               exectLocation = ad.Ad.AdsLocation.exectLocation,
-                           },
-
-                       };
-            return Ok(temp);
+            return Ok("Done");
         }
 
 

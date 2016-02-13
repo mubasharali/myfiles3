@@ -8,7 +8,7 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-4 col-md-3 col-lg-3">
-            <div class="row">
+            <div class="">
                 <div class="ibox">
                     <div class="ibox-title">
                         <h5>Advance Search</h5>
@@ -38,9 +38,9 @@
                         <label> <input data-bind="checked:gender" type="checkbox" value="female"> Female </label>
                         <label> <input data-bind="checked:gender" type="checkbox" value="does not matter"> Does not matter </label>*@
                         <div class="">
-                            <label><input class="radio i-checks" type="radio" data-bind="checked:gender " value="male" /> Male</label>
-                            <label><input class="radio i-checks" type="radio" data-bind="checked: gender " value="female" /> Female</label>
-                            <label><input class="radio i-checks" type="radio" data-bind="checked: gender " value="does not matter" /> Does not matter</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked:gender " value="m" /> Male</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked: gender " value="f" /> Female</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked: gender " value="d" /> Does not matter</label>
                         </div>
                         <hr />
                         <h5>Search by Salary type</h5>
@@ -63,7 +63,7 @@
                         <hr />
                         <h5>Search by Career Level</h5>
                         <select id="select-careerLevel" class="demo-default" data-bind="options: careerLevels,
-                       value: selectedCategory,
+                       value: selectedCareerLevel,
                        optionsCaption: 'Choose career level...'"></select>
                         <hr />
                         <h5>Search by Job type</h5>
@@ -75,13 +75,13 @@
                         <input type="date" class="form-control" data-bind="value:selectedLastDateToApply" />
                         <hr />
                         <h5>Search by Seats</h5>
-                        <input type="number" class="form-control"  data-bind="value:selectedSeats" placeholder="Enter number of seats" />
+                        <div id="ionrange_seats"></div>
                         <hr />
                         <h5>Search by Shift</h5>
                         <div class="">
                             <label><input class="radio i-checks" type="radio" data-bind="checked:shift " value="m" /> Morning</label>
                             <label><input class="radio i-checks" type="radio" data-bind="checked: shift " value="e" /> Evening</label>
-                            <label><input class="radio i-checks" type="radio" data-bind="checked: shift " value="d" /> Does not matter</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked: shift " value="n" /> Not confirmed</label>
                         </div>
                     </div>
                     
@@ -94,7 +94,7 @@
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
             <div data-bind="visible:!isLoading()">
-                <a href="../Jobs/Create" class="pull-right btn btn-danger">Create Job Ad</a>
+                <a data-bind="click:function(){ return createAd('/Jobs/Create')}" class="pull-right btn btn-danger">Create Job Ad</a>
                 <span data-bind="text:showAds().length"> </span> results found<br />
                 @*<b>Summary:</b> 
                 <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
@@ -110,7 +110,6 @@
                 
                 <div data-bind="foreach:showAds">
                     @Html.Partial("/Views/Shared/_AdListView.cshtml")
-                   
                 </div>
             </div>
         </div>
@@ -140,18 +139,26 @@
     <script src="~/Scripts/app/CreateAlert.js"></script>
 <script src="~/Scripts/app/_AdListView.js"></script>
 <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+<script src="~/Scripts/app/GetLoginUserId.js"></script>
     <script>
-       
+        var loadResults;
 
         function viewModel() {
             SearchingLocation();
             CreateAlert();
             ChatViewModel();
             AccountViewModel();
-            RefreshSearch();
+
             var self = this;
-            self.showJobs = ko.observableArray();
             
+            //-----------------------------------
+            
+            //---------------------------------
+
+            self.showAds = ko.observableArray();
+            RefreshSearch(self);
+            
+             
             return self;
         }
         //tree

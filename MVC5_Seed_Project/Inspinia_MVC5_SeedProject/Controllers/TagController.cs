@@ -12,6 +12,7 @@ using System.Web.Http.Description;
 using Inspinia_MVC5_SeedProject.Models;
 using System.Data.Entity.Validation;
 using Microsoft.AspNet.Identity;
+//using Inspinia_MVC5_SeedProject.CodeTemplates;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class TagController : ApiController
@@ -235,6 +236,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           name = tag.name,
                           followers = tag.FollowTags.Count(),
                           questions = tag.AdTags.Count + tag.QuestionTags.Count ,
+                          url = "/Tag/" + tag.Id + "/" + tag.name,
                       };
             return Ok(ret);
         }

@@ -3,6 +3,7 @@
     data = data || {};
     self.id = data.id;
     self.name = data.name;
+    self.link = "/Tag/" + data.id  + "/" + convertToSlug(self.name);
 }
 function Bid(data) {
     var self = this;
@@ -22,6 +23,13 @@ function Location(data) {
     self.popularPlace = data.popularPlace;
     self.exectLocation = data.exectLocation;
 }
+function convertToSlug(Text) {
+    return Text
+        .toLowerCase()
+        .replace(/[^\w ]+/g, '')
+        .replace(/ +/g, '-')
+    ;
+}
 function Ad(data) {
     var self = this;
 
@@ -31,6 +39,7 @@ function Ad(data) {
 
     data = data || {};
     self.title = data.title;
+    
     self.description = ko.observable(data.description);
     self.postedByName = data.postedByName;
     self.postedById = data.postedById;
@@ -43,7 +52,7 @@ function Ad(data) {
     self.showImages = ko.observable();
     self.views = data.views;
     self.price = data.price || "";
-    self.link = "../Details/" + data.id + "/" + data.title;
+    self.link = "/Details/" + data.id + "/" + convertToSlug( data.title);
     var loginUserId1 = getLoginUserId(self.loginUserId); //to access self.loginUserId outside this function
     //biding
     self.highestBid = ko.observable();

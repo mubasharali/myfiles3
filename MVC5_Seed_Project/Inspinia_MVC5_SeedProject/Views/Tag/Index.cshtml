@@ -200,7 +200,7 @@
 <script src="~/Scripts/app/chat.js"></script>
 <script src="~/Scripts/UserLogin.js"></script>
 <script src="~/Scripts/app/slick-knockout-binding.js"></script>
-<script src="~/Scripts/app/Selectize-Knockout-binding.js"></script>
+@*<script src="~/Scripts/app/Selectize-Knockout-binding.js"></script>*@
 <script src="~/Scripts/app/_AdListView.js"></script>
 <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
     <script>
@@ -230,7 +230,7 @@
                 self.showTags(tags);
             }
         }
-        function Tag(data) {
+        function Tag1(data) {
             var self = this;
             data = data || {};
             self.id = data.id;
@@ -373,7 +373,11 @@
             var self = this;
             self.searchTag = ko.observable();
             self.searchTag.subscribe(function () {
-                window.location.href = "/Tag/" + self.searchTag();
+                var tagname = self.searchTag().split(/[/]+/).pop();
+                var temp = self.searchTag().split(/[/ ]+/);
+                var newstr = "/" + temp[1] + "/" + temp[2];
+                tagname = convertToSlug(tagname);
+                window.location.href =  newstr + "/" + tagname ;
             });
             self.showTag = ko.observable();
             self.loadTag = function () {
@@ -385,7 +389,7 @@
                     type: 'GET'
                 })
                 .done(function (data) {
-                    var mappedads = new Tag(data);
+                    var mappedads = new Tag1(data);
                     self.showTag(mappedads);
                 })
                 .fail(function () {
@@ -408,6 +412,39 @@
                 return '';
             }
         }
+        $('#select-tag').selectize({
+            valueField: 'url',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 1,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span> '+
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
         ko.bindingHandlers.jqAutoresize = {
             init: function (element, valueAccessor, aBA, vm) {
                 if (!$(element).hasClass('msgTextArea')) {

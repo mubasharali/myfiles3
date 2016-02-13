@@ -72,7 +72,7 @@
                                             </span>
                                             <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
                                             <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
-                                                <li><a target="_blank" data-bind="attr:{href:'/Tag/' + name}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                                <li><a target="_blank" data-bind="attr:{href:link}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
                                             </ul><br /><br />
                                             <hr>
                                             <span data-bind="visible:!showJob()"> @*remove this*@
@@ -149,7 +149,7 @@
                                                 
                                                 <dl class="dl-horizontal m-t-md small">
                                                     <dt>Category:</dt>
-                                                    <dd data-bind="text:$parent.category"></dd>
+                                                    <dd data-bind="text:category"></dd>
 
                                                     <dt>Seats:</dt>
                                                     <dd data-bind="text:seats"></dd>
@@ -167,7 +167,7 @@
                                                     <dd data-bind="text:salaryType"></dd>
                                                     <span @*data-bind="visible:!showSkills().length == 0"*@>
                                                         <dt>Skills</dt>
-                                                        <dd><span data-bind="foreach:showSkills"> <a target="_blank" class="btn btn-xs btn-white" data-bind="text:name,attr:{href:'/Tag/' + name }"></a></span> </dd>
+                                                        <dd><span data-bind="foreach:showSkills"> <a target="_blank" class="btn btn-xs btn-white" data-bind="text:name,attr:{href:link }"></a></span> </dd>
                                                     </span>
                                                     <dt>Gender</dt>
                                                     <dd data-bind="text:$parent.gender"></dd>
@@ -417,13 +417,14 @@
             var self = this;
             data = data || {};
             self.seats = data.seats;
+            self.category = data.category;
             self.qualification = data.qualification;
             self.exprience = "";
             if (data.exprience == "n") {
                 self.exprience = "Not required";
             } else if (data.exprience == "f") {
                 self.exprience = "Fresh Graduate";
-            } else if (data.exprience != null) {
+            } else if (data.exprience != null && data.exprience.trim() != "") {
                 self.exprience = data.exprience + " year";
             }
             self.careerLevel = data.careerLevel;
@@ -483,7 +484,15 @@
             self.name = data.name;
             self.info = data.info || "";
             self.followers = data.followers || 0;
+            self.link = "/Tag/" + convertToSlug( data.name);
         };
+        function convertToSlug(Text) {
+            return Text
+                .toLowerCase()
+                .replace(/[^\w ]+/g, '')
+                .replace(/ +/g, '-')
+            ;
+        }
         function ad(data,commentsHub) {
             var self = this;
             self.commentsHub = commentsHub;
@@ -559,7 +568,7 @@
             self.category = data.category;
             self.subcategory = data.subCategory;
             self.showJob = ko.observable();
-            if (data.jobAd != null) {    //data.category.contains("job")    ..search substring
+            if (data.category == "Jobs") {    //data.category.contains("job")    ..search substring
                 self.showJob(new JobAd(data.jobAd));
             }
             self.gender = "";
@@ -761,8 +770,11 @@
                 else if (data.category == "LaptopAccessories") {
                     window.location.href = "/Electronics/EditLaptopAccessoriesAd/" + id;
                 }
-                else  {
+                else if(data.category == "Jobs") {
                     window.location.href = "/Jobs/Edit/" + id;
+                }
+                else {
+                    toastr.info("Error");
                 }
             }
             self.deleteAd = function (id) {

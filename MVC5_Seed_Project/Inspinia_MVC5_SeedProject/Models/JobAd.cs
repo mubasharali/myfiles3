@@ -32,6 +32,8 @@ public partial class JobAd
 
     public string salaryType { get; set; }
 
+    public string category1 { get; set; }
+
 
 
     public virtual Ad Ad { get; set; }

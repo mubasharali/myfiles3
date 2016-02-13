@@ -585,6 +585,7 @@
     <Content Include="Scripts\app\chat.js" />
     <Content Include="Scripts\app\CreateAlert.js" />
     <Content Include="Scripts\app\dropzone-knockout-binding.js" />
+    <Content Include="Scripts\app\GetLoginUserId.js" />
     <Content Include="Scripts\app\inspinia.js" />
     <Content Include="Scripts\app\JobsSearch.js" />
     <Content Include="Scripts\app\LaptopTree.js" />

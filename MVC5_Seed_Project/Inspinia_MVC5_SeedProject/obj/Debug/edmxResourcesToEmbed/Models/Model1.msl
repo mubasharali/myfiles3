@@ -634,6 +634,7 @@
     <EntitySetMapping Name="JobAds">
       <EntityTypeMapping TypeName="Model.JobAd">
         <MappingFragment StoreEntitySet="JobAd">
+          <ScalarProperty Name="category1" ColumnName="category1" />
           <ScalarProperty Name="salaryType" ColumnName="salaryType" />
           <ScalarProperty Name="lastDateToApply" ColumnName="lastDateToApply" />
           <ScalarProperty Name="careerLevel" ColumnName="careerLevel" />

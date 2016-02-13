@@ -390,6 +390,7 @@
     <Property Name="careerLevel" Type="nvarchar" MaxLength="50" />
     <Property Name="lastDateToApply" Type="date" />
     <Property Name="salaryType" Type="char" MaxLength="1" />
+    <Property Name="category1" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="JobSkill">
     <Key>

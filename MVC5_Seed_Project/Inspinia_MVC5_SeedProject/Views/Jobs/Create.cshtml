@@ -29,25 +29,9 @@
 
             <div class="form-group">
                 <label>Job Category</label>
-
-                <select name="category" class="form-control" form="post">
-                    <option value="It Jobs">
-                        It Jobs
-                    </option>
-                    <option value="Business Administration Jobs">
-                        Business Administration
-                    </option>
-                    <option value="Sales and marketing Jobs">
-                        Sales and marketing
-                    </option>
-                    <option value="Management Jobs">
-                        Management Jobs
-                    </option>
-                    <option value="other jobs">
-                        other jobs
-                    </option>
-
-                </select>
+                <select id="select-category1" name="category" class="demo-default" data-bind="options: availableCategories,
+                       value: selectedCategory,
+                       optionsCaption: 'Select category...'"></select>
             </div>
             <div class="form-group">
                 <label>Total seats </label>
@@ -239,7 +223,6 @@
 
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/plugins/validate")
-    @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/iCheck")
     @Scripts.Render("~/plugins/autosize")
 <script src="~/Scripts/app/_CreateAd.js"></script>
@@ -257,6 +240,9 @@
             window.btn_clicked = true;
             $("#post").submit();
         }
+        
+        self.availableCategories = ko.observableArray(new Array("Accountancy", "Administration", "Advertising", "Aerospace", "Apprenticeships", "Automotive", "Banking", "Call Center", "Catering", "Charity", "Construction", "Creative", "Customer Service", "Digital", "Education", "Engineering", "Finance", "FMCG", "Graduate", "HealthCare", "Hospitality", "HR", "Insurance", "IT", "Legal", "Leisure", "Logistics", "Management Consultancy", "Manufacturing", "Marketing", "Media", "Nursing", "Oil and Gas", "PA", "Pharmaceutical", "PR", "Property", "Public Sector", "Recruitment Sales", "Renewable Energy", "Retail", "Sales", "Science", "Secretarial", "Senior Appointments", "Social Work", "Teaching", "Telecoms", "Tourism", "Transport", "Travel", "Utilities", "Wholesale"));
+        self.selectedCategory = ko.observable();
         self.typeValue = ko.observable("sell");
         self.conditionChecked = ko.observable(false);
         self.selectedVal = ko.observable();
@@ -304,8 +290,8 @@
                             field: 'text',
                             direction: 'asc'
                         },
-
                     });
+                    $('#select-category1').selectize();
                 },
                 error: function (jqXHR, status, thrownError) {
                     toastr.error("failed to load Cities.Please refresh page and try again", "Error");

@@ -1,4 +1,4 @@
-﻿
+﻿@using Inspinia_MVC5_SeedProject.CodeTemplates
 <div class="row">
     <div class="ibox">
         <div class="ibox-content1 product-box">
@@ -43,9 +43,7 @@
                                 </span>
                             </span>
                         </span>
-                        <a href="#" class="product-name" data-bind="text:title,attr:{href:'/Details/' + id + '/' + title}"> Product</a>
-
-
+                        <a class="product-name" data-bind="text:title,attr:{href:link}"> </a>
 
                         <div class="small m-t-xs" data-bind="foreach:showTags">
                             <a target="_blank" data-bind="attr:{href:'/Tag/' + name},text:name" class="btn btn-xs btn-white"> </a>

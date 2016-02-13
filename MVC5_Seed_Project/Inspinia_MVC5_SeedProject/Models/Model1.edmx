@@ -395,6 +395,7 @@
           <Property Name="careerLevel" Type="nvarchar" MaxLength="50" />
           <Property Name="lastDateToApply" Type="date" />
           <Property Name="salaryType" Type="char" MaxLength="1" />
+          <Property Name="category1" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="JobSkill">
           <Key>
@@ -4953,6 +4954,7 @@
           <Property Name="lastDateToApply" Type="DateTime" Precision="0" />
           <Property Name="salaryType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="Ad" Relationship="Model.FK_JobAd_ToTable" FromRole="JobAd" ToRole="Ad" />
+          <Property Name="category1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="JobSkill">
           <Key>
@@ -5645,6 +5647,7 @@
           <EntitySetMapping Name="JobAds">
             <EntityTypeMapping TypeName="Model.JobAd">
               <MappingFragment StoreEntitySet="JobAd">
+                <ScalarProperty Name="category1" ColumnName="category1" />
                 <ScalarProperty Name="salaryType" ColumnName="salaryType" />
                 <ScalarProperty Name="lastDateToApply" ColumnName="lastDateToApply" />
                 <ScalarProperty Name="careerLevel" ColumnName="careerLevel" />

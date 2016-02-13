@@ -11,10 +11,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         public Entities db = new Entities();
         //
         // GET: /Tag/
-        [Route("Tag/{name?}")]
-        public ActionResult Index(string name)
+       [Route("Tag/{id}/{name?}")]
+        public ActionResult Index(int  id,string name = null)
         {
-            var data = db.Tags.FirstOrDefault(x=>x.name.Equals(name));
+            var data = db.Tags.FirstOrDefault(x=>x.Id.Equals(id));
             if (data != null)
             {
                 ViewBag.tagId = data.Id;

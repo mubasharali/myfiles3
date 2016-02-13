@@ -70,6 +70,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return db.AspNetUsers;
         }
+        public async Task<IHttpActionResult> GetLoginUserId()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Ok(User.Identity.GetUserId());
+            }
+            return Ok("Visitor");
+        }
         [HttpPost]
         public async Task<IHttpActionResult> CheckEmail(string email){
             if (!User.Identity.IsAuthenticated)

@@ -2536,6 +2536,7 @@
     <Property Name="lastDateToApply" Type="DateTime" Precision="0" />
     <Property Name="salaryType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
     <NavigationProperty Name="Ad" Relationship="Model.FK_JobAd_ToTable" FromRole="JobAd" ToRole="Ad" />
+    <Property Name="category1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="JobSkill">
     <Key>

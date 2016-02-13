@@ -67,7 +67,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
                    await db.SaveChangesAsync();
 
-                    return RedirectToAction("Details","Electronics", new { id = ad.Id, title = ad.title });
+                    return RedirectToAction("Details","Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly( ad.title) });
                 }
             }
             return View(ad);
@@ -148,6 +148,16 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         public async Task<bool> SaveAd(Ad ad,bool update = false)
         {
             JobAd jobAd = new JobAd();
+            if(update){
+              //  jobAd =await db.JobAds.FindAsync(ad.Id);
+                jobAd.adId = ad.Id;
+            }
+            //else{
+            //    jobAd = new JobAd();
+            //}
+             
+            ad.status = "a";
+            ad.category = "Jobs";
             var seats = System.Web.HttpContext.Current.Request["seats"];
             if ( seats != null && seats != "")
             {
@@ -178,7 +188,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
 
             if (!update)
             {
-                ad.category = System.Web.HttpContext.Current.Request["category"];
+                jobAd.category1 = System.Web.HttpContext.Current.Request["category"];
                 ad.subcategory = System.Web.HttpContext.Current.Request["subcategory"];
                 ad.time = DateTime.UtcNow;
 
@@ -191,7 +201,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             else if (update)
             {
                 ad.time = DateTime.Parse(System.Web.HttpContext.Current.Request["time"]);
-                ad.category = System.Web.HttpContext.Current.Request["category"];
+                jobAd.category1 = System.Web.HttpContext.Current.Request["category"];
                 ad.subcategory = System.Web.HttpContext.Current.Request["subcategory"];
                 db.Entry(ad).State = EntityState.Modified;
                 await db.SaveChangesAsync();
@@ -207,19 +217,23 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         // GET: /Jobs/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (Request.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Ad ad = await db.Ads.FindAsync(id);
+                if (ad == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(ad);
             }
-            Ad ad = await db.Ads.FindAsync(id);
-            if (ad == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", ad.postedBy);
-            ViewBag.Id = new SelectList(db.AdsLocations, "Id", "cityId", ad.Id);
-            ViewBag.Id = new SelectList(db.MobileAds, "Id", "color", ad.Id);
-            return View(ad);
+            Ad ad1 = await db.Ads.FindAsync(id);
+            return RedirectToAction("Details", "Electronics", new { id = ad1.Id, title = ElectronicsController.URLFriendly(ad1.title) });
+
         }
 
         // POST: /Jobs/Edit/5
@@ -231,14 +245,40 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         {
             if (ModelState.IsValid)
             {
-                db.Entry(ad).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if (Request.IsAuthenticated)
+                {
+                    var ab = Request["postedBy"];
+                    var iddd = User.Identity.GetUserId();
+                    if (Request["postedBy"] == User.Identity.GetUserId())
+                    {
+                       await SaveAd(ad, true);
+
+                       
+                        electronicController.SaveTags(Request["tags"], ref ad, "update");
+                       await SaveSkills(Request["skills"],ad,true);
+                        //asp.Ads.Add(ad);
+
+                        db.Entry(ad).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        electronicController.PostAdByCompanyPage(ad.Id, true);
+                        //ad.MobileAds.Add(mobileAd);
+                        try
+                        {
+                            db.SaveChanges();
+                        }
+                        catch (Exception e)
+                        {
+                            string sss = e.ToString();
+                        }
+                        //location
+                        electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly( ad.title) });
+                    }
+                }
+              //  return View("Edit", ad);
             }
-            ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", ad.postedBy);
-            ViewBag.Id = new SelectList(db.AdsLocations, "Id", "cityId", ad.Id);
-            ViewBag.Id = new SelectList(db.MobileAds, "Id", "color", ad.Id);
-            return View(ad);
+            return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
         }
 
         // GET: /Jobs/Delete/5

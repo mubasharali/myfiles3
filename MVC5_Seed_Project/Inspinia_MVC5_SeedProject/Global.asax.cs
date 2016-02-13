@@ -29,7 +29,8 @@ namespace Inspinia_MVC5_SeedProject
 
 
            // LazyInitializer.EnsureInitialized(ref _initializer, ref _isInitialized, ref _initializerLock);
-
+            var configuration = GlobalConfiguration.Configuration;
+            configuration.Formatters.Remove(configuration.Formatters.XmlFormatter);
             //GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             //GlobalConfiguration.Configuration.Formatters.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
         }
