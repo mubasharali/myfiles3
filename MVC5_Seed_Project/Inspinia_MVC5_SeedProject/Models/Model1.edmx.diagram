@@ -18,9 +18,6 @@
         <EntityTypeShape EntityType="Model.AspNetUserClaim" Width="1.5" PointX="3" PointY="59.875" />
         <EntityTypeShape EntityType="Model.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="40" />
         <EntityTypeShape EntityType="Model.Bid" Width="1.5" PointX="62.5" PointY="51.75" />
-        <EntityTypeShape EntityType="Model.CarAd" Width="1.5" PointX="72.75" PointY="60.125" />
-        <EntityTypeShape EntityType="Model.CarBrand" Width="1.5" PointX="77.75" PointY="60.125" />
-        <EntityTypeShape EntityType="Model.CarModel" Width="1.5" PointX="75.5" PointY="60" />
         <EntityTypeShape EntityType="Model.Chat" Width="1.5" PointX="4.5" PointY="35.875" />
         <EntityTypeShape EntityType="Model.Comment" Width="1.5" PointX="62" PointY="57.125" />
         <EntityTypeShape EntityType="Model.CommentReply" Width="1.5" PointX="62.375" PointY="61.25" />
@@ -49,7 +46,6 @@
         <AssociationConnector Association="Model.FK_AdsLocation_ToTable" />
         <AssociationConnector Association="Model.FK_AdTag_ToTable" />
         <AssociationConnector Association="Model.FK_Bid_ToTable_1" />
-        <AssociationConnector Association="Model.FK_CarAd_ToTable" />
         <AssociationConnector Association="Model.FK_Comment_ToTable" />
         <AssociationConnector Association="Model.FK_LaptopAds_ToTable" />
         <AssociationConnector Association="Model.FK_MobileAds_ToTable" />
@@ -60,8 +56,6 @@
         <AssociationConnector Association="Model.FK_AnswerReply_ToTable" />
         <AssociationConnector Association="Model.FK_AnswerVote_ToTable" />
         <AssociationConnector Association="Model.FK_AnswerReplyVote_ToTable" />
-        <AssociationConnector Association="Model.FK_CarAd_ToTable_1" />
-        <AssociationConnector Association="Model.FK_CarModels_ToTable" />
         <AssociationConnector Association="Model.FK_CommentReply_ToTable" />
         <AssociationConnector Association="Model.FK_CommentVote_ToTable" />
         <AssociationConnector Association="Model.FK_CommentReplyVote_ToTable" />
@@ -164,6 +158,14 @@
         <AssociationConnector Association="Model.FK_JobAd_ToTable" />
         <AssociationConnector Association="Model.FK_JobSkill_ToTable" />
         <AssociationConnector Association="Model.FK_JobSkill_ToTable_1" />
+        <EntityTypeShape EntityType="Model.CarAd" Width="1.5" PointX="70.5" PointY="52.5" />
+        <EntityTypeShape EntityType="Model.CarBrand" Width="1.5" PointX="5.25" PointY="49.5" />
+        <EntityTypeShape EntityType="Model.CarModel" Width="1.5" PointX="7.5" PointY="46.375" />
+        <AssociationConnector Association="Model.FK_CarAd_ToTable" />
+        <AssociationConnector Association="Model.FK_CarBrand_ToTable" />
+        <AssociationConnector Association="Model.FK_CarModel_ToTable" />
+        <AssociationConnector Association="Model.FK_CarAd_ToTable_2" />
+        <AssociationConnector Association="Model.FK_CarModel_ToTable_1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

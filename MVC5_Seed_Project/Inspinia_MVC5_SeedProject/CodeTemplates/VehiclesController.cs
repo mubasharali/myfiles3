@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
 
@@ -15,7 +16,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
     public class VehiclesController : Controller
     {
         private Entities db = new Entities();
-
+        ElectronicsController electronicController = new ElectronicsController();
         // GET: /Vehicles/
         public ActionResult Index(string category, string subcategory, string lowcategory, int? id)
         {
@@ -73,7 +74,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
-
+        
 
         // GET: /Vehicles/Details/5
         public async Task<ActionResult> Details(int? id)
@@ -97,7 +98,105 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             Ad ad = new Ad();
             return View(ad);
         }
+        public int SaveCarsBrandModel(ref Ad ad)
+        {
+            ad.status = "a";
+            var company = System.Web.HttpContext.Current.Request["brand"];
+            var model = System.Web.HttpContext.Current.Request["model"];
+            if (company != null && company != "")
+            {
+                company = company.Trim();
+                model = model.Trim();
+            }
+            if (true) //company != null
+            {
 
+                var allBrands = (db.Mobiles.Select(x => x.brand)).AsEnumerable(); //getBrands
+                bool isNewBrand = true;
+                foreach (var brand in allBrands)
+                {
+                    if (brand == company)
+                    {
+                        isNewBrand = false;
+                    }
+                }
+                if (isNewBrand)
+                {
+                    Mobile mob = new Mobile();
+                    mob.brand = company;
+                    mob.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                    mob.time = DateTime.UtcNow;
+                    if (company == null || company == "")
+                    {
+                        mob.status = "a";
+                    }
+                    else
+                    {
+                        mob.status = "p";
+                    }
+                    db.Mobiles.Add(mob);
+                    db.SaveChanges();
+
+                    MobileModel mod = new MobileModel();
+                    mod.model = model;
+                    mod.brandId = mob.Id;
+                    mod.time = DateTime.UtcNow;
+                    if (model == null || model == "")
+                    {
+                        mod.status = "a";
+                    }
+                    else
+                    {
+                        mod.status = "p";
+                    }
+                    mod.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                    db.MobileModels.Add(mod);
+                    db.SaveChanges();
+                    ad.status = "p";
+                }
+                else
+                {
+                    var allModels = db.MobileModels.Where(x => x.Mobile.brand == company).Select(x => x.model);
+                    bool isNewModel = true;
+                    foreach (var myModel in allModels)
+                    {
+                        if (myModel == model)
+                        {
+                            isNewModel = false;
+                        }
+                    }
+                    if (isNewModel)
+                    {
+                        ad.status = "p";
+                        var brandId = db.Mobiles.FirstOrDefault(x => x.brand.Equals(company));
+                        MobileModel mod = new MobileModel();
+                        mod.brandId = brandId.Id;
+                        mod.model = model;
+                        if (model == null || model == "")
+                        {
+                            mod.status = "a";
+                        }
+                        else
+                        {
+                            mod.status = "p";
+                        }
+                        mod.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                        mod.time = DateTime.UtcNow;
+                        db.MobileModels.Add(mod);
+                        try
+                        {
+                            db.SaveChanges();
+                        }
+                        catch (Exception e)
+                        {
+                            string s = e.ToString();
+                        }
+                    }
+                }
+                var mobileModel = db.MobileModels.FirstOrDefault(x => x.Mobile.brand == company && x.model == model);
+                return mobileModel.Id;
+            }
+        }
         // POST: /Vehicles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -105,110 +204,54 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateCarAd([Bind(Include="Id,category,postedBy,title,description,time,price,isnegotiable")] Ad ad)
         {
+
+            if (ModelState.IsValid)
+            {
+                if (Request.IsAuthenticated)
+                {
+                    //string tempId = Request["tempId"];
+                    FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                    electronicController.MyAd(ref ad, "Save", "Vehicles" , "Cars");
+                    db.Ads.Add(ad);
+                    db.SaveChanges();
+
+
+                    electronicController.PostAdByCompanyPage(ad.Id);
+
+                    await saveCarAd(ad);
+
+                    //images
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        string sbs = e.ToString();
+                    }
+                    //tags
+                    electronicController.SaveTags(Request["tags"], ref ad);
+                    
+                    electronicController.ReplaceAdImages(ref ad, fileNames);
+                    //location
+                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
+                    db.SaveChanges();
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ad.title });
+                }
+                return RedirectToAction("Vehicles", "Electronics");
+            }
+            TempData["error"] = "Only enter those information about which you are asked";
+            return View("Create", ad);
+
+
+
+
             if (ModelState.IsValid)
             {
                 if (Request.IsAuthenticated)
                 {
                     CarAd mobileAd = new CarAd();
 
-                    var isbiding = Request["bidingAllowed"];
-                    if (isbiding == "fixedPrice")
-                    {
-                        var nn = Request["isNegotiable"];
-                        if (nn == "on")
-                        {
-                            ad.isnegotiable = "y";
-                        }
-                        else
-                        {
-                            ad.isnegotiable = "n";
-                        }
-                    }
-                    else if (isbiding == "allowBiding")
-                    {
-                        ad.isnegotiable = "b";
-                    }
-                    var condition = Request["condition"];
-                    if (condition == "new")
-                    {
-                        mobileAd.condition = "n";
-                    }
-                    else if (condition == "unboxed")
-                    {
-                        mobileAd.condition = "b";
-                    }
-                    else
-                    {
-                        mobileAd.condition = "u";
-                    }
-                    mobileAd.color = Request["color"];
-                    mobileAd.year = short.Parse( Request["year"]);
-                    mobileAd.kmDriven = int.Parse(Request["kmDriven"]);
-                    mobileAd.fuelType = Request["fuelType"];
-                    var pp = Request["price"];
-                    pp = pp.Replace(",", string.Empty);
-                    if (pp != null && pp != "")
-                    {
-                        //if (pp.Substring(pp.Length - 1) == ",")
-                        //{
-                        //    pp = pp.Remove(pp.Length - 1);
-                        //}
-                        ad.price = int.Parse(pp);
-                    }
-                    var company = Request["brand"];
-                    var model = Request["model"];
-
-                    ad.time = DateTime.UtcNow;
-                    ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
-                    ad.postedBy = User.Identity.GetUserId();
-                    AspNetUser asp = db.AspNetUsers.FirstOrDefault(x => x.Id == ad.postedBy);
-
-                    ad.category = "Vehicles";
-                    //var companyName = model.Split(' ')[0];
-                    var allBrands = (db.CarBrands.Select(x => x.Id)).AsEnumerable(); //getBrands
-                    bool isNewBrand = true;
-                    foreach (var brand in allBrands)
-                    {
-                        if (brand == company)
-                        {
-                            isNewBrand = false;
-                        }
-                    }
-                    if (isNewBrand)
-                    {
-                        CarBrand mob = new CarBrand();
-                        mob.Id = company;
-                        db.CarBrands.Add(mob);
-                        db.SaveChanges();
-
-                        CarModel mod = new  CarModel();
-                        mod.model = model;
-                        mod.brand = company;
-                        db.CarModels.Add(mod);
-                        db.SaveChanges();
-                        //send admin notification
-                    }
-                    else
-                    {
-                        var allModels = db.CarModels.Where(x => x.brand == company).Select(x => x.model);
-                        bool isNewModel = true;
-                        foreach (var myModel in allModels)
-                        {
-                            if (myModel == model)
-                            {
-                                isNewModel = false;
-                            }
-                        }
-                        if (isNewModel)
-                        {
-                            CarModel mod = new  CarModel();
-                            mod.brand = company;
-                            mod.model = model;
-                            db.CarModels.Add(mod);
-                            db.SaveChanges();
-                            //send admin notification with user info
-                        }
-                    }
 
                     //if (companyName == "HTC" || companyName == "Nokia" || companyName == "Samsung" || companyName == "Iphone")
                     //{
@@ -239,7 +282,14 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             TempData["error"] = "Only enter those information about which you are asked";
             return View("Create", ad);
         }
-
+        public async saveCarAd(Ad ad, bool update = false)
+        {
+            CarAd mobileAd = new CarAd();
+            mobileAd.color = Request["color"];
+            mobileAd.year = short.Parse(Request["year"]);
+            mobileAd.kmDriven = int.Parse(Request["kmDriven"]);
+            mobileAd.fuelType = Request["fuelType"];
+        }
         // GET: /Vehicles/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {

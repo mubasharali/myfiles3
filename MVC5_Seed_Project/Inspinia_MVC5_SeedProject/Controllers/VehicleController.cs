@@ -35,16 +35,15 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            }).AsEnumerable();
             return Ok(mobiles);
         }
-        [HttpPost]
-        public async Task<IHttpActionResult> GetCarBrands()
+        
+        public async Task<IHttpActionResult> GetBrands()
         {
-            var brands = (db.CarBrands.Select(x => x.Id)).AsEnumerable();
+            var brands = db.Mobiles.Where(x => x.brand != "" && x.status != "p").Select(x => x.brand);
             return Ok(brands);
         }
-        [HttpPost]
-        public async Task<IHttpActionResult> GetCarModels(string brand)
+        public async Task<IHttpActionResult> GetModels(string brand)
         {
-            var models = await db.CarModels.Where(x => x.brand == brand).Select(x => x.model).ToListAsync();
+            var models = db.MobileModels.Where(x => x.Mobile.brand.Equals(brand) && x.status != "p").Select(x => x.model);
             return Ok(models);
         }
         // GET api/Vehicle/5

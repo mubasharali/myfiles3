@@ -189,8 +189,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     mobileAd.color = Request["color"];
 
                     mobileAd.mobileId =SaveMobileBrandModel(ref ad);
-                    // asp.Ads.Add(ad);
-                   
+                    
                     //images
                     try
                     {

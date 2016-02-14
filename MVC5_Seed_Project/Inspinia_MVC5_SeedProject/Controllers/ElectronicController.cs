@@ -433,7 +433,6 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                price = ad.Ad.price,
                                reportedCount = ad.Ad.Reporteds.Count,
                                isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
-                               // views = ad.Ad.AdViews.Count,
                                views = ad.Ad.views,
                                condition = ad.Ad.condition,
                                savedCount = ad.Ad.SaveAds.Count,
