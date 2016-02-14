@@ -138,36 +138,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CarAds">
-      <EntityTypeMapping TypeName="Model.CarAd">
-        <MappingFragment StoreEntitySet="CarAd">
-          <ScalarProperty Name="condition" ColumnName="condition" />
-          <ScalarProperty Name="carId" ColumnName="carId" />
-          <ScalarProperty Name="adId" ColumnName="adId" />
-          <ScalarProperty Name="fuelType" ColumnName="fuelType" />
-          <ScalarProperty Name="color" ColumnName="color" />
-          <ScalarProperty Name="kmDriven" ColumnName="kmDriven" />
-          <ScalarProperty Name="year" ColumnName="year" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="CarBrands">
-      <EntityTypeMapping TypeName="Model.CarBrand">
-        <MappingFragment StoreEntitySet="CarBrand">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="CarModels">
-      <EntityTypeMapping TypeName="Model.CarModel">
-        <MappingFragment StoreEntitySet="CarModel">
-          <ScalarProperty Name="model" ColumnName="model" />
-          <ScalarProperty Name="brand" ColumnName="brand" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Chats">
       <EntityTypeMapping TypeName="Model.Chat">
         <MappingFragment StoreEntitySet="Chat">
@@ -650,6 +620,46 @@
         <MappingFragment StoreEntitySet="JobSkill">
           <ScalarProperty Name="tagId" ColumnName="tagId" />
           <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CarAds">
+      <EntityTypeMapping TypeName="Model.CarAd">
+        <MappingFragment StoreEntitySet="CarAd">
+          <ScalarProperty Name="engineCapacity" ColumnName="engineCapacity" />
+          <ScalarProperty Name="assembly" ColumnName="assembly" />
+          <ScalarProperty Name="transmission" ColumnName="transmission" />
+          <ScalarProperty Name="registeredCity" ColumnName="registeredCity" />
+          <ScalarProperty Name="noOfOwners" ColumnName="noOfOwners" />
+          <ScalarProperty Name="carModel" ColumnName="carModel" />
+          <ScalarProperty Name="fuelType" ColumnName="fuelType" />
+          <ScalarProperty Name="color" ColumnName="color" />
+          <ScalarProperty Name="kmDriven" ColumnName="kmDriven" />
+          <ScalarProperty Name="year" ColumnName="year" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CarBrands">
+      <EntityTypeMapping TypeName="Model.CarBrand">
+        <MappingFragment StoreEntitySet="CarBrand">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="brand" ColumnName="brand" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CarModels">
+      <EntityTypeMapping TypeName="Model.CarModel">
+        <MappingFragment StoreEntitySet="CarModel">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="model" ColumnName="model" />
+          <ScalarProperty Name="brandId" ColumnName="brandId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

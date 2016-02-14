@@ -14,9 +14,6 @@
     <EntitySet Name="AspNetUserClaims" EntityType="Model.AspNetUserClaim" />
     <EntitySet Name="AspNetUserLogins" EntityType="Model.AspNetUserLogin" />
     <EntitySet Name="Bids" EntityType="Model.Bid" />
-    <EntitySet Name="CarAds" EntityType="Model.CarAd" />
-    <EntitySet Name="CarBrands" EntityType="Model.CarBrand" />
-    <EntitySet Name="CarModels" EntityType="Model.CarModel" />
     <EntitySet Name="Chats" EntityType="Model.Chat" />
     <EntitySet Name="Comments" EntityType="Model.Comment" />
     <EntitySet Name="CommentReplies" EntityType="Model.CommentReply" />
@@ -57,10 +54,6 @@
       <End Role="Ad" EntitySet="Ads" />
       <End Role="Bid" EntitySet="Bids" />
     </AssociationSet>
-    <AssociationSet Name="FK_CarAd_ToTable" Association="Model.FK_CarAd_ToTable">
-      <End Role="Ad" EntitySet="Ads" />
-      <End Role="CarAd" EntitySet="CarAds" />
-    </AssociationSet>
     <AssociationSet Name="FK_Comment_ToTable" Association="Model.FK_Comment_ToTable">
       <End Role="Ad" EntitySet="Ads" />
       <End Role="Comment" EntitySet="Comments" />
@@ -100,14 +93,6 @@
     <AssociationSet Name="FK_AnswerReplyVote_ToTable" Association="Model.FK_AnswerReplyVote_ToTable">
       <End Role="AnswerReply" EntitySet="AnswerReplies" />
       <End Role="AnswerReplyVote" EntitySet="AnswerReplyVotes" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CarAd_ToTable_1" Association="Model.FK_CarAd_ToTable_1">
-      <End Role="CarModel" EntitySet="CarModels" />
-      <End Role="CarAd" EntitySet="CarAds" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CarModels_ToTable" Association="Model.FK_CarModels_ToTable">
-      <End Role="CarBrand" EntitySet="CarBrands" />
-      <End Role="CarModel" EntitySet="CarModels" />
     </AssociationSet>
     <AssociationSet Name="FK_CommentReply_ToTable" Association="Model.FK_CommentReply_ToTable">
       <End Role="Comment" EntitySet="Comments" />
@@ -466,6 +451,29 @@
       <End Role="Tag" EntitySet="Tags" />
       <End Role="JobSkill" EntitySet="JobSkills" />
     </AssociationSet>
+    <EntitySet Name="CarAds" EntityType="Model.CarAd" />
+    <EntitySet Name="CarBrands" EntityType="Model.CarBrand" />
+    <EntitySet Name="CarModels" EntityType="Model.CarModel" />
+    <AssociationSet Name="FK_CarAd_ToTable" Association="Model.FK_CarAd_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="CarAd" EntitySet="CarAds" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarBrand_ToTable" Association="Model.FK_CarBrand_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="CarBrand" EntitySet="CarBrands" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarModel_ToTable" Association="Model.FK_CarModel_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="CarModel" EntitySet="CarModels" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarAd_ToTable_2" Association="Model.FK_CarAd_ToTable_2">
+      <End Role="City" EntitySet="Cities" />
+      <End Role="CarAd" EntitySet="CarAds" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarModel_ToTable_1" Association="Model.FK_CarModel_ToTable_1">
+      <End Role="CarBrand" EntitySet="CarBrands" />
+      <End Role="CarModel" EntitySet="CarModels" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -496,7 +504,6 @@
     <NavigationProperty Name="AdsLocation" Relationship="Model.FK_AdsLocation_ToTable" FromRole="Ad" ToRole="AdsLocation" />
     <NavigationProperty Name="AdTags" Relationship="Model.FK_AdTag_ToTable" FromRole="Ad" ToRole="AdTag" />
     <NavigationProperty Name="Bids" Relationship="Model.FK_Bid_ToTable_1" FromRole="Ad" ToRole="Bid" />
-    <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable" FromRole="Ad" ToRole="CarAd" />
     <NavigationProperty Name="Comments" Relationship="Model.FK_Comment_ToTable" FromRole="Ad" ToRole="Comment" />
     <NavigationProperty Name="LaptopAd" Relationship="Model.FK_LaptopAds_ToTable" FromRole="Ad" ToRole="LaptopAd" />
     <NavigationProperty Name="MobileAd" Relationship="Model.FK_MobileAds_ToTable" FromRole="Ad" ToRole="MobileAd" />
@@ -508,6 +515,7 @@
     <NavigationProperty Name="CompanyAd" Relationship="Model.FK_CompanyAd_ToTable" FromRole="Ad" ToRole="CompanyAd" />
     <NavigationProperty Name="JobAd" Relationship="Model.FK_JobAd_ToTable" FromRole="Ad" ToRole="JobAd" />
     <NavigationProperty Name="JobSkills" Relationship="Model.FK_JobSkill_ToTable" FromRole="Ad" ToRole="JobSkill" />
+    <NavigationProperty Name="CarAd" Relationship="Model.FK_CarAd_ToTable" FromRole="Ad" ToRole="CarAd" />
   </EntityType>
   <EntityType Name="AdImage">
     <Key>
@@ -629,38 +637,6 @@
     <Property Name="price" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Ad" Relationship="Model.FK_Bid_ToTable_1" FromRole="Bid" ToRole="Ad" />
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Bid_ToTable" FromRole="Bid" ToRole="AspNetUser" />
-  </EntityType>
-  <EntityType Name="CarAd">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="year" Type="Int16" />
-    <Property Name="kmDriven" Type="Int32" />
-    <Property Name="color" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
-    <Property Name="fuelType" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
-    <Property Name="adId" Type="Int32" Nullable="false" />
-    <Property Name="carId" Type="Int32" Nullable="false" />
-    <Property Name="condition" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <NavigationProperty Name="Ad" Relationship="Model.FK_CarAd_ToTable" FromRole="CarAd" ToRole="Ad" />
-    <NavigationProperty Name="CarModel" Relationship="Model.FK_CarAd_ToTable_1" FromRole="CarAd" ToRole="CarModel" />
-  </EntityType>
-  <EntityType Name="CarBrand">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="CarModels" Relationship="Model.FK_CarModels_ToTable" FromRole="CarBrand" ToRole="CarModel" />
-  </EntityType>
-  <EntityType Name="CarModel">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-    <Property Name="model" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable_1" FromRole="CarModel" ToRole="CarAd" />
-    <NavigationProperty Name="CarBrand" Relationship="Model.FK_CarModels_ToTable" FromRole="CarModel" ToRole="CarBrand" />
   </EntityType>
   <EntityType Name="Chat">
     <Key>
@@ -1020,20 +996,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_CarAd_ToTable">
-    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.CarAd" Role="CarAd" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Ad">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CarAd">
-        <PropertyRef Name="adId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Comment_ToTable">
     <End Type="Model.Ad" Role="Ad" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -1163,34 +1125,6 @@
       </Principal>
       <Dependent Role="AnswerReplyVote">
         <PropertyRef Name="answerReplyId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CarAd_ToTable_1">
-    <End Type="Model.CarModel" Role="CarModel" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.CarAd" Role="CarAd" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CarModel">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CarAd">
-        <PropertyRef Name="carId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CarModels_ToTable">
-    <End Type="Model.CarBrand" Role="CarBrand" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.CarModel" Role="CarModel" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CarBrand">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CarModel">
-        <PropertyRef Name="brand" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1428,6 +1362,7 @@
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_City_ToTable" FromRole="City" ToRole="AspNetUser" />
     <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_City_ToTable_1" FromRole="City" ToRole="AspNetUser" />
     <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable_1" FromRole="City" ToRole="Company" />
+    <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable_2" FromRole="City" ToRole="CarAd" />
   </EntityType>
   <Association Name="FK_AdsLocation_ToTable_1">
     <End Type="Model.City" Role="City" Multiplicity="0..1">
@@ -1748,6 +1683,8 @@
     <NavigationProperty Name="CompanyAds" Relationship="Model.FK_CompanyAd_ToTable_2" FromRole="AspNetUser" ToRole="CompanyAd" />
     <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable" FromRole="AspNetUser" ToRole="Company" />
     <NavigationProperty Name="ReviewVotes" Relationship="Model.FK_ReviewVote_ToTable_1" FromRole="AspNetUser" ToRole="ReviewVote" />
+    <NavigationProperty Name="CarBrands" Relationship="Model.FK_CarBrand_ToTable" FromRole="AspNetUser" ToRole="CarBrand" />
+    <NavigationProperty Name="CarModels" Relationship="Model.FK_CarModel_ToTable" FromRole="AspNetUser" ToRole="CarModel" />
   </EntityType>
   <Association Name="FK_Ad_ToTable">
     <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -2587,6 +2524,117 @@
       </Principal>
       <Dependent Role="JobSkill">
         <PropertyRef Name="tagId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="CarAd">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <Property Name="year" Type="Int16" />
+    <Property Name="kmDriven" Type="Int32" />
+    <Property Name="color" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+    <Property Name="fuelType" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+    <Property Name="carModel" Type="Int32" Nullable="false" />
+    <Property Name="noOfOwners" Type="Int16" />
+    <Property Name="registeredCity" Type="Int32" />
+    <Property Name="transmission" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="assembly" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="engineCapacity" Type="Int32" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_CarAd_ToTable" FromRole="CarAd" ToRole="Ad" />
+    <NavigationProperty Name="City" Relationship="Model.FK_CarAd_ToTable_2" FromRole="CarAd" ToRole="City" />
+  </EntityType>
+  <EntityType Name="CarBrand">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="brand" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CarBrand_ToTable" FromRole="CarBrand" ToRole="AspNetUser" />
+    <NavigationProperty Name="CarModels" Relationship="Model.FK_CarModel_ToTable_1" FromRole="CarBrand" ToRole="CarModel" />
+  </EntityType>
+  <EntityType Name="CarModel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="brandId" Type="Int32" Nullable="false" />
+    <Property Name="model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CarModel_ToTable" FromRole="CarModel" ToRole="AspNetUser" />
+    <NavigationProperty Name="CarBrand" Relationship="Model.FK_CarModel_ToTable_1" FromRole="CarModel" ToRole="CarBrand" />
+  </EntityType>
+  <Association Name="FK_CarAd_ToTable">
+    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.CarAd" Role="CarAd" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarAd">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CarBrand_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.CarBrand" Role="CarBrand" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarBrand">
+        <PropertyRef Name="addedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CarModel_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="Model.CarModel" Role="CarModel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarModel">
+        <PropertyRef Name="addedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CarAd_ToTable_2">
+    <End Type="Model.City" Role="City" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.CarAd" Role="CarAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarAd">
+        <PropertyRef Name="registeredCity" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CarModel_ToTable_1">
+    <End Type="Model.CarBrand" Role="CarBrand" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.CarModel" Role="CarModel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CarBrand">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarModel">
+        <PropertyRef Name="brandId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

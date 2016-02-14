@@ -166,30 +166,40 @@
   </EntityType>
   <EntityType Name="CarAd">
     <Key>
-      <PropertyRef Name="Id" />
+      <PropertyRef Name="adId" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="adId" Type="int" Nullable="false" />
     <Property Name="year" Type="smallint" />
     <Property Name="kmDriven" Type="int" />
     <Property Name="color" Type="nchar" MaxLength="20" />
     <Property Name="fuelType" Type="nchar" MaxLength="20" />
-    <Property Name="adId" Type="int" Nullable="false" />
-    <Property Name="carId" Type="int" Nullable="false" />
-    <Property Name="condition" Type="char" MaxLength="1" />
+    <Property Name="carModel" Type="int" Nullable="false" />
+    <Property Name="noOfOwners" Type="smallint" />
+    <Property Name="registeredCity" Type="int" />
+    <Property Name="transmission" Type="char" MaxLength="1" />
+    <Property Name="assembly" Type="char" MaxLength="1" />
+    <Property Name="engineCapacity" Type="int" />
   </EntityType>
   <EntityType Name="CarBrand">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="brand" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="time" Type="datetime" Nullable="false" />
+    <Property Name="status" Type="char" MaxLength="1" Nullable="false" />
   </EntityType>
   <EntityType Name="CarModel">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="brand" Type="nvarchar" MaxLength="30" Nullable="false" />
-    <Property Name="model" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="brandId" Type="int" Nullable="false" />
+    <Property Name="model" Type="nvarchar" MaxLength="50" />
+    <Property Name="time" Type="datetime" Nullable="false" />
+    <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="status" Type="char" MaxLength="1" Nullable="false" />
   </EntityType>
   <EntityType Name="Chat">
     <Key>
@@ -817,7 +827,7 @@
     <End Role="Ad" Type="Self.Ad" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Role="CarAd" Type="Self.CarAd" Multiplicity="*" />
+    <End Role="CarAd" Type="Self.CarAd" Multiplicity="0..1" />
     <ReferentialConstraint>
       <Principal Role="Ad">
         <PropertyRef Name="Id" />
@@ -827,21 +837,47 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_CarAd_ToTable_1">
-    <End Role="CarModel" Type="Self.CarModel" Multiplicity="1">
+  <Association Name="FK_CarAd_ToTable_2">
+    <End Role="City" Type="Self.City" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="CarAd" Type="Self.CarAd" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="CarModel">
+      <Principal Role="City">
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="CarAd">
-        <PropertyRef Name="carId" />
+        <PropertyRef Name="registeredCity" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_CarModels_ToTable">
+  <Association Name="FK_CarBrand_ToTable">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CarBrand" Type="Self.CarBrand" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarBrand">
+        <PropertyRef Name="addedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CarModel_ToTable">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="CarModel" Type="Self.CarModel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarModel">
+        <PropertyRef Name="addedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CarModel_ToTable_1">
     <End Role="CarBrand" Type="Self.CarBrand" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
@@ -851,7 +887,7 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="CarModel">
-        <PropertyRef Name="brand" />
+        <PropertyRef Name="brandId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2068,11 +2104,19 @@
       <End Role="Ad" EntitySet="Ad" />
       <End Role="CarAd" EntitySet="CarAd" />
     </AssociationSet>
-    <AssociationSet Name="FK_CarAd_ToTable_1" Association="Self.FK_CarAd_ToTable_1">
-      <End Role="CarModel" EntitySet="CarModel" />
+    <AssociationSet Name="FK_CarAd_ToTable_2" Association="Self.FK_CarAd_ToTable_2">
+      <End Role="City" EntitySet="City" />
       <End Role="CarAd" EntitySet="CarAd" />
     </AssociationSet>
-    <AssociationSet Name="FK_CarModels_ToTable" Association="Self.FK_CarModels_ToTable">
+    <AssociationSet Name="FK_CarBrand_ToTable" Association="Self.FK_CarBrand_ToTable">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="CarBrand" EntitySet="CarBrand" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarModel_ToTable" Association="Self.FK_CarModel_ToTable">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="CarModel" EntitySet="CarModel" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CarModel_ToTable_1" Association="Self.FK_CarModel_ToTable_1">
       <End Role="CarBrand" EntitySet="CarBrand" />
       <End Role="CarModel" EntitySet="CarModel" />
     </AssociationSet>

@@ -200,89 +200,89 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         // POST: /Vehicles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateCarAd([Bind(Include="Id,category,postedBy,title,description,time,price,isnegotiable")] Ad ad)
-        {
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> CreateCarAd([Bind(Include="Id,category,postedBy,title,description,time,price,isnegotiable")] Ad ad)
+        //{
 
-            if (ModelState.IsValid)
-            {
-                if (Request.IsAuthenticated)
-                {
-                    //string tempId = Request["tempId"];
-                    FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    electronicController.MyAd(ref ad, "Save", "Vehicles" , "Cars");
-                    db.Ads.Add(ad);
-                    db.SaveChanges();
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (Request.IsAuthenticated)
+        //        {
+        //            //string tempId = Request["tempId"];
+        //            FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+        //            electronicController.MyAd(ref ad, "Save", "Vehicles" , "Cars");
+        //            db.Ads.Add(ad);
+        //            db.SaveChanges();
 
 
-                    electronicController.PostAdByCompanyPage(ad.Id);
+        //            electronicController.PostAdByCompanyPage(ad.Id);
 
-                    await saveCarAd(ad);
+        //            await saveCarAd(ad);
 
-                    //images
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        string sbs = e.ToString();
-                    }
-                    //tags
-                    electronicController.SaveTags(Request["tags"], ref ad);
+        //            //images
+        //            try
+        //            {
+        //                db.SaveChanges();
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                string sbs = e.ToString();
+        //            }
+        //            //tags
+        //            electronicController.SaveTags(Request["tags"], ref ad);
                     
-                    electronicController.ReplaceAdImages(ref ad, fileNames);
-                    //location
-                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
-                    db.SaveChanges();
-                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ad.title });
-                }
-                return RedirectToAction("Vehicles", "Electronics");
-            }
-            TempData["error"] = "Only enter those information about which you are asked";
-            return View("Create", ad);
+        //            electronicController.ReplaceAdImages(ref ad, fileNames);
+        //            //location
+        //            electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
+        //            db.SaveChanges();
+        //            return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ad.title });
+        //        }
+        //        return RedirectToAction("Vehicles", "Electronics");
+        //    }
+        //    TempData["error"] = "Only enter those information about which you are asked";
+        //    return View("Create", ad);
 
 
 
 
-            if (ModelState.IsValid)
-            {
-                if (Request.IsAuthenticated)
-                {
-                    CarAd mobileAd = new CarAd();
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (Request.IsAuthenticated)
+        //        {
+        //            CarAd mobileAd = new CarAd();
 
 
-                    //if (companyName == "HTC" || companyName == "Nokia" || companyName == "Samsung" || companyName == "Iphone")
-                    //{
-                    //    string[] newModel = model.Split(' ').Skip(1).ToArray();
-                    //    model = string.Join("", newModel);
-                    //}
+        //            //if (companyName == "HTC" || companyName == "Nokia" || companyName == "Samsung" || companyName == "Iphone")
+        //            //{
+        //            //    string[] newModel = model.Split(' ').Skip(1).ToArray();
+        //            //    model = string.Join("", newModel);
+        //            //}
 
-                    //var mobiledata = db.LaptopBrands.FirstOrDefault(x => x.Id == company && x.LaptopModels.Any(xu => xu.model.Equals(model)));
-                    var laptopdata = db.CarModels.FirstOrDefault(x => x.brand == company && x.model == model);
-                    mobileAd.carId = laptopdata.Id;
-                    asp.Ads.Add(ad);
-                    db.Ads.Add(ad);
-                    mobileAd.adId = ad.Id;
-                    ad.CarAds.Add(mobileAd);
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        string s = e.ToString();
-                    }
-                    return RedirectToAction("Index", new { category = "cars", subcategory = laptopdata.brand, lowcategory = laptopdata.model, id = ad.Id, title = ad.title });
-                }
-                TempData["error"] = "You must be logged in to post ad";
-                return View("Create", ad);
-            }
-            TempData["error"] = "Only enter those information about which you are asked";
-            return View("Create", ad);
-        }
-        public async saveCarAd(Ad ad, bool update = false)
+        //            //var mobiledata = db.LaptopBrands.FirstOrDefault(x => x.Id == company && x.LaptopModels.Any(xu => xu.model.Equals(model)));
+        //            var laptopdata = db.CarModels.FirstOrDefault(x => x.brand == company && x.model == model);
+        //            mobileAd.carId = laptopdata.Id;
+        //            asp.Ads.Add(ad);
+        //            db.Ads.Add(ad);
+        //            mobileAd.adId = ad.Id;
+        //            ad.CarAds.Add(mobileAd);
+        //            try
+        //            {
+        //                db.SaveChanges();
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                string s = e.ToString();
+        //            }
+        //            return RedirectToAction("Index", new { category = "cars", subcategory = laptopdata.brand, lowcategory = laptopdata.model, id = ad.Id, title = ad.title });
+        //        }
+        //        TempData["error"] = "You must be logged in to post ad";
+        //        return View("Create", ad);
+        //    }
+        //    TempData["error"] = "Only enter those information about which you are asked";
+        //    return View("Create", ad);
+        //}
+        public void saveCarAd(Ad ad, bool update = false)
         {
             CarAd mobileAd = new CarAd();
             mobileAd.color = Request["color"];
