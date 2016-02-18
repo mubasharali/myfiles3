@@ -1,14 +1,16 @@
 ﻿//function commentsFile() {
-    var myhub = $.connection.AdComments;
+    //var myhub = $.connection.AdComments;
     function commentReply(data) {
         var self = this;
         data = data || {};
         self.description = ko.observable(data.description);
         self.postedByName = data.postedByName;
         self.postedById = data.postedById;
-        self.imageExtension = data.imageExtension;
         self.postedByLink = '/User/Index/' + self.postedById;
-        self.profileLink = '/Images/Users/p' + self.postedById + self.imageExtension;
+        self.profileLink = '/Images/Users/p' + self.postedById + data.imageExtension;
+        if (!data.imageExtension) {
+            self.profileLink = '/Images/Users/default.jpg';
+        }
         self.time = getTimeAgo(data.time);
         self.id = data.id;
         self.isliked = ko.observable(data.isUp);
@@ -79,12 +81,13 @@
                 });
             }
             else {
-                toastr.info("You are not login", "Oops!");
+                loginBtn();
             }
         }
     }
-    function comment(data) {
+    function comment(data,hub) {
         var self = this;
+        self.hub = hub;
         data = data || {};
         self.loginUserId = data.islogin || "";
         self.description = ko.observable(data.description);
@@ -92,9 +95,11 @@
         self.voteDownCount = ko.observable();
         self.postedByName = data.postedByName;
         self.postedById = data.postedById;
-        self.imageExtension = data.imageExtension;
         self.postedByLink = '/User/Index/' + self.postedById;
-        self.profileLink = '/Images/Users/p' + self.postedById + self.imageExtension;
+        self.profileLink = '/Images/Users/p' + self.postedById + data.imageExtension;
+        if (!data.imageExtension) {
+            self.profileLink = '/Images/Users/default.jpg';
+        }
         if (self.loginUserId == "" || data.loginUserProfileExtension == null) {
             self.loginUserProfileLink = '/Images/Users/default.jpg';
         } else {
@@ -123,9 +128,12 @@
         }
 
         self.checkEnter1 = function (d, e) {
-            if (e.keyCode == 13) {
-                // self.description(self.description().slice(0, -1));
-                self.addCommentReply(self.loginUserId);
+            if (self.loginUserId) {
+                if (e.keyCode == 13) {
+                    self.addCommentReply(self.loginUserId);
+                }
+            } else {
+                loginBtn();
             }
         }
         self.checkEnterEditing = function (d, e) {
@@ -206,7 +214,7 @@
                 });
             }
             else {
-                toastr.info("You are not login", "Oops!");
+                loginBtn();
             }
         }
         self.newCommentReply = ko.observable();
@@ -219,24 +227,24 @@
                 if (reply.description() != null && reply.description().trim() != "") {
                     //myhub.server.AddCommentReply(reply).fail(function (err) { toastr.error("failed to post comment reply", "Error!"); });
 
-                    //$.ajax({
-                    //    url: '/api/Comment/PostCommentReply',
-                    //    dataType: "json",
-                    //    contentType: "application/json",
-                    //    cache: false,
-                    //    type: 'POST',
-                    //    data: ko.toJSON(reply),
-                    //    success: function (data) {
-                    //        self.showCommentReply.push(new commentReply(data));
-                    //        self.newCommentReply('');
-                    //    },
-                    //    error: function () {
-                    //        toastr.error("failed to post comment reply", "Error!");
-                    //    }
-                    //});
+                    $.ajax({
+                        url: '/api/Comment/PostCommentReply',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(reply),
+                        success: function (data) {
+                            self.showCommentReply.push(new commentReply(data));
+                            self.newCommentReply('');
+                        },
+                        error: function () {
+                            toastr.error("failed to post comment reply", "Error!");
+                        }
+                    });
                 }
             } else {
-                toastr.info("You must be login to reply this comment", "Oops!");
+                loginBtn();
             }
         }
         //myhub.client.appendCommentReplyToMe = function (reply) {

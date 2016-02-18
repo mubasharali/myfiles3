@@ -10,14 +10,131 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Inspinia_MVC5_SeedProject.Models;
-
+using Microsoft.AspNet.Identity;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class SearchController : ApiController
     {
         private Entities db = new Entities();
 
-        
+        public async Task<IHttpActionResult> SearchAds(string tags, string title, int minPrice, int maxPrice, string city, string pp,string category, string subcategory)
+        {
+            string islogin = "";
+            if (User.Identity.IsAuthenticated)
+            {
+                islogin = User.Identity.GetUserId();
+            }
+            if (tags == null)
+            {
+                var temp1 = from ad in db.Ads
+                            where (ad.category.Equals(category) && (subcategory == null || subcategory == "undefined" || ad.subcategory.Equals(subcategory) )  && ad.status.Equals("a")  && (minPrice == 0 || ad.price > minPrice) && (maxPrice == 50000 || ad.price < maxPrice) && (city == null || city == "undefined" || ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.AdsLocation.popularPlace.name.Equals(pp))))
+                            orderby ad.time descending
+                            select new
+                            {
+                                title = ad.title,
+                                postedById = ad.AspNetUser.Id,
+                                postedByName = ad.AspNetUser.Email,
+                                description = ad.description,
+                                id = ad.Id,
+                                time = ad.time,
+                                islogin = islogin,
+                                isNegotiable = ad.isnegotiable,
+                                price = ad.price,
+                                reportedCount = ad.Reporteds.Count,
+                                isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
+                                // views = ad.Ad.AdViews.Count,
+                                views = ad.views,
+                                condition = ad.condition,
+                                savedCount = ad.SaveAds.Count,
+                                adTags = from tag1 in ad.AdTags.ToList()
+                                         select new
+                                         {
+                                             id = tag1.Id,
+                                             name = tag1.Tag.name,
+                                             //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                             //info = tag.Tag.info,
+                                         },
+                                bid = from biding in ad.Bids.ToList()
+                                      select new
+                                      {
+                                          price = biding.price,
+                                      },
+                                adImages = from image in ad.AdImages.ToList()
+                                           select new
+                                           {
+                                               imageExtension = image.imageExtension,
+                                           },
+                                location = new
+                                {
+                                    cityName = ad.AdsLocation.City.cityName,
+                                    cityId = ad.AdsLocation.cityId,
+                                    popularPlaceId = ad.AdsLocation.popularPlaceId,
+                                    popularPlace = ad.AdsLocation.popularPlace.name,
+                                    exectLocation = ad.AdsLocation.exectLocation,
+                                },
+
+                            };
+                return Ok(temp1);
+            }
+            string[] tagsArray = null;
+            if (tags != null)
+            {
+                tagsArray = tags.Split(',');
+            }
+
+
+
+            var temp = from ad in db.Ads
+                       where (ad.category.Equals(category) && (subcategory == null || subcategory == "undefined" || ad.subcategory.Equals(subcategory)) && (!tagsArray.Except(ad.AdTags.Select(x => x.Tag.name)).Any()) && ad.status.Equals("a") && (minPrice == 0 || ad.price > minPrice) && (maxPrice == 50000 || ad.price < maxPrice) && (city == null || city == "undefined" || ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.AdsLocation.popularPlace.name.Equals(pp))))
+                        
+                       orderby ad.time descending
+                        select new
+                        {
+                            title = ad.title,
+                            postedById = ad.AspNetUser.Id,
+                            postedByName = ad.AspNetUser.Email,
+                            description = ad.description,
+                            id = ad.Id,
+                            time = ad.time,
+                            islogin = islogin,
+                            isNegotiable = ad.isnegotiable,
+                            price = ad.price,
+                            reportedCount = ad.Reporteds.Count,
+                            isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
+                            // views = ad.Ad.AdViews.Count,
+                            views = ad.views,
+                            condition = ad.condition,
+                            savedCount = ad.SaveAds.Count,
+                            adTags = from tag1 in ad.AdTags.ToList()
+                                     select new
+                                     {
+                                         id = tag1.Id,
+                                         name = tag1.Tag.name,
+                                         //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                         //info = tag.Tag.info,
+                                     },
+                            bid = from biding in ad.Bids.ToList()
+                                  select new
+                                  {
+                                      price = biding.price,
+                                  },
+                            adImages = from image in ad.AdImages.ToList()
+                                       select new
+                                       {
+                                           imageExtension = image.imageExtension,
+                                       },
+                            location = new
+                            {
+                                cityName = ad.AdsLocation.City.cityName,
+                                cityId = ad.AdsLocation.cityId,
+                                popularPlaceId = ad.AdsLocation.popularPlaceId,
+                                popularPlace = ad.AdsLocation.popularPlace.name,
+                                exectLocation = ad.AdsLocation.exectLocation,
+                            },
+
+                        };
+            return Ok(temp);
+        }
 
         // GET api/Search/5
         [ResponseType(typeof(Ad))]

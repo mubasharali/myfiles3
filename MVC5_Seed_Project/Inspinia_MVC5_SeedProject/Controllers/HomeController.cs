@@ -1,16 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using MvcSiteMapProvider.Web.Mvc;
+using Newtonsoft.Json;
+using Microsoft.AspNet.Identity;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Data.Entity.Validation;
 using Inspinia_MVC5_SeedProject.Models;
+using Inspinia_MVC5_SeedProject.CodeTemplates;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
    // [InitializeSimpleMembership]
     public class HomeController : Controller
     {
         public Entities db = new Entities();
+        ElectronicsController electronicController = new ElectronicsController();
         public string subdomainName
         {
             get
@@ -30,16 +40,143 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 return sub;
             }
         }
-        //public ActionResult Index()
-        //{
-        //    if (this.subdomainName != null)
-        //    {
-        //        return RedirectToAction("Index", this.subdomainName);
-        //    }
-        //    //db.Ads.Join(db.Comments,x=>x.Id,x=>x.adId,(a,c)=>new{a.});
-            
-        //    return View();
-        //}
+
+        public ActionResult Create(string category, string subcategory)
+        {
+            if (Request.IsAuthenticated)
+            {
+                if (checkCategory(category, subcategory))
+                {
+                    ViewBag.category = category;
+                    ViewBag.subcategory = subcategory;
+                    Ad ad = new Ad();
+                    return View(ad);
+                }
+                return HttpNotFound();
+            }
+            return RedirectToAction("Register", "Account");
+        }
+        public bool checkCategory(string category, string subcategory)
+        {
+            if (category == "Vehicles")
+            {
+                if (subcategory == "commerical-vehicles" || subcategory == "vehicles-for-rent" || subcategory == "other-vehicles" || subcategory == "spare-parts")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,category,subcategory,postedBy,title,description,time,price,isnegotiable")] Ad ad)
+        {
+
+            if (ModelState.IsValid)
+            {
+                if (Request.IsAuthenticated)
+                {
+                    if (!checkCategory(ad.category, ad.subcategory))
+                    {
+                        return RedirectToAction("CreateAd", "Home");
+                    }
+                    //string tempId = Request["tempId"];
+                    FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                    electronicController.MyAd(ref ad, "Save", ad.category, ad.subcategory);
+                    db.Ads.Add(ad);
+                    db.SaveChanges();
+
+
+                    electronicController.PostAdByCompanyPage(ad.Id);
+
+
+                    //images
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        string sbs = e.ToString();
+                    }
+                    //tags
+                    electronicController.SaveTags(Request["tags"], ref ad);
+
+                    electronicController.ReplaceAdImages(ref ad, fileNames);
+                    //location
+                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
+                    db.SaveChanges();
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
+                }
+                return RedirectToAction("Register", "Account");
+            }
+            TempData["error"] = "Only enter those information about which you are asked";
+            return View("Create", ad);
+        }
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if (Request.IsAuthenticated)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Ad ad = await db.Ads.FindAsync(id);
+                if (ad == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(ad);
+            }
+            return RedirectToAction("Register", "Account");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit([Bind(Include = "Id,category,postedBy,title,description,time,price,isnegotiable")] Ad ad)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Request.IsAuthenticated)
+                {
+                    var ab = Request["postedBy"];
+                    var iddd = User.Identity.GetUserId();
+                    if (Request["postedBy"] == User.Identity.GetUserId())
+                    {
+                        FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                        electronicController.MyAd(ref ad, "Update", ad.category , ad.subcategory);
+
+
+                        electronicController.PostAdByCompanyPage(ad.Id, true);
+
+                        db.SaveChanges();
+                        //tags
+                        electronicController.SaveTags(Request["tags"], ref ad, "update");
+
+
+                        try
+                        {
+                            db.SaveChanges();
+                        }
+                        catch (Exception e)
+                        {
+                            string sss = e.ToString();
+                        }
+                        //location
+
+                        db.Entry(ad).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        electronicController.ReplaceAdImages(ref ad, fileNames);
+                        electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
+
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
+                    }
+                }
+                return RedirectToAction("Register", "Account");
+            }
+            return View("Edit", ad);
+        }
+
         public ActionResult Abc()
         {
             return View();
@@ -103,89 +240,89 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return View();
         }
         
-        public ActionResult Index1(string category, string subcategory, string lowercategory,string lowercategory1,int id = 0, string ignore = "")
-        {
-            var currentNode = this.GetCurrentSiteMapNode();
-            if (currentNode != null)
-            {
-                switch (currentNode.Key)
-                {
-                    case "titleid":
-                        currentNode.Title = ignore;
-                        currentNode.ParentNode.Title = lowercategory1;
-                        currentNode.ParentNode.ParentNode.Title = lowercategory;
-                        currentNode.ParentNode.ParentNode.ParentNode.Title = subcategory;
-                        currentNode.ParentNode.ParentNode.ParentNode.ParentNode.Title = category;
-                        break;
-                    case "lowercategory1":
-                        currentNode.Title = lowercategory1;
-                        currentNode.ParentNode.Title = lowercategory;
-                        currentNode.ParentNode.ParentNode.Title = subcategory;
-                        currentNode.ParentNode.ParentNode.ParentNode.Title = category;
-                        break;
-                    case "lowercategory":
-                        currentNode.Title = lowercategory;
-                        currentNode.ParentNode.Title = subcategory;
-                        currentNode.ParentNode.ParentNode.Title = category;
-                        break;
-                    case "subcategory":
-                        currentNode.Title = subcategory;
-                        currentNode.ParentNode.Title = category;
-                        break;
-                    case "category":
-                        currentNode.Title = category;
-                        break;
-                }
-            }
-            if (category == null)
-            {
-                return View("landingPage");
-            }
-            else if (subcategory == null)
-            {
-                if (category == "create")
-                {
-                    return View("createAd");
-                }
-                else if (category == "ask")
-                {
-                    return View("../Forum/Create");
-                }
-                else if (category == "electronics")
-                {
-                    return View("search");//electronics homepage or one page for all categories to select subcategory or all electronics featured ads
-                }
-                else 
-                {
-                    return View("notFound");
-                }
-            }
-            else if (lowercategory == null)
-            {
-                //if (category == "electronics")
-                //{
-                //    if (subcategory == "mobiles")
-                //    {
-                //        //return mobile ads
-                //    }
-                //}
-                return View("search");
-            }
-            else if (lowercategory1 == null)
-            {
-                return View("search");
-            }
-            else if (id == null)
-            {
-                return View("search");
-            }
-            else
-            {
-                ViewBag.adId = id;
-                return View("../Electronics/Details");
-            }
-            return View();
-        }
+        //public ActionResult Index1(string category, string subcategory, string lowercategory,string lowercategory1,int id = 0, string ignore = "")
+        //{
+        //    var currentNode = this.GetCurrentSiteMapNode();
+        //    if (currentNode != null)
+        //    {
+        //        switch (currentNode.Key)
+        //        {
+        //            case "titleid":
+        //                currentNode.Title = ignore;
+        //                currentNode.ParentNode.Title = lowercategory1;
+        //                currentNode.ParentNode.ParentNode.Title = lowercategory;
+        //                currentNode.ParentNode.ParentNode.ParentNode.Title = subcategory;
+        //                currentNode.ParentNode.ParentNode.ParentNode.ParentNode.Title = category;
+        //                break;
+        //            case "lowercategory1":
+        //                currentNode.Title = lowercategory1;
+        //                currentNode.ParentNode.Title = lowercategory;
+        //                currentNode.ParentNode.ParentNode.Title = subcategory;
+        //                currentNode.ParentNode.ParentNode.ParentNode.Title = category;
+        //                break;
+        //            case "lowercategory":
+        //                currentNode.Title = lowercategory;
+        //                currentNode.ParentNode.Title = subcategory;
+        //                currentNode.ParentNode.ParentNode.Title = category;
+        //                break;
+        //            case "subcategory":
+        //                currentNode.Title = subcategory;
+        //                currentNode.ParentNode.Title = category;
+        //                break;
+        //            case "category":
+        //                currentNode.Title = category;
+        //                break;
+        //        }
+        //    }
+        //    if (category == null)
+        //    {
+        //        return View("landingPage");
+        //    }
+        //    else if (subcategory == null)
+        //    {
+        //        if (category == "create")
+        //        {
+        //            return View("createAd");
+        //        }
+        //        else if (category == "ask")
+        //        {
+        //            return View("../Forum/Create");
+        //        }
+        //        else if (category == "electronics")
+        //        {
+        //            return View("search");//electronics homepage or one page for all categories to select subcategory or all electronics featured ads
+        //        }
+        //        else 
+        //        {
+        //            return View("notFound");
+        //        }
+        //    }
+        //    else if (lowercategory == null)
+        //    {
+        //        //if (category == "electronics")
+        //        //{
+        //        //    if (subcategory == "mobiles")
+        //        //    {
+        //        //        //return mobile ads
+        //        //    }
+        //        //}
+        //        return View("search");
+        //    }
+        //    else if (lowercategory1 == null)
+        //    {
+        //        return View("search");
+        //    }
+        //    else if (id == null)
+        //    {
+        //        return View("search");
+        //    }
+        //    else
+        //    {
+        //        ViewBag.adId = id;
+        //        return View("../Electronics/Details");
+        //    }
+        //    return View();
+        //}
         [Route("CreateAd")]
         public ActionResult CreateAd(string category,string subcategory)
         {

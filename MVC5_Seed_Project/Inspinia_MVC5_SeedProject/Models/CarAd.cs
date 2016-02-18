@@ -28,5 +28,6 @@ namespace Inspinia_MVC5_SeedProject.Models
     
         public virtual Ad Ad { get; set; }
         public virtual City City { get; set; }
+        public virtual CarModel CarModel1 { get; set; }
     }
 }

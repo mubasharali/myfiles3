@@ -3,7 +3,7 @@
     ViewBag.Title = "Create";
 }
 
-<div class="row wrapper border-bottom white-bg page-heading">
+@*<div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
         <h2>Create</h2>
         <ol class="breadcrumb">
@@ -20,92 +20,74 @@
 			@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary"})
         </div>
     </div>
-</div>
+</div>*@
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
-            <div class="ibox-content">
-                <form id="form" method="post" action="/Forum/create">
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="control-label col-md-2">Choose category</label>
-                            <div class="col-md-10">
-                                <select class="form-control" name="category" form="form">
-                                    <option>Electronics</option>
-                                    <option>Vehicles</option>
-                                    <option>RealEstate</option>
-                                    <option>Jobs</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="control-label col-md-2">Choose subcategory</label>
-                            <div class="col-md-10">
-                                <select class="form-control" name="subcategory" form="form">
-                                    <option>Mobiles</option>
-                                    <option>Laptops</option>
-                                    <option>Watches</option>
-                                    <option>Home appliances</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    @*<div class="row">
+            <div class="ibox">
+                <div class="ibox-title">Ask Question or Start a discussion</div>
+                <div class="ibox-content">
+                    <form id="form" method="post" action="/Forum/create">
+                        <div class="row">
                             <div class="form-group">
-                                <label class="control-label col-md-2">Choose low category</label>
+                                <label class="control-label col-md-2">Select category</label>
                                 <div class="col-md-10">
-                                    <select class="form-control" name="lowcategory" form="form">
-                                        <optgroup label="Mobile brands">
-                                            <option>Nokia</option>
-                                            <option>Samsung</option>
-                                            <option>HTC</option>
-                                            <option>Blackberry</option>
-                                        </optgroup>
-                                        <optgroup label="Mobile brands">HTC</optgroup>
-                                        <option>Samsung</option>
-                                        <option>Laptops</option>
-                                        <option>Watches</option>
-                                        <option>Home appliances</option>
+                                    <select class="form-control" name="category" form="form">
+                                        <option value="Mobiles">Mobiles & Tablets</option>
+                                        <option value="Laptops">Laptops & Computers</option>
+                                        <option value="Electronics">Electronics & Appliances</option>
+                                        <option value="Study">Study</option>
+                                        <option value="RealEstate">Real Estate</option>
+                                        <option value="Services">Services</option>
+                                        <option value="Animals">Animals</option>
+                                        <option value="Jobs">Jobs</option>
+                                        <option value="Vehicles">Vehicles</option>
+                                        <option value="Community">Community</option>
+                                        <option value="LifeStyle">LifeStyle</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Matrimonal">Matrimonal</option>
+                                        <option value="Business">Business</option>
+                                        <option value="About Website">About Website</option>
                                     </select>
                                 </div>
                             </div>
-                        </div>*@
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="control-label col-md-2">Title</label>
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" name="title" />
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Title</label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="title" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="control-label col-md-2">Description</label>
-                            <div class="col-md-10">
-                                <textarea class="form-control" rows="7" name="description"></textarea>
+                        <br />
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Description</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" rows="7" name="description"></textarea>
+                                </div>
+                            </div>
+                        </div><br />
+                        <div class="row">
+                            <div class="control-group">
+                                <label class="control-label col-md-2" for="select-repo">Tags:</label>
+                                <div class="col-md-10">
+                                    <input id="select-tag" name="tags" class="repositories" placeholder="Pick a tag..." />
+                                </div>
                             </div>
                         </div>
-                    </div><br />
-                    <div class="row">
-                        <div class="control-group">
-                            <label class="control-label col-md-2" for="select-repo">Tags:</label>
-                            <div class="col-md-10">
-                                <input id="select-tag" name="tags" class="repositories" placeholder="Pick a tag..." />
-                            </div>
+                        <br />
+                        <div class="form-group col-md-offset-2">
+                            <input type="submit" class="btn btn-info" />
                         </div>
-                    </div>
-                    <br />
-                    <div class="form-group col-md-offset-2">
-                        <input type="submit" class="btn btn-info"/>
-                    </div>
-                    
-                </form>
+
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -205,23 +187,44 @@
     @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
     <link href="~/Scripts/plugins/selectize/selectize.css" rel="stylesheet" />
 }
-
+@Html.Partial("/Views/Shared/_Chat.cshtml")
+@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 @section Scripts {
 
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/plugins/validate")
     @Scripts.Render("~/plugins/toastr")
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/UserLogin.js"></script>
+<script src="~/Scripts/app/chat.js"></script>
     <script src="~/Scripts/plugins/selectize/selectize.min.js"></script>
     <script type="text/javascript">
-
+        function viewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+        }
         $(document).ready(function () {
-            
+            ko.applyBindings(new viewModel());
+            $.connection.hub.start().done();
+            //$('#select-category').selectize({
+            //    inputMaxlength: 29,
+            //    options: ['Electronics'],
+            //    sortField: {
+            //        field: 'text',
+            //        direction: 'asc'
+            //    },
+
+            //});
+
             $('#select-tag').selectize({
                 valueField: 'name',
                 labelField: 'name',
                 searchField: 'name',
                 options: [],
                 create: true,
+                maxItems: 6,
                 render: {
                     option: function (item, escape) {
                         return '<div>' +
@@ -232,7 +235,7 @@
                             '<span class="description">' + escape(item.info) + '</span>' +
                             '<ul class="meta">' +
                                 '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
-                                '<li class="forks"><span>' + escape(item.questions) + '</span> questions asked</li>' +
+                                '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
                             '</ul>' +
                         '</div>';
                     }
@@ -252,6 +255,7 @@
                 }
             });
             
+            //$('#select-category').selectize.addOption({ text: 'electronics' });
             $("#form").validate({
                 rules: {
                     title: {

@@ -53,5 +53,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual JobAd JobAd { get; set; }
         public virtual ICollection<JobSkill> JobSkills { get; set; }
         public virtual CarAd CarAd { get; set; }
+        public virtual BikeAd BikeAd { get; set; }
     }
 }

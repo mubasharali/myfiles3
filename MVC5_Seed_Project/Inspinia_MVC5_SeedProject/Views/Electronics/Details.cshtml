@@ -72,7 +72,7 @@
                                             </span>
                                             <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
                                             <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
-                                                <li><a target="_blank" data-bind="attr:{href:link}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                                <li><a target="_blank" data-bind="attr:{href:'/Tag/' + id + '/' + name}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
                                             </ul><br /><br />
                                             <hr>
                                             <span data-bind="visible:!showJob()"> @*remove this*@
@@ -126,8 +126,28 @@
 
                                                 </dl>
                                             </div>
-                                            <div data-bind="foreach: showCarAd">
-                                                <hr>
+                                            <div data-bind="with: showBikeAd">
+
+                                                <dl class="dl-horizontal m-t-md small">
+                                                    <dt>Brand:</dt>
+                                                    <dd data-bind="text:brand"></dd>
+                                                    <dt>Model:</dt>
+                                                    <dd data-bind="text:model"></dd>
+                                                    <dt>condition:</dt>
+                                                    <dd data-bind="text:$parent.condition"></dd>
+                                                    <dt>Km Driven</dt>
+                                                    <dd data-bind="if:kmDriven"><span data-bind="text:kmDriven"></span>  Km</dd>
+
+                                                    <dt>Year</dt>
+                                                    <dd data-bind="text:year"></dd>
+                                                    <dt>Number of owners</dt>
+                                                    <dd data-bind="text:noOfOwners"></dd>
+                                                    <dt>Registered City</dt>
+                                                    <dd data-bind="text:registeredCity"></dd>
+                                                </dl>
+                                            </div>
+                                            <div data-bind="with: showCarAd">
+                                               
                                                 <dl class="dl-horizontal m-t-md small">
                                                     <dt>Brand:</dt>
                                                     <dd data-bind="text:brand"></dd>
@@ -136,13 +156,25 @@
                                                     <dt>color:</dt>
                                                     <dd data-bind="text:color"></dd>
                                                     <dt>condition:</dt>
-                                                    <dd data-bind="text:condition"></dd>
+                                                    <dd data-bind="text:$parent.condition"></dd>
                                                     <dt>Fuel type</dt>
                                                     <dd data-bind="text:fuelType"></dd>
                                                     <dt>Km Driven</dt>
-                                                    <dd data-bind="text:kmDriven"></dd>
+                                                    <dd data-bind="if:kmDriven"><span data-bind="text:kmDriven"></span>  Km</dd>
+                                                    
                                                     <dt>Year</dt>
                                                     <dd data-bind="text:year"></dd>
+                                                    <dt>Number of owners</dt>
+                                                    <dd data-bind="text:noOfOwners"></dd>
+                                                    <dt>Registered City</dt>
+                                                    <dd data-bind="text:registeredCity"></dd>
+                                                    <dt>Transmission</dt>
+                                                    <dd data-bind="text:transmission"></dd>
+                                                    <dt>Assembly</dt>
+                                                    <dd data-bind="text:assembly"></dd>
+                                                    <dt>Engine Capacity</dt>
+                                                    <dd data-bind="if:engineCapacity"><span data-bind="text:engineCapacity"></span> cc</dd>
+                                                    
                                                 </dl>
                                             </div>
                                             <div data-bind="with: showJob">
@@ -412,6 +444,42 @@
             self.brand = data.brand;
             self.model = data.model;
             self.kmDriven = data.kmDriven;
+            self.noOfOwners = data.noOfOwners;
+            self.registeredCity = data.registeredCity;
+            self.transmission = '';
+            if (data.transmission == "M") {
+                self.transmission = "Manual";
+            } else if (data.transmission == "A") {
+                self.transmission = "Automatic";
+            } else if (data.transmission == "S") {
+                self.transmission = "Semi-Automatic";
+            }
+            self.assembly = "";
+            if (data.assembly == "L") {
+                self.assembly = "Local";
+            } else if (data.assembly == "I") {
+                self.assembly = "Imported";
+            }
+            self.engineCapacity = data.engineCapacity;
+        }
+        function BikeAd(data) {
+            var self = this;
+            data = data || {};
+            self.year = data.year;
+            //self.condition = "";
+            //if (data.condition == "n") {
+            //    self.condition = "New";
+            //} else if (data.condition == "u") {
+            //    self.condition = "Used";
+            //} else if (data.condition == "b") {
+            //    self.condition = "unBoxed";
+            //}
+            self.brand = data.brand;
+            self.model = data.model;
+            self.kmDriven = data.kmDriven;
+            self.noOfOwners = data.noOfOwners;
+            self.registeredCity = data.registeredCity;
+            
         }
         function JobAd(data) {
             var self = this;
@@ -540,6 +608,7 @@
             self.price = data.price || "";
             self.newBidPrice = ko.observable();
             self.showCarAd = ko.observable();
+            self.showBikeAd = ko.observable();
             self.statusError = "";
             self.isVisible = true;
             if (data.status == "p") {
@@ -568,8 +637,11 @@
             self.category = data.category;
             self.subcategory = data.subCategory;
             self.showJob = ko.observable();
-            if (data.category == "Jobs") {    //data.category.contains("job")    ..search substring
+            if (data.category == "Jobs") {    
                 self.showJob(new JobAd(data.jobAd));
+            }
+            if (data.subCategory == "Bikes") {
+                self.showBikeAd(new BikeAd(data.bikead));
             }
             self.gender = "";
             if (data.isNegotiable == "m") {
@@ -711,7 +783,9 @@
                 var tags = $.map(data.adTags, function (item) { return new Tag(item); });
                 self.showTags(tags);
             }
-            
+            if (data.subCategory == "Cars") {
+                self.showCarAd(new CarAd(data.carad));
+            }
             if (data.mobilead.brand != null) {
                 self.showMobileAd ( new mobilead(data.mobilead));
             }
@@ -773,8 +847,14 @@
                 else if(data.category == "Jobs") {
                     window.location.href = "/Jobs/Edit/" + id;
                 }
+                else if (data.subCategory == "Cars") {
+                    window.location.href = "/Vehicles/EditCarAd/" + id;
+                }
+                else if (data.subCategory == "Bikes") {
+                    window.location.href = "/Vehicles/EditBikeAd/" + id;
+                }
                 else {
-                    toastr.info("Error");
+                    window.location.href = "/Home/Edit/" + id;
                 }
             }
             self.deleteAd = function (id) {

@@ -158,14 +158,24 @@
         <AssociationConnector Association="Model.FK_JobAd_ToTable" />
         <AssociationConnector Association="Model.FK_JobSkill_ToTable" />
         <AssociationConnector Association="Model.FK_JobSkill_ToTable_1" />
-        <EntityTypeShape EntityType="Model.CarAd" Width="1.5" PointX="70.5" PointY="52.5" />
-        <EntityTypeShape EntityType="Model.CarBrand" Width="1.5" PointX="5.25" PointY="49.5" />
-        <EntityTypeShape EntityType="Model.CarModel" Width="1.5" PointX="7.5" PointY="46.375" />
+        <EntityTypeShape EntityType="Model.CarAd" Width="1.5" PointX="73.125" PointY="57.625" />
+        <EntityTypeShape EntityType="Model.CarBrand" Width="1.5" PointX="75.875" PointY="58.5" />
+        <EntityTypeShape EntityType="Model.CarModel" Width="1.5" PointX="78.25" PointY="57.75" />
         <AssociationConnector Association="Model.FK_CarAd_ToTable" />
         <AssociationConnector Association="Model.FK_CarBrand_ToTable" />
         <AssociationConnector Association="Model.FK_CarModel_ToTable" />
         <AssociationConnector Association="Model.FK_CarAd_ToTable_2" />
         <AssociationConnector Association="Model.FK_CarModel_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CarAd_ToTable_1" />
+        <EntityTypeShape EntityType="Model.BikeAd" Width="1.5" PointX="53.5" PointY="47.625" />
+        <EntityTypeShape EntityType="Model.BikeBrand" Width="1.5" PointX="49.25" PointY="47.875" />
+        <EntityTypeShape EntityType="Model.BikeModel" Width="1.5" PointX="51.25" PointY="47.75" />
+        <AssociationConnector Association="Model.FK_BikeAd_ToTable" />
+        <AssociationConnector Association="Model.FK_BikeBrand_ToTable" />
+        <AssociationConnector Association="Model.FK_BikeModel_ToTable" />
+        <AssociationConnector Association="Model.FK_Table_ToTable" />
+        <AssociationConnector Association="Model.FK_BikeAd_ToTable_1" />
+        <AssociationConnector Association="Model.FK_BikeAd_ToTable_2" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

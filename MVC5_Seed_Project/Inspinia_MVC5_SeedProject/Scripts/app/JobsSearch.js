@@ -109,16 +109,23 @@ var loadQualification = function () {
 };
 var selfie;
 function RefreshSearch(selff) {
+
+    if (isLoading()) {
+        return;
+    }
     loadQualification();
     
+
     if (selff) {
         selfie = selff;
     }
   //  var self = this;
     searchingCity.subscribe(function () {
+        self.isLoading(false);
         RefreshSearch();
     })
     searchingPP.subscribe(function () {
+        self.isLoading(false);
         RefreshSearch();
     })
     

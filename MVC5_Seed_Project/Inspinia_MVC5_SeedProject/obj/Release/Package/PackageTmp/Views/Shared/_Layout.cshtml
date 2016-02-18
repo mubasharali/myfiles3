@@ -6,11 +6,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MyWebLogo | @ViewBag.Title</title>
+    <title>
+         @if (ViewBag.Title != null)
+        { @ViewBag.Title }
+        else
+        { <text>Classified in mobiles, laptops, vehicles, RealEstate, Jobs, Services, Electronics, Animals, Study, Entertainment, Matrimonal, Home Appliances, Business  </text> }
+    | MyWebLogo
+    </title>
+
     @RenderSection("Styles", required: false)
     @Styles.Render("~/Content/css")
     @Styles.Render("~/font-awesome/css")
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    @Styles.Render("~/scripts/selectizeStyles")
+  
+    <link href="~/Content/myStyles.css" rel="stylesheet" /> 
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">*@
 </head>
 <body class="fixed-sidebar fixed-nav mini-navbar">
 
@@ -34,7 +44,7 @@
 
             <!-- Footer -->
             @Html.Partial("_Footer")
-
+            @Html.Partial("~/Views/Search/_SearchLocation.cshtml")
         </div>
         <!-- End page wrapper-->
         <!-- Right Sidebar -->
@@ -48,6 +58,20 @@
     @Scripts.Render("~/plugins/pace")
     @Scripts.Render("~/plugins/slimScroll")
     @Scripts.Render("~/bundles/inspinia")
-    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/scripts/selectize")
+    @Scripts.Render("~/plugins/toastr")
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <script src="~/Scripts/app/_SearchLocation.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/app/chat.js"></script>
+    <script src="~/Scripts/UserLogin.js"></script>
+        @RenderSection("scripts", required: false)
+    <script>
+        $(function () {
+            $.connection.hub.start().done();
+        })
+    </script>
 </body>
 </html>

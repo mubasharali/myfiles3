@@ -13,14 +13,35 @@ function Company(data) {
         self.showModels(models);
     }
 }
-
+var laptopAccessories = ko.observable(false);
+var brand = ko.observable("");
+var model = ko.observable("");
+var title = ko.observable($("#search").val());
+var tags = ko.observable("");
+var minPrice = ko.observable(0);
+var maxPrice = ko.observable(50000);
+laptopAccessories.subscribe(function () {
+    RefreshSearch();
+})
+minPrice.subscribe(function () {
+    RefreshSearch();
+});
+maxPrice.subscribe(function () {
+    RefreshSearch();
+});
+tags.subscribe(function () {
+    RefreshSearch();
+})
 function TreeViewModel() {
     var self = this;
-
+    self.isLoading = ko.observable(false);
+    searchingCity.subscribe(function () {
+        RefreshSearch();
+    })
+    searchingPP.subscribe(function () {
+        RefreshSearch();
+    })
     self.showAds = ko.observableArray();
-    self.brand = ko.observable("");
-    self.model = ko.observable("");
-
     self.showCompanies = ko.observableArray();
     self.loadTree = function () {
         $.ajax({
@@ -51,11 +72,8 @@ function TreeViewModel() {
                         self.brand(self.model());
                         self.model("");
                     }
-                    console.log(self.brand());
-                    console.log(self.model());
-                    self.loadad();
+                    RefreshSearch();
                 })
-  // create the instance
   .jstree();
                 var to = false;
                 $('#treeSearch').keyup(function () {
@@ -73,23 +91,41 @@ function TreeViewModel() {
     }
     self.loadTree();
 
-    self.loadad = function () {
-        url_address = '/api/Electronic/SearchLaptopAds?brand=' + self.brand() + '&model=' + self.model();
+}
+function RefreshSearch() {
+    var self = this;
+    self.isLoading(true);
         $.ajax({
-            url: url_address,
+            url: '/api/Electronic/SearchLaptopAds?brand=' + brand() + '&model=' + model() + '&tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&isAccessories=' + laptopAccessories(),
             dataType: "json",
             contentType: "application/json",
             cache: false,
             type: 'POST',
             success: function (data) {
-                var mappedads = $.map(data, function (item) { return new ad(item); });
+                self.isLoading(false);
+                var mappedads = $.map(data, function (item) { return new Ad(item); });
                 self.showAds(mappedads);
-
             },
             error: function () {
-                toastr.error("Unable to load data. Please try again", "Error");
+                self.isLoading(false);
+                toastr.error("failed to search. Please refresh page and try again", "Error!");
             }
         });
-    }
-    self.loadad();
+    
 }
+var saveResult = function (data) {
+    minPrice(data.fromNumber);
+    maxPrice(data.toNumber);
+};
+$("#ionrange_1").ionRangeSlider({
+    min: 0,
+    max: 50000,
+    type: 'double',
+    prefix: "Rs",
+    maxPostfix: "+",
+    prettify: false,
+    hasGrid: true,
+    from: minPrice,
+    to: maxPrice,
+    onFinish: saveResult
+});

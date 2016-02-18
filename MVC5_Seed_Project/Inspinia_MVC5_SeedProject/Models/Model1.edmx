@@ -169,6 +169,38 @@
           <Property Name="time" Type="datetime" Nullable="false" />
           <Property Name="price" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="BikeAd">
+          <Key>
+            <PropertyRef Name="adId" />
+          </Key>
+          <Property Name="adId" Type="int" Nullable="false" />
+          <Property Name="year" Type="smallint" />
+          <Property Name="kmDriven" Type="int" />
+          <Property Name="bikeModel" Type="int" Nullable="false" />
+          <Property Name="noOfOwners" Type="smallint" />
+          <Property Name="registeredCity" Type="int" />
+        </EntityType>
+        <EntityType Name="BikeBrand">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="brand" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="time" Type="datetime" Nullable="false" />
+          <Property Name="status" Type="nchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BikeModel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="brandId" Type="int" Nullable="false" />
+          <Property Name="model" Type="nvarchar" MaxLength="50" />
+          <Property Name="time" Type="datetime" Nullable="false" />
+          <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="status" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
         <EntityType Name="CarAd">
           <Key>
             <PropertyRef Name="adId" />
@@ -828,6 +860,72 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_BikeAd_ToTable">
+          <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BikeAd" Type="Self.BikeAd" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeAd">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeAd_ToTable_1">
+          <End Role="BikeModel" Type="Self.BikeModel" Multiplicity="1" />
+          <End Role="BikeAd" Type="Self.BikeAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BikeModel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeAd">
+              <PropertyRef Name="bikeModel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeAd_ToTable_2">
+          <End Role="City" Type="Self.City" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BikeAd" Type="Self.BikeAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeAd">
+              <PropertyRef Name="registeredCity" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeBrand_ToTable">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BikeBrand" Type="Self.BikeBrand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeBrand">
+              <PropertyRef Name="addedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeModel_ToTable">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="BikeModel" Type="Self.BikeModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeModel">
+              <PropertyRef Name="addedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CarAd_ToTable">
           <End Role="Ad" Type="Self.Ad" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -839,6 +937,18 @@
             </Principal>
             <Dependent Role="CarAd">
               <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarAd_ToTable_1">
+          <End Role="CarModel" Type="Self.CarModel" Multiplicity="1" />
+          <End Role="CarAd" Type="Self.CarAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CarModel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CarAd">
+              <PropertyRef Name="carModel" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1958,6 +2068,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Table_ToTable">
+          <End Role="BikeBrand" Type="Self.BikeBrand" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BikeModel" Type="Self.BikeModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BikeBrand">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeModel">
+              <PropertyRef Name="brandId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Tag_ToTable">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
           <End Role="Tag" Type="Self.Tag" Multiplicity="*" />
@@ -1998,6 +2122,9 @@
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bid" EntityType="Self.Bid" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BikeAd" EntityType="Self.BikeAd" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BikeBrand" EntityType="Self.BikeBrand" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BikeModel" EntityType="Self.BikeModel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CarAd" EntityType="Self.CarAd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CarBrand" EntityType="Self.CarBrand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CarModel" EntityType="Self.CarModel" Schema="dbo" store:Type="Tables" />
@@ -2105,8 +2232,32 @@
             <End Role="Ad" EntitySet="Ad" />
             <End Role="Bid" EntitySet="Bid" />
           </AssociationSet>
+          <AssociationSet Name="FK_BikeAd_ToTable" Association="Self.FK_BikeAd_ToTable">
+            <End Role="Ad" EntitySet="Ad" />
+            <End Role="BikeAd" EntitySet="BikeAd" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeAd_ToTable_1" Association="Self.FK_BikeAd_ToTable_1">
+            <End Role="BikeModel" EntitySet="BikeModel" />
+            <End Role="BikeAd" EntitySet="BikeAd" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeAd_ToTable_2" Association="Self.FK_BikeAd_ToTable_2">
+            <End Role="City" EntitySet="City" />
+            <End Role="BikeAd" EntitySet="BikeAd" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeBrand_ToTable" Association="Self.FK_BikeBrand_ToTable">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="BikeBrand" EntitySet="BikeBrand" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeModel_ToTable" Association="Self.FK_BikeModel_ToTable">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="BikeModel" EntitySet="BikeModel" />
+          </AssociationSet>
           <AssociationSet Name="FK_CarAd_ToTable" Association="Self.FK_CarAd_ToTable">
             <End Role="Ad" EntitySet="Ad" />
+            <End Role="CarAd" EntitySet="CarAd" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarAd_ToTable_1" Association="Self.FK_CarAd_ToTable_1">
+            <End Role="CarModel" EntitySet="CarModel" />
             <End Role="CarAd" EntitySet="CarAd" />
           </AssociationSet>
           <AssociationSet Name="FK_CarAd_ToTable_2" Association="Self.FK_CarAd_ToTable_2">
@@ -2448,6 +2599,10 @@
           <AssociationSet Name="FK_SaveAd_ToTable_1" Association="Self.FK_SaveAd_ToTable_1">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="SaveAd" EntitySet="SaveAd" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Table_ToTable" Association="Self.FK_Table_ToTable">
+            <End Role="BikeBrand" EntitySet="BikeBrand" />
+            <End Role="BikeModel" EntitySet="BikeModel" />
           </AssociationSet>
           <AssociationSet Name="FK_Tag_ToTable" Association="Self.FK_Tag_ToTable">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -2936,6 +3091,37 @@
             <End Role="CarBrand" EntitySet="CarBrands" />
             <End Role="CarModel" EntitySet="CarModels" />
           </AssociationSet>
+          <AssociationSet Name="FK_CarAd_ToTable_1" Association="Model.FK_CarAd_ToTable_1">
+            <End Role="CarModel" EntitySet="CarModels" />
+            <End Role="CarAd" EntitySet="CarAds" />
+          </AssociationSet>
+          <EntitySet Name="BikeAds" EntityType="Model.BikeAd" />
+          <EntitySet Name="BikeBrands" EntityType="Model.BikeBrand" />
+          <EntitySet Name="BikeModels" EntityType="Model.BikeModel" />
+          <AssociationSet Name="FK_BikeAd_ToTable" Association="Model.FK_BikeAd_ToTable">
+            <End Role="Ad" EntitySet="Ads" />
+            <End Role="BikeAd" EntitySet="BikeAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeBrand_ToTable" Association="Model.FK_BikeBrand_ToTable">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="BikeBrand" EntitySet="BikeBrands" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeModel_ToTable" Association="Model.FK_BikeModel_ToTable">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="BikeModel" EntitySet="BikeModels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Table_ToTable" Association="Model.FK_Table_ToTable">
+            <End Role="BikeBrand" EntitySet="BikeBrands" />
+            <End Role="BikeModel" EntitySet="BikeModels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeAd_ToTable_1" Association="Model.FK_BikeAd_ToTable_1">
+            <End Role="BikeModel" EntitySet="BikeModels" />
+            <End Role="BikeAd" EntitySet="BikeAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeAd_ToTable_2" Association="Model.FK_BikeAd_ToTable_2">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="BikeAd" EntitySet="BikeAds" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -2978,6 +3164,7 @@
           <NavigationProperty Name="JobAd" Relationship="Model.FK_JobAd_ToTable" FromRole="Ad" ToRole="JobAd" />
           <NavigationProperty Name="JobSkills" Relationship="Model.FK_JobSkill_ToTable" FromRole="Ad" ToRole="JobSkill" />
           <NavigationProperty Name="CarAd" Relationship="Model.FK_CarAd_ToTable" FromRole="Ad" ToRole="CarAd" />
+          <NavigationProperty Name="BikeAd" Relationship="Model.FK_BikeAd_ToTable" FromRole="Ad" ToRole="BikeAd" />
         </EntityType>
         <EntityType Name="AdImage">
           <Key>
@@ -3825,6 +4012,7 @@
           <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_City_ToTable_1" FromRole="City" ToRole="AspNetUser" />
           <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable_1" FromRole="City" ToRole="Company" />
           <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable_2" FromRole="City" ToRole="CarAd" />
+          <NavigationProperty Name="BikeAds" Relationship="Model.FK_BikeAd_ToTable_2" FromRole="City" ToRole="BikeAd" />
         </EntityType>
         <Association Name="FK_AdsLocation_ToTable_1">
           <End Type="Model.City" Role="City" Multiplicity="0..1">
@@ -4147,6 +4335,8 @@
           <NavigationProperty Name="ReviewVotes" Relationship="Model.FK_ReviewVote_ToTable_1" FromRole="AspNetUser" ToRole="ReviewVote" />
           <NavigationProperty Name="CarBrands" Relationship="Model.FK_CarBrand_ToTable" FromRole="AspNetUser" ToRole="CarBrand" />
           <NavigationProperty Name="CarModels" Relationship="Model.FK_CarModel_ToTable" FromRole="AspNetUser" ToRole="CarModel" />
+          <NavigationProperty Name="BikeBrands" Relationship="Model.FK_BikeBrand_ToTable" FromRole="AspNetUser" ToRole="BikeBrand" />
+          <NavigationProperty Name="BikeModels" Relationship="Model.FK_BikeModel_ToTable" FromRole="AspNetUser" ToRole="BikeModel" />
         </EntityType>
         <Association Name="FK_Ad_ToTable">
           <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -5006,6 +5196,7 @@
           <Property Name="engineCapacity" Type="Int32" />
           <NavigationProperty Name="Ad" Relationship="Model.FK_CarAd_ToTable" FromRole="CarAd" ToRole="Ad" />
           <NavigationProperty Name="City" Relationship="Model.FK_CarAd_ToTable_2" FromRole="CarAd" ToRole="City" />
+          <NavigationProperty Name="CarModel1" Relationship="Model.FK_CarAd_ToTable_1" FromRole="CarAd" ToRole="CarModel" />
         </EntityType>
         <EntityType Name="CarBrand">
           <Key>
@@ -5031,6 +5222,7 @@
           <Property Name="status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_CarModel_ToTable" FromRole="CarModel" ToRole="AspNetUser" />
           <NavigationProperty Name="CarBrand" Relationship="Model.FK_CarModel_ToTable_1" FromRole="CarModel" ToRole="CarBrand" />
+          <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable_1" FromRole="CarModel" ToRole="CarAd" />
         </EntityType>
         <Association Name="FK_CarAd_ToTable">
           <End Type="Model.Ad" Role="Ad" Multiplicity="1">
@@ -5097,6 +5289,138 @@
             </Principal>
             <Dependent Role="CarModel">
               <PropertyRef Name="brandId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarAd_ToTable_1">
+          <End Type="Model.CarModel" Role="CarModel" Multiplicity="1" />
+          <End Type="Model.CarAd" Role="CarAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CarModel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CarAd">
+              <PropertyRef Name="carModel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="BikeAd">
+          <Key>
+            <PropertyRef Name="adId" />
+          </Key>
+          <Property Name="adId" Type="Int32" Nullable="false" />
+          <Property Name="year" Type="Int16" />
+          <Property Name="kmDriven" Type="Int32" />
+          <Property Name="bikeModel" Type="Int32" Nullable="false" />
+          <Property Name="noOfOwners" Type="Int16" />
+          <Property Name="registeredCity" Type="Int32" />
+          <NavigationProperty Name="Ad" Relationship="Model.FK_BikeAd_ToTable" FromRole="BikeAd" ToRole="Ad" />
+          <NavigationProperty Name="BikeModel1" Relationship="Model.FK_BikeAd_ToTable_1" FromRole="BikeAd" ToRole="BikeModel" />
+          <NavigationProperty Name="City" Relationship="Model.FK_BikeAd_ToTable_2" FromRole="BikeAd" ToRole="City" />
+        </EntityType>
+        <EntityType Name="BikeBrand">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="brand" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="Model.FK_BikeBrand_ToTable" FromRole="BikeBrand" ToRole="AspNetUser" />
+          <NavigationProperty Name="BikeModels" Relationship="Model.FK_Table_ToTable" FromRole="BikeBrand" ToRole="BikeModel" />
+        </EntityType>
+        <EntityType Name="BikeModel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="brandId" Type="Int32" Nullable="false" />
+          <Property Name="model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Model.FK_BikeModel_ToTable" FromRole="BikeModel" ToRole="AspNetUser" />
+          <NavigationProperty Name="BikeBrand" Relationship="Model.FK_Table_ToTable" FromRole="BikeModel" ToRole="BikeBrand" />
+          <NavigationProperty Name="BikeAds" Relationship="Model.FK_BikeAd_ToTable_1" FromRole="BikeModel" ToRole="BikeAd" />
+        </EntityType>
+        <Association Name="FK_BikeAd_ToTable">
+          <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.BikeAd" Role="BikeAd" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeAd">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeBrand_ToTable">
+          <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.BikeBrand" Role="BikeBrand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeBrand">
+              <PropertyRef Name="addedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeModel_ToTable">
+          <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="Model.BikeModel" Role="BikeModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeModel">
+              <PropertyRef Name="addedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Table_ToTable">
+          <End Type="Model.BikeBrand" Role="BikeBrand" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.BikeModel" Role="BikeModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BikeBrand">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeModel">
+              <PropertyRef Name="brandId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeAd_ToTable_1">
+          <End Type="Model.BikeModel" Role="BikeModel" Multiplicity="1" />
+          <End Type="Model.BikeAd" Role="BikeAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BikeModel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeAd">
+              <PropertyRef Name="bikeModel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeAd_ToTable_2">
+          <End Type="Model.City" Role="City" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.BikeAd" Role="BikeAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeAd">
+              <PropertyRef Name="registeredCity" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5760,6 +6084,41 @@
           <EntitySetMapping Name="CarModels">
             <EntityTypeMapping TypeName="Model.CarModel">
               <MappingFragment StoreEntitySet="CarModel">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="model" ColumnName="model" />
+                <ScalarProperty Name="brandId" ColumnName="brandId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BikeAds">
+            <EntityTypeMapping TypeName="Model.BikeAd">
+              <MappingFragment StoreEntitySet="BikeAd">
+                <ScalarProperty Name="registeredCity" ColumnName="registeredCity" />
+                <ScalarProperty Name="noOfOwners" ColumnName="noOfOwners" />
+                <ScalarProperty Name="bikeModel" ColumnName="bikeModel" />
+                <ScalarProperty Name="kmDriven" ColumnName="kmDriven" />
+                <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="adId" ColumnName="adId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BikeBrands">
+            <EntityTypeMapping TypeName="Model.BikeBrand">
+              <MappingFragment StoreEntitySet="BikeBrand">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+                <ScalarProperty Name="brand" ColumnName="brand" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BikeModels">
+            <EntityTypeMapping TypeName="Model.BikeModel">
+              <MappingFragment StoreEntitySet="BikeModel">
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="addedBy" ColumnName="addedBy" />
                 <ScalarProperty Name="time" ColumnName="time" />

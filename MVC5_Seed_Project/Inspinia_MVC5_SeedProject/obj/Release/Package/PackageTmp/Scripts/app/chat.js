@@ -4,12 +4,15 @@
     self.id = data.id;
     self.name = data.name;
     self.dpLink = '/Images/Users/p' + self.id + data.dpExtension;
+    if (!data.dpExtension) {
+        self.dpLink = '/Images/Users/default.jpg';
+    }
     //self.profileLink = '/Users/Index/' + self.id;
     self.openProfile = function () {
         window.location.href = '/User/Index/' + self.id;
     }
 }
-function Message(data) {
+function Message(data,sendMessageTo) {
     var self = this;
     data = data || {};
     self.id = data.id;
@@ -22,24 +25,16 @@ function Message(data) {
     self.time = (data.time);
     self.timeAgo = getTimeAgo(data.time);
     self.loginUserId = data.loginUserId;
+    console.log(self.sentFrom);
+    console.log(self.sentTo);
+    console.log("will be sent to : " + sendMessageTo);
+    if (sendMessageTo == self.sentFrom || sendMessageTo == self.sentTo) {
+        
+    } else {
+        console.log("No entry");
+        self.message = "";
+    }
 }
-//function sendMessageTo(id) {
-//    alert("sending");
-//    $.ajax({
-//        url: '/api/Chat/SendMessageTo?id=' + id.id,
-//        dataType: "json",
-//        contentType: "application/json",
-//        cache: false,
-//        type: 'POST',
-//        success: function (data) {
-//            console.log("message will be sent to :" + id.UserName);
-//        },
-//        error: function () {
-//            toastr.error("failed to accept message sending to this user", "Error!");
-//        }
-//    });
-//}
-
 function ChatViewModel() {
     
     var self = this;
@@ -47,13 +42,17 @@ function ChatViewModel() {
     self.onlineUsersHub = $.connection.onlineUsers;
     self.showChat = ko.observableArray();
     self.newMessage = ko.observable();
-    self.loginUserId1 = "abc";
+    self.loginUserId1 = "";
     self.onlineUsers = ko.observableArray();
     self.sendMessageTo = ko.observable();
     self.sendMessgeToName = ko.observable();
     self.sendTo = function (data) {
-        self.sendMessageTo(data.id);
-        self.sendMessgeToName(data.name);
+        if (self.loginUserId1) {
+            self.sendMessageTo(data.id);
+            self.sendMessgeToName(data.name);
+        } else {
+            loginBtn();
+        }
     }
     self.isOnline = ko.observable("Offline");
     
@@ -100,11 +99,11 @@ function ChatViewModel() {
             cache: false,
             type: 'GET',
             success: function (data) {
-                var msg = $.map(data, function (item) { return new Message(item) });
+                var msg = $.map(data, function (item) { return new Message(item,self.sendMessageTo()) });
                 self.showChat(msg);
             },
             error: function () {
-               // toastr.error("failed to load message", "Error!");
+                toastr.error("failed to load message. Please refresh page and try again", "Error!");
                 return null;
             }
         });
@@ -120,13 +119,13 @@ function ChatViewModel() {
                 toastr.info("You reached the limit", "Message too long!");
             }
         } else {
-            $("#inputEmail").modal('show');
+            loginBtn();
         }
     }
     self.hub.client.loadNewMessage = function (data) {
         self.newMessage('');
         if (data != null) {
-            self.showChat.push(new Message(data));
+            self.showChat.push(new Message(data,self.sendMessageTo()));
         }
     }
     self.onlineUsersHub.client.showConnected = function (connectionId) {

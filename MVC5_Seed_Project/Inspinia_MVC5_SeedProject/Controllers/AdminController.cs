@@ -81,7 +81,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            adTags = from tag in ad.AdTags.ToList()
                                     select new
                                     {
-                                        id = tag.Id,
+                                        id = tag.tagId,
                                         name = tag.Tag.name,
                                         followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                         //info = tag.Tag.info,
@@ -132,6 +132,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                        }).Take(limit)).AsEnumerable();
             return Ok(ret);
         }
+        [HttpPost]
         public async Task<IHttpActionResult> ApproveAd(int id)
         {
             Ad mobile = await db.Ads.FindAsync(id);
@@ -147,6 +148,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             await db.SaveChangesAsync();
             return Ok("approved");
         }
+        [HttpPost]
         public async Task<IHttpActionResult> ApproveMobileBrand(int id)
         {
             Mobile mobile = await db.Mobiles.FindAsync(id);
@@ -162,6 +164,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             await db.SaveChangesAsync();
             return Ok("approved");
         }
+        [HttpPost]
         public async Task<IHttpActionResult> ApproveMobileModel(int id)
         {
             MobileModel mobile = await db.MobileModels.FindAsync(id);
@@ -177,6 +180,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             await db.SaveChangesAsync();
             return Ok("approved");
         }
+        [HttpPost]
         public async Task<IHttpActionResult> ApproveLaptopBrand(int id)
         {
             LaptopBrand mobile = await db.LaptopBrands.FindAsync(id);
@@ -192,9 +196,74 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             await db.SaveChangesAsync();
             return Ok("approved");
         }
+        [HttpPost]
+        public async Task<IHttpActionResult> ApproveCarBrand(int id)
+        {
+            CarBrand mobile = await db.CarBrands.FindAsync(id);
+            if (mobile == null)
+            {
+                return NotFound();
+            }
+            if (mobile.status == "a")
+            {
+                return BadRequest("Already approved");
+            }
+            mobile.status = "a";
+            await db.SaveChangesAsync();
+            return Ok("approved");
+        }
+        [HttpPost]
         public async Task<IHttpActionResult> ApproveLaptopModel(int id)
         {
             LaptopModel mobile = await db.LaptopModels.FindAsync(id);
+            if (mobile == null)
+            {
+                return NotFound();
+            }
+            if (mobile.status == "a")
+            {
+                return BadRequest("Already approved");
+            }
+            mobile.status = "a";
+            await db.SaveChangesAsync();
+            return Ok("approved");
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> ApproveCarModel(int id)
+        {
+            CarModel mobile = await db.CarModels.FindAsync(id);
+            if (mobile == null)
+            {
+                return NotFound();
+            }
+            if (mobile.status == "a")
+            {
+                return BadRequest("Already approved");
+            }
+            mobile.status = "a";
+            await db.SaveChangesAsync();
+            return Ok("approved");
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> ApproveBikeBrand(int id)
+        {
+            BikeBrand mobile = await db.BikeBrands.FindAsync(id);
+            if (mobile == null)
+            {
+                return NotFound();
+            }
+            if (mobile.status == "a")
+            {
+                return BadRequest("Already approved");
+            }
+            mobile.status = "a";
+            await db.SaveChangesAsync();
+            return Ok("approved");
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> ApproveBikeModel(int id)
+        {
+            BikeModel mobile = await db.BikeModels.FindAsync(id);
             if (mobile == null)
             {
                 return NotFound();

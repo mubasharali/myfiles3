@@ -18,33 +18,34 @@
         </div>
 
         <div id="showChat" class="content" data-bind="foreach:showChat">
+            <div data-bind="if:message.length > 0">
+                <div data-bind="visible:sentFrom != loginUserId1">
+                    <div class="left">
+                        <div data-bind="attr:{'id':id}">
+                            @*sent from<div data-bind="text:sentFrom"></div>
+                        loginUserID<div data-bind="text:loginUserId1"></div>*@
+                            <div class="author-name">
+                                <span data-bind="text:sentToName"></span>                                <small data-bind="text:timeAgo" class="chat-date">
 
-            <div data-bind="visible:sentFrom != loginUserId1">
-                <div class="left">
-                    <div data-bind="attr:{'id':id}">
-                        @*sent from<div data-bind="text:sentFrom"></div>
-        loginUserID<div data-bind="text:loginUserId1"></div>*@
-                        <div class="author-name">
-                            <span data-bind="text:sentToName"></span>                                <small data-bind="text:timeAgo" class="chat-date">
-
-                            </small>
-                        </div>
-                        <div class="chat-message active" data-bind="text:message">
+                                </small>
+                            </div>
+                            <div class="chat-message active" data-bind="text:message">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div data-bind="visible: sentFrom == loginUserId1">
-                <div class="right">
-                    <div data-bind="attr:{'id':id}">
-                        @*sent from<div data-bind="text:sentFrom"></div>
+                <div data-bind="visible: sentFrom == loginUserId1">
+                    <div class="right">
+                        <div data-bind="attr:{'id':id}">
+                            @*sent from<div data-bind="text:sentFrom"></div>
                         loginUserID<div data-bind="text:loginUserId1"></div>*@
-                        <div class="author-name">
-                            <span data-bind="text:sentToName"></span>                                <small data-bind="text:timeAgo" class="chat-date">
+                            <div class="author-name">
+                                <span data-bind="text:sentToName"></span>                                <small data-bind="text:timeAgo" class="chat-date">
 
-                            </small>
-                        </div>
-                        <div class="chat-message " data-bind="text:message">
+                                </small>
+                            </div>
+                            <div class="chat-message " data-bind="text:message">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -64,7 +65,7 @@
     </div>
     <div id="small-chat">
 
-        <span class="badge badge-warning pull-right">5</span>
+        @*<span class="badge badge-warning pull-right">5</span>*@
         <a class="open-small-chat">
             <i class="fa fa-comments"></i>
 

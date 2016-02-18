@@ -9,44 +9,45 @@ function AccountViewModel() {
     self.password = ko.observable();
     self.UserName = ko.observable();
     self.confirmPassword = ko.observable();
-    self.error = ko.observable("");
+    self.loginError = ko.observable("");
     self.isPasswordSaved = ko.observable(true);
     self.checkEnterEmail = function (d, e) {
-        self.error("");
+        self.loginError("");
         if (e.keyCode == 13) {
             self.submitEmail();
         }
     }
     self.loginBtn = function () {
         $("#inputEmail").modal('show');
+        self.loginError("");
     }
     self.hasConfirmPasswordFocus = ko.observable(false);
     self.checkEnterNewPassword = function (d, e) {
-        self.error("");
+        self.loginError("");
         if (e.keyCode == 13) {
             self.hasConfirmPasswordFocus(true);
         }
     }
     self.checkEnterConfirmPassword = function (d, e) {
-        self.error("");
+        self.loginError("");
         if (e.keyCode == 13) {
             self.registerNewUser();
         }
     }
     self.checkEnterName = function (d, e) {
-        self.error("");
+        self.loginError("");
         if (e.keyCode == 13) {
             self.submitName();
         }
     }
     self.checkEnterPassword = function (d, e) {
-        self.error("");
+        self.loginError("");
         if (e.keyCode == 13) {
             self.checkLoginUserPassword();
         }
     }
     self.registerOnEmail = function () {
-        self.error("");
+        self.loginError("");
         $.ajax({
             url: '/Account/RegisterUser?email=' + self.email(),
             dataType: "json",
@@ -57,16 +58,15 @@ function AccountViewModel() {
                 if (data == "Done") {
                     location.reload();
                 } else {
-                    self.error("Some Error has occured.Please try again");
+                    self.loginError("Some Error has occured.Please try again");
                 }
             },
             error: function () {
-                self.error("failed to register. Please refresh page and try again", "Error!");
+                self.loginError("failed to register. Please refresh page and try again");
             }
         });
     }
     self.submitEmail = function () {
-        console.log(isValidEmailAddress(self.email()));
         if(isValidEmailAddress(self.email())){
             $.ajax({
                 url: '/api/User/CheckEmail?email=' + self.email(),
@@ -83,18 +83,18 @@ function AccountViewModel() {
                         $("#oldUser").modal('show');
                         self.UserName(data.name);
                     }
-                    self.error("");
+                    self.loginError("");
                 },
                 error: function () {
-                    self.error("failed to send Email. Please refresh page and try again", "Error!");
+                    self.loginError("failed to send Email. Please refresh page and try again");
                 }
             });
         }else{
-            self.error("Please enter a valid email address");
+            self.loginError("Please enter a valid email address");
         }
     }
     self.checkLoginUserPassword = function () {
-        self.error("");
+        self.loginError("");
         $.ajax({
             url: '/Account/UserLogin?email='+self.email() + '&password=' + self.password(),
             dataType: "json",
@@ -103,23 +103,22 @@ function AccountViewModel() {
             type: 'POST',
             success: function (data) {
                 if (data == "Done") {
-                    self.error("");
+                    self.loginError("");
                         
                     location.reload();
                 } else {
-                    self.error("Incorrect password. Forget Password?");
+                    self.loginError("Incorrect password. Forget Password?");
                 }
             },
             error: function () {
-                self.error("failed to send password. Please refresh page and try again", "Error!");
+                self.loginError("failed to send password. Please refresh page and try again");
             }
         });
     }
     self.registerNewUser = function () {
-        self.error("");
+        self.loginError("");
         if (self.password() === self.confirmPassword()) {
             if (typeof self.password() != "undefined") {
-                console.log(self.password());
                 $.ajax({
                     url: '/Account/RegisterUser?email=' + self.email() + '&password=' + self.password(),
                     dataType: "json",
@@ -128,28 +127,28 @@ function AccountViewModel() {
                     type: 'POST',
                     success: function (data) {
                         if (data == "Done") {
-                            self.error("");
+                            self.loginError("");
                             $("#newUser").modal('hide');
                             $("#inputName").modal('show');
                         } else {
-                            self.error("Some error has occured");
+                            self.loginError("Some error has occured");
                         }
                     },
                     error: function () {
-                        self.error("failed to send password. Please refresh page and try again", "Error!");
+                        self.loginError("failed to send password. Please refresh page and try again");
                     }
                 });
             }
             else {
-                self.error("Please enter password");
+                self.loginError("Please enter password");
             }
         }
         else {
-            self.error("password does not match");
+            self.loginError("password does not match");
         }
     }
     self.submitName = function () {
-        self.error("");
+        self.loginError("");
         self.UserName($.trim(self.UserName()));
         if (self.UserName()) {
             $.ajax({
@@ -162,16 +161,16 @@ function AccountViewModel() {
                     if (data == "Done") {
                         location.reload();
                     } else {
-                        self.error("Some error has occured");
+                        self.loginError("Some error has occured");
                     }
                 },
                 error: function () {
-                    self.error("failed to send Name. Please refresh page and try again", "Error!");
+                    self.loginError("failed to send Name. Please refresh page and try again");
                 }
             });
         }
         else {
-            self.error("Please enter valid name");
+            self.loginError("Please enter valid name");
         }
     }
 }

@@ -311,7 +311,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         // return RedirectToAction("Index", new { category = "mobiles", subcategory = mobileModel.Mobile.brand, lowcategory = mobileModel.model, id = ad.Id, title = ad.title });
                     }
                 }
-                return View("Edit", ad);
+                return RedirectToAction("Index","Home");
             }
             return View("Edit", ad);
         }

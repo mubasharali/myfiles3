@@ -21,6 +21,7 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.CompanyOffices = new HashSet<CompanyOffice>();
             this.Companies = new HashSet<Company>();
             this.CarAds = new HashSet<CarAd>();
+            this.BikeAds = new HashSet<BikeAd>();
         }
     
         public int Id { get; set; }
@@ -37,5 +38,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual AspNetUser AspNetUser1 { get; set; }
         public virtual ICollection<Company> Companies { get; set; }
         public virtual ICollection<CarAd> CarAds { get; set; }
+        public virtual ICollection<BikeAd> BikeAds { get; set; }
     }
 }

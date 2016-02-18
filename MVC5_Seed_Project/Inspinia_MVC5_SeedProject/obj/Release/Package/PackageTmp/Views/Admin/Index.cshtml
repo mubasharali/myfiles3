@@ -27,13 +27,18 @@
                 <div data-bind="visible:!isTagEditing()">
                     <h3 data-bind="text:name"></h3>
                     <p data-bind="text:info"></p>
+                    <span data-bind="visible:updatedInfo()">
+                        <b>Updated Info:</b><p data-bind="text:updatedInfo"></p>
+                        <button data-bind="click:approvetag">Approve</button>
+                        <button data-bind="click:rejecttag">Reject</button>
+                    </span>
                     <button class="btn btn-sm" data-bind="click:editTag">edit</button>
                     <button class="btn btn-sm" data-bind="click:$parent.deleteTag">Delete</button>
                 </div>
                 <div data-bind="visible:isTagEditing()">
-                    <input type="text" class="form-control" data-bind="value:name" />
-                    <textarea class="msgTextArea form-control" data-bind="value:info, jqAutoresize: {}"></textarea>
-                    <button data-bind="click:updateTag">Update</button>
+                   Name: <input type="text" class="form-control" data-bind="value:name" />
+                   Info: <textarea class="msgTextArea form-control" data-bind="value:info, jqAutoresize: {}"></textarea>
+                   Updated Info: <textarea class="msgTextArea form-control" data-bind="value:updatedInfo, jqAutoresize: {}"></textarea> <button data-bind="click:updateTag">Update</button>
                 </div>
             </div>
         </div>
@@ -64,16 +69,65 @@
             self.createdByName = data.createdByName;
             self.updatedTime = data.updatedTime;
             self.updatedBy = data.updatedBy;
+            self.updatedInfo = ko.observable( data.updatedInfo);
             self.isTagEditing = ko.observable(false);
             self.editTag = function () {
                 self.isTagEditing(true);
             }
-            self.updateTag = function (tag) {
+            
+            self.approvetag = function (tag) {
                 $.ajax({
-                    url: '/api/Tag/UpdateTag',
+                    url: '/api/Tag/ApproveTag?id=' + tag.id,
                     dataType: "json",
                     type: 'POST',
-                    data:ko.toJSON(tag),
+                    success: function (data) {
+                        self.info(self.updatedInfo());
+                        self.updatedInfo(null);
+                    },
+                    error: function () {
+                        toastr.error("Unable to approve tag. Please try again", "Error");
+                    },
+                });
+            }
+            self.rejecttag = function (tag) {
+                $.ajax({
+                    url: '/api/Tag/RejectTag?id=' + tag.id,
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (data) {
+                        self.updatedInfo("");
+                    },
+                    error: function () {
+                        toastr.error("Unable to approve tag. Please try again", "Error");
+                    },
+                });
+            }
+            self.updateTag = function (tag) {
+                console.log(tag.info());
+                console.log(tag.updatedInfo());
+                if (tag.info()) {
+                    tag.info().trim();
+                }
+                if (tag.updatedInfo()) {
+                    tag.updatedInfo().trim();
+                }
+                
+                var comment = {
+                    Id: tag.id,
+                    name: tag.name(),
+                    info: tag.info(),
+                    updatedInfo: tag.updatedInfo(),
+                    time: tag.time,
+                    updatedTime: tag.updatedTime,
+                    createdBy: tag.createdBy,
+                    updatedBy: tag.updatedBy,
+                };
+                console.log(comment);
+                $.ajax({
+                    url: '/api/Tag/UpdateTagAdmin',
+                    dataType: "json",
+                    type: 'POST',
+                    data: ko.toJSON(comment),
                     success: function (data) {
                         self.isTagEditing(false);
                     },
@@ -87,6 +141,9 @@
 
         }
         function loadRecentAddedTags() {
+            
+        }
+        function ViewModel() {
             var self = this;
             self.submitDate = function () {
                 self.loadTags();
@@ -98,29 +155,6 @@
             self.showUpdatedTagBtn = function () {
                 self.showUpdatedTag(!self.showUpdatedTag());
             }
-
-            self.loadTags = function () {
-                if (self.selectedOption() == "updated") {
-                    url_address = '/api/Tag/RecentUpdatedTags?daysAgo=' + self.daysAgo();
-                } else if (self.selectedOption() == "added") {
-                    url_address = '/api/Tag/RecentAddedTags?daysAgo=' + self.daysAgo();
-                }
-                else if (self.selectedOption() == "reported") {
-                    url_address = '/api/Tag/ReportedTags?daysAgo=' + self.daysAgo();
-                }
-                $.ajax({
-                    url: url_address,
-                    dataType: "json",
-                    type: 'POST',
-                    success: function (data) {
-                        var mappedads = $.map(data, function (item) { return new Tag(item); });
-                        self.showTags(mappedads);
-                    },
-                    error: function () {
-                        toastr.error("Unable to load tags. Please try again", "Error");
-                    },
-                });
-            };
             self.deleteTag = function (tag) {
                 swal({
                     title: "Are you sure?",
@@ -145,10 +179,30 @@
                     });
                 });
             }
+            self.loadTags = function () {
+                if (self.selectedOption() == "updated") {
+                    url_address = '/api/Tag/RecentUpdatedTags?daysAgo=' + self.daysAgo();
+                } else if (self.selectedOption() == "added") {
+                    url_address = '/api/Tag/RecentAddedTags?daysAgo=' + self.daysAgo();
+                }
+                else if (self.selectedOption() == "reported") {
+                    url_address = '/api/Tag/ReportedTags?daysAgo=' + self.daysAgo();
+                }
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (data) {
+                        var mappedads = $.map(data, function (item) { return new Tag(item); });
+                        self.showTags(mappedads);
+                    },
+                    error: function () {
+                        toastr.error("Unable to load tags. Please try again", "Error");
+                    },
+                });
+            };
+
             self.loadTags();
-        }
-        function ViewModel() {
-            loadRecentAddedTags();
         }
         function getTimeAgo(varDate) {
             if (varDate) {
@@ -176,8 +230,6 @@
                 onclick: null
             };
             ko.applyBindings(new ViewModel());
-            //ko.applyBindings(new updateTagModel, document.getElementById("updateTags"));
-            //jquery validate
         });
     </script>
 }

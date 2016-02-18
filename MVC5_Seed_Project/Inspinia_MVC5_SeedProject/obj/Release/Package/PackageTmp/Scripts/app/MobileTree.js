@@ -13,14 +13,36 @@ function Company(data) {
         self.showModels(models);
     }
 }
+var mobileAccessories = ko.observable(false);
+var brand = ko.observable("");
+var model = ko.observable("");
+var title = ko.observable($("#search").val());
+var tags = ko.observable("");
+var minPrice = ko.observable(0);
+var maxPrice = ko.observable(50000);
+mobileAccessories.subscribe(function () {
+    RefreshSearch();
+})
+minPrice.subscribe(function () {
+    RefreshSearch();
+});
+maxPrice.subscribe(function () {
+    RefreshSearch();
+});
+tags.subscribe(function () {
+    RefreshSearch();
+})
 
 function TreeViewModel() {
     var self = this;
-
     self.showAds = ko.observableArray();
-    self.brand = ko.observable("");
-    self.model = ko.observable("");
-
+    self.isLoading = ko.observable(false);
+    searchingCity.subscribe(function () {
+        RefreshSearch();
+    })
+    searchingPP.subscribe(function () {
+        RefreshSearch();
+    })
     self.showCompanies = ko.observableArray();
     self.loadTree = function () {
         $.ajax({
@@ -43,19 +65,15 @@ function TreeViewModel() {
                     },
                     "plugins": ["search"]
                 }).on('changed.jstree', function (e, data) {
-                    self.brand( data.instance.get_node(data.node.parent).text);
-                    self.model(data.instance.get_node(data.selected[0]).text);
-                    console.log(self.brand());
-                    console.log(self.model());
-                    if (self.brand() == undefined) {
-                        self.brand(self.model());
-                        self.model("");
+                    brand( data.instance.get_node(data.node.parent).text);
+                    model(data.instance.get_node(data.selected[0]).text);
+                   
+                    if (brand() == undefined) {
+                        brand(model());
+                        model("");
                     }
-                    console.log(self.brand());
-                    console.log(self.model());
-                    self.loadad();
+                    RefreshSearch();
                 })
-  // create the instance
   .jstree();
                 var to = false;
                 $('#treeSearch').keyup(function () {
@@ -73,24 +91,42 @@ function TreeViewModel() {
     }
     self.loadTree();
     
-    self.loadad = function () {
-        url_address = '/api/Electronic/SearchMobileAds?brand=' + self.brand() + '&model=' + self.model();
-        $.ajax({
-            url: url_address,
-            dataType: "json",
-            contentType: "application/json",
-            cache: false,
-            type: 'POST',
-            success: function (data) {
-                var mappedads = $.map(data, function (item) { return new ad(item); });
-                self.showAds(mappedads);
-
-            },
-            error: function () {
-                toastr.error("Unable to load data. Please try again", "Error");
-            }
-        });
-
-    }
-    self.loadad();
 }
+
+
+function RefreshSearch() {
+    self.isLoading(true);
+    $.ajax({
+        url: '/api/Electronic/SearchMobileAds?brand=' + brand() + '&model=' + model() + '&tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&isAccessories=' + mobileAccessories(),
+        dataType: "json",
+        contentType: "application/json",
+        cache: false,
+        type: 'POST',
+        success: function (data) {
+            self.isLoading(false);
+            var mappedads = $.map(data, function (item) { return new Ad(item); });
+            self.showAds(mappedads);
+        },
+        error: function () {
+            self.isLoading(false);
+            toastr.error("failed to search. Please refresh page and try again", "Error!");
+        }
+    });
+}
+
+var saveResult = function (data) {
+    minPrice ( data.fromNumber );
+    maxPrice  (data.toNumber);
+};
+$("#ionrange_1").ionRangeSlider({
+    min: 0,
+    max: 50000,
+    type: 'double',
+    prefix: "Rs",
+    maxPostfix: "+",
+    prettify: false,
+    hasGrid: true,
+    from: minPrice,
+    to: maxPrice,
+    onFinish: saveResult
+});

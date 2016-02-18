@@ -241,7 +241,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           isFollowed = q.FollowQuestions.Any(x=>x.followedBy == islogin),
                           questionTags = from tag in q.QuestionTags.ToList()
                                          select new{
-                                             id = tag.Id,
+                                             id = tag.tagId,
                                              name = tag.Tag.name,
                                              //info = tag.Tag.info,
                                          },

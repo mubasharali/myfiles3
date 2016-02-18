@@ -197,20 +197,20 @@
                     cache: false,
                     //type: 'POST',
                     success: function (data) {
-                        var tags = data[0].adTags;
+                        var tags = data.adTags;
                         $.each((tags), function (i, item) { self.selectedTags.push(item.name) });
-                        self.exectLocation = data[0].location.exectLocation;
-                        self.selectedCity(data[0].location.cityName);
-                        self.selectedCityOriginal = data[0].location.cityName;
-                        if (data[0].condition == 'u') {
+                        self.exectLocation = data.location.exectLocation;
+                        self.selectedCity(data.location.cityName);
+                        self.selectedCityOriginal = data.location.cityName;
+                        if (data.condition == 'u') {
                             self.conditionChecked("used");
-                        } else if (data[0].condition == 'b') {
+                        } else if (data.condition == 'b') {
                             self.conditionChecked("new");
-                        } else if (data[0].condition == 'n') {
+                        } else if (data.condition == 'n') {
                             self.conditionChecked("unBoxed");
                         }
 
-                        self.selectedPopularPlaceOriginal = data[0].location.popularPlace;
+                        self.selectedPopularPlaceOriginal = data.location.popularPlace;
 
                         self.selectedCityOriginal = self.selectedCity();
 

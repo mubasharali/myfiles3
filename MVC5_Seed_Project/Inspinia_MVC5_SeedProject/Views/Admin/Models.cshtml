@@ -2,16 +2,7 @@
     ViewBag.Title = "Models";
 }
 
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-sm-4">
-        <h2>Index</h2>
-        <ol class="breadcrumb">
-            <li class="active">
-                <strong>Ad</strong>
-            </li>
-        </ol>
-    </div>
-</div>
+
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -26,7 +17,6 @@
             <p> It is mendatory to submit after changing option</p>
             <h3>Brands</h3>
             <div data-bind="foreach:showBrands">
-                @*<div data-bind="text:$parent.selectedOption"></div>*@
                 <div data-bind="visible:!isBrandEditing()">
                     <div data-bind="text:brand"></div>
                     <div data-bind="text:time"></div>
@@ -97,6 +87,10 @@
                     var url = "/api/Admin/ApproveMobileBrand?id=" + brand.id;
                 } else if (selectedOption == "Laptops") {
                     url = "/api/Admin/ApproveLaptopBrand?id=" + brand.id;
+                } else if (selectedOption == "Cars") {
+                    url = "/api/Admin/ApproveCarBrand?id=" + brand.id;
+                } else if (selectedOption == "Bikes") {
+                    url = "/api/Admin/ApproveBikeBrand?id=" + brand.id;
                 }
                 swal({
                     title: "Are you sure?",
@@ -126,9 +120,18 @@
             }
             self.updateBrand = function (brand, selectedOption) {
                 brand.addedBy = brand.addedById;
+                var updateUrl = "";
                 if (selectedOption == "Mobiles") {
+                    updateUrl = '/api/Electronic/UpdateMobileBrand';
+                } else if (selectedOption == "Laptops") {
+                    updateUrl = '/api/Electronic/UpdateLaptopBrand';
+                } else if (selectedOption == "Cars") {
+                    updateUrl = '/api/Vehicle/UpdateCarBrand';
+                } else if (selectedOption == "Bikes") {
+                    updateUrl = '/api/Vehicle/UpdateBikeBrand';
+                }
                     $.ajax({
-                        url: '/api/Electronic/UpdateMobileBrand',
+                        url: updateUrl,
                         dataType: "json",
                         contentType: "application/json",
                         cache: false,
@@ -141,23 +144,6 @@
                             toastr.error("failed to update brand", "Error!");
                         }
                     });
-                }
-                else if (selectedOption == "Laptops") {
-                    $.ajax({
-                        url: '/api/Electronic/UpdateLaptopBrand',
-                        dataType: "json",
-                        contentType: "application/json",
-                        cache: false,
-                        type: 'POST',
-                        data: ko.toJSON(brand),
-                        success: function (data) {
-                            self.isBrandEditing(false);
-                        },
-                        error: function () {
-                            toastr.error("failed to update brand", "Error!");
-                        }
-                    });
-                }
             }
         };
         function Model(data) {
@@ -190,9 +176,14 @@
                 }, function () {
                     if (selectedOption == "Mobiles") {
                         var url = '/api/Admin/ApproveMobileModel?id=' + brand.id;
-                    } else {
+                    } else if(selectedOption == "Laptops") {
                         url = '/api/Admin/ApproveLaptopModel?id=' + brand.id;
+                    } else if (selectedOption == "Cars") {
+                        url = '/api/Admin/ApproveCarModel?id=' + brand.id;
+                    } else if (selectedOption == "Bikes") {
+                        url = '/api/Admin/ApproveBikeModel?id=' + brand.id;
                     }
+
                     $.ajax({
                         url: url,
                         dataType: "json",
@@ -209,10 +200,19 @@
                     });
                 });
             }
-            self.updateModel = function (model,selectedOption) {
+            self.updateModel = function (model, selectedOption) {
+                var updateUrl = "";
                 if (selectedOption == "Mobiles") {
+                    updateUrl = '/api/Electronic/UpdateMobileModel';
+                }else if(selectedOption == "Laptops"){
+                    updateUrl = '/api/Electronic/UpdateLaptopModel';
+                }else if(selectedOption == "Cars"){
+                    updateUrl = '/api/Vehicle/UpdateCarModel';
+                } else if (selectedOption == "Bikes") {
+                    updateUrl = '/api/Vehicle/UpdateBikeModel';
+                }
                     $.ajax({
-                        url: '/api/Electronic/UpdateMobileModel',
+                        url: updateUrl,
                         dataType: "json",
                         contentType: "application/json",
                         cache: false,
@@ -225,23 +225,6 @@
                             toastr.error("failed to update model", "Error!");
                         }
                     });
-                }
-                else if (selectedOption == "Laptops") {
-                    $.ajax({
-                        url: '/api/Electronic/UpdateLaptopModel',
-                        dataType: "json",
-                        contentType: "application/json",
-                        cache: false,
-                        type: 'POST',
-                        data: ko.toJSON(model),
-                        success: function (data) {
-                            self.isModelEditing(false);
-                        },
-                        error: function () {
-                            toastr.error("failed to update model", "Error!");
-                        }
-                    });
-                }
             }
         };
         function ViewModel() {
@@ -256,7 +239,7 @@
             }
             self.showBrands = ko.observableArray();
             self.showModels = ko.observableArray();
-            self.availableOptions = ["Mobiles", "Laptops"];
+            self.availableOptions = ["Mobiles", "Laptops","Cars","Bikes"];
             self.selectedOption = ko.observable("Mobiles");
             
             self.deleteModelBtn = function (model) {
@@ -273,6 +256,10 @@
                         url = '/api/Electronic/DeleteMobileModel?id=' + model.id;
                     } else if (self.selectedOption() == "Laptops") {
                         url = '/api/Electronic/DeleteLaptopModel?id=' + model.id;
+                    } else if (self.selectedOption() == "Cars") {
+                        url = '/api/Vehicle/DeleteCarModel?id=' + model.id;
+                    } else if (self.selectedOption() == "Bikes") {
+                        url = '/api/Vehicle/DeleteBikeModel?id=' + model.id;
                     }
                     $.ajax({
                         url: url,
@@ -304,6 +291,10 @@
                         url = '/api/Electronic/DeleteMobileBrand?id=' + brand.id;
                     } else if (self.selectedOption() == "Laptops") {
                         url = '/api/Electronic/DeleteLaptopBrand?id=' + brand.id;
+                    } else if (self.selectedOption() == "Cars") {
+                        url = '/api/Vehicle/DeleteCarBrand?id=' + brand.id;
+                    } else if (self.selectedOption() == "Bikes") {
+                        url = '/api/Vehicle/DeleteBikeBrand?id=' + brand.id;
                     }
                     $.ajax({
                         url: url,

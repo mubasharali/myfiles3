@@ -1,487 +1,200 @@
-﻿@model IEnumerable<Inspinia_MVC5_SeedProject.Models.AspNetUser>
+﻿@model Inspinia_MVC5_SeedProject.Models.AspNetUser
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = Model.Email ;
 }
 
-@* replaced email by name *@
 <input type="hidden" value="@ViewBag.id" id="userId" />
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-sm-4">
-        <h2>Profile</h2>
-        <ol class="breadcrumb">
-            <li class="active">
-                <strong>Profile</strong>
-            </li>
-            
-        </ol>
-    </div>
-</div>
 
-@*<div data-bind="foreach:showProfile">
-    <div data-bind="text:UserName">
-
-    </div>
-    <div data-bind="text:Email"></div>
-    <form action="#">
-        <input type="file" />
-        <input type="submit" />
-    </form>
-</div>*@
 
 <div class="wrapper wrapper-content animated fadeInRight" id="profile" >
-   
-    <div class="row m-b-lg m-t-lg" data-bind="with:showProfile">
-        <div class="col-md-5">
-
-            <div class="profile-image">
-                <img data-bind="attr:{src:dpLink}" class="img-circle circle-border m-b-md" alt="profile">
-            </div>
-            <div class="profile-info">
-                <div class="">
-                    <div>
-                        <h2 class="no-margins" data-bind="text:name"></h2>(<span data-bind="text:isOnline"></span> @*<span data-bind="if:isOnline()"><i class="fa fa-circle text-navy"></i> online</span>
-                        <span data-bind="if:!isOnline()"><i class="fa fa-circle text-warning"></i> offline</span>*@)
-                        <h4 data-bind="text:shortAbout"></h4>
-                        <small>
-                            <button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return addFriend(id)} " style="margin-bottom:1px"><span data-bind="visible:!isFriend()">Add Friend</span><span data-bind="visible:isFriend">UnFriend</span></button> 
-                            &nbsp;<button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return sendMessage(id,name)}" style="margin-bottom:1px">Send message</button> &nbsp;<button data-bind="visible: loginUserId != id" style="margin-bottom:1px" class="btn btn-sm">Follow</button>
-                            <button><a class="btn btn-sm" data-bind="visible: loginUserId == id,attr:{href:'/User/Profile/'+ id}" style="margin-bottom:1px">Edit Profile</a></button>
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <table class="table small m-b-xs">
-                <tbody>
-                    <tr>
-                        <td>
-                            From: <strong data-bind="text:city"></strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Email: <strong data-bind="text:UserName"></strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            phone number: <strong data-bind="text:phoneNumber"></strong>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>
-                            Date of birth: <strong data-bind="text:dateOfBirth"></strong>  &nbsp; Gender: <strong data-bind="text:gender"></strong>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-offset-1 col-md-3">
-            <table class="table small m-b-xs">
-                <tbody>
-                    <tr>
-                        <td>
-                            <strong>142</strong> Active ads
-                        </td>
-                        <td>
-                            <strong>22</strong> Followers
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>61</strong> saved ads
-                        </td>
-                        <td>
-                            <strong>54</strong> Pages
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>154</strong> Questions
-                        </td>
-                        <td>
-                            <strong>32</strong> Answers
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-       
+    <div data-bind="visible:!showProfile()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
     </div>
+    <div data-bind="with:showProfile">
+        <div class="row m-b-lg m-t-lg">
+            <div class="col-sm-5">
 
-    @*<div class="row">
-
-        <div class="col-lg-3" >
-            <div class="ibox">
-                <div class="ibox-content">
-                    <ul class="list-group clear-list m-t">
-                        <li class="list-group-item fist-item">
-                            Active ads
-                        </li>
-                        <li class="list-group-item">
-                            Save ads
-                        </li>
-                        <li data-bind="click:openProfile,visible:loginUserId == id" class="list-group-item">
-                            Edit profile
-                        </li>
-                        <li class="list-group-item">
-                            Questions asked
-                        </li>
-                        <li class="list-group-item">
-                            Answers
-                        </li>
-                        <li class="list-group-item">
-                            Comments
-                        </li>
-                    </ul>
+                <div class="profile-image">
+                    <a target="_blank" data-bind="attr:{href:dpLink}">
+                        <img data-bind="attr:{src:dpLink}" class="img-circle circle-border m-b-md" alt="profile">
+                    </a>
+                </div>
+                <div class="profile-info">
+                    <div class="">
+                        <div>
+                            <h2 class="no-margins" data-bind="text:name"></h2>(<span data-bind="text:isOnline"></span> @*<span data-bind="if:isOnline()"><i class="fa fa-circle text-navy"></i> online</span>
+                                <span data-bind="if:!isOnline()"><i class="fa fa-circle text-warning"></i> offline</span>*@)
+                            <br />
+                            <small>
+                                <button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return addFriend(id)} " style="margin-bottom:1px"><span data-bind="visible:!isFriend()">Add Friend</span><span data-bind="visible:isFriend">UnFriend</span></button>
+                                &nbsp;<button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return sendMessage(id,name)}" style="margin-bottom:1px">Send message</button> &nbsp;<button data-bind="visible: loginUserId != id" style="margin-bottom:1px" class="btn btn-sm">Follow</button>
+                                <a class="btn btn-sm btn-default" data-bind="visible: loginUserId == id,attr:{href:'/User/Profile/'+ id}" style="margin-bottom:1px">Edit Profile</a>
+                            </small>
+                        </div>
+                    </div>
                 </div>
             </div>
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <h3>About Alex Smith</h3>
+            <div class="col-sm-3">
+                <table class="table small m-b-xs">
+                    <tbody>
+                        <tr>
+                            <td>
+                                From:  <strong data-bind="text:city"></strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Email: <span data-bind="visible:!hideEmail"> <strong data-bind="text:UserName"></strong></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                phone number:<span data-bind="visible:!hidePhoneNumber"> <strong data-bind="text:phoneNumber"></strong></span>
+                            </td>
 
-                            <p class="small">
-                                There are many variations of passages of Lorem Ipsum available, but the majority have
-                                suffered alteration in some form, by injected humour, or randomised words which don't.
-                                <br />
-                                <br />
-                                If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
-                                anything embarrassing
-                            </p>
+                        </tr>
+                        <tr>
+                            <td>
+                                Date of birth:<span data-bind="visible:!hideDateOfBirth"><strong data-bind="text:dateOfBirth"></strong> </span> &nbsp; Gender: <strong data-bind="text:gender"></strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-offset-1 col-sm-3">
+                @*<table class="table small m-b-xs">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>142</strong> Active ads
+                                </td>
+                                <td>
+                                    <strong>22</strong> Followers
+                                </td>
 
-                            <p class="small font-bold">
-                                <span><i class="fa fa-circle text-navy"></i> Online status</span>
-                            </p>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>61</strong> saved ads
+                                </td>
+                                <td>
+                                    <strong>54</strong> Pages
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>154</strong> Questions
+                                </td>
+                                <td>
+                                    <strong>32</strong> Answers
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>*@
+            </div>
 
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-3">
+                
+                <div class="ibox hidden-xs" >
+                    <div class="ibox-content">
+                        <h3>About <span data-bind="text:name"> </span></h3>
+                        <p data-bind="visible:!about">Apparently, this user prefers to keep an air of mystery about them.</p>
+                        <p class="small" data-bind="text:about">
+                            
+                        </p>
+                    </div>
+                </div>
+                <div class="ibox hidden-xs" data-bind="visible:loginUserId == id && showCompanies().length > 0">
+                    <div class="ibox-title"><h5>My Companies</h5></div>
+                    <div class="ibox-content">
+                        <div data-bind="foreach:showCompanies">
+                            <a data-bind="attr:{href:'/CompanyPage/' + id + '/' + name}"  class="btn btn-white set_es"><img  style="width:26px"  data-bind="attr:{src:logoLink }"  /> <span data-bind="text:name" ></span></a>
+                            @*<div class="media">
+                                <a data-bind="attr:{href:'/CompanyPage/' + id + '/' + name}" >
+                                    <div class="pull-left"> <img style="width:26px" data-bind="attr:{src:logoLink }" /> </div> 
+                                    <div class="media-body" data-bind="text:name"> </div>
+                                </a>
+                            </div>*@
                         </div>
                     </div>
-
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <h3>Followers and friends</h3>
-                            <p class="small">
-                                If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
-                                anything embarrassing
-                            </p>
-                            <div class="user-friends">
-                                <a href=""><img alt="image" class="img-circle" src="~/Images/a3.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="~/Images/a1.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="~/Images/a2.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="~/Images/a4.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="~/Images/a5.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="~/Images/a6.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="~/Images/a7.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="~/Images/a8.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="~/Images/a2.jpg"></a>
-                                <a href=""><img alt="image" class="img-circle" src="~/Images/a1.jpg"></a>
-                            </div>
+                </div>
+                @*<div class="ibox hidden-xs">
+                    <div class="ibox-content">
+                        <h3>Followers and friends</h3>
+                        <p class="small">
+                            If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
+                            anything embarrassing
+                        </p>
+                        <div class="user-friends">
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a3.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a1.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a2.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a4.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a5.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a6.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a7.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a8.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a2.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a1.jpg"></a>
                         </div>
                     </div>
-
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <h3>Personal friends</h3>
-                            <ul class="list-unstyled file-list">
-                                <li><a href=""><i class="fa fa-file"></i> Project_document.docx</a></li>
-                                <li><a href=""><i class="fa fa-file-picture-o"></i> Logo_zender_company.jpg</a></li>
-                                <li><a href=""><i class="fa fa-stack-exchange"></i> Email_from_Alex.mln</a></li>
-                                <li><a href=""><i class="fa fa-file"></i> Contract_20_11_2014.docx</a></li>
-                                <li><a href=""><i class="fa fa-file-powerpoint-o"></i> Presentation.pptx</a></li>
-                                <li><a href=""><i class="fa fa-file"></i> 10_08_2015.docx</a></li>
-                            </ul>
-                        </div>
+                </div>*@
+                <div class="ibox hidden-xs" data-bind="visible:loginUserId == id">
+                    <div class="ibox-title"><h5>Manage Alerts</h5></div>
+                    <div class="ibox-content">
+                        <p data-bind="visible:followingTags().length>0">
+                            You are receiving notifications for following tags:
+                            @*<ul class="tag-list" data-bind="foreach:followingTags" style="padding:0">
+                                <li><a href=""><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                            </ul>*@
+                            <div class="small m-t-xs" data-bind="foreach:followingTags">
+                                <a target="_blank" data-bind="attr:{href:'/Tag/' + name},text:name" class="btn btn-xs btn-white" > </a>
+                            </div><br />
+                        </p>
+                        @*<span data-bind="foreach:followingTags">
+                            <p>&nbsp;</p>
+                        </span>*@
+                        <p >Enter tags you want to follow and you will be notified when new ad containing your followed tags will be posted</p>
+                        <p > Note: If you are already following a tag then it will be unfollowed</p>
+                        <input id="select-tags-to-follow" data-bind="value:tagsToFollow" class="repositories" placeholder="Pick tags..." />
+                        <p data-bind="visible:tagsToFollow().length > 0">Follow tags <span data-bind="text:tagsToFollow"></span> and if already followed then unfollow</p>
+                        <button data-bind="click:followTagsBtn" class="btn btn-primary">Submit</button>
+                        <div data-bind="text:followSummary"></div>
                     </div>
-
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <h3>Private message</h3>
-
-                            <p class="small">
-                                Send private message to Alex Smith
-                            </p>
-
-                            <div class="form-group">
-                                <label>Subject</label>
-                                <input type="name" class="form-control" placeholder="Message subject">
-                            </div>
-                            <div class="form-group">
-                                <label>Message</label>
-                                <textarea class="form-control" placeholder="Your message" rows="3"></textarea>
-                            </div>
-                            <button class="btn btn-primary btn-block">Send</button>
-
-                        </div>
-                    </div>
-
                 </div>
 
-                <div class="col-lg-5">
-
-                    <div class="social-feed-box">
-
-                        <div class="pull-right social-action dropdown">
-                            <button data-toggle="dropdown" class="dropdown-toggle btn-white">
-                                <i class="fa fa-angle-down"></i>
-                            </button>
-                            <ul class="dropdown-menu m-t-xs">
-                                <li><a href="#">Config</a></li>
-                            </ul>
-                        </div>
-                        <div class="social-avatar">
-                            <a href="" class="pull-left">
-                                <img alt="image" src="~/Images/a1.jpg">
-                            </a>
-                            <div class="media-body">
-                                <a href="#">
-                                    Andrew Williams
-                                </a>
-                                <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
-                            </div>
-                        </div>
-                        <div class="social-body">
-                            <p>
-                                Many desktop publishing packages and web page editors now use Lorem Ipsum as their
-                                default model text, and a search for 'lorem ipsum' will uncover many web sites still
-                                in their infancy. Packages and web page editors now use Lorem Ipsum as their
-                                default model text.
-                            </p>
-
-                            <div class="btn-group">
-                                <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
-                                <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
-                                <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
-                            </div>
-                        </div>
-                        <div class="social-footer">
-                            <div class="social-comment">
-                                <a href="" class="pull-left">
-                                    <img alt="image" src="~/Images/a1.jpg">
-                                </a>
-                                <div class="media-body">
-                                    <a href="#">
-                                        Andrew Williams
-                                    </a>
-                                    Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.
-                                    <br />
-                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
-                                    <small class="text-muted">12.06.2014</small>
-                                </div>
-                            </div>
-
-                            <div class="social-comment">
-                                <a href="" class="pull-left">
-                                    <img alt="image" src="~/Images/a2.jpg">
-                                </a>
-                                <div class="media-body">
-                                    <a href="#">
-                                        Andrew Williams
-                                    </a>
-                                    Making this the first true generator on the Internet. It uses a dictionary of.
-                                    <br />
-                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                    <small class="text-muted">10.07.2014</small>
-                                </div>
-                            </div>
-
-                            <div class="social-comment">
-                                <a href="" class="pull-left">
-                                    <img alt="image" src="~/Images/a3.jpg">
-                                </a>
-                                <div class="media-body">
-                                    <textarea class="form-control" placeholder="Write comment..."></textarea>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="social-feed-box">
-
-                        <div class="pull-right social-action dropdown">
-                            <button data-toggle="dropdown" class="dropdown-toggle btn-white">
-                                <i class="fa fa-angle-down"></i>
-                            </button>
-                            <ul class="dropdown-menu m-t-xs">
-                                <li><a href="#">Config</a></li>
-                            </ul>
-                        </div>
-                        <div class="social-avatar">
-                            <a href="" class="pull-left">
-                                <img alt="image" src="~/Images/a6.jpg">
-                            </a>
-                            <div class="media-body">
-                                <a href="#">
-                                    Andrew Williams
-                                </a>
-                                <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
-                            </div>
-                        </div>
-                        <div class="social-body">
-                            <p>
-                                Many desktop publishing packages and web page editors now use Lorem Ipsum as their
-                                default model text, and a search for 'lorem ipsum' will uncover many web sites still
-                                in their infancy. Packages and web page editors now use Lorem Ipsum as their
-                                default model text.
-                            </p>
-                            <p>
-                                Lorem Ipsum as their
-                                default model text, and a search for 'lorem ipsum' will uncover many web sites still
-                                in their infancy. Packages and web page editors now use Lorem Ipsum as their
-                                default model text.
-                            </p>
-                            <img src="~/Images/gallery/3.jpg" class="img-responsive">
-                            <div class="btn-group">
-                                <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
-                                <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
-                                <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
-                            </div>
-                        </div>
-                        <div class="social-footer">
-                            <div class="social-comment">
-                                <a href="" class="pull-left">
-                                    <img alt="image" src="~/Images/a1.jpg">
-                                </a>
-                                <div class="media-body">
-                                    <a href="#">
-                                        Andrew Williams
-                                    </a>
-                                    Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.
-                                    <br />
-                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
-                                    <small class="text-muted">12.06.2014</small>
-                                </div>
-                            </div>
-
-                            <div class="social-comment">
-                                <a href="" class="pull-left">
-                                    <img alt="image" src="~/Images/a2.jpg">
-                                </a>
-                                <div class="media-body">
-                                    <a href="#">
-                                        Andrew Williams
-                                    </a>
-                                    Making this the first true generator on the Internet. It uses a dictionary of.
-                                    <br />
-                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                    <small class="text-muted">10.07.2014</small>
-                                </div>
-                            </div>
-
-                            <div class="social-comment">
-                                <a href="" class="pull-left">
-                                    <img alt="image" src="~/Images/a8.jpg">
-                                </a>
-                                <div class="media-body">
-                                    <a href="#">
-                                        Andrew Williams
-                                    </a>
-                                    Making this the first true generator on the Internet. It uses a dictionary of.
-                                    <br />
-                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                    <small class="text-muted">10.07.2014</small>
-                                </div>
-                            </div>
-
-                            <div class="social-comment">
-                                <a href="" class="pull-left">
-                                    <img alt="image" src="~/Images/a3.jpg">
-                                </a>
-                                <div class="media-body">
-                                    <textarea class="form-control" placeholder="Write comment..."></textarea>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-
-                </div>
-                <div class="col-lg-4 m-b-lg">
-                    <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                        <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon navy-bg">
-                                <i class="fa fa-briefcase"></i>
-                            </div>
-
-                            <div class="vertical-timeline-content">
-                                <h2>Meeting</h2>
-                                <p>
-                                    Conference on the sales results for the previous year. Monica please examine sales trends in marketing and products. Below please find the current status of the sale.
-                                </p>
-                                <a href="#" class="btn btn-sm btn-primary"> More info</a>
-                                <span class="vertical-date">
-                                    Today <br>
-                                    <small>Dec 24</small>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon blue-bg">
-                                <i class="fa fa-file-text"></i>
-                            </div>
-
-                            <div class="vertical-timeline-content">
-                                <h2>Send documents to Mike</h2>
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.</p>
-                                <a href="#" class="btn btn-sm btn-success"> Download document </a>
-                                <span class="vertical-date">
-                                    Today <br>
-                                    <small>Dec 24</small>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon lazur-bg">
-                                <i class="fa fa-coffee"></i>
-                            </div>
-
-                            <div class="vertical-timeline-content">
-                                <h2>Coffee Break</h2>
-                                <p>Go to shop and find some products. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's. </p>
-                                <a href="#" class="btn btn-sm btn-info">Read more</a>
-                                <span class="vertical-date"> Yesterday <br><small>Dec 23</small></span>
-                            </div>
-                        </div>
-
-                        <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon yellow-bg">
-                                <i class="fa fa-phone"></i>
-                            </div>
-
-                            <div class="vertical-timeline-content">
-                                <h2>Phone with Jeronimo</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut.</p>
-                                <span class="vertical-date">Yesterday <br><small>Dec 23</small></span>
-                            </div>
-                        </div>
-
-                        <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon navy-bg">
-                                <i class="fa fa-comments"></i>
-                            </div>
-
-                            <div class="vertical-timeline-content">
-                                <h2>Chat with Monica and Sandra</h2>
-                                <p>Web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like). </p>
-                                <span class="vertical-date">Yesterday <br><small>Dec 23</small></span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                
 
             </div>
-            <div class="ibox float-e-margins">
+
+            <div class="col-lg-7 col-sm-9">
+                <h4>Active ads (<span data-bind="text:activeads().length"></span>)</h4><hr />
+                <div data-bind="foreach:activeads">
+                    @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                </div>
+                <div data-bind="visible:id == loginUserId">
+                    <h4>Saved ads (<span data-bind="text:savedads().length"></span>) </h4><hr />
+                    <div data-bind="foreach:savedads">
+                        @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                    </div>
+
+                    <h4>Notifications (<span data-bind="text:notificationads().length"></span>) </h4><hr />
+
+                    <div data-bind="foreach:notificationads">
+                        @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+            @*<div class="ibox float-e-margins">
                 <div class="ibox-title  back-change">
                     <h5>Image cropper <small>http://fengyuanchen.github.io/cropper/</small></h5>
                     <div class="ibox-tools">
@@ -542,27 +255,101 @@
                 </div>
             </div>*@
         </div>
+
 @section Styles {
 
-    @Styles.Render("~/plugins/toastrStyles")
 @Styles.Render("~/plugins/imagecropperStyles")
+@Styles.Render("~/bundles/tagStyles")
+@Styles.Render("~/plugins/slickStyles")
+@Styles.Render("~/plugins/slickThemeStyles")
+@Styles.Render("~/plugins/toastrStyles")
 }
+
 @Html.Partial("/Views/Shared/_Chat.cshtml")
 @Html.Partial("~/Views/Shared/_UserLogin.cshtml")
+
 @section Scripts{
-    @Scripts.Render("~/plugins/toastr")
+    
 @Scripts.Render("~/plugins/imagecropper")
+@Scripts.Render("~/plugins/slick")
+@Scripts.Render("~/plugins/truncate")
 <script src="~/Scripts/jquery.timeago.js"></script>
-<script src="~/Scripts/knockout-3.3.0.js"></script>
-<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
-<script src="~/signalr/hubs"></script>
-<script src="~/Scripts/app/chat.js"></script>
-<script src="~/Scripts/UserLogin.js"></script>
+<script src="~/Scripts/app/slick-knockout-binding.js"></script>
+<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
     <script>
+        function Company(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.logoLink = "/Images/Company/default_logo.png";
+            if (data.logoExtension) {
+                self.logoLink = "/Images/Company/" + self.id + "/logo" + data.logoExtension;
+            }
+            self.companyClicked = function () {
+                window.location.href = "/CompanyPage/" + self.id + "/" + self.name;
+            }
+        }
         function profile(data) {
             var self = this;
             data = data || {};
+
+            self.showCompanies = ko.observableArray();
+            if (data.companies) {
+                var tagsdata = $.map(data.companies, function (item) { return new Company(item); });
+                self.showCompanies(tagsdata);
+            }
+
+            self.tagsToFollow = ko.observable("");
+            self.followSummary = ko.observable();
+            self.followTagsBtn = function () {
+                if (self.tagsToFollow() == "") {
+                    toastr.info("Please Enter the tags");
+                    return;
+                }
+                self.followSummary("");
+                $.ajax({
+                    url: '/api/Tag/FollowTags?tags=' + self.tagsToFollow() + '&isUnfollowAllowed=' + true,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        self.followSummary("Done! Refresh page to see changes");
+                    },
+                    error: function () {
+                        toastr.error("Some error has occured. Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+
+            self.savedads = ko.observableArray();
+            self.activeads = ko.observableArray();
+            self.notificationads = ko.observableArray();
+
             self.id = data.Id;
+            self.followingTags = ko.observableArray();
+
+            
+
+            if (data.followingTags) {
+                var tagsdata = $.map(data.followingTags, function (item) { return new Tag(item); });
+                self.followingTags(tagsdata);
+            }
+            if (data.savedads) {
+                var adData = $.map(data.savedads, function (item) { return new Ad(item); });
+                self.savedads(adData);
+            }
+            if (data.activeads) {
+                var adData = $.map(data.activeads, function (item) { return new Ad(item); });
+                self.activeads(adData);
+            }
+            if (data.notificationads) {
+                var adData = $.map(data.notificationads, function (item) { return new Ad(item); });
+                self.notificationads(adData);
+            }
+
             self.UserName = data.UserName;
             self.city = data.city;
             self.gender = data.gender;
@@ -574,14 +361,17 @@
             self.phoneNumber = data.phoneNumber;
             self.hideEmail = data.hideEmail;
             self.hidePhoneNumber = data.hidePhoneNumber;
-            self.dpExtension = data.dpExtension;
-            self.dpLink = '/Images/Users/p' + self.id + self.dpExtension;
-            self.shortAbout = data.shortAbout;
-            self.longAbout = data.longAbout;
+            self.hideDateOfBirth = data.hideDateOfBirth;
+            self.dpLink = '/Images/Users/p' + self.id + data.dpExtension;
+            if (!data.dpExtension) {
+                self.dpLink = '/Images/Users/default.jpg';
+            }
+            self.about = data.about;
             self.lastSeen = data.lastSeen;
             self.reputation = data.reputation;
             self.since = data.since;
             self.isFriend = ko.observable(data.isFriend);
+            self.isFriendRequestSent = ko.observable(data.isFriendRequestSent);
             self.addFriend = function (id) {
                 if (self.loginUserId) {
                     if (self.isFriend()) {
@@ -603,7 +393,12 @@
                             }
                         })
                     }
+                } else {
+                    loginBtn();
                 }
+            }
+            self.follow = function (id) {
+
             }
             self.unFriend = function (id) {
                 self.isFriend(false);
@@ -626,7 +421,6 @@
             self.sendMessage = function (id, name) {
                 sendMessageTo(id);
                 sendMessgeToName(name);
-                console.log("Message will be sent to : " + name);
                 $(".open-small-chat").trigger('click');
 
             }
@@ -657,18 +451,21 @@
                 window.location.href = "/User/Profile/" + userId;
             }
         }
+        
         function viewModel() {
+            SearchingLocation();
             ChatViewModel();
             AccountViewModel();
             
             var self = this;
+            self.followedTags = ko.observableArray();
             self.showProfile = ko.observable();
             
             self.openProfile = function () {
                 var userId = $("#userId").val();
                 window.location.href = "/User/Profile/" + userId;
             }
-
+            
             //online users
             //var userId = $("#userId").val();
             //self.onlineUsersHub = $.connection.onlineUsers;
@@ -690,8 +487,42 @@
                     cache: false,
                     type: 'GET',
                     success: function (data) {
-                       // var mape = $.map(data, function (item) { return new profile(item); });
                         self.showProfile(new profile(data));
+                        $('#select-tags-to-follow').selectize({
+                            valueField: 'name',
+                            labelField: 'name',
+                            searchField: 'name',
+                            options: [],
+                            maxItems: 20,
+                            render: {
+                                option: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="title">' +
+                                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                                        '</span>' +
+                                        '<span class="description">' + escape(item.info) + '</span>' +
+                                        '<ul class="meta">' +
+                                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                                        '</ul>' +
+                                    '</div>';
+                                }
+                            },
+                            load: function (query, callback) {
+                                if (!query.length) return callback();
+                                $.ajax({
+                                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                                    type: 'POST',
+                                    error: function () {
+                                        callback();
+                                    },
+                                    success: function (res) {
+                                        callback(res.slice(0, 10));
+                                    }
+                                });
+                            }
+                        });
                     },
                     error: function () {
                         toastr.error("failed to load profile", "Error");
@@ -701,6 +532,7 @@
             self.loadProfile();
             return self;
         }
+        
         function getTimeAgo(varDate) {
             if (varDate) {
                 return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
@@ -710,6 +542,10 @@
             }
         }
         $(function () {
+            
+           
+
+
             $('#setProfilePicBtn').prop('disabled', true);
             var $image = $(".image-crop > img")
             $($image).cropper({
@@ -774,10 +610,8 @@
                 $image.cropper("setDragMode", "crop");
             });
             $.connection.hub.start().done();
-            //   ko.applyBindings(new viewModel(), document.getElementById("profile"));
-           // ChatViewModel();
+            
             ko.applyBindings(new viewModel());
-            //  ko.applyBindings(new ChatViewModel(), document.getElementById("chatViewModel"));
             
         });
     </script>

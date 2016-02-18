@@ -120,18 +120,52 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           };
                 return Ok(ret);
             }
-            var retu = from b in db.LaptopBrands
-                      where b.time >= days
-                      select new
-                      {
-                          id = b.Id,
-                          brand = b.brand,
-                          time = b.time,
-                          status = b.status,
-                          addedById = b.AspNetUser.Id,
-                          addedByName = b.AspNetUser.Email
-                      };
-            return Ok(retu);
+            if (MobileOrLaptop == "Laptops")
+            {
+                var retu = from b in db.LaptopBrands
+                           where b.time >= days
+                           select new
+                           {
+                               id = b.Id,
+                               brand = b.brand,
+                               time = b.time,
+                               status = b.status,
+                               addedById = b.AspNetUser.Id,
+                               addedByName = b.AspNetUser.Email
+                           };
+                return Ok(retu);
+            }
+            if (MobileOrLaptop == "Bikes")
+            {
+                var retu = from b in db.BikeBrands
+                           where b.time >= days
+                           select new
+                           {
+                               id = b.Id,
+                               brand = b.brand,
+                               time = b.time,
+                               status = b.status,
+                               addedById = b.AspNetUser.Id,
+                               addedByName = b.AspNetUser.Email
+                           };
+                return Ok(retu);
+            }
+            if (MobileOrLaptop == "Cars")
+            {
+                var retua = from b in db.CarBrands
+                            where b.time >= days
+                            select new
+                            {
+                                id = b.Id,
+                                brand = b.brand,
+                                time = b.time,
+                                status = b.status,
+                                addedById = b.AspNetUser.Id,
+                                addedByName = b.AspNetUser.Email
+                            };
+                return Ok(retua);
+            }
+            return BadRequest();
         }
         public async Task<IHttpActionResult> GetModelsWithTime(int daysAgo,string MobileOrLaptop)
         {
@@ -154,21 +188,58 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           };
                 return Ok(ret);
             }
-            var retu = from mob in db.LaptopModels
-                      where mob.time >= days
-                      select new
-                      {
-                          id = mob.Id,
-                          brand = mob.LaptopBrand.brand,
-                          brandId = mob.brandId,
-                          model = mob.model,
-                          time = mob.time,
-                          status = mob.status,
-                          addedById = mob.AspNetUser.Id,
-                          addedByName = mob.AspNetUser.Email,
-                      };
-            return Ok(retu);
-            
+            if (MobileOrLaptop == "Laptops")
+            {
+                var retu = from mob in db.LaptopModels
+                           where mob.time >= days
+                           select new
+                           {
+                               id = mob.Id,
+                               brand = mob.LaptopBrand.brand,
+                               brandId = mob.brandId,
+                               model = mob.model,
+                               time = mob.time,
+                               status = mob.status,
+                               addedById = mob.AspNetUser.Id,
+                               addedByName = mob.AspNetUser.Email,
+                           };
+                return Ok(retu);
+            }
+            if (MobileOrLaptop == "Bikes")
+            {
+                var retu = from mob in db.BikeModels
+                           where mob.time >= days
+                           select new
+                           {
+                               id = mob.Id,
+                               brand = mob.BikeBrand.brand,
+                               brandId = mob.brandId,
+                               model = mob.model,
+                               time = mob.time,
+                               status = mob.status,
+                               addedById = mob.AspNetUser.Id,
+                               addedByName = mob.AspNetUser.Email,
+                           };
+                return Ok(retu);
+            }
+            if (MobileOrLaptop == "Cars")
+            {
+                var retua = from mob in db.CarModels
+                            where mob.time >= days
+                            select new
+                            {
+                                id = mob.Id,
+                                brand = mob.CarBrand.brand,
+                                brandId = mob.brandId,
+                                model = mob.model,
+                                time = mob.time,
+                                status = mob.status,
+                                addedById = mob.AspNetUser.Id,
+                                addedByName = mob.AspNetUser.Email,
+                            };
+                return Ok(retua);
+            }
+            return BadRequest();
         }
 
         [HttpPost]
@@ -217,15 +288,25 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 }
                 mob.addedBy = User.Identity.GetUserId();
                 mob.time = DateTime.UtcNow;
+                mob.status = "a";
                 db.Entry(mob).State = EntityState.Modified;
-
+               
                 try
                 {
                     await db.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbEntityValidationException e)
                 {
-                    throw;
+                    string s = e.ToString();
+                    List<string> errorMessages = new List<string>();
+                    foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
+                    {
+                        string entityName = validationResult.Entry.Entity.GetType().Name;
+                        foreach (DbValidationError error in validationResult.ValidationErrors)
+                        {
+                            errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                        }
+                    }
                 }
                 return StatusCode(HttpStatusCode.NoContent);
             }
@@ -242,6 +323,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 }
                 mob.addedBy = User.Identity.GetUserId();
                 mob.time = DateTime.UtcNow;
+                mob.status = "a";
                 try
                 {
                     db.Entry(mob).State = EntityState.Modified;
@@ -254,9 +336,18 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     await db.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbEntityValidationException e)
                 {
-                    throw;
+                    string s = e.ToString();
+                    List<string> errorMessages = new List<string>();
+                    foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
+                    {
+                        string entityName = validationResult.Entry.Entity.GetType().Name;
+                        foreach (DbValidationError error in validationResult.ValidationErrors)
+                        {
+                            errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                        }
+                    }
                 }
                 return StatusCode(HttpStatusCode.NoContent);
             }
@@ -273,6 +364,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 }
                 mob.addedBy = User.Identity.GetUserId();
                 mob.time = DateTime.UtcNow;
+                mob.status = "a";
                 try
                 {
                     db.Entry(mob).State = EntityState.Modified;
@@ -285,9 +377,18 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     await db.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbEntityValidationException e)
                 {
-                    throw;
+                    string s = e.ToString();
+                    List<string> errorMessages = new List<string>();
+                    foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
+                    {
+                        string entityName = validationResult.Entry.Entity.GetType().Name;
+                        foreach (DbValidationError error in validationResult.ValidationErrors)
+                        {
+                            errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                        }
+                    }
                 }
                 return StatusCode(HttpStatusCode.NoContent);
             }
@@ -688,7 +789,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           adTags = from tag in ad.Ad.AdTags.ToList()
                                    select new
                                    {
-                                       id = tag.Id,
+                                       id = tag.tagId,
                                        name = tag.Tag.name,
                                        //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                        //info = tag.Tag.info,
@@ -809,6 +910,29 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
                                model = ad.LaptopAd.LaptopModel.model,
                            },
+                           bikead = new
+                           {
+                               brand = ad.BikeAd.BikeModel1.BikeBrand.brand,
+                               model = ad.BikeAd.BikeModel1.model,
+                               year = ad.BikeAd.year,
+                               kmDriven = ad.BikeAd.kmDriven,
+                               noOfOwners = ad.BikeAd.noOfOwners,
+                               registeredCity = ad.BikeAd.City.cityName,
+                           },
+                           carad = new
+                           {
+                               color = ad.CarAd.color,
+                               brand = ad.CarAd.CarModel1.CarBrand.brand,
+                               model = ad.CarAd.CarModel1.model,
+                               year= ad.CarAd.year,
+                               kmDriven = ad.CarAd.kmDriven,
+                               fuelType = ad.CarAd.fuelType,
+                               noOfOwners = ad.CarAd.noOfOwners,
+                               registeredCity = ad.CarAd.City.cityName,
+                               transmission = ad.CarAd.transmission,
+                               assembly = ad.CarAd.assembly,
+                               engineCapacity = ad.CarAd.engineCapacity,
+                           },
                            jobAd = new
                            {
                                seats = ad.JobAd.seats,
@@ -836,7 +960,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            adTags = from tag in ad.AdTags.ToList()
                                     select new
                                     {
-                                        id = tag.Id,
+                                        id = tag.tagId,
                                         name = tag.Tag.name,
                                         followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                         //info = tag.Tag.info,

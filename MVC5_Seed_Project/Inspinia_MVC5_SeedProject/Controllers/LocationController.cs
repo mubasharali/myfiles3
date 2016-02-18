@@ -39,8 +39,30 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 return NotFound();
             }
-
             return Ok(city);
+        }
+        
+        [HttpPost]
+        public async Task<string> SaveCity([FromBody] string city)
+        {
+            if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                var citydb = db.Cities.FirstOrDefault(x => x.cityName.Equals(city, StringComparison.OrdinalIgnoreCase));
+                if (citydb == null)
+                {
+                    City cit = new City();
+                    cit.cityName = city;
+                    cit.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                    cit.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                    cit.addedOn = DateTime.UtcNow;
+                    db.Cities.Add(cit);
+                    await db.SaveChangesAsync();
+                    return "Done";
+                }
+                //return Ok(citydb.Id);
+            }
+           // return BadRequest();
+            return "Done";
         }
         [HttpPost]
         public async Task<IHttpActionResult> UpdateCity(City city)

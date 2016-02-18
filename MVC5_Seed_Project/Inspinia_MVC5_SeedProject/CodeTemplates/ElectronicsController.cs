@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -403,6 +405,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         }
         public void MyAd(ref Ad ad,string SaveOrUpdate,string cateogry = null,string subcategory = null)
         {
+            ad.status = "a";
             var type = System.Web.HttpContext.Current.Request["type"];
             var isbiding = System.Web.HttpContext.Current.Request["bidingAllowed"];
             var condition = System.Web.HttpContext.Current.Request["condition"];
@@ -465,7 +468,6 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
             ad.postedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
-
         }
         
         [HttpPost]
@@ -556,7 +558,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 {
                     db.Entry(loc).State = EntityState.Modified;
                 }
-                db.SaveChanges();
+                    db.SaveChanges();
+                
             }
         }
         
@@ -873,7 +876,11 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         public ActionResult Details(int? id,string title = null)
         {
             ViewBag.adId = id;
-            ViewBag.title = db.Ads.Find(id).title;
+            Ad data = db.Ads.Find(id);
+            if(data == null){
+                return HttpNotFound();
+            }
+            ViewBag.title = data.title;
             return View();
         }
         

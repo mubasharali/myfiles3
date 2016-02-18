@@ -64,6 +64,8 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.ReviewVotes = new HashSet<ReviewVote>();
             this.CarBrands = new HashSet<CarBrand>();
             this.CarModels = new HashSet<CarModel>();
+            this.BikeBrands = new HashSet<BikeBrand>();
+            this.BikeModels = new HashSet<BikeModel>();
         }
     
         public string Id { get; set; }
@@ -139,5 +141,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<ReviewVote> ReviewVotes { get; set; }
         public virtual ICollection<CarBrand> CarBrands { get; set; }
         public virtual ICollection<CarModel> CarModels { get; set; }
+        public virtual ICollection<BikeBrand> BikeBrands { get; set; }
+        public virtual ICollection<BikeModel> BikeModels { get; set; }
     }
 }

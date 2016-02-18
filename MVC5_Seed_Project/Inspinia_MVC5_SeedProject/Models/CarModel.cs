@@ -14,6 +14,11 @@ namespace Inspinia_MVC5_SeedProject.Models
     
     public partial class CarModel
     {
+        public CarModel()
+        {
+            this.CarAds = new HashSet<CarAd>();
+        }
+    
         public int Id { get; set; }
         public int brandId { get; set; }
         public string model { get; set; }
@@ -23,5 +28,6 @@ namespace Inspinia_MVC5_SeedProject.Models
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual CarBrand CarBrand { get; set; }
+        public virtual ICollection<CarAd> CarAds { get; set; }
     }
 }
