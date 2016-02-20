@@ -664,5 +664,40 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="BikeAds">
+      <EntityTypeMapping TypeName="Model.BikeAd">
+        <MappingFragment StoreEntitySet="BikeAd">
+          <ScalarProperty Name="registeredCity" ColumnName="registeredCity" />
+          <ScalarProperty Name="noOfOwners" ColumnName="noOfOwners" />
+          <ScalarProperty Name="bikeModel" ColumnName="bikeModel" />
+          <ScalarProperty Name="kmDriven" ColumnName="kmDriven" />
+          <ScalarProperty Name="year" ColumnName="year" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BikeBrands">
+      <EntityTypeMapping TypeName="Model.BikeBrand">
+        <MappingFragment StoreEntitySet="BikeBrand">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="brand" ColumnName="brand" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BikeModels">
+      <EntityTypeMapping TypeName="Model.BikeModel">
+        <MappingFragment StoreEntitySet="BikeModel">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="model" ColumnName="model" />
+          <ScalarProperty Name="brandId" ColumnName="brandId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

@@ -17,7 +17,6 @@
             <p> It is mendatory to submit after changing option</p>
             <h3>Brands</h3>
             <div data-bind="foreach:showBrands">
-                @*<div data-bind="text:$parent.selectedOption"></div>*@
                 <div data-bind="visible:!isBrandEditing()">
                     <div data-bind="text:brand"></div>
                     <div data-bind="text:time"></div>
@@ -90,6 +89,8 @@
                     url = "/api/Admin/ApproveLaptopBrand?id=" + brand.id;
                 } else if (selectedOption == "Cars") {
                     url = "/api/Admin/ApproveCarBrand?id=" + brand.id;
+                } else if (selectedOption == "Bikes") {
+                    url = "/api/Admin/ApproveBikeBrand?id=" + brand.id;
                 }
                 swal({
                     title: "Are you sure?",
@@ -126,6 +127,8 @@
                     updateUrl = '/api/Electronic/UpdateLaptopBrand';
                 } else if (selectedOption == "Cars") {
                     updateUrl = '/api/Vehicle/UpdateCarBrand';
+                } else if (selectedOption == "Bikes") {
+                    updateUrl = '/api/Vehicle/UpdateBikeBrand';
                 }
                     $.ajax({
                         url: updateUrl,
@@ -177,6 +180,8 @@
                         url = '/api/Admin/ApproveLaptopModel?id=' + brand.id;
                     } else if (selectedOption == "Cars") {
                         url = '/api/Admin/ApproveCarModel?id=' + brand.id;
+                    } else if (selectedOption == "Bikes") {
+                        url = '/api/Admin/ApproveBikeModel?id=' + brand.id;
                     }
 
                     $.ajax({
@@ -203,6 +208,8 @@
                     updateUrl = '/api/Electronic/UpdateLaptopModel';
                 }else if(selectedOption == "Cars"){
                     updateUrl = '/api/Vehicle/UpdateCarModel';
+                } else if (selectedOption == "Bikes") {
+                    updateUrl = '/api/Vehicle/UpdateBikeModel';
                 }
                     $.ajax({
                         url: updateUrl,
@@ -232,7 +239,7 @@
             }
             self.showBrands = ko.observableArray();
             self.showModels = ko.observableArray();
-            self.availableOptions = ["Mobiles", "Laptops","Cars"];
+            self.availableOptions = ["Mobiles", "Laptops","Cars","Bikes"];
             self.selectedOption = ko.observable("Mobiles");
             
             self.deleteModelBtn = function (model) {
@@ -251,6 +258,8 @@
                         url = '/api/Electronic/DeleteLaptopModel?id=' + model.id;
                     } else if (self.selectedOption() == "Cars") {
                         url = '/api/Vehicle/DeleteCarModel?id=' + model.id;
+                    } else if (self.selectedOption() == "Bikes") {
+                        url = '/api/Vehicle/DeleteBikeModel?id=' + model.id;
                     }
                     $.ajax({
                         url: url,
@@ -284,6 +293,8 @@
                         url = '/api/Electronic/DeleteLaptopBrand?id=' + brand.id;
                     } else if (self.selectedOption() == "Cars") {
                         url = '/api/Vehicle/DeleteCarBrand?id=' + brand.id;
+                    } else if (self.selectedOption() == "Bikes") {
+                        url = '/api/Vehicle/DeleteBikeBrand?id=' + brand.id;
                     }
                     $.ajax({
                         url: url,

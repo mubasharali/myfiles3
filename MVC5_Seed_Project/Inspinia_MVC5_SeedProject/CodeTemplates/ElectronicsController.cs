@@ -454,6 +454,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 ad.price = int.Parse(pp);
             }
+            ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
+            ad.postedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
             if (SaveOrUpdate == "Save")
             {
                 ad.category = cateogry;
@@ -463,11 +465,17 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             else if (SaveOrUpdate == "Update")
             {
                 ad.time =DateTime.Parse(System.Web.HttpContext.Current.Request["time"]);
-                ad.category = System.Web.HttpContext.Current.Request["category"];
-                ad.subcategory = System.Web.HttpContext.Current.Request["subcategory"];
+                if (ad.category == null)
+                {
+                    ad.category = System.Web.HttpContext.Current.Request["category"];
+                }
+                if (ad.subcategory == null)
+                {
+                    ad.subcategory = System.Web.HttpContext.Current.Request["subcategory"];
+                }
+                
+
             }
-            ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
-            ad.postedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
         }
         
         [HttpPost]

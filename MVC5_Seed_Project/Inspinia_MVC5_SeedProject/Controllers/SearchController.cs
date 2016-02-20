@@ -49,7 +49,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 adTags = from tag1 in ad.AdTags.ToList()
                                          select new
                                          {
-                                             id = tag1.Id,
+                                             id = tag1.tagId,
                                              name = tag1.Tag.name,
                                              //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                              //info = tag.Tag.info,
@@ -108,7 +108,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                             adTags = from tag1 in ad.AdTags.ToList()
                                      select new
                                      {
-                                         id = tag1.Id,
+                                         id = tag1.tagId,
                                          name = tag1.Tag.name,
                                          //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                          //info = tag.Tag.info,

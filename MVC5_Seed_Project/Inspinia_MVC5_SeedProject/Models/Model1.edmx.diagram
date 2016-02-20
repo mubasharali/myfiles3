@@ -176,6 +176,8 @@
         <AssociationConnector Association="Model.FK_Table_ToTable" />
         <AssociationConnector Association="Model.FK_BikeAd_ToTable_1" />
         <AssociationConnector Association="Model.FK_BikeAd_ToTable_2" />
+        <EntityTypeShape EntityType="Model.House" Width="1.5" PointX="70.5" PointY="52.875" />
+        <AssociationConnector Association="Model.FK_House_ToTable" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

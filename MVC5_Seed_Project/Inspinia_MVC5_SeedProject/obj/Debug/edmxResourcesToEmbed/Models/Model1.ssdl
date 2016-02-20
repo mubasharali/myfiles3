@@ -421,6 +421,16 @@
     <Property Name="friendId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
   </EntityType>
+  <EntityType Name="House">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="int" Nullable="false" />
+    <Property Name="bedroom" Type="char" MaxLength="1" />
+    <Property Name="bathroom" Type="char" MaxLength="1" />
+    <Property Name="floor" Type="char" MaxLength="1" />
+    <Property Name="area" Type="int" />
+  </EntityType>
   <EntityType Name="JobAd">
     <Key>
       <PropertyRef Name="adId" />
@@ -1559,6 +1569,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_House_ToTable">
+    <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="House" Type="Self.House" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="House">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Image_ToTable">
     <End Role="Company" Type="Self.Company" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -2141,6 +2165,7 @@
     <EntitySet Name="FollowQuestion" EntityType="Self.FollowQuestion" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FollowTag" EntityType="Self.FollowTag" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Friend" EntityType="Self.Friend" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="House" EntityType="Self.House" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="JobAd" EntityType="Self.JobAd" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="JobSkill" EntityType="Self.JobSkill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopAds" EntityType="Self.LaptopAds" Schema="dbo" store:Type="Tables" />
@@ -2442,6 +2467,10 @@
     <AssociationSet Name="FK_Friend_ToTable_1" Association="Self.FK_Friend_ToTable_1">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="Friend" EntitySet="Friend" />
+    </AssociationSet>
+    <AssociationSet Name="FK_House_ToTable" Association="Self.FK_House_ToTable">
+      <End Role="Ad" EntitySet="Ad" />
+      <End Role="House" EntitySet="House" />
     </AssociationSet>
     <AssociationSet Name="FK_Image_ToTable" Association="Self.FK_Image_ToTable">
       <End Role="Company" EntitySet="Company" />

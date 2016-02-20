@@ -164,6 +164,38 @@
     <Property Name="time" Type="datetime" Nullable="false" />
     <Property Name="price" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="BikeAd">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="int" Nullable="false" />
+    <Property Name="year" Type="smallint" />
+    <Property Name="kmDriven" Type="int" />
+    <Property Name="bikeModel" Type="int" Nullable="false" />
+    <Property Name="noOfOwners" Type="smallint" />
+    <Property Name="registeredCity" Type="int" />
+  </EntityType>
+  <EntityType Name="BikeBrand">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="brand" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="time" Type="datetime" Nullable="false" />
+    <Property Name="status" Type="nchar" MaxLength="1" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BikeModel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="brandId" Type="int" Nullable="false" />
+    <Property Name="model" Type="nvarchar" MaxLength="50" />
+    <Property Name="time" Type="datetime" Nullable="false" />
+    <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="status" Type="char" MaxLength="1" Nullable="false" />
+  </EntityType>
   <EntityType Name="CarAd">
     <Key>
       <PropertyRef Name="adId" />
@@ -820,6 +852,72 @@
       </Principal>
       <Dependent Role="Bid">
         <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BikeAd_ToTable">
+    <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="BikeAd" Type="Self.BikeAd" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BikeAd">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BikeAd_ToTable_1">
+    <End Role="BikeModel" Type="Self.BikeModel" Multiplicity="1" />
+    <End Role="BikeAd" Type="Self.BikeAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BikeModel">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BikeAd">
+        <PropertyRef Name="bikeModel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BikeAd_ToTable_2">
+    <End Role="City" Type="Self.City" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="BikeAd" Type="Self.BikeAd" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BikeAd">
+        <PropertyRef Name="registeredCity" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BikeBrand_ToTable">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="BikeBrand" Type="Self.BikeBrand" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BikeBrand">
+        <PropertyRef Name="addedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BikeModel_ToTable">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="BikeModel" Type="Self.BikeModel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BikeModel">
+        <PropertyRef Name="addedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1965,6 +2063,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Table_ToTable">
+    <End Role="BikeBrand" Type="Self.BikeBrand" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="BikeModel" Type="Self.BikeModel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BikeBrand">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BikeModel">
+        <PropertyRef Name="brandId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Tag_ToTable">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
     <End Role="Tag" Type="Self.Tag" Multiplicity="*" />
@@ -2005,6 +2117,9 @@
     <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Bid" EntityType="Self.Bid" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BikeAd" EntityType="Self.BikeAd" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BikeBrand" EntityType="Self.BikeBrand" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BikeModel" EntityType="Self.BikeModel" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarAd" EntityType="Self.CarAd" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarBrand" EntityType="Self.CarBrand" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarModel" EntityType="Self.CarModel" Schema="dbo" store:Type="Tables" />
@@ -2111,6 +2226,26 @@
     <AssociationSet Name="FK_Bid_ToTable_1" Association="Self.FK_Bid_ToTable_1">
       <End Role="Ad" EntitySet="Ad" />
       <End Role="Bid" EntitySet="Bid" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BikeAd_ToTable" Association="Self.FK_BikeAd_ToTable">
+      <End Role="Ad" EntitySet="Ad" />
+      <End Role="BikeAd" EntitySet="BikeAd" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BikeAd_ToTable_1" Association="Self.FK_BikeAd_ToTable_1">
+      <End Role="BikeModel" EntitySet="BikeModel" />
+      <End Role="BikeAd" EntitySet="BikeAd" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BikeAd_ToTable_2" Association="Self.FK_BikeAd_ToTable_2">
+      <End Role="City" EntitySet="City" />
+      <End Role="BikeAd" EntitySet="BikeAd" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BikeBrand_ToTable" Association="Self.FK_BikeBrand_ToTable">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="BikeBrand" EntitySet="BikeBrand" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BikeModel_ToTable" Association="Self.FK_BikeModel_ToTable">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="BikeModel" EntitySet="BikeModel" />
     </AssociationSet>
     <AssociationSet Name="FK_CarAd_ToTable" Association="Self.FK_CarAd_ToTable">
       <End Role="Ad" EntitySet="Ad" />
@@ -2459,6 +2594,10 @@
     <AssociationSet Name="FK_SaveAd_ToTable_1" Association="Self.FK_SaveAd_ToTable_1">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="SaveAd" EntitySet="SaveAd" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Table_ToTable" Association="Self.FK_Table_ToTable">
+      <End Role="BikeBrand" EntitySet="BikeBrand" />
+      <End Role="BikeModel" EntitySet="BikeModel" />
     </AssociationSet>
     <AssociationSet Name="FK_Tag_ToTable" Association="Self.FK_Tag_ToTable">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />

@@ -5,16 +5,18 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
+using Newtonsoft.Json;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity.Validation;
+using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
-
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
     public class RealEstateController : Controller
     {
-        private Entities db = new Entities();
-
+        public Entities db = new Entities();
+        ElectronicsController electronicController = new ElectronicsController();
         // GET: /RealEstate/
         public async Task<ActionResult> Index()
         {
@@ -40,30 +42,74 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         // GET: /RealEstate/Create
         public ActionResult Create()
         {
-            ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email");
-            ViewBag.Id = new SelectList(db.AdsLocations, "Id", "cityId");
-            ViewBag.Id = new SelectList(db.MobileAds, "Id", "color");
-            return View();
+            Ad ad = new Ad();
+            return View(ad);
         }
-
-        // POST: /RealEstate/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        public async Task<bool> SaveRealEstateAd(int adId, bool update = false)
+        {
+            House house = new House();
+            if (System.Web.HttpContext.Current.Request["area"] != null)
+            {
+                house.area =int.Parse( System.Web.HttpContext.Current.Request["area"]);
+            }
+            if (System.Web.HttpContext.Current.Request["bathroom"] != null)
+            {
+                house.bathroom = (System.Web.HttpContext.Current.Request["bathroom"]);
+            }
+            if (System.Web.HttpContext.Current.Request["bedroom"] != null)
+            {
+                house.bedroom = (System.Web.HttpContext.Current.Request["bedroom"]);
+            }
+            if (System.Web.HttpContext.Current.Request["floor"] != null)
+            {
+                house.floor = (System.Web.HttpContext.Current.Request["floor"]);
+            }
+            house.adId = adId;
+            if (update)
+            {
+                db.Entry(house).State = EntityState.Modified;
+            }
+            else
+            {
+                db.Houses.Add(house);
+            }
+           await db.SaveChangesAsync();
+           return true;
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include="Id,category,postedBy,title,description,time,price,isnegotiable")] Ad ad)
+        public ActionResult Create([Bind(Include = "Id,category,subcategory,postedBy,title,description,time,price,isnegotiable")] Ad ad)
         {
+
             if (ModelState.IsValid)
             {
-                db.Ads.Add(ad);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
+                if (Request.IsAuthenticated)
+                {
+                    FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                    electronicController.MyAd(ref ad, "Save", ad.category, ad.subcategory);
+                    db.Ads.Add(ad);
+                    db.SaveChanges();
 
-            ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", ad.postedBy);
-            ViewBag.Id = new SelectList(db.AdsLocations, "Id", "cityId", ad.Id);
-            ViewBag.Id = new SelectList(db.MobileAds, "Id", "color", ad.Id);
-            return View(ad);
+
+                    electronicController.PostAdByCompanyPage(ad.Id);
+
+                    //
+                    SaveRealEstateAd(ad.Id);
+
+                    
+                    //tags
+                    electronicController.SaveTags(Request["tags"], ref ad);
+
+                    electronicController.ReplaceAdImages(ref ad, fileNames);
+                    //location
+                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
+                    db.SaveChanges();
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
+                }
+                return RedirectToAction("Register", "Account");
+            }
+            TempData["error"] = "Only enter those information about which you are asked";
+            return View("Create", ad);
         }
 
         // GET: /RealEstate/Edit/5
@@ -78,9 +124,6 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 return HttpNotFound();
             }
-            ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", ad.postedBy);
-            ViewBag.Id = new SelectList(db.AdsLocations, "Id", "cityId", ad.Id);
-            ViewBag.Id = new SelectList(db.MobileAds, "Id", "color", ad.Id);
             return View(ad);
         }
 
@@ -89,18 +132,66 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include="Id,category,postedBy,title,description,time,price,isnegotiable")] Ad ad)
+        public async Task<ActionResult> Edit([Bind(Include="Id,category,subcategory,status,postedBy,title,description,time,price,isnegotiable")] Ad ad)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(ad).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if (Request.IsAuthenticated)
+                {
+                    var ab = Request["postedBy"];
+                    var iddd = User.Identity.GetUserId();
+                    if (Request["postedBy"] == User.Identity.GetUserId())
+                    {
+                        FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                        electronicController.MyAd(ref ad, "Update");
+
+                        db.Entry(ad).State = EntityState.Modified;
+                        try
+                        {
+                            await db.SaveChangesAsync();
+                        }
+                        catch (DbEntityValidationException e)
+                        {
+                            string s = e.ToString();
+                            List<string> errorMessages = new List<string>();
+                            foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
+                            {
+                                string entityName = validationResult.Entry.Entity.GetType().Name;
+                                foreach (DbValidationError error in validationResult.ValidationErrors)
+                                {
+                                    errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                                }
+                            }
+                        }
+
+                        electronicController.PostAdByCompanyPage(ad.Id, true);
+
+                        db.SaveChanges();
+                        await SaveRealEstateAd(ad.Id, true);
+                        electronicController.SaveTags(Request["tags"], ref ad, "update");
+
+
+                        try
+                        {
+                            db.SaveChanges();
+                        }
+                        catch (Exception e)
+                        {
+                            string sss = e.ToString();
+                        }
+                        //location
+
+                        
+
+                        electronicController.ReplaceAdImages(ref ad, fileNames);
+                        electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
+
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
+                    }
+                }
+                return RedirectToAction("Register", "Account");
             }
-            ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", ad.postedBy);
-            ViewBag.Id = new SelectList(db.AdsLocations, "Id", "cityId", ad.Id);
-            ViewBag.Id = new SelectList(db.MobileAds, "Id", "color", ad.Id);
-            return View(ad);
+            return View("Edit", ad);
         }
 
         // GET: /RealEstate/Delete/5

@@ -699,5 +699,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Houses">
+      <EntityTypeMapping TypeName="Model.House">
+        <MappingFragment StoreEntitySet="House">
+          <ScalarProperty Name="area" ColumnName="area" />
+          <ScalarProperty Name="floor" ColumnName="floor" />
+          <ScalarProperty Name="bathroom" ColumnName="bathroom" />
+          <ScalarProperty Name="bedroom" ColumnName="bedroom" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

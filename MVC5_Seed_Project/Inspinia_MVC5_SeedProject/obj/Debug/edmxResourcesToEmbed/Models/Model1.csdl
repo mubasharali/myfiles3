@@ -505,6 +505,11 @@
       <End Role="City" EntitySet="Cities" />
       <End Role="BikeAd" EntitySet="BikeAds" />
     </AssociationSet>
+    <EntitySet Name="Houses" EntityType="Model.House" />
+    <AssociationSet Name="FK_House_ToTable" Association="Model.FK_House_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="House" EntitySet="Houses" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -548,6 +553,7 @@
     <NavigationProperty Name="JobSkills" Relationship="Model.FK_JobSkill_ToTable" FromRole="Ad" ToRole="JobSkill" />
     <NavigationProperty Name="CarAd" Relationship="Model.FK_CarAd_ToTable" FromRole="Ad" ToRole="CarAd" />
     <NavigationProperty Name="BikeAd" Relationship="Model.FK_BikeAd_ToTable" FromRole="Ad" ToRole="BikeAd" />
+    <NavigationProperty Name="House" Relationship="Model.FK_House_ToTable" FromRole="Ad" ToRole="House" />
   </EntityType>
   <EntityType Name="AdImage">
     <Key>
@@ -2804,6 +2810,31 @@
       </Principal>
       <Dependent Role="BikeAd">
         <PropertyRef Name="registeredCity" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="House">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <Property Name="bedroom" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="bathroom" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="floor" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="area" Type="Int32" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_House_ToTable" FromRole="House" ToRole="Ad" />
+  </EntityType>
+  <Association Name="FK_House_ToTable">
+    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.House" Role="House" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="House">
+        <PropertyRef Name="adId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

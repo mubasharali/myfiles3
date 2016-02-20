@@ -108,6 +108,14 @@ var loadQualification = function () {
 
 };
 var selfie;
+function convertToSlug(Text) {
+    return Text
+        .toLowerCase()
+        .replace(/[^\w ]+/g, '')
+        .replace(/ +/g, '-')
+    ;
+}
+
 function RefreshSearch(selff) {
 
     if (isLoading()) {
@@ -130,8 +138,12 @@ function RefreshSearch(selff) {
     })
     
     isLoading(true);
+
+  // tags( convertToSlug(tags()));
+    var ulr = '/api/Job/SearchJobAds?gender=' + gender() + '&skills=' + skills() + '&tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&salaryType=' + salaryType() + '&category=' + selectedCategory() + '&qualification=' + selectedQualification() + '&exprience=' + selectedExprience() + '&careerLevel=' + selectedCareerLevel() + '&jobType=' + selectedJobType() + '&lastDateToApply=' + selectedLastDateToApply() + '&minSeats=' + minSeats() + '&maxSeats=' + maxSeats() + '&shift=' + shift();
+    console.log(ulr);
     $.ajax({
-        url: '/api/Job/SearchJobAds?gender=' + gender() + '&skills=' + skills() + '&tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&salaryType=' + salaryType() + '&category=' + selectedCategory() + '&qualification=' + selectedQualification() + '&exprience=' + selectedExprience() + '&careerLevel=' + selectedCareerLevel() + '&jobType=' + selectedJobType() + '&lastDateToApply=' + selectedLastDateToApply() + '&minSeats=' + minSeats() + '&maxSeats=' + maxSeats() + '&shift=' + shift(),
+        url : ulr,
         dataType: "json",
         contentType: "application/json",
         cache: false,

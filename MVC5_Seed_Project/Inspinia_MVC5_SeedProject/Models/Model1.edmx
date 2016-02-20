@@ -426,6 +426,16 @@
           <Property Name="friendId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="time" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="House">
+          <Key>
+            <PropertyRef Name="adId" />
+          </Key>
+          <Property Name="adId" Type="int" Nullable="false" />
+          <Property Name="bedroom" Type="char" MaxLength="1" />
+          <Property Name="bathroom" Type="char" MaxLength="1" />
+          <Property Name="floor" Type="char" MaxLength="1" />
+          <Property Name="area" Type="int" />
+        </EntityType>
         <EntityType Name="JobAd">
           <Key>
             <PropertyRef Name="adId" />
@@ -1564,6 +1574,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_House_ToTable">
+          <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="House" Type="Self.House" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="House">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Image_ToTable">
           <End Role="Company" Type="Self.Company" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2146,6 +2170,7 @@
           <EntitySet Name="FollowQuestion" EntityType="Self.FollowQuestion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FollowTag" EntityType="Self.FollowTag" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Friend" EntityType="Self.Friend" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="House" EntityType="Self.House" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JobAd" EntityType="Self.JobAd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JobSkill" EntityType="Self.JobSkill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LaptopAds" EntityType="Self.LaptopAds" Schema="dbo" store:Type="Tables" />
@@ -2447,6 +2472,10 @@
           <AssociationSet Name="FK_Friend_ToTable_1" Association="Self.FK_Friend_ToTable_1">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Friend" EntitySet="Friend" />
+          </AssociationSet>
+          <AssociationSet Name="FK_House_ToTable" Association="Self.FK_House_ToTable">
+            <End Role="Ad" EntitySet="Ad" />
+            <End Role="House" EntitySet="House" />
           </AssociationSet>
           <AssociationSet Name="FK_Image_ToTable" Association="Self.FK_Image_ToTable">
             <End Role="Company" EntitySet="Company" />
@@ -3122,6 +3151,11 @@
             <End Role="City" EntitySet="Cities" />
             <End Role="BikeAd" EntitySet="BikeAds" />
           </AssociationSet>
+          <EntitySet Name="Houses" EntityType="Model.House" />
+          <AssociationSet Name="FK_House_ToTable" Association="Model.FK_House_ToTable">
+            <End Role="Ad" EntitySet="Ads" />
+            <End Role="House" EntitySet="Houses" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -3165,6 +3199,7 @@
           <NavigationProperty Name="JobSkills" Relationship="Model.FK_JobSkill_ToTable" FromRole="Ad" ToRole="JobSkill" />
           <NavigationProperty Name="CarAd" Relationship="Model.FK_CarAd_ToTable" FromRole="Ad" ToRole="CarAd" />
           <NavigationProperty Name="BikeAd" Relationship="Model.FK_BikeAd_ToTable" FromRole="Ad" ToRole="BikeAd" />
+          <NavigationProperty Name="House" Relationship="Model.FK_House_ToTable" FromRole="Ad" ToRole="House" />
         </EntityType>
         <EntityType Name="AdImage">
           <Key>
@@ -5424,6 +5459,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="House">
+          <Key>
+            <PropertyRef Name="adId" />
+          </Key>
+          <Property Name="adId" Type="Int32" Nullable="false" />
+          <Property Name="bedroom" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="bathroom" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="floor" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="area" Type="Int32" />
+          <NavigationProperty Name="Ad" Relationship="Model.FK_House_ToTable" FromRole="House" ToRole="Ad" />
+        </EntityType>
+        <Association Name="FK_House_ToTable">
+          <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.House" Role="House" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="House">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -6125,6 +6185,17 @@
                 <ScalarProperty Name="model" ColumnName="model" />
                 <ScalarProperty Name="brandId" ColumnName="brandId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Houses">
+            <EntityTypeMapping TypeName="Model.House">
+              <MappingFragment StoreEntitySet="House">
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="floor" ColumnName="floor" />
+                <ScalarProperty Name="bathroom" ColumnName="bathroom" />
+                <ScalarProperty Name="bedroom" ColumnName="bedroom" />
+                <ScalarProperty Name="adId" ColumnName="adId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

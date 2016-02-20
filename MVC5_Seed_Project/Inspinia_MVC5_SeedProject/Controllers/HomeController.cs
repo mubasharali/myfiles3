@@ -65,6 +65,17 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     return true;
                 }
             }
+            else if (category == "RealEstate")
+            {
+                string[] subcategories = {"apartment", "house", "plot & land", "Shop", "Office", "PG & Flatmates", "other commerical places"}; //reference over Realestate/create page + RealEstateSearch.js
+                foreach (var subcat in subcategories)
+                {
+                    if (subcategory == subcat)
+                    {
+                        return true;
+                    }
+                }
+            }
             return false;
         }
         [HttpPost]

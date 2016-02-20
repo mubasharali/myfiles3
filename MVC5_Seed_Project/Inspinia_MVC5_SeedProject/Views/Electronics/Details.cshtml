@@ -177,6 +177,21 @@
                                                     
                                                 </dl>
                                             </div>
+                                            <div data-bind="with: showRealEstateAd">
+
+                                                <dl class="dl-horizontal m-t-md small">
+                                                    <dt>Category:</dt>
+                                                    <dd data-bind="text:$parent.subcategory"></dd>
+                                                    <dt>Area:</dt>
+                                                    <dd data-bind="text:area"></dd>
+                                                    <dt>Bed rooms:</dt>
+                                                    <dd data-bind="text:bedroom"></dd>
+                                                    <dt>Bath room:</dt>
+                                                    <dd data-bind="text:bathroom"></dd>
+                                                    <dt>Floor</dt>
+                                                    <dd data-bind="text:floor"></dd>
+                                                </dl>
+                                            </div>
                                             <div data-bind="with: showJob">
                                                 
                                                 <dl class="dl-horizontal m-t-md small">
@@ -427,6 +442,14 @@
                 });
             }
         }
+        function RealEstate(data) {
+            var self = this;
+            data = data || {};
+            self.floor = data.floor;
+            self.bedroom = data.bedroom;
+            self.bathroom = data.bathroom;
+            self.area = data.area;
+        }
         function CarAd(data) {
             var self = this;
             data = data || {};
@@ -582,6 +605,10 @@
             self.isAdmin = data.isAdmin;
             self.title = data.title;
 
+            self.showRealEstateAd = ko.observable();
+            if (data.category == "RealEstate") {
+                self.showRealEstateAd(new RealEstate(data.realestatead));
+            }
 
             self.companyName = data.companyName;
             self.companyId = data.companyId;
@@ -619,7 +646,7 @@
             }
             self.type = "";
             if (data.type == true) {
-                self.type = "For sell";
+                self.type = "For Sale";
             } else {
                 self.type = "Want to buy";
             }
@@ -852,6 +879,9 @@
                 }
                 else if (data.subCategory == "Bikes") {
                     window.location.href = "/Vehicles/EditBikeAd/" + id;
+                }
+                else if (data.category == "RealEstate") {
+                    window.location.href = "/RealEstate/Edit/" + id;
                 }
                 else {
                     window.location.href = "/Home/Edit/" + id;

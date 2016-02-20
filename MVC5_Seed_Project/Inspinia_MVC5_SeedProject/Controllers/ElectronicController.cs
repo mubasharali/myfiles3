@@ -544,7 +544,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                adTags = from tag1 in ad.Ad.AdTags.ToList()
                                         select new
                                         {
-                                            id = tag1.Id,
+                                            id = tag1.tagId,
                                             name = tag1.Tag.name,
                                             //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                             //info = tag.Tag.info,
@@ -605,7 +605,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                adTags = from tag1 in ad.Ad.AdTags.ToList()
                                         select new
                                         {
-                                            id = tag1.Id,
+                                            id = tag1.tagId,
                                             name = tag1.Tag.name,
                                             //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                             //info = tag.Tag.info,
@@ -668,7 +668,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 adTags = from tag1 in ad.Ad.AdTags.ToList()
                                          select new
                                          {
-                                             id = tag1.Id,
+                                             id = tag1.tagId,
                                              name = tag1.Tag.name,
                                              //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                              //info = tag.Tag.info,
@@ -728,7 +728,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            adTags = from tag1 in ad.Ad.AdTags.ToList()
                                     select new
                                     {
-                                        id = tag1.Id,
+                                        id = tag1.tagId,
                                         name = tag1.Tag.name,
                                         //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
                                         //info = tag.Tag.info,
@@ -932,6 +932,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                transmission = ad.CarAd.transmission,
                                assembly = ad.CarAd.assembly,
                                engineCapacity = ad.CarAd.engineCapacity,
+                           },
+                           realestatead = new{
+                               bedroom = ad.House.bedroom,
+                               bathroom = ad.House.bathroom,
+                               area = ad.House.area,
+                               floor = ad.House.floor,
                            },
                            jobAd = new
                            {

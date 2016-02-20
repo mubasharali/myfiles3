@@ -253,6 +253,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\RealEstateController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TempController.cs" />
@@ -379,6 +380,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Friend.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\House.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
@@ -601,6 +605,7 @@
     <Content Include="Scripts\app\JobsSearch.js" />
     <Content Include="Scripts\app\LaptopTree.js" />
     <Content Include="Scripts\app\MobileTree.js" />
+    <Content Include="Scripts\app\RealEstateSearch.js" />
     <Content Include="Scripts\app\SearchAds.js" />
     <Content Include="Scripts\app\Selectize-Knockout-binding.js" />
     <Content Include="Scripts\app\slick-knockout-binding.js" />
@@ -988,6 +993,8 @@
     <Content Include="Views\Vehicles\Cars.cshtml" />
     <Content Include="Views\Vehicles\_TreeCars.cshtml" />
     <Content Include="Views\Vehicles\Bikes.cshtml" />
+    <Content Include="Views\Shared\_CreateAd_RealEstate.cshtml" />
+    <Content Include="Views\Shared\_EditAd_RealEstate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
