@@ -201,6 +201,14 @@
           <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="status" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
+        <EntityType Name="Camera">
+          <Key>
+            <PropertyRef Name="adId" />
+          </Key>
+          <Property Name="adId" Type="int" Nullable="false" />
+          <Property Name="brand" Type="nvarchar" MaxLength="50" />
+          <Property Name="category" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="CarAd">
           <Key>
             <PropertyRef Name="adId" />
@@ -933,6 +941,20 @@
             </Principal>
             <Dependent Role="BikeModel">
               <PropertyRef Name="addedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Camera_ToTable">
+          <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Camera" Type="Self.Camera" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Camera">
+              <PropertyRef Name="adId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2149,6 +2171,7 @@
           <EntitySet Name="BikeAd" EntityType="Self.BikeAd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BikeBrand" EntityType="Self.BikeBrand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BikeModel" EntityType="Self.BikeModel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Camera" EntityType="Self.Camera" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CarAd" EntityType="Self.CarAd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CarBrand" EntityType="Self.CarBrand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CarModel" EntityType="Self.CarModel" Schema="dbo" store:Type="Tables" />
@@ -2276,6 +2299,10 @@
           <AssociationSet Name="FK_BikeModel_ToTable" Association="Self.FK_BikeModel_ToTable">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="BikeModel" EntitySet="BikeModel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Camera_ToTable" Association="Self.FK_Camera_ToTable">
+            <End Role="Ad" EntitySet="Ad" />
+            <End Role="Camera" EntitySet="Camera" />
           </AssociationSet>
           <AssociationSet Name="FK_CarAd_ToTable" Association="Self.FK_CarAd_ToTable">
             <End Role="Ad" EntitySet="Ad" />
@@ -3156,6 +3183,11 @@
             <End Role="Ad" EntitySet="Ads" />
             <End Role="House" EntitySet="Houses" />
           </AssociationSet>
+          <EntitySet Name="Cameras" EntityType="Model.Camera" />
+          <AssociationSet Name="FK_Camera_ToTable" Association="Model.FK_Camera_ToTable">
+            <End Role="Ad" EntitySet="Ads" />
+            <End Role="Camera" EntitySet="Cameras" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -3200,6 +3232,7 @@
           <NavigationProperty Name="CarAd" Relationship="Model.FK_CarAd_ToTable" FromRole="Ad" ToRole="CarAd" />
           <NavigationProperty Name="BikeAd" Relationship="Model.FK_BikeAd_ToTable" FromRole="Ad" ToRole="BikeAd" />
           <NavigationProperty Name="House" Relationship="Model.FK_House_ToTable" FromRole="Ad" ToRole="House" />
+          <NavigationProperty Name="Camera" Relationship="Model.FK_Camera_ToTable" FromRole="Ad" ToRole="Camera" />
         </EntityType>
         <EntityType Name="AdImage">
           <Key>
@@ -5484,6 +5517,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Camera">
+          <Key>
+            <PropertyRef Name="adId" />
+          </Key>
+          <Property Name="adId" Type="Int32" Nullable="false" />
+          <Property Name="brand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Ad" Relationship="Model.FK_Camera_ToTable" FromRole="Camera" ToRole="Ad" />
+        </EntityType>
+        <Association Name="FK_Camera_ToTable">
+          <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Camera" Role="Camera" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Camera">
+              <PropertyRef Name="adId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -6195,6 +6251,15 @@
                 <ScalarProperty Name="floor" ColumnName="floor" />
                 <ScalarProperty Name="bathroom" ColumnName="bathroom" />
                 <ScalarProperty Name="bedroom" ColumnName="bedroom" />
+                <ScalarProperty Name="adId" ColumnName="adId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cameras">
+            <EntityTypeMapping TypeName="Model.Camera">
+              <MappingFragment StoreEntitySet="Camera">
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="brand" ColumnName="brand" />
                 <ScalarProperty Name="adId" ColumnName="adId" />
               </MappingFragment>
             </EntityTypeMapping>

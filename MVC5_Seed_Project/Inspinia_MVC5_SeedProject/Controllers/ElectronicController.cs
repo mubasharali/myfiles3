@@ -755,6 +755,130 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                        };
             return Ok(temp);
         }
+        public async Task<IHttpActionResult> SearchCameras(string brand, string tags, string title, int minPrice, int maxPrice, string city, string pp, bool isAccessories,string category)
+        {
+            string islogin = "";
+            if (User.Identity.IsAuthenticated)
+            {
+                islogin = User.Identity.GetUserId();
+            }
+            if (tags == null)
+            {
+                var temp1 = from ad in db.Cameras
+                            where (((isAccessories && ad.Ad.subcategory.Equals("CamerasAccessories")) || (!isAccessories && ad.Ad.subcategory == "Cameras")) && ad.Ad.status.Equals("a") && (brand == null || brand == "undefined" ||  ad.brand.Equals(brand)) && (category == null || category == "undefined" || ad.category.Equals(category)) &&
+                            (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))))
+                            orderby ad.Ad.time descending
+                            select new
+                            {
+                                title = ad.Ad.title,
+                                postedById = ad.Ad.AspNetUser.Id,
+                                postedByName = ad.Ad.AspNetUser.Email,
+                                description = ad.Ad.description,
+                                id = ad.Ad.Id,
+                                time = ad.Ad.time,
+                                islogin = islogin,
+                                isNegotiable = ad.Ad.isnegotiable,
+                                price = ad.Ad.price,
+                                reportedCount = ad.Ad.Reporteds.Count,
+                                isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                                // views = ad.Ad.AdViews.Count,
+                                views = ad.Ad.views,
+                                condition = ad.Ad.condition,
+                                savedCount = ad.Ad.SaveAds.Count,
+                                category = ad.category, //this is category of camera not ad
+                                brand = ad.brand,
+                                adTags = from tag1 in ad.Ad.AdTags.ToList()
+                                         select new
+                                         {
+                                             id = tag1.tagId,
+                                             name = tag1.Tag.name,
+                                             //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                             //info = tag.Tag.info,
+                                         },
+                                bid = from biding in ad.Ad.Bids.ToList()
+                                      select new
+                                      {
+                                          price = biding.price,
+                                      },
+                                adImages = from image in ad.Ad.AdImages.ToList()
+                                           select new
+                                           {
+                                               imageExtension = image.imageExtension,
+                                           },
+                                location = new
+                                {
+                                    cityName = ad.Ad.AdsLocation.City.cityName,
+                                    cityId = ad.Ad.AdsLocation.cityId,
+                                    popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                    popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                    exectLocation = ad.Ad.AdsLocation.exectLocation,
+                                },
+
+                            };
+                return Ok(temp1);
+            }
+            string[] tagsArray = null;
+            if (tags != null)
+            {
+                tagsArray = tags.Split(',');
+            }
+            
+
+             var temp = from ad in db.Cameras
+                        where (((isAccessories && ad.Ad.subcategory.Equals("CamerasAccessories")) || (!isAccessories && ad.Ad.subcategory == "Cameras")) && ad.Ad.status.Equals("a") && (brand == null || brand == "undefined" || ad.brand.Equals(brand)) && (category == null || category == "undefined" || ad.category.Equals(category)) &&
+                        (!tagsArray.Except(ad.Ad.AdTags.Select(x => x.Tag.name)).Any()) &&
+                            (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))))
+                            orderby ad.Ad.time descending
+                            select new
+                            {
+                                title = ad.Ad.title,
+                                postedById = ad.Ad.AspNetUser.Id,
+                                postedByName = ad.Ad.AspNetUser.Email,
+                                description = ad.Ad.description,
+                                id = ad.Ad.Id,
+                                time = ad.Ad.time,
+                                islogin = islogin,
+                                isNegotiable = ad.Ad.isnegotiable,
+                                price = ad.Ad.price,
+                                reportedCount = ad.Ad.Reporteds.Count,
+                                isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
+                                // views = ad.Ad.AdViews.Count,
+                                views = ad.Ad.views,
+                                condition = ad.Ad.condition,
+                                savedCount = ad.Ad.SaveAds.Count,
+                                category = ad.category, //this is category of camera not ad
+                                brand = ad.brand,
+                                adTags = from tag1 in ad.Ad.AdTags.ToList()
+                                         select new
+                                         {
+                                             id = tag1.tagId,
+                                             name = tag1.Tag.name,
+                                             //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                             //info = tag.Tag.info,
+                                         },
+                                bid = from biding in ad.Ad.Bids.ToList()
+                                      select new
+                                      {
+                                          price = biding.price,
+                                      },
+                                adImages = from image in ad.Ad.AdImages.ToList()
+                                           select new
+                                           {
+                                               imageExtension = image.imageExtension,
+                                           },
+                                location = new
+                                {
+                                    cityName = ad.Ad.AdsLocation.City.cityName,
+                                    cityId = ad.Ad.AdsLocation.cityId,
+                                    popularPlaceId = ad.Ad.AdsLocation.popularPlaceId,
+                                    popularPlace = ad.Ad.AdsLocation.popularPlace.name,
+                                    exectLocation = ad.Ad.AdsLocation.exectLocation,
+                                },
+
+                            };
+            return Ok(temp);
+        }
+
         public async Task<IHttpActionResult> GetMobileTrends()
         {
             string islogin = "";
@@ -897,6 +1021,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            savedCount = ad.SaveAds.Count,
                            category = ad.category,
                            subCategory = ad.subcategory,
+                           cameraad = new{
+                               brand = ad.Camera.brand,
+                               category = ad.Camera.category,
+                           },
                            mobilead = new
                            {
                                color = ad.MobileAd.color,

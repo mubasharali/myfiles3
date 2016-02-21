@@ -5,7 +5,7 @@ var title = ko.observable();
 var tags = ko.observable("");
 var skills = ko.observable("");
 var minPrice = ko.observable(0);
-var maxPrice = ko.observable(50000);
+var maxPrice = ko.observable(500000);
 var minSeats = ko.observable(0);
 var maxSeats = ko.observable(1000);
 var gender = ko.observable();
@@ -22,7 +22,7 @@ var availableJobTypes = new Array("Full time", "Permanent", "Contract", "Interns
 var selectedJobType = ko.observable();
 var selectedLastDateToApply = ko.observable();
 var shift = ko.observable();
-var isLoading = ko.observable(false);
+
 availableCategories.subscribe(function () {
     console.log( "this" + availableCategories());
 })
@@ -81,6 +81,15 @@ selectedLastDateToApply.subscribe(function () {
 shift.subscribe(function () {
     RefreshSearch();
 })
+
+var selfie;
+function convertToSlug(Text) {
+    return Text
+        .toLowerCase()
+        .replace(/[^\w ]+/g, '')
+        .replace(/ +/g, '-')
+    ;
+}
 var loadQualification = function () {
     $.ajax({
         url: '/api/Job/GetAllQualifications',
@@ -107,38 +116,24 @@ var loadQualification = function () {
     });
 
 };
-var selfie;
-function convertToSlug(Text) {
-    return Text
-        .toLowerCase()
-        .replace(/[^\w ]+/g, '')
-        .replace(/ +/g, '-')
-    ;
-}
-
-function RefreshSearch(selff) {
-
-    if (isLoading()) {
-        return;
-    }
-    loadQualification();
-    
-
-    if (selff) {
-        selfie = selff;
-    }
-  //  var self = this;
+function JobsViewModel() {
+    var self = this;
+    self.showAds = ko.observableArray();
+    self.isLoading = ko.observable(false);
     searchingCity.subscribe(function () {
-        self.isLoading(false);
         RefreshSearch();
     })
     searchingPP.subscribe(function () {
-        self.isLoading(false);
         RefreshSearch();
     })
-    
-    isLoading(true);
+    loadQualification();
+}
+function RefreshSearch() {
 
+    if (self.isLoading()) {
+        return;
+    }
+    self.isLoading(true);
   // tags( convertToSlug(tags()));
     var ulr = '/api/Job/SearchJobAds?gender=' + gender() + '&skills=' + skills() + '&tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&salaryType=' + salaryType() + '&category=' + selectedCategory() + '&qualification=' + selectedQualification() + '&exprience=' + selectedExprience() + '&careerLevel=' + selectedCareerLevel() + '&jobType=' + selectedJobType() + '&lastDateToApply=' + selectedLastDateToApply() + '&minSeats=' + minSeats() + '&maxSeats=' + maxSeats() + '&shift=' + shift();
     console.log(ulr);
@@ -149,12 +144,12 @@ function RefreshSearch(selff) {
         cache: false,
         type: 'POST',
         success: function (data) {
-            isLoading(false);
+            self.isLoading(false);
             var mappedads = $.map(data, function (item) { return new Ad(item); });
-            selfie.showAds(mappedads);
+            self.showAds(mappedads);
         },
         error: function () {
-            isLoading(false);
+            self.isLoading(false);
             toastr.error("failed to search. Please refresh page and try again", "Error!");
         }
     });

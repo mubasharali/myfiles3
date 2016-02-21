@@ -710,5 +710,14 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Cameras">
+      <EntityTypeMapping TypeName="Model.Camera">
+        <MappingFragment StoreEntitySet="Camera">
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="brand" ColumnName="brand" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

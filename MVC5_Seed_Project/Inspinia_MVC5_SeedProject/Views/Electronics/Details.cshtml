@@ -107,6 +107,15 @@
                                                 </h1>
                                                 <hr>
                                             </span>
+                                            <div data-bind="with:showCameraAd">
+                                                <dl class="dl-horizontal m-t-md small">
+                                                    <dt>Category:</dt>
+                                                    <dd data-bind="text:category"></dd>
+                                                    
+                                                    <dt data-bind="with:brand">Brand:</dt>
+                                                    <dd data-bind="text:brand"></dd>
+                                                </dl>
+                                            </div>
                                             <div data-bind="with:showMobileAd">
                                                 <dl class="dl-horizontal m-t-md small">
                                                     <dt>condition:</dt>
@@ -450,6 +459,12 @@
             self.bathroom = data.bathroom;
             self.area = data.area;
         }
+        function CameraAd(data) {
+            var self = this;
+            data = data || {};
+            self.category = data.category;
+            self.brand = data.brand;
+        }
         function CarAd(data) {
             var self = this;
             data = data || {};
@@ -543,6 +558,7 @@
                 console.log(self.showSkills());
             }
         }
+
         function mobilead(data) {
             var self = this;
             data = data || {};
@@ -606,10 +622,13 @@
             self.title = data.title;
 
             self.showRealEstateAd = ko.observable();
+            self.showCameraAd = ko.observable();
             if (data.category == "RealEstate") {
                 self.showRealEstateAd(new RealEstate(data.realestatead));
             }
-
+            if (data.subCategory == "Cameras" || data.subCategory == "CamerasAccessories") {
+                self.showCameraAd(new CameraAd(data.cameraad));
+            }
             self.companyName = data.companyName;
             self.companyId = data.companyId;
 
@@ -634,6 +653,7 @@
             self.savedCount = ko.observable( data.savedCount );
             self.price = data.price || "";
             self.newBidPrice = ko.observable();
+            
             self.showCarAd = ko.observable();
             self.showBikeAd = ko.observable();
             self.statusError = "";
@@ -882,6 +902,12 @@
                 }
                 else if (data.category == "RealEstate") {
                     window.location.href = "/RealEstate/Edit/" + id;
+                }
+                else if (data.subCategory == "Cameras") {
+                    window.location.href = "/Electronics/EditCameraAd/" + id;
+                }
+                else if (data.subCategory == "CamerasAccessories") {
+                    window.location.href = "/Electronics/EditCameraAccessoriesAd/" + id;
                 }
                 else {
                     window.location.href = "/Home/Edit/" + id;

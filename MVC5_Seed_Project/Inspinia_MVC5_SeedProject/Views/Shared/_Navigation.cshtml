@@ -47,12 +47,12 @@
             <li class="@Html.IsSelected(controller: "MobilesTablets")">
                 <a href="@Url.Action("Index", "MobilesTablets")"><i class="fa fa-mobile fa-2x"></i> <span class="nav-label">Mobiles, Tablets</span> </a>
             </li>
-            <li class="@Html.IsSelected(controller: "Electronics")">
+            <li @*class="@Html.IsSelected(controller: "Electronics")"*@ >
                 <a href="@Url.Action("Index", "Electronics")"><i class="fa fa-tv"></i> <span class="nav-label">Electronics, Appliances</span><span class="fa arrow"></span> </a>
                 <ul class="nav nav-second-level collapse">
-                    <li class="@Html.IsSelected(action: "ComputersLaptops")"><a href="@Url.Action("ComputersLaptops", "Electronics")"><i class="fa fa-laptop"></i>Computers & Accessories</a></li>
+                    <li class="@Html.IsSelected(action: "ComputersLaptops")"><a href="@Url.Action("ComputersLaptops", "Electronics")"><i class="fa fa-laptop"></i>Computers </a></li>
 
-                    <li class="@Html.IsSelected(action: "Camera")"><a href="@Url.Action("Camera", "Electronics")"><i class="fa fa-camera"></i>Camera</a></li>
+                    <li class="@Html.IsSelected(action: "Camera")"><a href="@Url.Action("Cameras", "Electronics")"><i class="fa fa-camera"></i>Camera</a></li>
                     <li class="@Html.IsSelected(action: "Games")"><a href="@Url.Action("Games", "Electronics")"><i class="fa fa-play"></i>TV, Audio, Video</a></li>
                     <li class="@Html.IsSelected(action: "Games")"><a href="@Url.Action("Games", "Electronics")"><i class="fa fa-gamepad"></i>Games</a></li>
                     <li class="@Html.IsSelected(action: "Home_Appliances")"><a href="@Url.Action("Home_Appliances", "Electronics")"><i class="fa fa-television"></i>Home Appliances</a></li>

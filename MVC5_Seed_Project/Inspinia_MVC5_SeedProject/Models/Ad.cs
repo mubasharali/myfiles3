@@ -55,5 +55,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual CarAd CarAd { get; set; }
         public virtual BikeAd BikeAd { get; set; }
         public virtual House House { get; set; }
+        public virtual Camera Camera { get; set; }
     }
 }

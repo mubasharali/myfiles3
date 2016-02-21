@@ -86,5 +86,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<BikeBrand> BikeBrands { get; set; }
         public virtual DbSet<BikeModel> BikeModels { get; set; }
         public virtual DbSet<House> Houses { get; set; }
+        public virtual DbSet<Camera> Cameras { get; set; }
     }
 }

@@ -510,6 +510,11 @@
       <End Role="Ad" EntitySet="Ads" />
       <End Role="House" EntitySet="Houses" />
     </AssociationSet>
+    <EntitySet Name="Cameras" EntityType="Model.Camera" />
+    <AssociationSet Name="FK_Camera_ToTable" Association="Model.FK_Camera_ToTable">
+      <End Role="Ad" EntitySet="Ads" />
+      <End Role="Camera" EntitySet="Cameras" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -554,6 +559,7 @@
     <NavigationProperty Name="CarAd" Relationship="Model.FK_CarAd_ToTable" FromRole="Ad" ToRole="CarAd" />
     <NavigationProperty Name="BikeAd" Relationship="Model.FK_BikeAd_ToTable" FromRole="Ad" ToRole="BikeAd" />
     <NavigationProperty Name="House" Relationship="Model.FK_House_ToTable" FromRole="Ad" ToRole="House" />
+    <NavigationProperty Name="Camera" Relationship="Model.FK_Camera_ToTable" FromRole="Ad" ToRole="Camera" />
   </EntityType>
   <EntityType Name="AdImage">
     <Key>
@@ -2834,6 +2840,29 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="House">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Camera">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <Property Name="brand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Ad" Relationship="Model.FK_Camera_ToTable" FromRole="Camera" ToRole="Ad" />
+  </EntityType>
+  <Association Name="FK_Camera_ToTable">
+    <End Type="Model.Ad" Role="Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.Camera" Role="Camera" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Camera">
         <PropertyRef Name="adId" />
       </Dependent>
     </ReferentialConstraint>

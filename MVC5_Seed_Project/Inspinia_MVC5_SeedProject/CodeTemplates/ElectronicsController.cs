@@ -52,7 +52,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         {
             return View("Laptops");
         }
-       
+        public ActionResult Cameras()
+        {
+            return View();
+        }
         public void PostAdByCompanyPage(int adId,bool update = false)
         {
             var postAdUsing = System.Web.HttpContext.Current.Request["postAdUsing"];
@@ -111,8 +114,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     ReplaceAdImages( ref ad, fileNames);
                     //location
                     MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
-                    return RedirectToAction("Details",new {id = ad.Id, title = ad.title });
-                    //return RedirectToAction("Index", new { category = "mobiles", subcategory = laptopdata.LaptopBrand.brand, lowcategory = laptopdata.model, id = ad.Id, title = ad.title });
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
                 return View("Create", ad);
             }
@@ -128,7 +130,49 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return RedirectToAction("Index", "Home");
         }
+        public ActionResult CreateCameraAd()
+        {
+            if (Request.IsAuthenticated)
+            {
+                Ad ad = new Ad();
+                return View(ad);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        public ActionResult CreateCameraAccessoriesAd()
+        {
+            if (Request.IsAuthenticated)
+            {
+                Ad ad = new Ad();
+                return View(ad);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        public ActionResult EditCameraAd(int id)
+        {
+            if (Request.IsAuthenticated)
+            {
+                Ad ad = db.Ads.Find(id);
+                if (ad.postedBy == User.Identity.GetUserId())
+                {
+                    return View(ad);
+                }
+            }
+            return RedirectToAction("Index", "Home");
+        }
         public ActionResult EditLaptopAccessoriesAd(int id)
+        {
+            if (Request.IsAuthenticated)
+            {
+                Ad ad = db.Ads.Find(id);
+                if (ad.postedBy == User.Identity.GetUserId())
+                {
+                    return View(ad);
+                }
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        public ActionResult EditCameraAccessoriesAd(int id)
         {
             if (Request.IsAuthenticated)
             {
@@ -173,6 +217,146 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return View("Create", ad);
         }
+        public void SaveCameraAd(int adId, bool update = false)
+        {
+            Camera cam = new Camera();
+            cam.category = System.Web.HttpContext.Current.Request["cameraCategory"];
+            cam.brand = System.Web.HttpContext.Current.Request["brand"];
+            cam.adId = adId;
+            if (update)
+            {
+                db.Entry(cam).State = EntityState.Modified;
+            }
+            else
+            {
+                db.Cameras.Add(cam);
+            }
+            db.SaveChanges();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateCameraAd([Bind(Include = "Id,category,subcategory,postedBy,title,description,time")] Ad ad)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Request.IsAuthenticated)
+                {
+                    FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                    MyAd(ref ad, "Save","Electronics","Cameras");
+                    db.Ads.Add(ad);
+                    db.SaveChanges();
+
+                    SaveCameraAd(ad.Id);
+                    PostAdByCompanyPage(ad.Id);
+                    
+                    //tags
+                    SaveTags(Request["tags"], ref ad);
+
+                    ReplaceAdImages(ref ad, fileNames);
+                    //location
+                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
+                    db.SaveChanges();
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            return View("Create", ad);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditCameraAd([Bind(Include = "Id,category,subcateogry,postedBy,title,description,time")] Ad ad)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Request.IsAuthenticated)
+                {
+                    if (Request["postedBy"] == User.Identity.GetUserId())
+                    {
+                        FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                        MyAd(ref ad, "Update");
+
+                        db.Entry(ad).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        SaveCameraAd(ad.Id, true);
+
+                        //tags
+                        SaveTags(Request["tags"], ref ad, "update");
+                        //location
+
+                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
+                        ReplaceAdImages(ref ad, fileNames);
+                        db.SaveChanges();
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
+                    }
+
+                }
+                return View("EditLaptopAccessoriesAd", ad);
+            }
+            return View("EditLaptopAccessoriesAd", ad);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateCameraAccessoriesAd([Bind(Include = "Id,category,subcategory,postedBy,title,description,time")] Ad ad)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Request.IsAuthenticated)
+                {
+                    FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                    MyAd(ref ad, "Save", "Electronics", "CamerasAccessories");
+                    db.Ads.Add(ad);
+                    db.SaveChanges();
+
+                    SaveCameraAd(ad.Id);
+                    PostAdByCompanyPage(ad.Id);
+
+                    //tags
+                    SaveTags(Request["tags"], ref ad);
+
+                    ReplaceAdImages(ref ad, fileNames);
+                    //location
+                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
+                    db.SaveChanges();
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            return View("Create", ad);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditCameraAccessoriesAd([Bind(Include = "Id,category,subcateogry,postedBy,title,description,time")] Ad ad)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Request.IsAuthenticated)
+                {
+                    if (Request["postedBy"] == User.Identity.GetUserId())
+                    {
+                        FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                        MyAd(ref ad, "Update");
+
+                        db.Entry(ad).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        SaveCameraAd(ad.Id, true);
+
+                        //tags
+                        SaveTags(Request["tags"], ref ad, "update");
+                        //location
+
+                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
+                        ReplaceAdImages(ref ad, fileNames);
+                        db.SaveChanges();
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
+                    }
+
+                }
+                return View("EditLaptopAccessoriesAd", ad);
+            }
+            return View("EditLaptopAccessoriesAd", ad);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UpdateLaptopAccessoriesAd([Bind(Include = "Id,category,postedBy,title,description,time")] Ad ad)
@@ -204,7 +388,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
                         ReplaceAdImages(ref ad, fileNames);
                         db.SaveChanges();
-                        return RedirectToAction("../Details/" + ad.Id + "/" + ad.title);
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }
 
                 }
@@ -495,7 +679,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     SaveTags(Request["tags"],ref ad);
                     //location
                     MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
-                    return RedirectToAction("Details", new {  id = ad.Id});
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
                 return View("CreateHomeAppliancesAd",ad);
             }
@@ -873,7 +1057,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         //location
                         MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Update");
                         ReplaceAdImages(ref ad, fileNames);
-                        return RedirectToAction("Details", new { id = ad.Id, title = ad.title });
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }
                 }
                 return View("Create", ad);

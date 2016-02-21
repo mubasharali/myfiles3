@@ -196,6 +196,14 @@
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="status" Type="char" MaxLength="1" Nullable="false" />
   </EntityType>
+  <EntityType Name="Camera">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="int" Nullable="false" />
+    <Property Name="brand" Type="nvarchar" MaxLength="50" />
+    <Property Name="category" Type="nvarchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="CarAd">
     <Key>
       <PropertyRef Name="adId" />
@@ -928,6 +936,20 @@
       </Principal>
       <Dependent Role="BikeModel">
         <PropertyRef Name="addedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Camera_ToTable">
+    <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Camera" Type="Self.Camera" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Camera">
+        <PropertyRef Name="adId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2144,6 +2166,7 @@
     <EntitySet Name="BikeAd" EntityType="Self.BikeAd" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BikeBrand" EntityType="Self.BikeBrand" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BikeModel" EntityType="Self.BikeModel" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Camera" EntityType="Self.Camera" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarAd" EntityType="Self.CarAd" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarBrand" EntityType="Self.CarBrand" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarModel" EntityType="Self.CarModel" Schema="dbo" store:Type="Tables" />
@@ -2271,6 +2294,10 @@
     <AssociationSet Name="FK_BikeModel_ToTable" Association="Self.FK_BikeModel_ToTable">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="BikeModel" EntitySet="BikeModel" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Camera_ToTable" Association="Self.FK_Camera_ToTable">
+      <End Role="Ad" EntitySet="Ad" />
+      <End Role="Camera" EntitySet="Camera" />
     </AssociationSet>
     <AssociationSet Name="FK_CarAd_ToTable" Association="Self.FK_CarAd_ToTable">
       <End Role="Ad" EntitySet="Ad" />
