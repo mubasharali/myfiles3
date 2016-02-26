@@ -19,6 +19,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public int tagId { get; set; }
     
         public virtual Ad Ad { get; set; }
-        public virtual Tag Tag { get; set; }
+        public virtual Skill Skill { get; set; }
     }
 }

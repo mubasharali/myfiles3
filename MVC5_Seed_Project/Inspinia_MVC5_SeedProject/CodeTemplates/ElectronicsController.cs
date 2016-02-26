@@ -754,59 +754,42 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 
             }
         }
-        
-        public ActionResult Index(string category, string subcategory, string lowcategory, int? id)
+        [Route("TV-DVD-Multimedia")]
+        public ActionResult tv()
         {
-            
-            if (category == null)//mobiles
-            {
-                return View("Index");
-            }
-            if (subcategory == null)//htc
-            {
-                //if (category == "mobiles")
-                //{
-                    ViewBag.category = category;
-                    ViewBag.subcategory = subcategory;
-                    ViewBag.lowcategory = lowcategory;
-                    ViewBag.title = null;
-               // }
-                return View("search");
-            }
-            if (lowcategory == null)//M8
-            {
-                ViewBag.category = category;
-                ViewBag.subcategory = subcategory;
-                ViewBag.lowcategory = lowcategory;
-                ViewBag.title = null;
-                return View("search");
-            }
-            if (id == null)
-            {
-                ViewBag.cateogry = category;
-                ViewBag.subcateogry = subcategory;
-                ViewBag.lowcategory = lowcategory;
-                ViewBag.title = null;
-                return View("search");
-            }
-            if (id != null)
-            {
-                Ad ad = db.Ads.FirstOrDefault(x => x.Id == id);
-                if (ad == null)
-                {
-                    return HttpNotFound();
-                }
-                if (category == "mobiles") // remove this logic
-                {
-                    var mobileAds = ad.MobileAd;
-                    ViewBag.ad = mobileAds;
-                    ViewBag.category = "mobiles";
-                    ViewBag.adId = id;
-                }
-                return View("Details",ad);
-            }
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            ViewBag.subcategory = "TV-DVD-Multimedia";
+            ViewBag.category = "Electronics";
+            return View("../Vehicles/Index");
         }
+        [Route("Other-Electronics")]
+        public ActionResult otherelectronics()
+        {
+            ViewBag.subcategory = "Other-Electronics";
+            ViewBag.category = "Electronics";
+            return View("../Vehicles/Index");
+        }
+        [Route("Home-Appliances")]
+        public ActionResult homeappliances()
+        {
+            ViewBag.subcategory = "Home-Appliances";
+            ViewBag.category = "Electronics";
+            return View("../Vehicles/Index");
+        }
+        [Route("Games")]
+        public ActionResult games()
+        {
+            ViewBag.subcategory = "Games";
+            ViewBag.category = "Electronics";
+            return View("../Vehicles/Index");
+        }
+
+        //[Route("Electronics/{category?}")]
+        //public ActionResult Index(string category)
+        //{
+        //    ViewBag.subcategory = category;
+        //    ViewBag.category = "Vehicles";
+        //    return View("Index");
+        //}
         //[HttpPost]
         
         public ActionResult EditLaptopAd(int id)

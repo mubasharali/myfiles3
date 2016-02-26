@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Jobs";
+    ViewBag.Title = "Find Jobs|Full time Part time Jobs|Work from home";
 }
 
 
@@ -52,9 +52,10 @@
                         </div>
                         <hr />
                         <h5>Search by qualification</h5>
-                        <select id="select-qualification" class="demo-default" data-bind="options: availableQualifications,
+                        @*<select id="select-qualification" class="demo-default" data-bind="options: availableQualifications,
                        value: selectedQualification,
-                       optionsCaption: 'Choose category...'"></select>
+                       optionsCaption: 'Choose category...'"></select>*@
+                        <input id="select-qualification" class="repositories" data-bind="value:selectedQualification" placeholder="e.g, BS Software Engineering" />
                         <hr />
                         <h5>Search by Exprience</h5>
                         <select id="select-exprience" class="demo-default" data-bind="options: availableExpriences,
@@ -94,7 +95,7 @@
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
             <div data-bind="visible:!isLoading()">
-                <a data-bind="click:function(){ return createAd('/Jobs/Create')}" class="pull-right btn btn-danger">Create Job Ad</a>
+                <a data-bind="click:function(){ return createAd('/Jobs/Create')}" data-style="expand-left" class="ladda-button pull-right btn btn-danger">Create Job Ad</a>
                 <span data-bind="text:showAds().length"> </span> results found<br />
                 @*<b>Summary:</b> 
                 <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
@@ -148,15 +149,10 @@
             CreateAlert();
             ChatViewModel();
             AccountViewModel();
-
+            JobsViewModel();
             var self = this;
-            
-            //-----------------------------------
-            
-            //---------------------------------
-
-            self.showAds = ko.observableArray();
-            RefreshSearch(self);
+          //  self.showAds = ko.observableArray();
+          //  RefreshSearch(self);
             
              
             return self;
@@ -288,6 +284,7 @@
             }
         });
         $(function () {
+            $('.ladda-button').ladda('bind', { timeout: 200000 });
             toastr.options = {
                 closeButton: true,
                 progressBar: true,

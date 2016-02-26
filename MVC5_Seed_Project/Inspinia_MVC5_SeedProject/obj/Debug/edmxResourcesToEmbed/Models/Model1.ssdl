@@ -646,6 +646,15 @@
     <Property Name="savedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
   </EntityType>
+  <EntityType Name="Skill">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="60" Nullable="false" />
+    <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="time" Type="datetime" Nullable="false" />
+  </EntityType>
   <EntityType Name="Tag">
     <Key>
       <PropertyRef Name="Id" />
@@ -1648,12 +1657,12 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_JobSkill_ToTable_1">
-    <End Role="Tag" Type="Self.Tag" Multiplicity="1">
+    <End Role="Skill" Type="Self.Skill" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="JobSkill" Type="Self.JobSkill" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Tag">
+      <Principal Role="Skill">
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="JobSkill">
@@ -2210,6 +2219,7 @@
     <EntitySet Name="ReviewReply" EntityType="Self.ReviewReply" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ReviewVote" EntityType="Self.ReviewVote" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SaveAd" EntityType="Self.SaveAd" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Skill" EntityType="Self.Skill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tag" EntityType="Self.Tag" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Ad_ToTable" Association="Self.FK_Ad_ToTable">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -2512,7 +2522,7 @@
       <End Role="JobSkill" EntitySet="JobSkill" />
     </AssociationSet>
     <AssociationSet Name="FK_JobSkill_ToTable_1" Association="Self.FK_JobSkill_ToTable_1">
-      <End Role="Tag" EntitySet="Tag" />
+      <End Role="Skill" EntitySet="Skill" />
       <End Role="JobSkill" EntitySet="JobSkill" />
     </AssociationSet>
     <AssociationSet Name="FK_LaptopAds_ToTable" Association="Self.FK_LaptopAds_ToTable">

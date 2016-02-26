@@ -101,13 +101,17 @@ create electronic ad:
                 self.category = ko.observable();
                 self.subcategory = ko.observable();
                 self.categorySelected = ko.observable(false);
-                self.categoryList = ["Mobiles", "Electronics", "Jobs", "Vehicles"];
+                self.categoryList = ["Mobiles", "Electronics", "Jobs", "Vehicles","Real Estate"];
                 self.categoryClicked = function (data) {
                     self.categorySelected(true);
                     self.category(data);
-                    if (self.category() == "Jobs") {
+                    if (self.category() == "Jobs" ) {
                         self.loading(true);
                         window.location.href = '/Jobs/Create';
+                    }
+                    if (self.category() == "Real Estate") {
+                        self.loading(true);
+                        window.location.href = '/Realestate/Create';
                     }
                 }
                 self.backButtonUnderSubcategory = function () {

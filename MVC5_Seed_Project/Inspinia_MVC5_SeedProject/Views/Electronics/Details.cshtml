@@ -223,7 +223,7 @@
                                                     <dd data-bind="text:salaryType"></dd>
                                                     <span @*data-bind="visible:!showSkills().length == 0"*@>
                                                         <dt>Skills</dt>
-                                                        <dd><span data-bind="foreach:showSkills"> <a target="_blank" class="btn btn-xs btn-white" data-bind="text:name,attr:{href:link }"></a></span> </dd>
+                                                        <dd><span data-bind="foreach:showSkills"> <span class="btn btn-xs btn-white" data-bind="text:name"></span></span> </dd>
                                                     </span>
                                                     <dt>Gender</dt>
                                                     <dd data-bind="text:$parent.gender"></dd>

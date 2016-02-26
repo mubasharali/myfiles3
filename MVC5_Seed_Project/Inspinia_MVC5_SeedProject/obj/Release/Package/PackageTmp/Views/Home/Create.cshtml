@@ -12,10 +12,12 @@
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <a class="btn btn-info btn-xs pull-right " href="../CreateAd">Post ad in another category</a>
                     <h5>Create Ad</h5>
                 </div>
                 <div class="ibox-content">
-                    <form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" action="@Url.Action("FileUploadHandler", "Electronics")" method="post" enctype="multipart/form-data">
+                    <p><b>Note:</b> Fields with <span class="req">*</span> are mandatory</p>
+                    <form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" @*action="@Url.Action("FileUploadHandler", "Electronics")"*@ method="post" enctype="multipart/form-data">
                         <h2>Add Images</h2>
                         <div id="dropzonePreview" class="dz-default dz-message">
                         </div>

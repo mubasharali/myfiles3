@@ -16,7 +16,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         {
             if (Request.IsAuthenticated)
             {
-                var user =  db.AspNetUsers.Find(User.Identity.GetUserId());
+                var userId = User.Identity.GetUserId();
+                var user =  db.AspNetUsers.Find(userId);
                 return user.Email;
             }
             return "visitor";

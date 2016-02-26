@@ -196,6 +196,14 @@
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="status" Type="char" MaxLength="1" Nullable="false" />
   </EntityType>
+  <EntityType Name="Camera">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="int" Nullable="false" />
+    <Property Name="brand" Type="nvarchar" MaxLength="50" />
+    <Property Name="category" Type="nvarchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="CarAd">
     <Key>
       <PropertyRef Name="adId" />
@@ -421,6 +429,16 @@
     <Property Name="friendId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
   </EntityType>
+  <EntityType Name="House">
+    <Key>
+      <PropertyRef Name="adId" />
+    </Key>
+    <Property Name="adId" Type="int" Nullable="false" />
+    <Property Name="bedroom" Type="char" MaxLength="1" />
+    <Property Name="bathroom" Type="char" MaxLength="1" />
+    <Property Name="floor" Type="char" MaxLength="1" />
+    <Property Name="area" Type="int" />
+  </EntityType>
   <EntityType Name="JobAd">
     <Key>
       <PropertyRef Name="adId" />
@@ -626,6 +644,15 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="adId" Type="int" Nullable="false" />
     <Property Name="savedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="time" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Skill">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="60" Nullable="false" />
+    <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="Tag">
@@ -918,6 +945,20 @@
       </Principal>
       <Dependent Role="BikeModel">
         <PropertyRef Name="addedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Camera_ToTable">
+    <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Camera" Type="Self.Camera" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Camera">
+        <PropertyRef Name="adId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1559,6 +1600,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_House_ToTable">
+    <End Role="Ad" Type="Self.Ad" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="House" Type="Self.House" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Ad">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="House">
+        <PropertyRef Name="adId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Image_ToTable">
     <End Role="Company" Type="Self.Company" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -1602,12 +1657,12 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_JobSkill_ToTable_1">
-    <End Role="Tag" Type="Self.Tag" Multiplicity="1">
+    <End Role="Skill" Type="Self.Skill" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="JobSkill" Type="Self.JobSkill" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Tag">
+      <Principal Role="Skill">
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="JobSkill">
@@ -2120,6 +2175,7 @@
     <EntitySet Name="BikeAd" EntityType="Self.BikeAd" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BikeBrand" EntityType="Self.BikeBrand" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BikeModel" EntityType="Self.BikeModel" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Camera" EntityType="Self.Camera" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarAd" EntityType="Self.CarAd" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarBrand" EntityType="Self.CarBrand" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CarModel" EntityType="Self.CarModel" Schema="dbo" store:Type="Tables" />
@@ -2141,6 +2197,7 @@
     <EntitySet Name="FollowQuestion" EntityType="Self.FollowQuestion" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FollowTag" EntityType="Self.FollowTag" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Friend" EntityType="Self.Friend" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="House" EntityType="Self.House" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="JobAd" EntityType="Self.JobAd" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="JobSkill" EntityType="Self.JobSkill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LaptopAds" EntityType="Self.LaptopAds" Schema="dbo" store:Type="Tables" />
@@ -2162,6 +2219,7 @@
     <EntitySet Name="ReviewReply" EntityType="Self.ReviewReply" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ReviewVote" EntityType="Self.ReviewVote" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SaveAd" EntityType="Self.SaveAd" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Skill" EntityType="Self.Skill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tag" EntityType="Self.Tag" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Ad_ToTable" Association="Self.FK_Ad_ToTable">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -2246,6 +2304,10 @@
     <AssociationSet Name="FK_BikeModel_ToTable" Association="Self.FK_BikeModel_ToTable">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="BikeModel" EntitySet="BikeModel" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Camera_ToTable" Association="Self.FK_Camera_ToTable">
+      <End Role="Ad" EntitySet="Ad" />
+      <End Role="Camera" EntitySet="Camera" />
     </AssociationSet>
     <AssociationSet Name="FK_CarAd_ToTable" Association="Self.FK_CarAd_ToTable">
       <End Role="Ad" EntitySet="Ad" />
@@ -2443,6 +2505,10 @@
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="Friend" EntitySet="Friend" />
     </AssociationSet>
+    <AssociationSet Name="FK_House_ToTable" Association="Self.FK_House_ToTable">
+      <End Role="Ad" EntitySet="Ad" />
+      <End Role="House" EntitySet="House" />
+    </AssociationSet>
     <AssociationSet Name="FK_Image_ToTable" Association="Self.FK_Image_ToTable">
       <End Role="Company" EntitySet="Company" />
       <End Role="CompanyImage" EntitySet="CompanyImage" />
@@ -2456,7 +2522,7 @@
       <End Role="JobSkill" EntitySet="JobSkill" />
     </AssociationSet>
     <AssociationSet Name="FK_JobSkill_ToTable_1" Association="Self.FK_JobSkill_ToTable_1">
-      <End Role="Tag" EntitySet="Tag" />
+      <End Role="Skill" EntitySet="Skill" />
       <End Role="JobSkill" EntitySet="JobSkill" />
     </AssociationSet>
     <AssociationSet Name="FK_LaptopAds_ToTable" Association="Self.FK_LaptopAds_ToTable">

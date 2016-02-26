@@ -69,6 +69,22 @@
                 {
                                     <a data-bind="click:function(){ return createAd('/Home/Create?category=Vehicles&subcategory=spare-parts')}" data-style="expand-left" class="ladda-button pull-right btn btn-danger">Sell Spare parts</a>
                 }
+                else if (ViewBag.subcategory == "TV-DVD-Multimedia")
+                {
+                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Electronics&subcategory=TV-DVD-Multimedia')}" data-style="expand-left" class="ladda-button pull-right btn btn-danger">Sell TV-DVD-Multimedia</a>
+                }
+                else if (ViewBag.subcategory == "Games")
+                {
+                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Electronics&subcategory=Games')}" data-style="expand-left" class="ladda-button pull-right btn btn-danger">Sell Games</a>
+                }
+                else if (ViewBag.subcategory == "Home-Appliances")
+                {
+                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Electronics&subcategory=Home-Appliances')}" data-style="expand-left" class="ladda-button pull-right btn btn-danger">Sell Home Appliances</a>
+                }
+                else if (ViewBag.subcategory == "Other-Electronics")
+                {
+                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Electronics&subcategory=Other-Electronics')}" data-style="expand-left" class="ladda-button pull-right btn btn-danger">Sell Electronics</a>
+                }
                 <span data-bind="text:showAds().length"> </span> results found<br />
                 @*<b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || brand() || model() || tags() )"> all </span> <b> <span data-bind="visible:laptopAccessories()"> Laptop/Computer Accessories </span> <span data-bind="visible:!laptopAccessories()">Laptops/Computers</span> </b><span data-bind="visible:brand || model"> of </span> <b> <span data-bind="text:brand"></span> <span data-bind="text:model"> </b>
                     <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
@@ -99,7 +115,7 @@
     @Styles.Render("~/Content/plugins/jsTree")
     @Styles.Render("~/bundles/tagStyles")
     @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
-@Styles.Render("~/plugins/laddaStyles")
+
 }
 
 @section Scripts{
@@ -110,7 +126,7 @@
     @Scripts.Render("~/plugins/slick")
     @Scripts.Render("~/plugins/jsTree")
     @Scripts.Render("~/plugins/ionRange")
-@Scripts.Render("~/plugins/ladda")
+
     <script src="~/Scripts/app/SearchAds.js"></script>
     <script src="~/Scripts/app/slick-knockout-binding.js"></script>
     <script src="~/Scripts/app/CreateAlert.js"></script>

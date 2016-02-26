@@ -89,7 +89,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 return true;
             }
             string[] values = s.Split(',');
-            Tag[] tags = new Tag[values.Length];
+            Skill[] tags = new Skill[values.Length];
             JobSkill[] qt = new JobSkill[values.Length];
             for (int i = 0; i < values.Length; i++)
             {
@@ -97,9 +97,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 string ss = values[i];
                 if (ss != "")
                 {
-                    var data = db.Tags.FirstOrDefault(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
+                    var data = db.Skills.FirstOrDefault(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
 
-                    tags[i] = new Tag();
+                    tags[i] = new Skill();
                     if (data != null)
                     {
                         tags[i].Id = data.Id;
@@ -108,8 +108,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     {
                         tags[i].name = values[i];
                         tags[i].time = DateTime.UtcNow;
-                        tags[i].createdBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                        db.Tags.Add(tags[i]);
+                        tags[i].addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                        db.Skills.Add(tags[i]);
                     }
                 }
                 else

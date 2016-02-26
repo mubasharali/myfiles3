@@ -78,7 +78,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<CompanyAd> CompanyAds { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<JobAd> JobAds { get; set; }
-        public virtual DbSet<JobSkill> JobSkills { get; set; }
         public virtual DbSet<CarAd> CarAds { get; set; }
         public virtual DbSet<CarBrand> CarBrands { get; set; }
         public virtual DbSet<CarModel> CarModels { get; set; }
@@ -87,5 +86,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<BikeModel> BikeModels { get; set; }
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<Camera> Cameras { get; set; }
+        public virtual DbSet<JobSkill> JobSkills { get; set; }
+        public virtual DbSet<Skill> Skills { get; set; }
     }
 }

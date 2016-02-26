@@ -615,15 +615,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="JobSkills">
-      <EntityTypeMapping TypeName="Model.JobSkill">
-        <MappingFragment StoreEntitySet="JobSkill">
-          <ScalarProperty Name="tagId" ColumnName="tagId" />
-          <ScalarProperty Name="adId" ColumnName="adId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CarAds">
       <EntityTypeMapping TypeName="Model.CarAd">
         <MappingFragment StoreEntitySet="CarAd">
@@ -716,6 +707,25 @@
           <ScalarProperty Name="category" ColumnName="category" />
           <ScalarProperty Name="brand" ColumnName="brand" />
           <ScalarProperty Name="adId" ColumnName="adId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JobSkills">
+      <EntityTypeMapping TypeName="Model.JobSkill">
+        <MappingFragment StoreEntitySet="JobSkill">
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Skills">
+      <EntityTypeMapping TypeName="Model.Skill">
+        <MappingFragment StoreEntitySet="Skill">
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

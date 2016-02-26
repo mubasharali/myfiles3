@@ -51,10 +51,10 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual CompanyAd CompanyAd { get; set; }
         public virtual JobAd JobAd { get; set; }
-        public virtual ICollection<JobSkill> JobSkills { get; set; }
         public virtual CarAd CarAd { get; set; }
         public virtual BikeAd BikeAd { get; set; }
         public virtual House House { get; set; }
         public virtual Camera Camera { get; set; }
+        public virtual ICollection<JobSkill> JobSkills { get; set; }
     }
 }

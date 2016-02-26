@@ -23,7 +23,27 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             var ret = db.JobAds.Select(x => x.qualification);
             return Ok(ret);
         }
-
+        public async Task<IHttpActionResult> SearchQualifications(string s)
+        {
+            var ret = from qual in db.JobAds
+                      where qual.qualification.Contains(s)
+                      select new
+                      {
+                          name = qual.qualification,
+                      };
+            return Ok(ret);
+        }
+        public async Task<IHttpActionResult> SearchSkills(string s)
+        {
+            var ret = from tag in db.Skills
+                      where tag.name.Contains(s)
+                      select new
+                      {
+                          id = tag.Id,
+                          name = tag.name,
+                      };
+            return Ok(ret);
+        }
         public async Task<IHttpActionResult> SearchJobAds(string gender, string skills, string tags, string title, int minPrice, int maxPrice, string city, string pp, string salaryType, string category, string qualification, string exprience , string careerLevel, string jobType, DateTime? lastDateToApply, int minSeats, int maxSeats, string shift)
         {
             string islogin = "";
@@ -99,7 +119,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                        && (lastDateToApply == null || ad.lastDateToApply == lastDateToApply)
                                                        && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 500000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city)) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))
                                                         && (minSeats == 0 || ad.seats > minSeats) && (maxSeats == 1000 || ad.seats < maxSeats)
-                                && (!skillsArray.Except(ad.Ad.JobSkills.Select(x => x.Tag.name)).Any()) && (!tagsArray.Except(ad.Ad.AdTags.Select(x => x.Tag.name)).Any()))
+                                && (!skillsArray.Except(ad.Ad.JobSkills.Select(x => x.Skill.name)).Any()) && (!tagsArray.Except(ad.Ad.AdTags.Select(x => x.Tag.name)).Any()))
                            orderby ad.Ad.time descending
                            select new
                            {
@@ -158,7 +178,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                        && (lastDateToApply == null || ad.lastDateToApply == lastDateToApply)
                                                        && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 500000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city)) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))
                                                         && (minSeats == 0 || ad.seats > minSeats) && (maxSeats == 1000 || ad.seats < maxSeats)
-                                && (!skillsArray.Except(ad.Ad.JobSkills.Select(x => x.Tag.name)).Any()))
+                                && (!skillsArray.Except(ad.Ad.JobSkills.Select(x => x.Skill.name)).Any()))
                            orderby ad.Ad.time descending
                            select new
                            {

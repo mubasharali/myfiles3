@@ -1080,7 +1080,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                         select new
                                         {
                                             id = skill.Id,
-                                            name = skill.Tag.name,
+                                            name = skill.Skill.name,
                                         },
                            },
                            location = new

@@ -23,9 +23,7 @@ var selectedJobType = ko.observable();
 var selectedLastDateToApply = ko.observable();
 var shift = ko.observable();
 
-availableCategories.subscribe(function () {
-    console.log( "this" + availableCategories());
-})
+
 minPrice.subscribe(function () {
     RefreshSearch();
 });
@@ -57,7 +55,6 @@ selectedCategory.subscribe(function () {
     RefreshSearch();
 })
 selectedExprience.subscribe(function () {
-    console.log("E " + selectedExprience());
     if (selectedExprience() == "Not required") {
         selectedExprience("n");
     } else if (selectedExprience() == "Fresh Graduate") {
@@ -65,7 +62,6 @@ selectedExprience.subscribe(function () {
     } else if (selectedExprience() != "") {
         selectedExprience(selectedExprience().slice(0, 1));
     }
-    console.log("new " + selectedExprience());
     RefreshSearch();
 })
 selectedCareerLevel.subscribe(function () {
@@ -90,32 +86,65 @@ function convertToSlug(Text) {
         .replace(/ +/g, '-')
     ;
 }
-var loadQualification = function () {
-    $.ajax({
-        url: '/api/Job/GetAllQualifications',
-        dataType: "json",
-        contentType: "application/json",
-        cache: false,
-        type: 'GET',
-        success: function (data) {
-            $.each((data), function (i, item) { availableQualifications.push(item) });
-            $('#select-category1').selectize();
-            $('#select-careerLevel').selectize();
-            $('#select-exprience').selectize();
-            $('#select-jobtype').selectize();
-            $('#select-qualification').selectize({
-                sortField: {
-                    field: 'text',
-                    direction: 'asc'
-                },
-            });
-        },
-        error: function (jqXHR, status, thrownError) {
-            toastr.error("failed to load Qualification data.Please refresh page and try again", "Error");
-        }
-    });
+$('#select-qualification').selectize({
+    valueField: 'name',
+    labelField: 'name',
+    searchField: 'name',
+    options: [],
+    maxItems: 1,
+    create: true,
+    render: {
+        option: function (item, escape) {
+            return '<div>' +
+                '<span class="">' +
+                    '<span class="name">' + escape(item.name) + '</span>' +
 
-};
+                '</span>' +
+
+
+            '</div>';
+        }
+    },
+    load: function (query, callback) {
+        if (!query.length) return callback();
+        $.ajax({
+            url: '/api/Job/SearchQualifications?s=' + encodeURIComponent(query),
+            type: 'POST',
+            error: function () {
+                callback();
+            },
+            success: function (res) {
+                callback(res.slice(0, 10));
+            }
+        });
+    }
+});
+//var loadQualification = function () {
+//    $.ajax({
+//        url: '/api/Job/GetAllQualifications',
+//        dataType: "json",
+//        contentType: "application/json",
+//        cache: false,
+//        type: 'GET',
+//        success: function (data) {
+//            $.each((data), function (i, item) { availableQualifications.push(item) });
+//            $('#select-category1').selectize();
+//            $('#select-careerLevel').selectize();
+//            $('#select-exprience').selectize();
+//            $('#select-jobtype').selectize();
+//            $('#select-qualification').selectize({
+//                sortField: {
+//                    field: 'text',
+//                    direction: 'asc'
+//                },
+//            });
+//        },
+//        error: function (jqXHR, status, thrownError) {
+//            toastr.error("failed to load Qualification data.Please refresh page and try again", "Error");
+//        }
+//    });
+
+//};
 function JobsViewModel() {
     var self = this;
     self.showAds = ko.observableArray();
@@ -126,7 +155,7 @@ function JobsViewModel() {
     searchingPP.subscribe(function () {
         RefreshSearch();
     })
-    loadQualification();
+  //  loadQualification();
 }
 function RefreshSearch() {
 
@@ -136,7 +165,7 @@ function RefreshSearch() {
     self.isLoading(true);
   // tags( convertToSlug(tags()));
     var ulr = '/api/Job/SearchJobAds?gender=' + gender() + '&skills=' + skills() + '&tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&salaryType=' + salaryType() + '&category=' + selectedCategory() + '&qualification=' + selectedQualification() + '&exprience=' + selectedExprience() + '&careerLevel=' + selectedCareerLevel() + '&jobType=' + selectedJobType() + '&lastDateToApply=' + selectedLastDateToApply() + '&minSeats=' + minSeats() + '&maxSeats=' + maxSeats() + '&shift=' + shift();
-    console.log(ulr);
+    
     $.ajax({
         url : ulr,
         dataType: "json",
@@ -147,6 +176,10 @@ function RefreshSearch() {
             self.isLoading(false);
             var mappedads = $.map(data, function (item) { return new Ad(item); });
             self.showAds(mappedads);
+            $('#select-category1').selectize();
+                        $('#select-careerLevel').selectize();
+                        $('#select-exprience').selectize();
+                        $('#select-jobtype').selectize();
         },
         error: function () {
             self.isLoading(false);

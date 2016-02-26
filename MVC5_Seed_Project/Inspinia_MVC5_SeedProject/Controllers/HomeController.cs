@@ -40,7 +40,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 return sub;
             }
         }
-
+        [Route("Feedback-contact")]
+        public ActionResult Feedback()
+        {
+            return View();
+        }
         public ActionResult Create(string category, string subcategory)
         {
             if (Request.IsAuthenticated)
@@ -68,6 +72,17 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             else if (category == "RealEstate")
             {
                 string[] subcategories = {"apartment", "house", "plot & land", "Shop", "Office", "PG & Flatmates", "other commerical places"}; //reference over Realestate/create page + RealEstateSearch.js
+                foreach (var subcat in subcategories)
+                {
+                    if (subcategory == subcat)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else if (category == "Electronics")
+            {
+                string[] subcategories = { "TV-DVD-Multimedia", "Games", "Home-Appliances", "Other-Electronics" };
                 foreach (var subcat in subcategories)
                 {
                     if (subcategory == subcat)
@@ -206,8 +221,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               id = ad.Ad.Id,
                               title = ad.Ad.title,
                           };
-            ViewBag.mobiles = mobiles;
-            return View();
+           // ViewBag.mobiles = mobiles;
+            return View(mobiles);
         }
         //public string Index()
         //{
