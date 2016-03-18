@@ -158,6 +158,7 @@
           <Property Name="hideDateOfBirth" Type="bit" />
           <Property Name="hideFriends" Type="bit" />
           <Property Name="IsPasswordSaved" Type="bit" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Bid">
           <Key>
@@ -400,6 +401,16 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="companyId" Type="int" Nullable="false" />
           <Property Name="tagId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="givenBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="time" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="FollowCompany">
           <Key>
@@ -1503,6 +1514,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Feedback_ToTable">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feedback">
+              <PropertyRef Name="givenBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FollowCompany_ToTable">
           <End Role="Company" Type="Self.Company" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2198,6 +2223,7 @@
           <EntitySet Name="CompanyOffice" EntityType="Self.CompanyOffice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyQuestion" EntityType="Self.CompanyQuestion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyTag" EntityType="Self.CompanyTag" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FollowCompany" EntityType="Self.FollowCompany" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FollowQuestion" EntityType="Self.FollowQuestion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FollowTag" EntityType="Self.FollowTag" Schema="dbo" store:Type="Tables" />
@@ -2477,6 +2503,10 @@
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feedback_ToTable" Association="Self.FK_Feedback_ToTable">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Feedback" EntitySet="Feedback" />
           </AssociationSet>
           <AssociationSet Name="FK_FollowCompany_ToTable" Association="Self.FK_FollowCompany_ToTable">
             <End Role="Company" EntitySet="Company" />
@@ -3198,6 +3228,11 @@
           <AssociationSet Name="FK_JobSkill_ToTable_1" Association="Model.FK_JobSkill_ToTable_1">
             <End Role="Skill" EntitySet="Skills" />
             <End Role="JobSkill" EntitySet="JobSkills" />
+          </AssociationSet>
+          <EntitySet Name="Feedbacks" EntityType="Model.Feedback" />
+          <AssociationSet Name="FK_Feedback_ToTable" Association="Model.FK_Feedback_ToTable">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="Feedback" EntitySet="Feedbacks" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -4415,6 +4450,8 @@
           <NavigationProperty Name="CarModels" Relationship="Model.FK_CarModel_ToTable" FromRole="AspNetUser" ToRole="CarModel" />
           <NavigationProperty Name="BikeBrands" Relationship="Model.FK_BikeBrand_ToTable" FromRole="AspNetUser" ToRole="BikeBrand" />
           <NavigationProperty Name="BikeModels" Relationship="Model.FK_BikeModel_ToTable" FromRole="AspNetUser" ToRole="BikeModel" />
+          <NavigationProperty Name="Feedbacks" Relationship="Model.FK_Feedback_ToTable" FromRole="AspNetUser" ToRole="Feedback" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Ad_ToTable">
           <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -5560,6 +5597,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="givenBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Feedback_ToTable" FromRole="Feedback" ToRole="AspNetUser" />
+        </EntityType>
+        <Association Name="FK_Feedback_ToTable">
+          <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Feedback" Role="Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feedback">
+              <PropertyRef Name="givenBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -6084,6 +6146,7 @@
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="Model.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="IsPasswordSaved" ColumnName="IsPasswordSaved" />
                 <ScalarProperty Name="hideFriends" ColumnName="hideFriends" />
                 <ScalarProperty Name="hideDateOfBirth" ColumnName="hideDateOfBirth" />
@@ -6290,6 +6353,17 @@
                 <ScalarProperty Name="time" ColumnName="time" />
                 <ScalarProperty Name="addedBy" ColumnName="addedBy" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feedbacks">
+            <EntityTypeMapping TypeName="Model.Feedback">
+              <MappingFragment StoreEntitySet="Feedback">
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="givenBy" ColumnName="givenBy" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

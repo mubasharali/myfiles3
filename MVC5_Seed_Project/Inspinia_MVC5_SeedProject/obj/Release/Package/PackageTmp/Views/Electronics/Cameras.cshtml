@@ -77,9 +77,9 @@
             <div data-bind="visible:isLoading()">
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
-            <div data-bind="visible:!isLoading()">
-                <a data-bind="visible:!laptopAccessories(),click:function(){ return createAd('/Electronics/CreateCameraAd')}" data-style="expand-left" class="ladda-button pull-right btn btn-danger">Sell Camera </a>
-                <a data-bind="visible:laptopAccessories(),click:function(){ return createAd('/Electronics/CreateCameraAccessoriesAd')}" data-style="expand-left" class="ladda-button pull-right btn btn-danger">Sell Camera Accessories</a>
+            <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
+                <a data-bind="visible:!laptopAccessories(),click:function(){ return createAd('/Electronics/CreateCameraAd')}" data-style="expand-left" class=" pull-right btn btn-danger">Sell Camera </a>
+                <a data-bind="visible:laptopAccessories(),click:function(){ return createAd('/Electronics/CreateCameraAccessoriesAd')}" data-style="expand-left" class="pull-right btn btn-danger">Sell Camera Accessories</a>
                 <span data-bind="text:showAds().length"> </span> results found<br />
                 <b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || selectedBrand()  || tags() )"> all </span> <b> <span data-bind="visible:laptopAccessories()"> Cameras Accessories </span> <span data-bind="visible:!laptopAccessories()">Cameras</span> </b><span data-bind="visible:selectedBrand "> of </span> <b> <span data-bind="text:selectedBrand"></span> </b>
                 <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
@@ -101,24 +101,20 @@
         <div class="col-lg-2 hidden-md hidden-sm hidden-xs"> </div>
     </div>
 </div>
-@Html.Partial("/Views/Shared/_Chat.cshtml")
-@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 @section Styles {
     @Styles.Render("~/plugins/slickStyles")
     @Styles.Render("~/plugins/slickThemeStyles")
     @Styles.Render("~/plugins/toastrStyles")
-    @Styles.Render("~/Content/plugins/jsTree")
+    <link href="~/Content/plugins/jsTree/style.css" rel="stylesheet" />
     @Styles.Render("~/bundles/tagStyles")
     @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
 }
 
 @section Scripts{
-    @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
-    @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/slick")
-    @Scripts.Render("~/plugins/jsTree")
+@Scripts.Render("~/plugins/jsTree")
     @Scripts.Render("~/plugins/ionRange")
     <script src="~/Scripts/app/SearchCamera.js"></script>
     <script src="~/Scripts/app/slick-knockout-binding.js"></script>
@@ -126,6 +122,7 @@
     <script src="~/Scripts/app/_AdListView.js"></script>
     <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
     <script src="~/Scripts/app/GetLoginUserId.js"></script>
+<script src="~/Scripts/app/GoogleAnalytics.js"></script>
     <script>
 
         function viewModel() {
@@ -225,7 +222,7 @@
             //    ko.applyBindings(new viewModel);
             //};
             var length = $(window).width();
-            if (length < 770) {
+            if (length < 786) { //770
                 $(".collapse-link").click();
             }
         });

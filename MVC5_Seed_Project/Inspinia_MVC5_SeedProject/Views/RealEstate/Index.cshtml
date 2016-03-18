@@ -40,7 +40,7 @@
             <div class="">
                 <div class="ibox">
                     <div class="ibox-title">
-                        <h5>Advance Search</h5>
+                        <h5>Search Filters</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -80,8 +80,8 @@
             <div data-bind="visible:isLoading()">
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
-            <div data-bind="visible:!isLoading()">
-                <a data-bind="click:function(){ return createAd('/RealEstate/Create')}" data-style="expand-left" class="ladda-button pull-right btn btn-danger">Post Real Estate ad </a>
+            <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
+                <a data-bind="click:function(){ return createAd('/RealEstate/Create')}" data-style="expand-left" class=" pull-right btn btn-danger">Post Real Estate ad </a>
                 <span data-bind="text:showAds().length"> </span> results found<br />
                 @*<b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || brand() || model() || tags() )"> all </span> <b> <span data-bind="visible:laptopAccessories()"> Laptop/Computer Accessories </span> <span data-bind="visible:!laptopAccessories()">Laptops/Computers</span> </b><span data-bind="visible:brand || model"> of </span> <b> <span data-bind="text:brand"></span> <span data-bind="text:model"> </b>
                     <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
@@ -103,13 +103,10 @@
         <div class="col-lg-2 hidden-md hidden-sm hidden-xs"> </div>
     </div>
 </div>
-@Html.Partial("/Views/Shared/_Chat.cshtml")
-@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 @section Styles {
     @Styles.Render("~/plugins/slickStyles")
     @Styles.Render("~/plugins/slickThemeStyles")
     @Styles.Render("~/plugins/toastrStyles")
-    @Styles.Render("~/Content/plugins/jsTree")
     @Styles.Render("~/bundles/tagStyles")
     @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
 }
@@ -118,9 +115,7 @@
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
-    @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/slick")
-    @Scripts.Render("~/plugins/jsTree")
     @Scripts.Render("~/plugins/ionRange")
     <script src="~/Scripts/app/RealEstateSearch.js"></script>
     <script src="~/Scripts/app/slick-knockout-binding.js"></script>
@@ -215,13 +210,14 @@
             $('.product-images').slick({
                 dots: true
             });
-            // ko.applyBindings(new viewModel, (document.getElementById('ads')));
-
-            // ko.applyBindings(new treeModel, document.getElementById('navigation'));
+            var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            if (w < 786) {
+                //  $("#advanceSearch").closest('.collapse-link').click();
+                $('.collapse-link').click();
+            }
             ko.applyBindings(new viewModel);
-            //window.onload = function () {
-            //    ko.applyBindings(new viewModel);
-            //};
+            
 
         });
 

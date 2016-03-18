@@ -8,6 +8,10 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Amazon;
+using Amazon.S3;
+using Amazon.S3.Model;
+using System.Configuration;
 using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
@@ -15,30 +19,63 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
     public class CompanyController : Controller
     {
         private Entities db = new Entities();
-
+        
         // GET: /Company/
         public ActionResult Index()
         {
             var companies = db.Companies.Include(c => c.AspNetUser).Include(c => c.City).Include(c => c.popularPlace);
             return View(companies.ToList());
+            
         }
+        private static readonly string _awsAccessKey =
+            ConfigurationManager.AppSettings["AWSAccessKey"];
+
+        private static readonly string _awsSecretKey =
+            ConfigurationManager.AppSettings["AWSSecretKey"];
+
+        private static readonly string _bucketName =
+            ConfigurationManager.AppSettings["Bucketname"];
+        private static readonly string _folderName =
+            ConfigurationManager.AppSettings["CompanyFolder"];
         public ActionResult uploadLogo()
         {
             int id = int.Parse( Request["id"]);
             HttpPostedFileBase file = Request.Files["fileInput"];
             string extension = System.IO.Path.GetExtension(file.FileName);
-            string companyFolder = "~/Images/Company/" + id;
-            if (! System.IO.Directory.Exists(Server.MapPath(companyFolder)))
+
+
+
+            string newFileName = id + "/logo" + extension ;
+            AmazonS3Config config = new AmazonS3Config();
+            config.ServiceURL = "https://s3.amazonaws.com/";
+            Amazon.S3.IAmazonS3 s3Client = AWSClientFactory.CreateAmazonS3Client(_awsAccessKey, _awsSecretKey, config);
+
+            var request2 = new PutObjectRequest()
             {
-                System.IO.Directory.CreateDirectory(Server.MapPath(companyFolder));
-            }
-            //filename = "temp" + DateTime.UtcNow.Ticks + extension;
-            file.SaveAs(Server.MapPath(companyFolder + "/logo" + extension ));
+                BucketName = _bucketName,
+                CannedACL = S3CannedACL.PublicRead,//PERMISSION TO FILE PUBLIC ACCESIBLE
+                Key = _folderName + newFileName,
+                InputStream = file.InputStream//SEND THE FILE STREAM
+            };
+            s3Client.PutObject(request2);
             var data = db.Companies.Find(id);
             data.logoextension = extension;
             db.Entry(data).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("Details","Company", new { id = id ,title = data.title });
+
+
+            //string companyFolder = "~/Images/Company/" + id;
+            //if (! System.IO.Directory.Exists(Server.MapPath(companyFolder)))
+            //{
+            //    System.IO.Directory.CreateDirectory(Server.MapPath(companyFolder));
+            //}
+            ////filename = "temp" + DateTime.UtcNow.Ticks + extension;
+            //file.SaveAs(Server.MapPath(companyFolder + "/logo" + extension ));
+            //var data = db.Companies.Find(id);
+            //data.logoextension = extension;
+            //db.Entry(data).State = EntityState.Modified;
+            //db.SaveChanges();
+            return RedirectToAction("Details","Company", new { id = id ,title = ElectronicsController.URLFriendly( data.title) });
         }
 
         public ActionResult Create()
@@ -59,6 +96,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 return HttpNotFound();
             }
             ViewBag.companyId = company.Id;
+            ViewBag.title = company.title;
             return View();
         }
         public ActionResult Ask()
@@ -76,7 +114,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         {
             string s = Request["tags"];
             string[] values = s.Split(',');
-            Tag[] tags = new Tag[values.Length];
+            Inspinia_MVC5_SeedProject.Models.Tag[] tags = new Inspinia_MVC5_SeedProject.Models.Tag[values.Length];
             CompanyTag[] qt = new CompanyTag[values.Length];
             for (int i = 0; i < values.Length; i++)
             {
@@ -86,7 +124,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 {
                     var data = db.Tags.FirstOrDefault(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
 
-                    tags[i] = new Tag();
+                    tags[i] = new Inspinia_MVC5_SeedProject.Models.Tag();
                     if (data != null)
                     {
                         tags[i].Id = data.Id;
@@ -160,7 +198,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     {
                         string ss = e.ToString();
                     }
-                    return RedirectToAction("Details","Company", new {id = company.Id , title = company.title });
+                    return RedirectToAction("Details","Company", new {id = company.Id , title =ElectronicsController.URLFriendly( company.title) });
                 }
                 
             }
@@ -196,9 +234,6 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.createdBy = new SelectList(db.AspNetUsers, "Id", "Email", company.createdBy);
-            ViewBag.cityId = new SelectList(db.Cities, "Id", "addedBy", company.cityId);
-            ViewBag.popularPlaceId = new SelectList(db.popularPlaces, "Id", "name", company.popularPlaceId);
             return View(company);
         }
 

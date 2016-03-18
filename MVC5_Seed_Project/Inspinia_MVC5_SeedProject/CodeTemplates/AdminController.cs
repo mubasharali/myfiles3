@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
@@ -15,22 +16,59 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
     {
         private Entities db = new Entities();
 
+        public bool isAdmin()
+        {
+            if (Request.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                var status = db.AspNetUsers.Find(userId).status;
+                if (status == "admin")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         // GET: /Admin/
         public async Task<ActionResult> Index()
         {
-            return View();
+            if (isAdmin())
+            {
+                return View();
+            }
+            return RedirectToAction("../not-found");
         }
         public async Task<ActionResult> Models()
         {
-            return View();
+            if (isAdmin())
+            {
+                return View();
+            }
+            return RedirectToAction("../not-found");
         }
         public async Task<ActionResult> Ads()
         {
-            return View();
+            if (isAdmin())
+            {
+                return View();
+            }
+            return RedirectToAction("../not-found");
+        }
+        public async Task<ActionResult> Feedback()
+        {
+            if (isAdmin())
+            {
+                return View();
+            }
+            return RedirectToAction("../not-found");
         }
         public async Task<ActionResult> Location()
         {
-            return View();
+            if (isAdmin())
+            {
+                return View();
+            }
+            return RedirectToAction("../not-found");
         }
         // GET: /Admin/Details/5
         public async Task<ActionResult> Details(int? id)

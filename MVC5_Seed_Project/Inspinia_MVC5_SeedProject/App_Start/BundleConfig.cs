@@ -60,8 +60,8 @@ namespace Inspinia_MVC5_SeedProject
                       "~/Scripts/plugins/jsTree/jstree.min.js"));
 
             // jsTree styles
-            bundles.Add(new StyleBundle("~/Content/plugins/jsTree").Include(
-                      "~/Content/plugins/jsTree/style.css"));
+            //bundles.Add(new StyleBundle("~/Content/plugins/jsTree").Include(
+            //          "~/Content/plugins/jsTree/style.css"));
 
             // validate
             bundles.Add(new ScriptBundle("~/plugins/validate").Include(

@@ -12,6 +12,13 @@ using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
 using System.Text;
 using Newtonsoft.Json;
+using Amazon;
+using Amazon.S3;
+using Amazon.S3.Model;
+using System.Configuration;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Net.Mail;
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
     public class FileName
@@ -48,10 +55,45 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         //    var ads = db.Ads.Include(a => a.AspNetUser);
         //    return View(ads);
         //}
+
+        public static void sendEmail(string to,string subject, string body){
+            MailMessage mail = new MailMessage();
+            mail.From = new System.Net.Mail.MailAddress("dealkar.pk@gmail.com");
+
+            // The important part -- configuring the SMTP client
+            SmtpClient smtp = new SmtpClient();
+            smtp.Port = 587;   // [1] You can try with 465 also, I always used 587 and got success 587
+            smtp.EnableSsl = true;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network; // [2] Added this
+            smtp.UseDefaultCredentials = false; // [3] Changed this
+            smtp.Credentials = new NetworkCredential("dealkar.pk@gmail.com", "birthdaywish");  // [4] Added this. Note, first parameter is NOT string.
+            smtp.Host = "smtp.gmail.com";
+
+            //recipient address
+            mail.To.Add(new MailAddress(to));
+            mail.Subject = subject;
+            //Formatted mail body
+            mail.IsBodyHtml = true;
+           // string st = "Test";
+
+            mail.Body = body;
+            try
+            {
+                smtp.Send(mail);
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString(); 
+            }
+        }
+
+        [Route("Laptops-Computers")]
         public ActionResult ComputersLaptops()
         {
+           // sendEmail("irfanyusanif@gmail.com", "Hi i am irfan");
             return View("Laptops");
         }
+         [Route("Cameras")]
         public ActionResult Cameras()
         {
             return View();
@@ -116,7 +158,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
-                return View("Create", ad);
+                return RedirectToAction("Register", "Account");
             }
             return View("Create", ad);
         }
@@ -128,7 +170,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 Ad ad = new Ad();
                 return View(ad);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "Account");
         }
         public ActionResult CreateCameraAd()
         {
@@ -137,7 +179,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 Ad ad = new Ad();
                 return View(ad);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "Account");
         }
         public ActionResult CreateCameraAccessoriesAd()
         {
@@ -146,7 +188,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 Ad ad = new Ad();
                 return View(ad);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "Account");
         }
         public ActionResult EditCameraAd(int id)
         {
@@ -158,7 +200,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     return View(ad);
                 }
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "Account");
         }
         public ActionResult EditLaptopAccessoriesAd(int id)
         {
@@ -170,7 +212,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     return View(ad);
                 }
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "Account");
         }
         public ActionResult EditCameraAccessoriesAd(int id)
         {
@@ -182,7 +224,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     return View(ad);
                 }
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "Account");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -211,9 +253,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     //location
                     MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
                     db.SaveChanges();
-                    return RedirectToAction("../Electronics/Details/" + ad.Id + "/" + ad.title);
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
-                return View("Create", ad);
+                return RedirectToAction("Register", "Account");
             }
             return View("Create", ad);
         }
@@ -258,7 +300,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     db.SaveChanges();
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Register", "Account");
             }
             return View("Create", ad);
         }
@@ -291,7 +333,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     }
 
                 }
-                return View("EditLaptopAccessoriesAd", ad);
+                return RedirectToAction("Register", "Account");
             }
             return View("EditLaptopAccessoriesAd", ad);
         }
@@ -320,7 +362,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     db.SaveChanges();
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Register", "Account");
             }
             return View("Create", ad);
         }
@@ -353,7 +395,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     }
 
                 }
-                return View("EditLaptopAccessoriesAd", ad);
+                return RedirectToAction("Register", "Account");
             }
             return View("EditLaptopAccessoriesAd", ad);
         }
@@ -392,59 +434,95 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     }
 
                 }
-                return View("EditLaptopAccessoriesAd", ad);
+                return RedirectToAction("Register", "Account");
             }
             return View("EditLaptopAccessoriesAd", ad);
         }
+        private static readonly string _awsAccessKey =
+            ConfigurationManager.AppSettings["AWSAccessKey"];
 
+        private static readonly string _awsSecretKey =
+            ConfigurationManager.AppSettings["AWSSecretKey"];
+
+        private static readonly string _bucketName =
+            ConfigurationManager.AppSettings["Bucketname"];
+        private static readonly string _folderName =
+            ConfigurationManager.AppSettings["FolderName"];
         public void ReplaceAdImages(ref Ad ad, FileName[] filenames)
         {
             string newFileName = "";
             int count = 1;
             var id = ad.Id;
             var imaa = db.AdImages.Where(x => x.adId.Equals(id)).Count();
-            //var imaa = db.Ads.Find(id).AdImages.Count;
-            //foreach (var img in imaa)
-            //{
-            //    System.IO.File.Delete(Server.MapPath(@"~\Images\Ads\" + ad.Id + "_" + count++ + img.imageExtension));
-            //    db.AdImages.Remove(img);
-            //}
             count = imaa + 1;
             for (int i = 1; i < filenames.Length; i++)
             {
-                string filename = System.Web.HttpContext.Current.Server.MapPath("~/Images/Ads/" +  filenames[i].fileName );
-                string extension = System.IO.Path.GetExtension(filenames[i].fileName);
-                newFileName = ad.Id.ToString() + "_" + count + extension;
-                if (System.IO.File.Exists(filename))
-                {
-                    if ( ! (System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath("~/Images/Ads/" + newFileName)) ))
-                    {
-                        System.IO.File.Move(filename, System.Web.HttpContext.Current.Server.MapPath("~/Images/Ads/" + newFileName));
-                        System.IO.File.Delete(filename);
-                        AdImage image = new AdImage();
-                        image.imageExtension = extension;
-                        image.adId = ad.Id;
-                        db.AdImages.Add(image);
-                        try {
-                            db.SaveChanges();
-                        }catch(Exception e)
-                        {
-                            string s = e.ToString();
-                        }
-                        count++;
-                    }
-                }
+                 IAmazonS3 client;
+                 try
+                 {
+                     using (client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1))
+                     {
+                         GetObjectRequest request = new GetObjectRequest
+                         {
+                             BucketName = _bucketName,
+                             Key = _folderName + filenames[i].fileName
+                         };
+                         using (GetObjectResponse response = client.GetObject(request))
+                         {
+                             string filename = filenames[i].fileName;
+                             if (!System.IO.File.Exists(filename))
+                             {
+                                 string extension = System.IO.Path.GetExtension(filenames[i].fileName);
+                                 newFileName = ad.Id.ToString() + "_" + count + extension;
+
+                                 client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1);
+
+                                 CopyObjectRequest request1 = new CopyObjectRequest()
+                                 {
+                                     SourceBucket = _bucketName,
+                                     SourceKey = _folderName + filename,
+                                     DestinationBucket = _bucketName,
+                                     CannedACL = S3CannedACL.PublicRead,//PERMISSION TO FILE PUBLIC ACCESIBLE
+                                     DestinationKey = _folderName + newFileName
+                                 };
+                                 CopyObjectResponse response1 = client.CopyObject(request1);
+
+                                 AdImage image = new AdImage();
+                                 image.imageExtension = extension;
+                                 image.adId = ad.Id;
+                                 db.AdImages.Add(image);
+                                 db.SaveChanges();
+                                 count++;
+
+
+
+                                 DeleteObjectRequest deleteObjectRequest =
+                                 new DeleteObjectRequest
+                                 {
+                                     BucketName = _bucketName,
+                                     Key = _folderName + filenames[i].fileName
+                                 };
+                                 AmazonS3Config config = new AmazonS3Config();
+                                 config.ServiceURL = "https://s3.amazonaws.com/";
+                                 using (client = Amazon.AWSClientFactory.CreateAmazonS3Client(
+                                      _awsAccessKey, _awsSecretKey, config))
+                                 {
+                                     client.DeleteObject(deleteObjectRequest);
+                                 }
+                             }
+                         }
+                     }
+                 }
+                 catch (Exception e)
+                 {
+
+                 }
             }
-            
-            //try {
-            //    db.SaveChanges();
-            //}
-            //catch(Exception e)
-            //{
-            //    string s = e.ToString();
-            //}
         }
+
         
+
+
         [HttpPost]
         public ActionResult FileUploadHandler()
         {
@@ -461,12 +539,74 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 }
                 try
                 {
-                    HttpPostedFileBase file = Request.Files[i];
-                    string extension = System.IO.Path.GetExtension(file.FileName);
-                    filename = "temp" + DateTime.UtcNow.Ticks + extension;
-                    file.SaveAs(Server.MapPath("~/Images/Ads/" + filename));
-                    fileNames[i] = filename;
-                }
+                    IAmazonS3 client;
+                    //string logo = "logo2.png";
+                    //using (client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1))
+                    //{
+                    //    GetObjectRequest request = new GetObjectRequest
+                    //         {
+                    //             BucketName = _bucketName,
+                    //             Key = logo
+                    //         };
+                    //    using (GetObjectResponse response = client.GetObject(request))
+                    //    {
+                         //   string dest =System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), logo);
+                            //if (!System.IO.File.Exists(logo))
+                            //{
+                            //    response.WriteResponseStreamToFile(dest);
+                            //}
+                            Image imgg = Image.FromFile(Server.MapPath(@"\Images\others\WaterMark.png"));
+                            float f = float.Parse("0.5");
+                            Image img = SetImageOpacity(imgg, f);
+
+                            HttpPostedFileBase file = Request.Files[i];
+                            using (Image image = Image.FromStream(file.InputStream, true, true))
+                          //  using (Image watermarkImage = Image.FromFile(Server.MapPath(@"\Images\others\WaterMark.png")))
+                            using (Image watermarkImage = img)
+                            using (Graphics imageGraphics = Graphics.FromImage(image))
+                            using (TextureBrush watermarkBrush = new TextureBrush(watermarkImage))
+                            {
+                               // int x = (image.Width / 2 - watermarkImage.Width / 2);
+                                int x = 4;
+                                int y = image.Height - watermarkImage.Height;
+                                //int y = (image.Height / 2 - watermarkImage.Height / 2);
+                                watermarkBrush.TranslateTransform(x, y);
+                                imageGraphics.FillRectangle(watermarkBrush, new Rectangle(new Point(x, y), new Size(watermarkImage.Width + 1, watermarkImage.Height)));
+                            //    image.Save(file.FileName);
+                                
+                              //  image.Save(@"C:\Users\Irfan\Desktop\logo12.png");
+
+                                
+
+                                //upload on aws
+                                string extension = System.IO.Path.GetExtension(file.FileName);
+                                filename = "temp" + DateTime.UtcNow.Ticks + extension;
+                                image.Save(Server.MapPath(@"\Images\Ads\" + filename));
+                                if (file.ContentLength > 0) // accept the file
+                                {
+                                    AmazonS3Config config = new AmazonS3Config();
+                                    config.ServiceURL = "https://s3.amazonaws.com/";
+                                    Amazon.S3.IAmazonS3 s3Client = AWSClientFactory.CreateAmazonS3Client(_awsAccessKey, _awsSecretKey, config);
+
+                                    var request2 = new PutObjectRequest()
+                                    {
+                                        BucketName = _bucketName,
+                                        CannedACL = S3CannedACL.PublicRead,//PERMISSION TO FILE PUBLIC ACCESIBLE
+                                        Key = _folderName + filename,
+                                        //InputStream = file.InputStream//SEND THE FILE STREAM
+                                        FilePath = Server.MapPath(@"\Images\Ads\" + filename)
+                                    };
+                                    s3Client.PutObject(request2);
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@"\Images\Ads\" + filename)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@"\Images\Ads\" + filename));
+                                }
+                            }
+                      //  }
+                        fileNames[i] = filename;
+                    }
+               // }
                 catch (Exception ex)
                 {
                     return Json(new { Message = "Error in saving file" });
@@ -476,7 +616,39 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return Json(fileNames);
         }
 
+        public Image SetImageOpacity(Image image, float opacity)
+        {
+            try
+            {
+                //create a Bitmap the size of the image provided  
+                Bitmap bmp = new Bitmap(image.Width, image.Height);
 
+                //create a graphics object from the image  
+                using (Graphics gfx = Graphics.FromImage(bmp))
+                {
+
+                    //create a color matrix object  
+                    ColorMatrix matrix = new ColorMatrix();
+
+                    //set the opacity  
+                    matrix.Matrix33 = opacity;
+
+                    //create image attributes  
+                    ImageAttributes attributes = new ImageAttributes();
+
+                    //set the color(opacity) of the image  
+                    attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                    //now draw the image  
+                    gfx.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
+                }
+                return bmp;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        } 
         public int SaveLaptopBrandModel(Ad ad)
         {
             ad.status = "a";
@@ -584,8 +756,13 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         }
         public ActionResult CreateHomeAppliancesAd()
         {
-            Ad ad= new Ad();
-            return View(ad);
+            if (Request.IsAuthenticated)
+            {
+
+                Ad ad = new Ad();
+                return View(ad);
+            }
+            return RedirectToAction("Register", "Account");
         }
         public void MyAd(ref Ad ad,string SaveOrUpdate,string cateogry = null,string subcategory = null)
         {
@@ -681,7 +858,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
-                return View("CreateHomeAppliancesAd",ad);
+                return RedirectToAction("Register", "Account");
             }
             return View("CreateHomeAppliancesAd", ad);
             //ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", ad.postedBy);
@@ -794,16 +971,16 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         
         public ActionResult EditLaptopAd(int id)
         {
-            if (id == null)
+            if (Request.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Ad ad = db.Ads.Find(id);
+                if (ad.postedBy == User.Identity.GetUserId())
+                {
+                    return View(ad);
+                }
+
             }
-            Ad ad = db.Ads.Find(id);
-            if (ad == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ad);
+            return RedirectToAction("Register", "Account");
         }
         public static string RemapInternationalCharToAscii(char c)
         {
@@ -945,7 +1122,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                  db.SaveChanges();
             }
             string[] values = s.Split(',');
-            Tag[] tags = new Tag[values.Length];
+            Inspinia_MVC5_SeedProject.Models.Tag[] tags = new Inspinia_MVC5_SeedProject.Models.Tag[values.Length];
             AdTag[] qt = new AdTag[values.Length];
             for (int i = 0; i < values.Length; i++)
             {
@@ -955,7 +1132,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 {
                     var data = db.Tags.FirstOrDefault(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
 
-                    tags[i] = new Tag();
+                    tags[i] = new Inspinia_MVC5_SeedProject.Models.Tag();
                     if (data != null)
                     {
                         tags[i].Id = data.Id;
@@ -1043,7 +1220,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }
                 }
-                return View("Create", ad);
+                return RedirectToAction("Register", "Account");
             }
             return View("Create", ad);
         }
@@ -1063,8 +1240,12 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         
         public ActionResult CreateLaptopAd()
         {
-            Ad ad = new Ad();
-            return View(ad);
+            if (Request.IsAuthenticated)
+            {
+                Ad ad = new Ad();
+                return View(ad);
+            }
+            return RedirectToAction("Register", "Account");
         }
         
         

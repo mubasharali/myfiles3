@@ -516,6 +516,11 @@
       <End Role="Skill" EntitySet="Skills" />
       <End Role="JobSkill" EntitySet="JobSkills" />
     </AssociationSet>
+    <EntitySet Name="Feedbacks" EntityType="Model.Feedback" />
+    <AssociationSet Name="FK_Feedback_ToTable" Association="Model.FK_Feedback_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Feedback" EntitySet="Feedbacks" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -1732,6 +1737,8 @@
     <NavigationProperty Name="CarModels" Relationship="Model.FK_CarModel_ToTable" FromRole="AspNetUser" ToRole="CarModel" />
     <NavigationProperty Name="BikeBrands" Relationship="Model.FK_BikeBrand_ToTable" FromRole="AspNetUser" ToRole="BikeBrand" />
     <NavigationProperty Name="BikeModels" Relationship="Model.FK_BikeModel_ToTable" FromRole="AspNetUser" ToRole="BikeModel" />
+    <NavigationProperty Name="Feedbacks" Relationship="Model.FK_Feedback_ToTable" FromRole="AspNetUser" ToRole="Feedback" />
+    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK_Ad_ToTable">
     <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -2874,6 +2881,31 @@
       </Principal>
       <Dependent Role="JobSkill">
         <PropertyRef Name="tagId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Feedback">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="givenBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Feedback_ToTable" FromRole="Feedback" ToRole="AspNetUser" />
+  </EntityType>
+  <Association Name="FK_Feedback_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.Feedback" Role="Feedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Feedback">
+        <PropertyRef Name="givenBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

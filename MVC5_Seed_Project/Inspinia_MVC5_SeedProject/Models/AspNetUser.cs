@@ -66,6 +66,7 @@ namespace Inspinia_MVC5_SeedProject.Models
             this.CarModels = new HashSet<CarModel>();
             this.BikeBrands = new HashSet<BikeBrand>();
             this.BikeModels = new HashSet<BikeModel>();
+            this.Feedbacks = new HashSet<Feedback>();
         }
     
         public string Id { get; set; }
@@ -92,6 +93,7 @@ namespace Inspinia_MVC5_SeedProject.Models
         public Nullable<bool> hideDateOfBirth { get; set; }
         public Nullable<bool> hideFriends { get; set; }
         public Nullable<bool> IsPasswordSaved { get; set; }
+        public string status { get; set; }
     
         public virtual ICollection<Ad> Ads { get; set; }
         public virtual ICollection<Answer> Answers { get; set; }
@@ -143,5 +145,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual ICollection<CarModel> CarModels { get; set; }
         public virtual ICollection<BikeBrand> BikeBrands { get; set; }
         public virtual ICollection<BikeModel> BikeModels { get; set; }
+        public virtual ICollection<Feedback> Feedbacks { get; set; }
     }
 }

@@ -22,6 +22,42 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return db.Mobiles;
         }
+        public async Task<bool> isAdmin()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                var status = db.AspNetUsers.Find(userId).status;
+                if (status == "admin")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public async Task<IHttpActionResult> GetFeedbacks()
+        {
+            var ret = from feed in db.Feedbacks
+                      orderby feed.time descending
+                      select new
+                      {
+                          id = feed.Id,
+                          type = feed.type,
+                          description = feed.description,
+                          time = feed.time,
+                          givenById = feed.givenBy,
+                          givenByName = feed.AspNetUser.Email,
+                      };
+            return Ok(ret);
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> DeleteFeedback(int id)
+        {
+            var feedback = await db.Feedbacks.FindAsync(id);
+            db.Feedbacks.Remove(feedback);
+            await db.SaveChangesAsync();
+            return Ok("Done");
+        }
         public async Task<IHttpActionResult> GetAds(int limit)
         {
            // await AdViews(id);

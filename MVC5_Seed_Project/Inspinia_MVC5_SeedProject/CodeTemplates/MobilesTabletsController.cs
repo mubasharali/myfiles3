@@ -43,7 +43,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 Ad ad = new Ad();
                 return View(ad);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "Account");
         }
         public ActionResult CreateMobileAccessoriesAd()
         {
@@ -52,7 +52,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 Ad ad = new Ad();
                 return View(ad);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "Account");
         }
         public ActionResult EditMobileAccessoriesAd(int id)
         {
@@ -65,8 +65,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 }
                 
             }
-
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "Account");
         }
         public int SaveMobileBrandModel(ref Ad ad)
         {
@@ -218,12 +217,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     //location
                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
                     db.SaveChanges();
-                    return RedirectToAction("Details", "Electronics" , new { id = ad.Id , title = ad.title});
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
-                TempData["error"] = "You must be logged in to post ad";
-                return View("Create", ad);
+                return RedirectToAction("Register", "Account");
             }
-            TempData["error"] = "Only enter those information about which you are asked";
             return View("Create", ad);
             //ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", ad.postedBy);
             //return View(ad);
@@ -254,9 +251,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     //location
                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
                     db.SaveChanges();
-                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ad.title });
+                    return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
-                return View("Create", ad);
+                return RedirectToAction("Register", "Account");
             }
             return View("Create", ad);
         }
@@ -307,11 +304,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         //location
                         electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
                         electronicController.ReplaceAdImages(ref ad, fileNames);
-                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ad.title });
-                        // return RedirectToAction("Index", new { category = "mobiles", subcategory = mobileModel.Mobile.brand, lowcategory = mobileModel.model, id = ad.Id, title = ad.title });
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }
                 }
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Register", "Account");
             }
             return View("Edit", ad);
         }
@@ -325,7 +321,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     return View(ad);
                 }
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Register", "Account");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -362,11 +358,11 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         db.Entry(mobileAd).State = EntityState.Modified;
 
                         db.SaveChanges();
-                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ad.title });
+                        return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }
 
                 }
-                return View("EditAd", ad);
+                return RedirectToAction("Register", "Account");
             }
             return View("EditAd", ad);
         }

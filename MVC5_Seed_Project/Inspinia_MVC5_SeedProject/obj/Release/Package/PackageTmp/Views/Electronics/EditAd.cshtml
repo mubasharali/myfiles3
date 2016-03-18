@@ -1,8 +1,7 @@
 ﻿@model Inspinia_MVC5_SeedProject.Models.Ad
 @using Inspinia_MVC5_SeedProject.CodeTemplates;
 @{
-    Layout = "/Views/Shared/_Layout_Without_Signalr.cshtml";
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
 }
 
 
@@ -151,6 +150,9 @@
     <script type="text/javascript">
 
         function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
             var self = this;
             self.conditionChecked = ko.observable(false);
             self.typeValue = ko.observable("sell");
@@ -228,7 +230,7 @@
                                         '<span class="description">' + escape(item.info) + '</span>' +
                                         '<ul class="meta">' +
                                             '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
-                                            '<li class="forks"><span>' + escape(item.questions) + '</span> questions asked</li>' +
+                                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
                                         '</ul>' +
                                     '</div>';
                                 }

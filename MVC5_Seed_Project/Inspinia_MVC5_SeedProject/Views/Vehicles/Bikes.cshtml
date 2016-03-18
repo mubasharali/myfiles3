@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Buy and sell Bikes";
+    ViewBag.Title = "Buy and sell Bikes, Motocycles, scooters";
 }
 
 
@@ -37,33 +37,47 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-4 col-md-3 col-lg-3">
-            <div class="">
-                @Html.Partial("~/Views/Vehicles/_TreeCars.cshtml")
-                <div class="ibox-title"><h5> search by tags</h5></div>
-                <div class="ibox-content"><input id="select-tag" data-bind="value:tags" class="repositories" placeholder="Pick tags..." /></div>
-                <div class="ibox-title"><h5> search by Price</h5></div>
-                <div id="ionrange_1"></div>
-                @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Search Filters</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <h5> search by Brand/Model</h5>
+                    @Html.Partial("~/Views/Vehicles/_TreeCars.cshtml")
+                    <hr />
+                    <h5> search by tags</h5>
+                    <input id="select-tag" data-bind="value:tags" class="repositories" placeholder="Pick tags..." />
+                    <hr />
+                    <h5> search by Price</h5>
+                    <div id="ionrange_1"></div>
+
+                </div>
             </div>
+            @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
         </div>
         <div class="col-sm-8 col-md-9 col-lg-7">
             <div data-bind="visible:isLoading()">
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
-            <div data-bind="visible:!isLoading()">
-                <a data-bind="click:function(){ return createAd('/Vehicles/CreateBikeAd')}" data-style="expand-left" class="ladda-button pull-right btn btn-danger">Sell your Bike</a>
+            <div id="FirstLoading" data-bind="visible:!isLoading()">
+                <a data-bind="click:function(){ return createAd('/Vehicles/CreateBikeAd')}" data-style="expand-left" class=" pull-right btn btn-danger">Sell your Bike</a>
                 <span data-bind="text:showAds().length"> </span> results found<br />
                 @*<b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || brand() || model() || tags() )"> all </span> <b> <span data-bind="visible:laptopAccessories()"> Laptop/Computer Accessories </span> <span data-bind="visible:!laptopAccessories()">Laptops/Computers</span> </b><span data-bind="visible:brand || model"> of </span> <b> <span data-bind="text:brand"></span> <span data-bind="text:model"> </b>
-                    <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
+            <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
 
-                    <span data-bind="visible:minPrice()!= 0 && maxPrice()!= 50000">
-                        with price from <b> <span data-bind="text:minPrice"></span> </b> to <b> <span data-bind="text:maxPrice"></span></b>
-                    </span>
-                    <span data-bind="visible:! (minPrice()!= 0 && maxPrice()!= 50000)">
-                        <span data-bind="visible:minPrice() != 0"> with min price <b> <span data-bind="text:minPrice"></span> </b> </span>
-                        <span data-bind="visible:maxPrice()!= 50000">with max price <b> <span data-bind="text:maxPrice"></span> </b> </span>
-                    </span>
-                    <span data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>*@
+            <span data-bind="visible:minPrice()!= 0 && maxPrice()!= 50000">
+                with price from <b> <span data-bind="text:minPrice"></span> </b> to <b> <span data-bind="text:maxPrice"></span></b>
+            </span>
+            <span data-bind="visible:! (minPrice()!= 0 && maxPrice()!= 50000)">
+                <span data-bind="visible:minPrice() != 0"> with min price <b> <span data-bind="text:minPrice"></span> </b> </span>
+                <span data-bind="visible:maxPrice()!= 50000">with max price <b> <span data-bind="text:maxPrice"></span> </b> </span>
+            </span>
+            <span data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>*@
                 <div data-bind="foreach:showAds">
                     @Html.Partial("/Views/Shared/_AdListView.cshtml")
                 </div>
@@ -73,13 +87,11 @@
         <div class="col-lg-2 hidden-md hidden-sm hidden-xs"> </div>
     </div>
 </div>
-@Html.Partial("/Views/Shared/_Chat.cshtml")
-@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 @section Styles {
     @Styles.Render("~/plugins/slickStyles")
     @Styles.Render("~/plugins/slickThemeStyles")
     @Styles.Render("~/plugins/toastrStyles")
-    @Styles.Render("~/Content/plugins/jsTree")
+<link href="~/Content/plugins/jsTree/style.css" rel="stylesheet" />
     @Styles.Render("~/bundles/tagStyles")
     @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
 }
@@ -192,7 +204,10 @@
             //window.onload = function () {
             //    ko.applyBindings(new viewModel);
             //};
-
+            var length = $(window).width();
+            if (length < 786) { //770
+                $(".collapse-link").click();
+            }
         });
 
     </script>

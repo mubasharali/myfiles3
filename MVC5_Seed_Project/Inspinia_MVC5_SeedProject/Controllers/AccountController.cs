@@ -8,8 +8,11 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
+using Microsoft.AspNet.Identity.Owin;
 using Inspinia_MVC5_SeedProject.Models;
-
+using Inspinia_MVC5_SeedProject.CodeTemplates;
+using Microsoft.Owin.Security.DataProtection;
+using Microsoft.Owin;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
   //   public class ApplicationUserManager : UserManager<ApplicationUser>
@@ -27,14 +30,61 @@ namespace Inspinia_MVC5_SeedProject.Controllers
     //        PasswordValidator = new MinimumLengthValidator(0);
     //    }
     //}
+    //following code is for email verification
+    public class AppUserManager : UserManager<ApplicationUser>
+{
+public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
+
+    public static AppUserManager Create(IdentityFactoryOptions<AppUserManager> options, IOwinContext context)
+    {
+        ApplicationDbContext db = context.Get<ApplicationDbContext>();
+        AppUserManager manager = new AppUserManager(new UserStore<ApplicationUser>(db));
+
+        //manager.PasswordValidator = new PasswordValidator { 
+        //    RequiredLength = 6,
+        //    RequireNonLetterOrDigit = false,
+        //    RequireDigit = false,
+        //    RequireLowercase = true,
+        //    RequireUppercase = true
+        //};
+
+        //manager.UserValidator = new UserValidator<ApplicationUser>(manager)
+        //{
+        //    AllowOnlyAlphanumericUserNames = true,
+        //    RequireUniqueEmail = true
+        //};
+
+        var dataProtectionProvider = options.DataProtectionProvider;
+
+        //token life span is 3 hours
+        if (dataProtectionProvider != null)
+        {
+            manager.UserTokenProvider =
+               new DataProtectorTokenProvider<ApplicationUser>
+                  (dataProtectionProvider.Create("ConfirmationToken"))
+               {
+                   TokenLifespan = TimeSpan.FromHours(3)
+               };
+        }
+
+        //defining email service
+       // manager.EmailService = new EmailService();
+
+        return manager;
+    } //Create
+
+  } //class
+
+
     [Authorize]
     public class AccountController : Controller
     {
         private Entities db = new Entities();
+
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
-
+           
         }
 
         public AccountController(UserManager<ApplicationUser> userManager)
@@ -51,7 +101,35 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-        
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return View("Error");
+            }
+
+            var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
+            UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
+                as IUserTokenProvider<ApplicationUser, string>;
+
+            IdentityResult result;
+            try
+            {
+                result = await UserManager.ConfirmEmailAsync(userId, code);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return Json("Error", JsonRequestBehavior.AllowGet);
+            }
+
+            if (result.Succeeded)
+            {
+                return Json("Done", JsonRequestBehavior.AllowGet);
+            }
+            return Json("Error", JsonRequestBehavior.AllowGet);
+            
+        }
         [HttpPost]
         [AllowAnonymous]
         public async Task<JsonResult> UserLogin(string email, string password)
@@ -79,7 +157,34 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                await db.SaveChangesAsync();
             }
             var user = await UserManager.FindAsync(email, password);
-            
+
+            try
+            {
+                var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
+                UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
+                    as IUserTokenProvider<ApplicationUser, string>;
+
+                //var provider = new DpapiDataProtectionProvider("Sample");
+
+                //var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>());
+
+                //userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(
+                //    provider.Create("EmailConfirmation"));
+
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                var callbackUrl = Url.Action(
+                   "ConfirmEmail", "Account",
+                   new { userId = user.Id, code = code },
+                   protocol: Request.Url.Scheme);
+
+                ElectronicsController.sendEmail(user.UserName, "Welcome to dealkar.pk - Confirm Email address", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+           //    await ConfirmEmail(user.Id, code);
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString();
+            }
+
             if (user != null)
             {
                 await SignInAsync(user, true);
@@ -131,16 +236,16 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         public async Task<JsonResult> RegisterUser(string email, string password = "aa")
         {
 
-            var roleManager = new RoleManager<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            //var roleManager = new RoleManager<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
 
 
-            if (!roleManager.RoleExists("Admin"))
-            {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                role.Name = "Admin";
-                roleManager.Create(role);
+            //if (!roleManager.RoleExists("Admin"))
+            //{
+            //    var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+            //    role.Name = "Admin";
+            //    roleManager.Create(role);
 
-            }
+            //}
 
 
             var ab = email.Split('@');
@@ -154,9 +259,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             var result = await UserManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
-                var currentUser = UserManager.FindByName(user.UserName);
+                //var currentUser = UserManager.FindByName(user.UserName);
 
-                var roleresult = UserManager.AddToRole(currentUser.Id, "Admin");
+                //var roleresult = UserManager.AddToRole(currentUser.Id, "Admin");
 
                 try { 
                 await SignInAsync(user, isPersistent: true);
@@ -175,8 +280,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     data.IsPasswordSaved = true;
                 }
+                data.hideEmail = true;
+                data.hidePhoneNumber = true;
                 db.Entry(data).State = System.Data.Entity.EntityState.Modified;
                 await db.SaveChangesAsync();
+                
+                
                 return Json("Done", JsonRequestBehavior.AllowGet);
             }
             return Json("Error", JsonRequestBehavior.AllowGet);
@@ -364,6 +473,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         // POST: /Account/LinkLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult LinkLogin(string provider)
         {
             // Request a redirect to the external login provider to link a login for the current user

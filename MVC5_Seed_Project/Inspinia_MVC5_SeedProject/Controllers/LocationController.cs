@@ -18,6 +18,21 @@ namespace Inspinia_MVC5_SeedProject.Controllers
     {
         private Entities db = new Entities();
 
+        public async Task<IHttpActionResult> SubmitFeedback(Feedback fb)
+        {
+            if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                if (ModelState.IsValid)
+                {
+                    fb.givenBy = User.Identity.GetUserId();
+                    fb.time = DateTime.UtcNow;
+                    db.Feedbacks.Add(fb);
+                    await db.SaveChangesAsync();
+                    return Ok("Done");
+                }
+            }
+            return BadRequest();
+        }
         // GET api/Location
         public async Task<IHttpActionResult> GetCities()
         {

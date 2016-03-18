@@ -400,7 +400,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         }
 
         // DELETE api/Forum/5
-        [ResponseType(typeof(Question))]
+        [HttpPost]
         public async Task<IHttpActionResult> DeleteQuestion(int id)
         {
             Question question = await db.Questions.FindAsync(id);
@@ -412,7 +412,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             db.Questions.Remove(question);
             await db.SaveChangesAsync();
 
-            return Ok(question);
+            return Ok("Done");
         }
         [HttpPost]
         public async Task<IHttpActionResult> DeleteAnswer(int id)

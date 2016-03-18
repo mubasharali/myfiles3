@@ -78,7 +78,9 @@ namespace Inspinia_MVC5_SeedProject
             //    url: "{controller}/{action}/{id}/{title}",
             //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional, title = UrlParameter.Optional }
             //);
-            
+            routes.MapRoute("Robots.txt",
+                "robots.txt",
+                new { controller = "Home", action = "Robots" });
 
             routes.MapRoute(
                 name: "Default",

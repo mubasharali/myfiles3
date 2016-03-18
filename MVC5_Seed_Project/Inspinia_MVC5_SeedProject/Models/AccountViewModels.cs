@@ -60,4 +60,9 @@ namespace Inspinia_MVC5_SeedProject.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
+    public class ExternalLoginViewModel
+    {
+        public string Action { get; set; }
+        public string ReturnUrl { get; set; }
+    }
 }

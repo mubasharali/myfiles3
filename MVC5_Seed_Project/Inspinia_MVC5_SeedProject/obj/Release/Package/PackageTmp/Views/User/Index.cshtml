@@ -11,7 +11,7 @@
     <div data-bind="visible:!showProfile()">
         @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
     </div>
-    <div data-bind="with:showProfile">
+    <div id="FirstLoading" style="display:none" data-bind="with:showProfile">
         <div class="row m-b-lg m-t-lg">
             <div class="col-sm-5">
 
@@ -27,8 +27,9 @@
                                 <span data-bind="if:!isOnline()"><i class="fa fa-circle text-warning"></i> offline</span>*@)
                             <br />
                             <small>
-                                <button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return addFriend(id)} " style="margin-bottom:1px"><span data-bind="visible:!isFriend()">Add Friend</span><span data-bind="visible:isFriend">UnFriend</span></button>
-                                &nbsp;<button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return sendMessage(id,name)}" style="margin-bottom:1px">Send message</button> &nbsp;<button data-bind="visible: loginUserId != id" style="margin-bottom:1px" class="btn btn-sm">Follow</button>
+                                @*<button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return addFriend(id)} " style="margin-bottom:1px"><span data-bind="visible:!isFriend()">Add Friend</span><span data-bind="visible:isFriend">UnFriend</span></button>
+                                &nbsp;<button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return sendMessage(id,name)}" style="margin-bottom:1px">Send message</button> &nbsp;<button data-bind="visible: loginUserId != id" style="margin-bottom:1px" class="btn btn-sm">Follow</button>*@
+
                                 <a class="btn btn-sm btn-default" data-bind="visible: loginUserId == id,attr:{href:'/User/Profile/'+ id}" style="margin-bottom:1px">Edit Profile</a>
                             </small>
                         </div>
@@ -113,7 +114,7 @@
                     <div class="ibox-title"><h5>My Companies</h5></div>
                     <div class="ibox-content">
                         <div data-bind="foreach:showCompanies">
-                            <a data-bind="attr:{href:'/CompanyPage/' + id + '/' + name}"  class="btn btn-white set_es"><img  style="width:26px"  data-bind="attr:{src:logoLink }"  /> <span data-bind="text:name" ></span></a>
+                            <a data-bind="attr:{href:companyUrl}" class="btn btn-white set_es"><img style="width:26px" data-bind="attr:{src:logoLink }" /> <span data-bind="text:name"></span></a>
                             @*<div class="media">
                                 <a data-bind="attr:{href:'/CompanyPage/' + id + '/' + name}" >
                                     <div class="pull-left"> <img style="width:26px" data-bind="attr:{src:logoLink }" /> </div> 
@@ -265,8 +266,7 @@
 @Styles.Render("~/plugins/toastrStyles")
 }
 
-@Html.Partial("/Views/Shared/_Chat.cshtml")
-@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
+
 
 @section Scripts{
     
@@ -285,11 +285,16 @@
             self.name = data.name;
             self.logoLink = "/Images/Company/default_logo.png";
             if (data.logoExtension) {
-                self.logoLink = "/Images/Company/" + self.id + "/logo" + data.logoExtension;
+                self.logoLink = $.cookie("AWSURL") + $.cookie("AWSCompanyFolder") + +self.id + "/logo" + data.logoExtension;
             }
-            self.companyClicked = function () {
-                window.location.href = "/CompanyPage/" + self.id + "/" + self.name;
-            }
+            self.companyUrl = "/CompanyPage/" + self.id + "/" + convertToSlug( self.name);
+        }
+        function convertToSlug(Text) {
+            return Text
+                .toLowerCase()
+                .replace(/[^\w ]+/g, '')
+                .replace(/ +/g, '-')
+            ;
         }
         function profile(data) {
             var self = this;
@@ -362,7 +367,7 @@
             self.hideEmail = data.hideEmail;
             self.hidePhoneNumber = data.hidePhoneNumber;
             self.hideDateOfBirth = data.hideDateOfBirth;
-            self.dpLink = '/Images/Users/p' + self.id + data.dpExtension;
+            self.dpLink = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + 'p' + self.id + data.dpExtension;
             if (!data.dpExtension) {
                 self.dpLink = '/Images/Users/default.jpg';
             }
@@ -488,6 +493,7 @@
                     type: 'GET',
                     success: function (data) {
                         self.showProfile(new profile(data));
+                        $("#FirstLoading").css({ "display": "block" });
                         $('#select-tags-to-follow').selectize({
                             valueField: 'name',
                             labelField: 'name',

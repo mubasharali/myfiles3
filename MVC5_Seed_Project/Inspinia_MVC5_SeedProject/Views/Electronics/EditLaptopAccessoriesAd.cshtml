@@ -364,7 +364,7 @@
                                         '<span class="description">' + escape(item.info) + '</span>' +
                                         '<ul class="meta">' +
                                             '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
-                                            '<li class="forks"><span>' + escape(item.questions) + '</span> questions asked</li>' +
+                                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
                                         '</ul>' +
                                     '</div>';
                                 }
@@ -487,7 +487,7 @@
                     if (images) {
                         for (i = 0; i < images.length; i++) {
                             myDropzone1.options.addedfile.call(myDropzone1, images[i]);
-                            myDropzone1.options.thumbnail.call(myDropzone1, images[i], "/Images/Ads/" + images[i].name);
+                            myDropzone1.options.thumbnail.call(myDropzone1, images[i], $.cookie("AWSURL") + $.cookie("AWSFolderName") + images[i].name);
                         }
                     }
                 },
@@ -568,7 +568,7 @@
                             '<span class="description">' + escape(item.info) + '</span>' +
                             '<ul class="meta">' +
                                 '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
-                                '<li class="forks"><span>' + escape(item.questions) + '</span> questions asked</li>' +
+                                '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
                             '</ul>' +
                         '</div>';
                     }

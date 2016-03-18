@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -40,6 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK">
+      <HintPath>..\packages\AWSSDK.2.3.54.2\lib\net45\AWSSDK.dll</HintPath>
+    </Reference>
     <Reference Include="ChatJs.Lib">
       <HintPath>..\packages\ChatJS.2.0.22\lib\net45\ChatJs.Lib.dll</HintPath>
     </Reference>
@@ -373,6 +376,9 @@
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Feedback.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FollowCompany.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -597,17 +603,24 @@
     <Content Include="Images\landing\laptop.png" />
     <Content Include="Images\landing\perspective.png" />
     <Content Include="Images\others\1f415.png" />
+    <Content Include="Images\others\favicon.png" />
     <Content Include="Images\others\stars.png" />
+    <Content Include="Images\others\WaterMark.png" />
     <Content Include="Images\spinner.gif" />
     <Content Include="Images\Users\default.jpg" />
     <Content Include="Scripts\app\adImage-EditAd.js" />
+    <Content Include="Scripts\app\AnimalSearch.js" />
     <Content Include="Scripts\app\BikesTree.js" />
     <Content Include="Scripts\app\CarsTree.js" />
     <Content Include="Scripts\app\chat.js" />
+    <Content Include="Scripts\app\ConvertToSlug.js" />
     <Content Include="Scripts\app\CreateAlert.js" />
     <Content Include="Scripts\app\dropzone-knockout-binding.js" />
+    <Content Include="Scripts\app\friendlyURL.js" />
     <Content Include="Scripts\app\GetLoginUserId.js" />
+    <Content Include="Scripts\app\GoogleAnalytics.js" />
     <Content Include="Scripts\app\inspinia.js" />
+    <Content Include="Scripts\app\IsAdmin.js" />
     <Content Include="Scripts\app\JobsSearch.js" />
     <Content Include="Scripts\app\LaptopTree.js" />
     <Content Include="Scripts\app\MobileTree.js" />
@@ -689,6 +702,7 @@
     <Content Include="Content\plugins\slick\fonts\slick.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="ChatJs\Sounds\chat.ogg" />
+    <Content Include="fonts\fontastique.ttf" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -833,7 +847,9 @@
     <Content Include="Scripts\plugins\sweetalert\sweetalert.min.js" />
     <Content Include="Scripts\plugins\toastr\toastr.min.js" />
     <Content Include="Scripts\plugins\validate\jquery.validate.min.js" />
-    <Content Include="Scripts\UserLogin.js" />
+    <Content Include="Scripts\UserLogin.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\_Comments.js" />
     <Content Include="Scripts\_CreateAd.js" />
     <Content Include="Web.config">
@@ -1008,6 +1024,8 @@
     <Content Include="Views\Electronics\CreateCameraAccessoriesAd.cshtml" />
     <Content Include="Views\Electronics\EditCameraAccessoriesAd.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
+    <Content Include="Views\Admin\Feedback.cshtml" />
+    <Content Include="Views\Home\Robots.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1044,7 +1062,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59911</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:59322/</IISUrl>
+          <IISUrl>https://localhost:44300/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

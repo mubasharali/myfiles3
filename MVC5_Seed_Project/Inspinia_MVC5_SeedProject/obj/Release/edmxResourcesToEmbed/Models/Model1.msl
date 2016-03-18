@@ -519,6 +519,7 @@
     <EntitySetMapping Name="AspNetUsers">
       <EntityTypeMapping TypeName="Model.AspNetUser">
         <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="status" ColumnName="status" />
           <ScalarProperty Name="IsPasswordSaved" ColumnName="IsPasswordSaved" />
           <ScalarProperty Name="hideFriends" ColumnName="hideFriends" />
           <ScalarProperty Name="hideDateOfBirth" ColumnName="hideDateOfBirth" />
@@ -725,6 +726,17 @@
           <ScalarProperty Name="time" ColumnName="time" />
           <ScalarProperty Name="addedBy" ColumnName="addedBy" />
           <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Feedbacks">
+      <EntityTypeMapping TypeName="Model.Feedback">
+        <MappingFragment StoreEntitySet="Feedback">
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="givenBy" ColumnName="givenBy" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="type" ColumnName="type" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Data.Entity.Validation;
 using System.Web.Mvc;
 using System.Net.Mail;
 using Microsoft.AspNet.Identity;
@@ -26,11 +27,17 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             ViewBag.type = "mobiles";
             return View("Index");
         }
-        // GET: /Forum/Details/5
-        public ActionResult Details(int? id)
+        [Route("Forum/Details/{id?}/{title?}")]
+        public ActionResult Details(int? id,string title = "")
         {
-            ViewBag.questionId = id;
-            return View();
+            if (id != null)
+            {
+                var q = db.Questions.Find(id).title;
+                ViewBag.questionId = id;
+                ViewBag.title = q;
+                return View();
+            }
+            return View("/NotFound");
         }
 
         // GET: /Forum/Create
@@ -55,6 +62,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 db.Questions.Add(question);
 
                 string s = Request["tags"];
+                s = s.Trim();
                 string[] values = s.Split(',');
                 Tag []tags = new Tag[values.Length];
                 QuestionTag []qt = new QuestionTag[values.Length];
@@ -63,57 +71,34 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 {
                     values[i] = values[i].Trim();
                     string ss = values[i];
-                    var data = db.Tags.FirstOrDefault(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
-
-                    tags[i] = new Tag();
-                    if (data != null)
+                    if (ss != "")
                     {
-                        tags[i].Id = data.Id;
+                        var data = db.Tags.FirstOrDefault(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
+
+                        tags[i] = new Tag();
+                        if (data != null)
+                        {
+                            tags[i].Id = data.Id;
+                        }
+                        else
+                        {
+                            tags[i].name = values[i];
+                            tags[i].time = DateTime.UtcNow;
+                            tags[i].createdBy = User.Identity.GetUserId();
+                            db.Tags.Add(tags[i]);
+                        }
                     }
                     else
                     {
-                        tags[i].name = values[i];
-                        tags[i].time = DateTime.UtcNow;
-                        tags[i].createdBy = User.Identity.GetUserId();
-                        db.Tags.Add(tags[i]);
+                        tags[i] = null;
                     }
-                     
-
-                    //MailMessage mail = new MailMessage();
-                    //mail.From = new System.Net.Mail.MailAddress("m.irfanwatoo@gmail.com");
-
-                    //// The important part -- configuring the SMTP client
-                    //SmtpClient smtp = new SmtpClient();
-                    //smtp.Port = 587;   // [1] You can try with 465 also, I always used 587 and got success
-                    //smtp.EnableSsl = true;
-                    //smtp.DeliveryMethod = SmtpDeliveryMethod.Network; // [2] Added this
-                    //smtp.UseDefaultCredentials = false; // [3] Changed this
-                    //smtp.Credentials = new NetworkCredential("m.irfanwatoo@gmail.com","birthdaywish");  // [4] Added this. Note, first parameter is NOT string.
-                    //smtp.Host = "smtp.gmail.com";
-
-                    ////recipient address
-                    //mail.To.Add(new MailAddress("irfanyusanif420@gmail.com"));
-
-                    ////Formatted mail body
-                    //mail.IsBodyHtml = true;
-                    //string st = "Test";
-
-                    //mail.Body = st;
-                    //smtp.Send(mail);
+                    
 
                 }
 
 
                 db.SaveChanges();
                 
-
-                try { 
-                db.SaveChanges();
-                }
-                catch (Exception e)
-                {
-                    string sb = e.ToString();
-                }
                 for (int i = 0; i < values.Length; i++)
                 {
                     qt[i] = new QuestionTag();
@@ -123,7 +108,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 }
 
                 db.SaveChanges();
-                return RedirectToAction("Details", new { id=question.Id});
+                return RedirectToAction("Details", new { id = question.Id, title = ElectronicsController.URLFriendly(question.title) });
             }
 
             ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", question.postedBy);
@@ -144,7 +129,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 return HttpNotFound();
             }
-            ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", question.postedBy);
+            var tags = question.QuestionTags.Select(x => x.Tag.name).ToArray();
+            ViewBag.tags = tags;
             return View(question);
         }
 
@@ -157,14 +143,97 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         {
             if (ModelState.IsValid)
             {
+                SaveQuestionTags(Request["tags"], question, true);
                 db.Entry(question).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    string s = e.ToString();
+                    List<string> errorMessages = new List<string>();
+                    foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
+                    {
+                        string entityName = validationResult.Entry.Entity.GetType().Name;
+                        foreach (DbValidationError error in validationResult.ValidationErrors)
+                        {
+                            errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                        }
+                    }
+                }
+                return RedirectToAction("Details", new {id= question.Id,title = ElectronicsController.URLFriendly( question.title) });
             }
-            ViewBag.postedBy = new SelectList(db.AspNetUsers, "Id", "Email", question.postedBy);
             return View(question);
         }
+        public void SaveQuestionTags(string s, Question q, bool update = false)
+        {
+            if (update)
+            {
+                var adid = q.Id;
+                var adtags = db.QuestionTags.Where(x => x.questionId.Equals(adid)).ToList();
+                foreach (var cc in adtags)
+                {
+                    db.QuestionTags.Remove(cc);
+                }
+                db.SaveChanges();
+            }
+            string[] values = s.Split(',');
+            Inspinia_MVC5_SeedProject.Models.Tag[] tags = new Inspinia_MVC5_SeedProject.Models.Tag[values.Length];
+            QuestionTag[] qt = new  QuestionTag[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = values[i].Trim();
+                string ss = values[i];
+                if (ss != "")
+                {
+                    var data = db.Tags.FirstOrDefault(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
 
+                    tags[i] = new Inspinia_MVC5_SeedProject.Models.Tag();
+                    if (data != null)
+                    {
+                        tags[i].Id = data.Id;
+                    }
+                    else
+                    {
+                        tags[i].name = values[i];
+                        tags[i].time = DateTime.UtcNow;
+                        tags[i].createdBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                        db.Tags.Add(tags[i]);
+                    }
+                }
+                else
+                {
+                    tags[i] = null;
+                }
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                string sb = e.ToString();
+            }
+            for (int i = 0; i < values.Length; i++)
+            {
+                if (tags[i] != null)
+                {
+                    qt[i] = new  QuestionTag();
+                    qt[i].questionId = q.Id;
+                    qt[i].tagId = tags[i].Id;
+                    db.QuestionTags.Add(qt[i]);
+                }
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                string sb = e.ToString();
+            }
+        }
         // GET: /Forum/Delete/5
         public ActionResult Delete(int? id)
         {

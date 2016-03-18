@@ -47,6 +47,52 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
             return Ok(company);
         }
+        public async Task<IHttpActionResult> SearchCompanies(string title, string tags)
+        {
+            if (tags == null || tags == "undefined")
+            {
+                var ret = from company in db.Companies
+                          where (title == null || title == "" || title == "undefined" || company.title.Contains(title))
+                          select new
+                          {
+                              id = company.Id,
+                              title = company.title,
+                              shortabout = company.shortabout,
+                              city = company.City.cityName,
+                              exectLocation = company.exectLocation,
+                              popularPlace = company.popularPlace.name,
+                              logoExtension = company.logoextension,
+                              contactNo1 = company.contactNo1,
+                              contactNo2 = company.contactNo2,
+                              tags = from tag in company.CompanyTags
+                                     select new
+                                     {
+                                         id = tag.tagId,
+                                         name = tag.Tag.name
+                                     },
+
+                          };
+                return Ok(ret);
+            }
+            string[] tagsArray = null;
+            if (tags != null)
+            {
+                tagsArray = tags.Split(',');
+            }
+            var ret1 = from company in db.Companies
+                       where (title == null || title == "" || title == "undefined" || company.title.Contains(title) && (!tagsArray.Except( company.CompanyTags.Select(x=>x.Tag.name)).Any()))
+                      select new
+                      {
+                          id = company.Id,
+                          title = company.title,
+                          city = company.City.cityName,
+                          popularPlace = company.popularPlace.name,
+                          logoExtension = company.logoextension,
+                          contactNo1 = company.contactNo1,
+                          contactNo2 = company.contactNo2
+                      };
+            return Ok(ret1);
+        }
         public async Task<IHttpActionResult> AddReview(Review review)
         {
             if (User.Identity.IsAuthenticated)
@@ -324,7 +370,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                          contactNo1 = branch.contactNo1,
                                          contactNo2 = branch.contactNo2
                                      },
-                          tags = company.CompanyTags.Select(x => x.Tag.name)
+                          tags = from tag1 in company.CompanyTags
+                                   select new
+                                   {
+                                       id = tag1.tagId,
+                                       name = tag1.Tag.name,
+                                   },
 
                       };
 

@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </div>
-                        <div data-bind="with:showTag">
+                        <div id="FirstLoading" style="display:none" data-bind="with:showTag">
                             <div class="ibox-title">
                                 <h2>
                                     <span data-bind="text:name">@Model.name</span> <span style="font-size: 12px; color: #b4b6b8">
@@ -186,8 +186,7 @@
 <link href="~/Content/myStyles.css" rel="stylesheet" />
 }
 
-@Html.Partial("/Views/Shared/_Chat.cshtml")
-@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
+
 
 @section Scripts{
 @Scripts.Render("~/plugins/knockout")
@@ -391,6 +390,7 @@
                 .done(function (data) {
                     var mappedads = new Tag1(data);
                     self.showTag(mappedads);
+                    $("#FirstLoading").css({ "display": "block" });
                 })
                 .fail(function () {
                     toastr.error("Unable to load data. Please refresh page and try again", "Error");

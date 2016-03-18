@@ -1,6 +1,6 @@
 ﻿<nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
-        <ul class="nav" id="side-menu">
+        <ul class="nav" style="display:none" id="side-menu">
             <li class="nav-header hidden-lg hidden-md hidden-sm">
                 @if (Request.IsAuthenticated) { 
                 <div class="dropdown profile-element">
@@ -20,6 +20,9 @@
                         </li>
                         <li>
                             <a href="/CreateAd">Create Ad</a>
+                        </li>
+                        <li>
+                            <a href="/Company/Create">Create Page</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -55,7 +58,7 @@
                     <li class="@Html.IsSelected(action: "tv")"><a href="@Url.Action("tv", "Electronics")"><i class="fa fa-play"></i>TV-DVD-Multimedia</a></li>
                     <li class="@Html.IsSelected(action: "games")"><a href="@Url.Action("games", "Electronics")"><i class="fa fa-gamepad"></i>Games</a></li>
                     <li class="@Html.IsSelected(action: "homeappliances")"><a href="@Url.Action("homeappliances", "Electronics")"><i class="fa fa-television"></i>Home Appliances</a></li>
-                    <li class="@Html.IsSelected(action: "otherelectronics")"><a href="@Url.Action("otherelectronics", "Electronics")"><i class="fa fa-gamepad"></i>other electronics</a></li>
+                    <li class="@Html.IsSelected(action: "otherelectronics")"><a href="@Url.Action("otherelectronics", "Electronics")"><i class="fa fa-bolt"></i>other electronics</a></li>
                 </ul>
             </li>
             @*<li class="@Html.IsSelected(controller: "Business")">
@@ -67,20 +70,21 @@
                 <ul class="nav nav-second-level collapse">
                     <li class="@Html.IsSelected(action: "Cars")"><a href="@Url.Action("Cars","Vehicles")"><i class="fa fa-car"></i> Cars</a></li>
                     <li class="@Html.IsSelected(action: "Bikes")"><a href="@Url.Action("Bikes", "Vehicles")"><i class="fa fa-motorcycle"></i>Bikes</a></li>
-                    <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Index", "Vehicles", new {category = "commerical-vehicles"})"><i class="fa fa-truck"></i>Commerical Vehicles</a></li>
-                    <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Index", "Vehicles", new {category = "vehicles-for-rent" })"><i class="fa fa-money"></i>Vehicles For Rent</a></li>
-                    <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Index", "Vehicles", new { category = "other-vehicles"})"><i class="fa fa-ship"></i>Other Vehicles</a></li>
-                    <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Index", "Vehicles", new { category = "spare-parts"})"><i class="fa fa-ship"></i>Spare parts</a></li>
+                    <li class="@Html.IsSelected(action: "CommericalVehicles")"><a href="@Url.Action("CommericalVehicles", "Vehicles")"><i class="fa fa-truck"></i>Commerical Vehicles</a></li>
+                    <li class="@Html.IsSelected(action: "VehiclesForRent")"><a href="@Url.Action("VehiclesForRent", "Vehicles")"><i class="fa fa-money"></i>Vehicles For Rent</a></li>
+                    <li class="@Html.IsSelected(action: "OtherVehicles")"><a href="@Url.Action("OtherVehicles", "Vehicles")"><i class="fa fa-ship"></i>Other Vehicles</a></li>
+                    <li class="@Html.IsSelected(action: "SpareParts")"><a href="@Url.Action("SpareParts", "Vehicles")"><i class="fa fa-sitemap"></i>Spare parts</a></li>
                 </ul>
             </li>
-            @*<li class="@Html.IsSelected(controller: "Animals")">
-                <a href="@Url.Action("Index", "Animals")"><i class="fa fa-paw"></i> <span class="nav-label">Animals</span> </a>
-            </li>*@
+            
             <li class="@Html.IsSelected(controller: "Jobs")">
                 <a href="@Url.Action("Index", "Jobs")"><i class="fa fa-suitcase"></i> <span class="nav-label">Jobs</span> </a>
             </li>
             <li class="@Html.IsSelected(controller: "RealEstate")">
                 <a href="@Url.Action("Index", "RealEstate")"><i class="fa fa-home"></i> <span class="nav-label">RealEstate</span> </a>
+            </li>
+            <li class="@Html.IsSelected(action: "Pets-Animals")">
+                <a href="@Url.Action("Animals", "Vehicles")"><i class="fa fa-paw"></i> <span class="nav-label">Pets & Animals</span> </a>
             </li>
             <li class="@Html.IsSelected(controller: "Services")">
                 <a href="@Url.Action("Index", "Services")"><i class="fa fa-cogs"></i> <span class="nav-label">Services</span> </a>

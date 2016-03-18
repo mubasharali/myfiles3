@@ -48,19 +48,19 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         public async Task<bool> SaveRealEstateAd(int adId, bool update = false)
         {
             House house = new House();
-            if (System.Web.HttpContext.Current.Request["area"] != null)
+            if (System.Web.HttpContext.Current.Request["area"] != null && System.Web.HttpContext.Current.Request["area"] != "")
             {
                 house.area =int.Parse( System.Web.HttpContext.Current.Request["area"]);
             }
-            if (System.Web.HttpContext.Current.Request["bathroom"] != null)
+            if (System.Web.HttpContext.Current.Request["bathroom"] != null && System.Web.HttpContext.Current.Request["bathroom"] != "")
             {
                 house.bathroom = (System.Web.HttpContext.Current.Request["bathroom"]);
             }
-            if (System.Web.HttpContext.Current.Request["bedroom"] != null)
+            if (System.Web.HttpContext.Current.Request["bedroom"] != null && System.Web.HttpContext.Current.Request["bedroom"] != "")
             {
                 house.bedroom = (System.Web.HttpContext.Current.Request["bedroom"]);
             }
-            if (System.Web.HttpContext.Current.Request["floor"] != null)
+            if (System.Web.HttpContext.Current.Request["floor"] != null && System.Web.HttpContext.Current.Request["floor"] != "")
             {
                 house.floor = (System.Web.HttpContext.Current.Request["floor"]);
             }
@@ -93,8 +93,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
 
                     electronicController.PostAdByCompanyPage(ad.Id);
 
-                    //
-                    SaveRealEstateAd(ad.Id);
+                      SaveRealEstateAd(ad.Id);
 
                     
                     //tags

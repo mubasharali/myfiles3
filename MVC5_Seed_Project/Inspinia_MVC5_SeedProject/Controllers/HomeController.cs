@@ -40,12 +40,22 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 return sub;
             }
         }
+
+        #region -- Robots() Method --
+        public ActionResult Robots()
+        {
+            Response.ContentType = "text/plain";
+            return View();
+        }
+        #endregion
+
         [Route("Feedback-contact")]
         public ActionResult Feedback()
         {
             return View();
         }
-        public ActionResult Create(string category, string subcategory)
+       
+        public ActionResult Create(string category, string subcategory = null)
         {
             if (Request.IsAuthenticated)
             {
@@ -90,6 +100,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                         return true;
                     }
                 }
+            }
+            else if (category == "Animals")
+            {
+                return true;
             }
             return false;
         }
@@ -158,7 +172,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,category,postedBy,title,description,time,price,isnegotiable")] Ad ad)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,category,subcategory,postedBy,title,description,time,price,isnegotiable")] Ad ad)
         {
             if (ModelState.IsValid)
             {
@@ -212,6 +226,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return View();
         }
         public ActionResult Index()
+        
         {
             var mobiles = from ad in db.MobileAds
                           where ad.Ad.AdImages.Count > 0

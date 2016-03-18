@@ -109,3 +109,6 @@ C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedPro
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\WebMatrix.WebData.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\WebMatrix.Data.xml
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\WebMatrix.WebData.xml
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Scripts\UserLogin.js
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\AWSSDK.dll
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\AWSSDK.pdb

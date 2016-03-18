@@ -25,11 +25,56 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         // GET: /Vehicles/
         
 
-        [Route("Vehicle/{category?}")]
-        public ActionResult Index(string category)
+        //[Route("Vehicle/{category?}")]
+        //public ActionResult Index(string category)
+        //{
+        //    ViewBag.subcategory = category;
+        //    ViewBag.category = "Vehicles";
+        //    return View("Index");
+        //}
+        [Route("Cars")]
+        public ActionResult Cars()
         {
-            ViewBag.subcategory = category;
+            return View();
+        }
+        [Route("Bikes")]
+        public ActionResult Bikes()
+        {
+            return View();
+        }
+        [Route("Commerical-Vehicles")]
+        public ActionResult CommericalVehicles()
+        {
             ViewBag.category = "Vehicles";
+            ViewBag.subcategory = "commerical-vehicles";
+            return View("Index");
+        }
+        [Route("Vehicles-for-rent")]
+        public ActionResult VehiclesForRent()
+        {
+            ViewBag.category = "Vehicles";
+            ViewBag.subcategory = "vehicles-for-rent";
+            return View("Index");
+        }
+        [Route("Other-Vehicles")]
+        public ActionResult OtherVehicles()
+        {
+            ViewBag.category = "Vehicles";
+            ViewBag.subcategory = "other-vehicles";
+            return View("Index");
+        }
+        [Route("Vehicles-spare-parts")]
+        public ActionResult SpareParts()
+        {
+            ViewBag.category = "Vehicles";
+            ViewBag.subcategory = "spare-parts";
+            return View("Index");
+        }
+        [Route("Pets-Animals")]
+        public ActionResult Animals()
+        {
+            ViewBag.category = "Animals";
+            ViewBag.subcategory = "Animals";
             return View("Index");
         }
         //public ActionResult VehiclesForRent()
@@ -53,14 +98,14 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             ViewBag.adId = id;
             return View();
         }
-        public ActionResult Cars()
-        {
-            return View();
-        }
-        public ActionResult Bikes()
-        {
-            return View();
-        }
+        //public ActionResult Cars()
+        //{
+        //    return View();
+        //}
+        //public ActionResult Bikes()
+        //{
+        //    return View();
+        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,category,postedBy,title,description,time,price,isnegotiable")] Ad ad)

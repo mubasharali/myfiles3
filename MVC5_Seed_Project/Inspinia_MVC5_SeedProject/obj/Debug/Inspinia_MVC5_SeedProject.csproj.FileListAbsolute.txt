@@ -306,10 +306,12 @@ D:\FYP\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\zh-Hant\System.S
 D:\FYP\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.csprojResolveAssemblyReference.cache
 D:\FYP\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.dll
 D:\FYP\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.pdb
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Scripts\UserLogin.js
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Inspinia_MVC5_SeedProject.dll.config
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Inspinia_MVC5_SeedProject.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Inspinia_MVC5_SeedProject.pdb
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Antlr3.Runtime.dll
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\AWSSDK.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\ChatJs.Lib.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\EntityFramework.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\EntityFramework.SqlServer.dll
@@ -351,6 +353,7 @@ C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedPro
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\WebGrease.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\WebMatrix.Data.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\WebMatrix.WebData.dll
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\AWSSDK.pdb
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\EntityFramework.xml
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\EntityFramework.SqlServer.xml
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Microsoft.AspNet.Identity.Core.xml
@@ -416,3 +419,4 @@ C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedPro
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\zh-Hant\System.Spatial.resources.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.dll
 C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.pdb
+C:\Users\Irfan\Documents\GitHub\myfiles3\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.csprojResolveAssemblyReference.cache

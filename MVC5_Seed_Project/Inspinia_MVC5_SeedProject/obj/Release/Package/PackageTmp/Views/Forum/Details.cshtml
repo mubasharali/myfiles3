@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Details";
+    ViewBag.Title = ViewBag.title;
 }
 <input type="hidden" id="questionId" value="@ViewBag.questionId" />
 <input type="hidden" id="currentPage" value="@HttpContext.Current.Request.Url.AbsolutePath" />
@@ -10,11 +10,17 @@
         <div class="col-md-3"></div>
         <div class="col-md-9">
             <div class="ibox">
-                <div id="QuestionViewModel" data-bind="foreach: showQuestions">
+                <div data-bind="visible:!showQuestions()">@Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")</div>
+                <div id="FirstLoading" style="display:none" data-bind="foreach: showQuestions">
                     <div class="ibox-content" data-bind="attr:{'id':id}">
                         <div class="row">
                             <div class="col-lg-12">
-                                    <a data-bind="visible:postedById==loginUserId" class="btn btn-white btn-xs pull-right">Delete</a><a data-bind="visible:postedById==loginUserId" class="btn btn-white btn-xs pull-right">Edit</a>
+                                <span data-bind="visible:postedById != loginUserId">
+                                    <span data-bind="visible:isAdmin()">
+                                        <a data-bind="click:deleteQuestion" class="btn btn-white btn-xs pull-right">Delete</a>
+                                    </span>
+                                </span>
+                                    <a data-bind="visible:postedById==loginUserId,click:deleteQuestion" class="btn btn-white btn-xs pull-right">Delete</a><a data-bind="visible:postedById==loginUserId,attr:{href:'/Forum/Edit/' + id}" class="btn btn-white btn-xs pull-right">Edit</a>
                                 <div class="vote-item">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -29,9 +35,9 @@
                                             </div>
                                             <a data-bind="text:title" class="vote-title"></a>
                                             <p data-bind="text:description"></p>
-                                            <div>
-                                                <ul class="tag-list" data-bind="foreach:showTags" @*style="padding: 0"*@>
-                                                    <li><a target="_blank" data-bind="attr:{href:'/Tag/' + name}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                            <div >
+                                                <ul class="tag-list" data-bind="foreach:showTags" >
+                                                    <li><a target="_blank" data-bind="attr:{href:tagURL}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
                                                 </ul>
                                             </div>
                                             <br /><br />
@@ -170,13 +176,15 @@
                             </div>
                             
                             <div style="margin:10px">
-                                <h5>Post answer</h5>
-                                <textarea class="msgTextArea form-control" placeholder="Write Answer.." name="answer" data-bind="value:newAnswer, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return answerKeyUp(newAnswer().length,data,event)}}"></textarea>
-                                <span data-bind="visible:newAnswer().length > 900 && newAnswer().length <= 1000">
-                                    You can Enter only <span data-bind="text:1000 - newAnswer().length"></span> more characters.
-                                </span>
-                                <div style="margin:6px">
-                                    <button data-bind="click:function(){return addAnswer()}" class="btn btn-success pull-right">submit</button>
+                                <div class="col-sm-12">
+                                    <h5>Post answer</h5>
+                                    <textarea class="msgTextArea form-control" placeholder="Write Answer.." name="answer" data-bind="value:newAnswer, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return answerKeyUp(newAnswer().length,data,event)}}"></textarea>
+                                    <span data-bind="visible:newAnswer().length > 900 && newAnswer().length <= 1000">
+                                        You can Enter only <span data-bind="text:1000 - newAnswer().length"></span> more characters.
+                                    </span>
+                                    <div style="margin:6px">
+                                        <button data-bind="click:function(){return addAnswer()}" class="btn btn-success pull-right">submit</button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -195,11 +203,10 @@
         </div>
     </div>
 </div>
-@Html.Partial("/Views/Shared/_Chat.cshtml")
-@Html.Partial("~/Views/Shared/_UserLogin.cshtml")
 
 @section Styles {
     @Styles.Render("~/plugins/toastrStyles")
+@Styles.Render("~/plugins/sweetAlertStyles")
 }
 
 
@@ -207,11 +214,9 @@
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
-    @Scripts.Render("~/plugins/knockout")
-<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
-<script src="~/signalr/hubs"></script>
-<script src="~/Scripts/UserLogin.js"></script>
-<script src="~/Scripts/app/chat.js"></script>
+@Scripts.Render("~/plugins/sweetAlert")
+<script src="~/Scripts/app/friendlyURL.js"></script>
+<script src="~/Scripts/app/IsAdmin.js"></script>
     <script>
         function AnswerReply(data) {
             var self = this;
@@ -556,11 +561,13 @@
                 }
             }
         }
+        
         function Tag(data) {
             var self = this;
             data = data || {};
             self.id = data.id;
             self.name = data.name;
+            self.tagURL = '/Tag/' + self.id + '/' + convertToSlug(self.name);
         };
         function Question(data) {
             var self = this;
@@ -589,6 +596,32 @@
             if (data.isFollowed) {
                 self.followText("UnFollow");
                 self.isFollowed(true);
+            }
+            self.deleteQuestion = function (question) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this !",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Forum/DeleteQuestion/' + question.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            swal("Deleted!", "Question has been deleted.", "success");
+                            window.location.href = "/Forum";
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
+                });
             }
             self.follow = function (questionId, loginUserId) {
                 if (loginUserId) {
@@ -828,6 +861,8 @@
                 .done(function (data) {
                     var mappedads = $.map(data, function (item) { return new Question(item); });
                     self.showQuestions(mappedads);
+                    $("#FirstLoading").css({ "display": "block" });
+                    loadAdmin();
                 })
                 .fail(function () {
                     toastr.error("Unable to load data. Please try again", "Error");

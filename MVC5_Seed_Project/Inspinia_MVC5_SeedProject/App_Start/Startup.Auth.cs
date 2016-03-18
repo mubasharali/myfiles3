@@ -13,14 +13,17 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
-
+//using Microsoft.Owin.Security.DataProtection;
 namespace Inspinia_MVC5_SeedProject
 {
     public partial class Startup
     {
+        //internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
+
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
+            //DataProtectionProvider = app.GetDataProtectionProvider();
             // Enable the application to use a cookie to store information for the signed in user
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -39,9 +42,9 @@ namespace Inspinia_MVC5_SeedProject
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "159579124429445",
+               appSecret: "8e2368cff3e546eb233bcd3a428e9ab1");
 
             //app.UseGoogleAuthentication();
         }

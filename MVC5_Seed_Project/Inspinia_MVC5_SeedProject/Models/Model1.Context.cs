@@ -88,5 +88,6 @@ namespace Inspinia_MVC5_SeedProject.Models
         public virtual DbSet<Camera> Cameras { get; set; }
         public virtual DbSet<JobSkill> JobSkills { get; set; }
         public virtual DbSet<Skill> Skills { get; set; }
+        public virtual DbSet<Feedback> Feedbacks { get; set; }
     }
 }

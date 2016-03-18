@@ -48,8 +48,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     foreach (var ext in ret)
                     {
-                        img[i].extension = ext;
-                        img[i++].size = new FileInfo(System.Web.Hosting.HostingEnvironment.MapPath(@"~\Images\Ads\" + id + "_" + i + ext)).Length;
+                        img[i++].extension = ext;
+                      //  img[i++].size = new FileInfo(System.Web.Hosting.HostingEnvironment.MapPath(@"~\Images\Ads\" + id + "_" + i + ext)).Length;
                     }
                 }
                 catch (Exception e)
@@ -507,6 +507,135 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             var models = db.MobileModels.Where(x=>x.Mobile.brand.Equals(brand) && x.status != "p").Select(x=>x.model);
             //var models =await db.MobileModels.Where(x => x.Mobile == brand).ToListAsync();
             return Ok(models);
+        }
+        public async Task<IHttpActionResult> SearchAds( string tags, string title, string city, string pp)
+        {
+            string islogin = "";
+            if (User.Identity.IsAuthenticated)
+            {
+                islogin = User.Identity.GetUserId();
+            }
+            if (tags == null || tags == "undefined")
+            {
+                var temp1 = from ad in db.Ads
+                            where ( ad.status.Equals("a") && (city == null || city == "undefined" || ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.AdsLocation.popularPlace.name.Equals(pp))))
+                            orderby ad.time descending
+                            select new
+                            {
+                               // companyId = ad.CompanyAd.companyId,
+                              //  companyName = ad.CompanyAd.Company.title,
+                               // isAdmin = isAdmin,
+                                title = ad.title,
+                                postedById = ad.AspNetUser.Id,
+                                postedByName = ad.AspNetUser.Email,
+                                description = ad.description,
+                                id = ad.Id,
+                                time = ad.time,
+                                status = ad.status,
+                                islogin = islogin,
+                                isNegotiable = ad.isnegotiable,
+                                price = ad.price,
+                                reportedCount = ad.Reporteds.Count,
+                                isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
+                                views = ad.views,
+                                condition = ad.condition,
+                                type = ad.type,
+                                isSaved = ad.SaveAds.Any(x => x.savedBy == islogin),
+                                savedCount = ad.SaveAds.Count,
+                                category = ad.category,
+                                subCategory = ad.subcategory,
+                                adTags = from tag1 in ad.AdTags.ToList()
+                                         select new
+                                         {
+                                             id = tag1.tagId,
+                                             name = tag1.Tag.name,
+                                             //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                             //info = tag.Tag.info,
+                                         },
+                                bid = from biding in ad.Bids.ToList()
+                                      select new
+                                      {
+                                          price = biding.price,
+                                      },
+                                adImages = from image in ad.AdImages.ToList()
+                                           select new
+                                           {
+                                               imageExtension = image.imageExtension,
+                                           },
+                                location = new
+                                {
+                                    cityName = ad.AdsLocation.City.cityName,
+                                    cityId = ad.AdsLocation.cityId,
+                                    popularPlaceId = ad.AdsLocation.popularPlaceId,
+                                    popularPlace = ad.AdsLocation.popularPlace.name,
+                                    exectLocation = ad.AdsLocation.exectLocation,
+                                },
+
+                            };
+                return Ok(temp1);
+            }
+            string[] tagsArray = null;
+            if (tags != null)
+            {
+                tagsArray = tags.Split(',');
+            }
+
+
+            var temp = from ad in db.Ads
+                       where (ad.status.Equals("a") && (!tagsArray.Except(ad.AdTags.Select(x => x.Tag.name)).Any()) && (city == null || city == "undefined" || ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.AdsLocation.popularPlace.name.Equals(pp))))
+                       orderby ad.time descending
+                       select new
+                       {
+                           // companyId = ad.CompanyAd.companyId,
+                           //  companyName = ad.CompanyAd.Company.title,
+                           // isAdmin = isAdmin,
+                           title = ad.title,
+                           postedById = ad.AspNetUser.Id,
+                           postedByName = ad.AspNetUser.Email,
+                           description = ad.description,
+                           id = ad.Id,
+                           time = ad.time,
+                           status = ad.status,
+                           islogin = islogin,
+                           isNegotiable = ad.isnegotiable,
+                           price = ad.price,
+                           reportedCount = ad.Reporteds.Count,
+                           isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
+                           views = ad.views,
+                           condition = ad.condition,
+                           type = ad.type,
+                           isSaved = ad.SaveAds.Any(x => x.savedBy == islogin),
+                           savedCount = ad.SaveAds.Count,
+                           category = ad.category,
+                           subCategory = ad.subcategory,
+                           adTags = from tag1 in ad.AdTags.ToList()
+                                    select new
+                                    {
+                                        id = tag1.tagId,
+                                        name = tag1.Tag.name,
+                                        //followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                        //info = tag.Tag.info,
+                                    },
+                           bid = from biding in ad.Bids.ToList()
+                                 select new
+                                 {
+                                     price = biding.price,
+                                 },
+                           adImages = from image in ad.AdImages.ToList()
+                                      select new
+                                      {
+                                          imageExtension = image.imageExtension,
+                                      },
+                           location = new
+                           {
+                               cityName = ad.AdsLocation.City.cityName,
+                               cityId = ad.AdsLocation.cityId,
+                               popularPlaceId = ad.AdsLocation.popularPlaceId,
+                               popularPlace = ad.AdsLocation.popularPlace.name,
+                               exectLocation = ad.AdsLocation.exectLocation,
+                           },
+                       };
+            return Ok(temp);
         }
 
         public async Task<IHttpActionResult> SearchMobileAds(string brand, string model,string tags,string title, int minPrice, int maxPrice,string city, string pp,bool isAccessories)
@@ -967,8 +1096,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 try
                 {
                   //  var user = new ApplicationUser() { UserName = ide.Email };
-                 //   isAdmin = Roles.IsUserInRole("Admin");
-                    //isAdmin = Roles.GetRolesForUser().Contains("Admin");
+                  // isAdmin = Roles.IsUserInRole("Admin");
+                   // isAdmin = Roles.GetRolesForUser().Contains("Admin");
                 }
                 catch (Exception e)
                 {

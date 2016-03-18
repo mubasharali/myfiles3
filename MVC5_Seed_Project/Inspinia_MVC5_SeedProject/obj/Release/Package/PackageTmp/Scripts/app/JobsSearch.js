@@ -149,6 +149,7 @@ function JobsViewModel() {
     var self = this;
     self.showAds = ko.observableArray();
     self.isLoading = ko.observable(false);
+    RefreshSearch();
     searchingCity.subscribe(function () {
         RefreshSearch();
     })
@@ -175,6 +176,7 @@ function RefreshSearch() {
         success: function (data) {
             self.isLoading(false);
             var mappedads = $.map(data, function (item) { return new Ad(item); });
+            $("#FirstLoading").css("display", "block");
             self.showAds(mappedads);
             $('#select-category1').selectize();
                         $('#select-careerLevel').selectize();
